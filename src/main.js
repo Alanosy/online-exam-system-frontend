@@ -1,9 +1,9 @@
 /*
- * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @Date: 2024-03-04 10:53:12
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-03-25 15:19:12
- * @FilePath: \com-project\src\main.js
+ * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @Date: 2024-03-04 10:34:47
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-03-25 15:19:13
+ * @FilePath: \vue-admin-template\src\main.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import Vue from 'vue'

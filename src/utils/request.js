@@ -1,3 +1,11 @@
+/*
+ * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @Date: 2024-03-28 16:10:58
+ * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @LastEditTime: 2024-03-28 16:12:19
+ * @FilePath: \com-project\src\utils\request.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
@@ -76,7 +84,7 @@ service.interceptors.response.use(
     //   return res
     // }
   },
-  error => {
+   error => {
     console.log('err' + error) // for debug
     Message({
       message: error.message,
