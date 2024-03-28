@@ -54,6 +54,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { sendEmail } from '@/api/email'
 
 export default {
   name: 'Login',
@@ -94,7 +95,15 @@ export default {
       immediate: true
     }
   },
+  created() {
+    this.getEmail()
+  },
   methods: {
+    async getEmail() {
+      const res = await sendEmail('3109836428@qq.com')
+      console.log('我获得了api的返回')
+      console.log(res)
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -107,18 +116,18 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+        // if (valid) {
+        //   this.loading = true
+        //   this.$store.dispatch('user/login', this.loginForm).then(() => {
+        //     this.$router.push({ path: this.redirect || '/' })
+        //     this.loading = false
+        //   }).catch(() => {
+        //     this.loading = false
+        //   })
+        // } else {
+        //   console.log('error submit!!')
+        //   return false
+        // }
       })
     }
   }
