@@ -17,7 +17,6 @@ service.interceptors.request.use(
 
     console.log('发送请求');
     console.log(config);
-
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
@@ -76,7 +75,7 @@ service.interceptors.response.use(
     //   return res
     // }
   },
-  error => {
+   error => {
     console.log('err' + error) // for debug
     Message({
       message: error.message,

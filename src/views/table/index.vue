@@ -1,9 +1,17 @@
 <!--
+<<<<<<< HEAD
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-04 10:55:05
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-28 15:55:34
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-04-01 10:51:42
  * @FilePath: \com-project\src\views\table\index.vue
+=======
+ * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @Date: 2024-03-04 10:34:47
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-03-28 15:55:44
+ * @FilePath: \vue-admin-template\src\views\table\index.vue
+>>>>>>> 38476220ca6c35f3288a543099c0698a637341e9
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
@@ -98,6 +106,25 @@
           zip: 200333
         }]
       }
+      return statusMap[status]
+    }
+  },
+  data() {
+    return {
+      list: null,
+      listLoading: false
+    }
+  },
+  created() {
+    // this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      getList().then(response => {
+        this.list = response.data.items
+        this.listLoading = false
+      })
     }
   }
 </script>
