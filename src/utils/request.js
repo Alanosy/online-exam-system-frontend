@@ -1,3 +1,11 @@
+/*
+ * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @Date: 2024-03-28 16:10:58
+ * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @LastEditTime: 2024-03-28 16:12:19
+ * @FilePath: \com-project\src\utils\request.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
@@ -15,8 +23,8 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
 
-    console.log('发送请求');
-    console.log(config);
+    console.log('发送请求')
+    console.log(config)
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
@@ -46,9 +54,10 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log(res);
-    console.log("这是响应拦截");
-    return res;
+    console.log('这是响应拦截')
+    console.log(res)
+    return res
+
     // if the custom code is not 20000, it is judged as an error.
     // if (res.code !== 20000) {
     //   Message({
@@ -75,7 +84,7 @@ service.interceptors.response.use(
     //   return res
     // }
   },
-   error => {
+  error => {
     console.log('err' + error) // for debug
     Message({
       message: error.message,

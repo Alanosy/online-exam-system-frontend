@@ -62,8 +62,7 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-        >Login</el-button
-      >
+      >Login</el-button>
 
       <div class="tips">
         <span style="margin-right: 20px">username: admin</span>
@@ -74,95 +73,92 @@
 </template>
 
 <script>
-import { validUsername } from "@/utils/validate";
-import { sendEmail } from "@/api/email";
+import { validUsername } from '@/utils/validate'
+import { sendEmail } from '@/api/email'
 
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error("Please enter the correct user name"));
+        callback(new Error('Please enter the correct user name'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("The password can not be less than 6 digits"));
+        callback(new Error('The password can not be less than 6 digits'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loginForm: {
-        username: "admin",
-        password: "111111",
+        username: 'admin',
+        password: '111111'
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", validator: validateUsername },
+          { required: true, trigger: 'blur', validator: validateUsername }
         ],
         password: [
-          { required: true, trigger: "blur", validator: validatePassword },
-        ],
+          { required: true, trigger: 'blur', validator: validatePassword }
+        ]
       },
       loading: false,
-      passwordType: "password",
-      redirect: undefined,
-    };
+      passwordType: 'password',
+      redirect: undefined
+    }
   },
   watch: {
     $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect;
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   created() {
-    this.getEmail();
+    this.getEmail()
+  },
+  created() {
+    this.getEmail()
   },
   methods: {
     async getEmail() {
-      const res = await sendEmail("3492886133@qq.com");
-      console.log("我获得了api的返回");
-      console.log(res);
+      const res = await sendEmail('3109836428@qq.com')
+      console.log('我获得了api的返回')
+      console.log(res)
     },
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     handleLogin() {
-      console.log("点击提交按钮");
-      let formdata = new FormData()
-      formdata.append('username', this.loginForm.username)
-      formdata.append('password', this.loginForm.password)
-      console.log(formdata);
-      this.$refs.loginForm.validate((valid) => {
-        this.$router.push("/");
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', formdata).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      });
-    },
+      this.$refs.loginForm.validate(valid => {
+        // if (valid) {
+        //   this.loading = true
+        //   this.$store.dispatch('user/login', this.loginForm).then(() => {
+        //     this.$router.push({ path: this.redirect || '/' })
+        //     this.loading = false
+        //   }).catch(() => {
+        //     this.loading = false
+        //   })
+        // } else {
+        //   console.log('error submit!!')
+        //   return false
+        // }
+      })
+    }
   }
-};
+}
 </script>
 
 <style lang="scss">

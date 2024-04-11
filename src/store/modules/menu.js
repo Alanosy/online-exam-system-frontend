@@ -21,7 +21,7 @@ const mutations = {
       } else {
         state?.tags?.forEach(item => {
           item.checked = false
-        });
+        })
         state.tags.push(tag)
       }
       sessionStorage.setItem('TAGS', JSON.stringify(state.tags))
@@ -29,7 +29,7 @@ const mutations = {
   },
   // 删除标签
   REMOVE_TAG(state, tag) {
-    console.log(tag);
+    console.log(tag)
     state.tags.map((item, index) => {
       if (item.title === tag.title) {
         state.tags.splice(index, 1)
@@ -42,7 +42,7 @@ const mutations = {
   },
   CLOSE_SIDEBAR: (state) => {
     state.tags = []
-  },
+  }
 }
 
 const actions = {
