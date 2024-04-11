@@ -124,6 +124,7 @@
 </script>
 <style scoped>
 .qb{
+   margin-top:20px;
     width: 100%;
     height: 8000px;
 }

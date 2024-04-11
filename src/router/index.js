@@ -43,57 +43,65 @@ export const constantRoutes = [
     hidden: true
   },
 
+  // {
+  //     path: '/form',
+  //     component: Layout,
+  //     children: [
+  //       {
+  //         path: 'index',
+  //         name: 'Form',
+  //         component: () => import('@/views/form/index'),
+  //         meta: { title: 'Form', icon: 'form' }
+  //       }
+  //     ]
+  //   },
+
   {
-    path: '/',
+    path: '/', 
     component: Layout,
-    redirect: '/dashboard',
     children: [{
-      path: 'dashboard',
+      path: '/index',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '主页', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/usermanager',
     component: Layout,
-    redirect: '/usermanager',
     children: [{
-      path: 'usermanager',
-      name: '用户管理',
+      path: '/yonghu',
+      name: 'Usermanager',
       component: () => import('@/views/usermanager/yonghu'),
       meta: { title: '用户管理', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/classmanager',
     component: Layout,
-    redirect: '/classmanager',
     children: [{
-      path: 'classmanager',
-      name: '班级管理',
+      path: '/classgl',
+      name: 'Classmanager',
       component: () => import('@/views/classmanager/classgl'),
       meta: { title: '班级管理', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/textcenter',
     component: Layout,
-    redirect: '/textcenter',
     children: [{
-      path: 'textcenter',
-      name: '试卷中心',
+      path: '/shijuanzx',
+      name: 'Textcenter',
       component: () => import('@/views/textcenter/shijuanzx'),
       meta: { title: '试卷中心', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/questcenter',
     component: Layout,
-    redirect: '/questcenter',
     children: [{
-      path: 'questcenter',
-      name: '刷题中心',
+      path: '/shuatizx',
+      name: 'Questcenter',
       component: () => import('@/views/questcenter/shuatizx'),
       meta: { title: '刷题中心', icon: 'dashboard' }
     }]
@@ -101,109 +109,111 @@ export const constantRoutes = [
   {
     path: '/examrecord',
     component: Layout,
-    redirect: '/examrecord',
-    name: '考试记录',
+    name: 'Examrecord',
     meta: { title: '考试记录', icon: 'el-icon-s-help' },
     children: [
       {
-        path: 'examrecord',
-        name: '考试记录',
-        component: () => import('@/views/examrecord/examrecord'),
+        path: '/examrecord1',
+        name: 'Examrecord1',
+        component: () => import('@/views/examrecord/examrecord1'),
         meta: { title: '考试记录', icon: 'table' }
       },
       {
-        path: 'questrecord',
-        name: '刷题记录',
+        path: '/questrecord',
+        name: 'Examrecord2',
         component: () => import('@/views/examrecord/questrecord'),
         meta: { title: '刷题记录', icon: 'tree' }
       }
     ]
   },
   {
-    path: '/',
+    path: '/wrongbook',
     component: Layout,
-    redirect: '/wrongbook',
     children: [{
-      path: 'wrongbook',
-      name: '错题本',
+      path: '/cuotiben',
+      name: 'Wrongbook',
       component: () => import('@/views/wrongbook/cuotiben'),
       meta: { title: '错题本', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/exammange',
     component: Layout,
-    redirect: '/exammange',
     children: [{
-      path: 'exammange',
-      name: '考试管理',
+      path: '/kaoshigl',
+      name: 'Exammange',
       component: () => import('@/views/exammanage/kaoshigl'),
       meta: { title: '考试管理', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/bankmanage',
     component: Layout,
-    redirect: '/bankmanage',
     children: [{
-      path: 'bankmanage',
-      name: '题库管理',
+      path: '/tikugl',
+      name: 'Bankmanage',
       component: () => import('@/views/bankmanage/tikugl'),
       meta: { title: '题库管理', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/questmanage',
     component: Layout,
-    redirect: '/questmanage',
     children: [{
-      path: 'questmanage',
-      name: '试题管理',
+      path: '/shitigl',
+      name: 'Questmanage',
       component: () => import('@/views/questmanage/shitigl'),
       meta: { title: '试题管理', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/shitiadd',
     component: Layout,
-    redirect: '/certificate',
     children: [{
-      path: 'certificate',
-      name: '证书管理',
+      path: '/news',
+      name: 'news',
+      hidden:true,
+      component: () => import('@/views/shitiadd/news'),
+      meta: { title: '试题管理', icon: 'dashboard' }
+    }]
+  },
+  {
+    path: '/certificate',
+    component: Layout,
+    children: [{
+      path: '/zhengshugl',
+      name: 'Certificate',
       component: () => import('@/views/certificate/zhengshugl'),
       meta: { title: '证书管理', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/scoreana',
     component: Layout,
-    redirect: '/scoreana',
     children: [{
-      path: 'scoreana',
-      name: '成绩分析',
+      path: 'chengjifx',
+      name: 'Scoreana',
       component: () => import('@/views/scoreana/chengjifx'),
       meta: { title: '成绩分析', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/answermanage',
     component: Layout,
-    redirect: '/answermanage',
     children: [{
-      path: 'answermanage',
-      name: '答卷管理',
+      path: 'dajuangl',
+      name: 'Answermanage',
       component: () => import('@/views/answermanage/dajuangl'),
       meta: { title: '答卷管理', icon: 'dashboard' }
     }]
   },
   {
-    path: '/',
+    path: '/notice',
     component: Layout,
-    redirect: '/notice',
     children: [{
-      path: 'notice',
-      name: '公告管理',
-      component: () => import('@/views/notice/notice'),
+      path: 'notice1',
+      name: 'Notice',
+      component: () => import('@/views/notice/notice1'),
       meta: { title: '公告管理', icon: 'dashboard' }
     }]
   },

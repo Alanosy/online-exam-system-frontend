@@ -1,16 +1,16 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-08 16:04:28
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-04-11 15:05:10
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 
 <template>
-    <div>
+    <div style="margin-top:30px">
 
-        <div style=" padding-left: 53px;padding-top: 22px;">
+        <div style=" padding-left: 53px;">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
                 <el-form-item label="证书名称:   ">
                     <el-select v-model="formInline.user " placeholder="证书名称">
@@ -187,25 +187,7 @@ export default {
 </script>
 
 <style>
-.el-input__inner {
-    -webkit-appearance: none;
-    background-color: #FFF;
-    background-image: none;
-    border-radius: 18px;
-    border: 1px solid #161616;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    color: #606266;
-    display: inline-block;
-    font-size: inherit;
-    height: 40px;
-    line-height: 40px;
-    outline: 0;
-    padding: 0 15px;
-    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    width: 100%;
-}
+
 
 .el-table--border,
 .el-table--group {
