@@ -11,6 +11,6 @@ import request from '@/utils/request'
 export function sendEmail(email) {
   return request({
     url: `/user/authcode?email=${email}`,
-    method: 'get',
+    method: 'get'
   })
 }
