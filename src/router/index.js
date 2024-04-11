@@ -54,6 +54,7 @@ export const constantRoutes = [
       meta: { title: '主页', icon: 'dashboard' }
     }]
   },
+
   {
     path: '/',
     component: Layout,
