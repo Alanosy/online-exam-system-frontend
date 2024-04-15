@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-11 16:09:05
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-04-15 09:23:41
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -34,7 +34,7 @@
                 <el-table-column prop="zip" label="创建时间" align="center" />
                 <el-table-column fixed="right" label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" size="small" @click="bianji">开始考试</el-button>
+                        <el-button type="text" size="small"  @click="screenInfo()">开始考试</el-button>
                        
                     </template>
                 </el-table-column>
@@ -130,6 +130,10 @@ export default {
     methods: {
         onSubmit() {
             console.log('submit!');
+        },
+        screenInfo(row, index, done) {
+         console.info("=====", row);
+         this.$router.push({ name: "text", query: { zhi: row } });
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`)

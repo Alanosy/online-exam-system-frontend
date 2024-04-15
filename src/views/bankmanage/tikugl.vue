@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-04-11 17:21:44
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-04-15 11:04:19
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,11 +12,8 @@
 
     <div style=" padding-left: 53px;padding-top: 22px;">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="题库名称:   ">
-          <el-select v-model="formInline.region" placeholder="题库名称">
-            <el-option label="区域一" value="shanghai" />
-            <el-option label="区域二" value="beijing" />
-          </el-select>
+        <el-form-item label="题库名称:">
+          <el-input v-model="input" placeholder="请输入查询内容"></el-input>
         </el-form-item>
         <el-form-item >
           <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
@@ -29,7 +26,7 @@
 
     <!-- table -->
     <div style="margin: auto;width: 1200px; " align="center">
-      <el-table :data="tableData" border>
+      <el-table :data="tables" border>
         <el-table-column fixed prop="date" label="序号" align="center" />
         <el-table-column prop="name" label="题库名称" align="center" />
         <el-table-column prop="province" label="单选题数量" align="center" />
@@ -86,9 +83,26 @@ export default {
     },
 
   },
+ computed:{
+       tables() { //在你的数据表格中定义tabels
+		   const input = this.input
+			 if (input) {
+				// console.log("input输入的搜索内容：" + this.input)
+				return this.tableData.filter(data => {
+					console.log("object:" + Object.keys(data))
+					return Object.keys(data).some(key => {
+						return String(data[key]).toLowerCase().indexOf(input) > -1
+					})
+				})
+			}
+			return this.tableData
+		}
+   
+   },
 
     data() {
         return {
+          input:'',
             formInline: {
                 user: '',
                 region: ''
@@ -114,8 +128,8 @@ export default {
                 jd:'22',
                 zip: 200333
             }, {
-                date: '88',
-                name: '王小虎',
+                date: '78',
+                name: '王da虎',
                 province: '20',
                 city: '5',
                 address: '20',
@@ -123,8 +137,8 @@ export default {
                 zip: 200333
             },
             {
-               date: '88',
-                name: '王小虎',
+               date: '87',
+                name: '王虎',
                 province: '20',
                 city: '5',
                 address: '20',
@@ -132,8 +146,8 @@ export default {
                 zip: 200333
             },
             {
-               date: '88',
-                name: '王小虎',
+               date: '8',
+                name: '王v虎',
                 province: '20',
                 city: '5',
                 address: '20',
