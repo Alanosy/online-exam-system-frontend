@@ -13,7 +13,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" style="margin-left: 20px"
+          <el-button type="primary"
+            @click="onSubmit" style="margin-left: 20px"
             >查询</el-button
           >
         </el-form-item>
@@ -106,6 +107,9 @@ export default {
       console.log(`当前页: ${val}`);
     },
   },
+ 
+  
+ 
 
   data() {
     return {

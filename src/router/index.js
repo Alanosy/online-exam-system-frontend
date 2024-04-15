@@ -98,6 +98,17 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/zhunbeikaoshi',
+    component: Layout,
+    children: [{
+      path: '/text',
+      name: 'text',
+      hidden:true,
+      component: () => import('@/views/zhunbeikaoshi/text'),
+      meta: { title: '准备考试', icon: 'dashboard' }
+    }]
+  },
+  {
     path: '/questcenter',
     component: Layout,
     children: [{

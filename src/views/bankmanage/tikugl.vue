@@ -1,46 +1,53 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-04-11 17:21:44
+ * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @LastEditTime: 2024-04-15 14:28:51
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 
 <template>
   <div>
-
-    <div style=" padding-left: 53px;padding-top: 22px;">
+    <div style="padding-left: 53px; padding-top: 22px">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="题库名称:   ">
-          <el-select v-model="formInline.region" placeholder="题库名称">
-            <el-option label="区域一" value="shanghai" />
-            <el-option label="区域二" value="beijing" />
-          </el-select>
+        <el-form-item label="题库名称:">
+          <el-input v-model="input" placeholder="请输入查询内容"></el-input>
         </el-form-item>
-        <el-form-item >
-          <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
-          <el-button type="primary" style="margin-left: 40px;" @click="screenInfo()">新增</el-button>
+        <el-form-item>
+          <el-button type="primary" style="margin-left: 40px" @click="onSubmit"
+            >查询</el-button
+          >
+          <el-button
+            type="primary"
+            style="margin-left: 40px"
+            @click="screenInfo()"
+            >新增</el-button
+          >
         </el-form-item>
-        
-
       </el-form>
     </div>
 
     <!-- table -->
-    <div style="margin: auto;width: 1200px; " align="center">
-      <el-table :data="tableData" border>
+    <div style="margin: auto; width: 1200px" align="center">
+      <el-table :data="tables" border>
         <el-table-column fixed prop="date" label="序号" align="center" />
         <el-table-column prop="name" label="题库名称" align="center" />
-        <el-table-column prop="count" label="单选题数量" align="center" />
-        <el-table-column prop="class" label="多选题数量" align="center" />
-        <el-table-column prop="time" label="判断题数量" align="center" />
-        <el-table-column prop="jd" label="简答题数量" align="center"/>
+        <el-table-column prop="province" label="单选题数量" align="center" />
+        <el-table-column prop="city" label="多选题数量" align="center" />
+        <el-table-column prop="address" label="判断题数量" align="center" />
+        <el-table-column prop="jd" label="简答题数量" align="center" />
 
         <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="row">
-            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
-            <el-button type="text" size="small" @click="open">删除</el-button>
+          <template slot-scope=" { row }">
+            <el-button
+              type="text"
+              size="small"
+              style="font-size:14px"
+             @click="updateRow(row)"
+              >编辑</el-button
+            >
+            <el-button type="text" size="small" style="color:red;font-size:14px" @click="open">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -57,77 +64,182 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <!--编辑弹窗-->
 
-
-    <!--弹框---->
-    
-    <el-dialog title="编辑"  :visible.sync="dialogFormVisible">
-      <el-row >
+    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
+      <el-row>
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="序号  " :label-width="formLabelWidth">
               <el-input v-model="form.date" autocomplete="off"></el-input>
             </el-form-item>
-
           </el-form>
-
         </el-col>
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="班级名称" :label-width="formLabelWidth">
+            <el-form-item label="题库名称" :label-width="formLabelWidth">
               <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
-
           </el-form>
         </el-col>
-
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="班级口令" :label-width="formLabelWidth">
-              <el-input v-model="form.count" autocomplete="off"></el-input>
+            <el-form-item label="单选题数量" :label-width="formLabelWidth">
+              <el-input v-model="form. province" autocomplete="off"></el-input>
             </el-form-item>
-
           </el-form>
-
         </el-col>
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="班级   " :label-width="formLabelWidth">
-              <el-input v-model="form.class" autocomplete="off"></el-input>
+            <el-form-item label="多选题数量" :label-width="formLabelWidth">
+              <el-input v-model="form.city" autocomplete="off"></el-input>
             </el-form-item>
-
           </el-form>
         </el-col>
-
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="注册时间" :label-width="formLabelWidth">
-              <el-input v-model="form.time" autocomplete="off"></el-input>
+            <el-form-item label="判断题数量" :label-width="formLabelWidth">
+              <el-input v-model="form.address" autocomplete="off"></el-input>
             </el-form-item>
-
           </el-form>
-
         </el-col>
-        
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="简答题数量" :label-width="formLabelWidth">
+              <el-input v-model="form.jd" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
       </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
   </div>
-
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      input: "",
+      formInline: {
+        user: "",
+        region: "",
+      },
+      currentPage1: 5,
+      currentPage2: 5,
+      currentPage3: 5,
+      currentPage4: 4,
+      tableData: [
+        {
+          date: "88",
+          name: "王小虎",
+          province: "20",
+          city: "5",
+          address: "20",
+          jd: "22",
+          zip: 200333,
+        },
+        {
+          date: "88",
+          name: "王小虎",
+          province: "20",
+          city: "5",
+          address: "20",
+          jd: "22",
+          zip: 200333,
+        },
+        {
+          date: "78",
+          name: "王da虎",
+          province: "20",
+          city: "5",
+          address: "20",
+          jd: "22",
+          zip: 200333,
+        },
+        {
+          date: "87",
+          name: "王虎",
+          province: "20",
+          city: "5",
+          address: "20",
+          jd: "22",
+          zip: 200333,
+        },
+        {
+          date: "8",
+          name: "王v虎",
+          province: "20",
+          city: "5",
+          address: "20",
+          jd: "22",
+          zip: 200333,
+        },
+      ],
+      formInline: {
+        user: "",
+        region: "",
+      },
+      dialogVisible: false,
+      cancle() {},
+      updateRow(row) {
+        this.dialogFormVisible = true;
+        this.form = row;
+      },
+      diaTitle: "新增",
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: "",
+      },
+      formLabelWidth: "120px"
+    }
+  },
   methods: {
-    handleClick(row) {
-      console.log(row);
+    open() {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true,
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    onSubmit() {
+      console.log("submit!");
+    },
+    screenInfo(row, index, done) {
+      console.info("=====", row);
+      this.$router.push({ name: "Add", query: { zhi: row } });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -135,192 +247,124 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
-    onSubmit() {
-      console.log("submit!");
-    },
-    open() {
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning',
-                center: true
-            }).then(() => {
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });
-            });
-        },
+    handleClick(row) {
+      console.log(row);
+    }
   },
-  data() {
-    return {
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
-      tableData: [
-        {
-          date: "1001",
-          name: "好好学习班",
-          count: "好好学习，天天向上",
-          class: "2201班",
-          time: "2024.2.28",
-        },
-        {
-          date: "1001",
-          name: "好好学习班",
-          count: "好好学习，天天向上",
-          class: "2201班",
-          time: "2024.2.28",
-        },
-        {
-          date: "1001",
-          name: "好好学习班",
-          count: "好好学习，天天向上",
-          class: "2201班",
-          time: "2024.2.28",
-        },
-        {
-          date: "1001",
-          name: "好好学习班",
-          count: "好好学习，天天向上",
-          class: "2201班",
-          time: "2024.2.28",
-        },
-        {
-          date: "1001",
-          name: "好好学习班",
-          count: "好好学习，天天向上",
-          class: "2201班",
-          time: "2024.2.28",
-        },
-      ],
-      formInline: {
-        user: "",
-        region: "",
-      },
-      cancle(){},
-      updateRow(row){
-      this.dialogFormVisible=true
-      this.form=row
-    },
-      diaTitle:'新增',
-      dialogTableVisible: false,
-      dialogFormVisible: false,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
-      formLabelWidth: '120px'
-    };
+  computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }
+      return this.tableData;
+    }
   },
 
+  
 };
 </script>
 <style>
 .el-input__inner {
-    -webkit-appearance: none;
-    background-color: #FFF;
-    background-image: none;
-    border-radius: 18px;
-    border: 1px solid #161616;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    color: #606266;
-    display: inline-block;
-    font-size: inherit;
-    height: 40px;
-    line-height: 40px;
-    outline: 0;
-    padding: 0 15px;
-    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    width: 100%;
+  -webkit-appearance: none;
+  background-color: #fff;
+  background-image: none;
+  border-radius: 18px;
+  border: 1px solid #161616;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  height: 40px;
+  line-height: 40px;
+  outline: 0;
+  padding: 0 15px;
+  -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 100%;
 }
 
 .el-table--border,
 .el-table--group {
-    border: 1px solid #161616;
+  border: 1px solid #161616;
 }
 
 .el-table thead {
-    color: #333;
-    font-weight: 500;
+  color: #333;
+  font-weight: 500;
 }
 
 .el-table {
-    position: relative;
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    width: 100%;
-    max-width: 100%;
-    font-size: 14px;
-    color: #333;
-
+  position: relative;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  font-size: 14px;
+  color: #333;
 }
 .el-pagination {
-    white-space: nowrap;
-    padding: 40px 53px;
-    color: #303133;
-    font-weight: 700;
+  white-space: nowrap;
+  padding: 40px 53px;
+  color: #303133;
+  font-weight: 700;
 }
 
-.el-pagination button, .el-pagination span:not([class*=suffix]) {
-    display: inline-block;
-    font-size: 13px;
-    min-width: 35.5px;
-    height: 20px;
-    line-height: 27px;
-    vertical-align: top;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+.el-pagination button,
+.el-pagination span:not([class*="suffix"]) {
+  display: inline-block;
+  font-size: 13px;
+  min-width: 35.5px;
+  height: 20px;
+  line-height: 27px;
+  vertical-align: top;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .el-pagination__total {
-    margin-right: 10px;
-    font-weight: 800;
-    color: #606266;
+  margin-right: 10px;
+  font-weight: 800;
+  color: #606266;
 }
 
-.el-pagination button, .el-pagination span:not([class*=suffix]) {
-    display: inline-block;
-    font-size: 10px;
-    min-width: 30.5px;
-    height: 36px;
-    line-height: 28px;
-    vertical-align: top;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+.el-pagination button,
+.el-pagination span:not([class*="suffix"]) {
+  display: inline-block;
+  font-size: 10px;
+  min-width: 30.5px;
+  height: 36px;
+  line-height: 28px;
+  vertical-align: top;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .el-pagination__jump {
-    margin-left: 24px;
-    font-weight: 400;
-    color: #333;
+  margin-left: 24px;
+  font-weight: 400;
+  color: #333;
 }
 .el-pager li {
-    padding: 0 4px;
-    font-size: 13px;
-    min-width: 35.5px;
-    height: 28px;
-    line-height: 36px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    text-align: center;
+  padding: 0 4px;
+  font-size: 13px;
+  min-width: 35.5px;
+  height: 28px;
+  line-height: 36px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
 }
 </style>
