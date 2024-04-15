@@ -2,15 +2,15 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-11 16:06:53
+ * @LastEditTime: 2024-04-15 08:56:39
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 
 <template>
-  <div>
+  <div style="margin-top:30px">
 
-    <div style=" padding-left: 53px;padding-top: 22px;">
+    <div style=" padding-left: 53px;">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="所属题库:   ">
           <el-select v-model="formInline.region" placeholder="所属题库">
@@ -186,7 +186,7 @@ export default {
     -webkit-appearance: none;
     background-color: #FFF;
     background-image: none;
-    border-radius: 5px;
+    border-radius: 18px;
     border: 1px solid #161616;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
