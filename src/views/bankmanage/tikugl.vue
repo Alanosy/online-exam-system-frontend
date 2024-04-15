@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-04-11 17:06:40
+ * @LastEditTime: 2024-04-11 17:21:44
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -20,7 +20,7 @@
         </el-form-item>
         <el-form-item >
           <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
-          <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">新增</el-button>
+          <el-button type="primary" style="margin-left: 40px;" @click="screenInfo()">新增</el-button>
         </el-form-item>
         
 
@@ -63,34 +63,41 @@
 
 <script>
 export default {
+  methods:{
+      onSubmit() {
+            console.log('submit!');
+        },
+      screenInfo(row, index, done) {
+      console.info("=====", row);
+      this.$router.push({ name: "Add", query: { zhi: row } });
+    },
+     handleSizeChange(val) {
+            console.log(`每页 ${val} 条`)
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`)
+        },
+     handleClick(row) {
+            console.log(row)
+        },
+      
+    handleClick(row) {
+        console.log(row)
+    },
+
+  },
 
     data() {
         return {
             formInline: {
                 user: '',
                 region: ''
-            }
-        }      
-    },
-    methods: {
-        onSubmit() {
-            console.log('submit!');
-        }
-    },
-
-
-
-    data() {
-        return {
+            },
             currentPage1: 5,
             currentPage2: 5,
             currentPage3: 5,
-            currentPage4: 4
-        }
-    },
-    data() {
-        return {
-            tableData: [{
+            currentPage4: 4,
+               tableData: [{
                 date: '88',
                 name: '王小虎',
                 province: '20',
@@ -137,30 +144,14 @@ export default {
                 user: '',
                 region: ''
             }
+
         }
+            
     },
-
-
-    methods: {
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`)
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`)
-        }
-    },
-
-    methods: {
-        handleClick(row) {
-            console.log(row)
-        }
-    },
+   
 
 
 
-    handleClick(row) {
-        console.log(row)
-    },
 }
 
 </script>

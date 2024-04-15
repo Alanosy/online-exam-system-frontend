@@ -158,6 +158,17 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/message',
+    component: Layout,
+    children: [{
+      path: '/add',
+      name: 'Add',
+      hidden:true,
+      component: () => import('@/views/message/add'),
+      meta: { title: '题库管理', icon: 'dashboard' }
+    }]
+  },
+  {
     path: '/questmanage',
     component: Layout,
     children: [{
