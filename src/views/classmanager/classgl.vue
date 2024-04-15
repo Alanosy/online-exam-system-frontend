@@ -13,14 +13,12 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" style="margin-left: 20px"
-            >查询</el-button
-          >
+          <el-button type="primary" @click="onSubmit" style="margin-left: 20px">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" style="margin-left: 10px"
-            >新增</el-button
-          >
+          <el-button
+          :title="diaTitle"
+          type="primary" @click="dialogTableVisible = true" style="margin-left: 10px" > 新增</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -29,12 +27,7 @@
       <el-table :data="tableData" border>
         <el-table-column prop="date" label="序号" align="center" width="120px">
         </el-table-column>
-        <el-table-column
-          prop="name"
-          label="班级名称"
-          width="180px"
-          align="center"
-        >
+        <el-table-column prop="name" label="班级名称" width="180px" align="center">
         </el-table-column>
         <el-table-column prop="count" label="班级口令" align="center">
         </el-table-column>
@@ -43,37 +36,154 @@
         <el-table-column prop="time" label="注册时间" align="center">
         </el-table-column>
         <el-table-column align="center" label="操作">
-          <template slot-scope="scope">
-            <el-button
-              @click="handleClick(scope.row)"
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              size="small"
-              style="color: red; font-size: 14px"
-              >删除</el-button
-            >
+          <template slot-scope="{row}">
+            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
+            <el-button type="text" size="small" style="color: red; font-size: 14px" @click="open">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 分页 -->
     <div style="margin-top: 25px; margin-left: 52px">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
-      >
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4"
+        :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper"
+        :total="400">
       </el-pagination>
     </div>
+    <!--新增弹窗-->
+
+    <el-dialog
+    :title="diaTitle"
+      :visible.sync="dialogTableVisible">
+      <el-row >
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="序号  " :label-width="formLabelWidth">
+              <el-input v-model="form.date" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级口令" :label-width="formLabelWidth">
+              <el-input v-model="form.count" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级   " :label-width="formLabelWidth">
+             <el-select v-model="form.class" disabled>
+            <el-option
+                   v-for="item in options"
+                   :key="item.value"
+                   :lable="item.lable"
+                   :value="item.value"
+                   />
+
+          </el-select>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="注册时间" :label-width="formLabelWidth">
+              <el-input v-model="form.time" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        
+      </el-row>
+      
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    
+    
+    <!--编辑弹窗-->
+
+    <el-dialog title="编辑"  :visible.sync="dialogFormVisible">
+      <el-row >
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="序号  " :label-width="formLabelWidth">
+              <el-input v-model="form.date" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级口令" :label-width="formLabelWidth">
+              <el-input v-model="form.count" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级   " :label-width="formLabelWidth">
+              <el-input v-model="form.class" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="注册时间" :label-width="formLabelWidth">
+              <el-input v-model="form.time" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        
+      </el-row>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -89,6 +199,27 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
+    onSubmit() {
+      console.log("submit!");
+    },
+    open() {
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                center: true
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
   },
   data() {
     return {
@@ -137,23 +268,40 @@ export default {
         user: "",
         region: "",
       },
+      cancle(){},
+      updateRow(row){
+      this.dialogFormVisible=true
+      this.form=row
+    },
+      diaTitle:'新增',
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      formLabelWidth: '120px'
     };
   },
-  methods: {
-    onSubmit() {
-      console.log("submit!");
-    },
-  },
+
 };
 </script>
 
 <style>
-
-.el-table--border, .el-table--group {
-    border: 1px solid #b3b3b3;
+.el-table--border,
+.el-table--group {
+  border: 1px solid #b3b3b3;
 }
+
 .bj {
   margin-top: 40px;
   margin-left: 30px;
 }
+
 </style>
