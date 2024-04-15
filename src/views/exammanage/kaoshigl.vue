@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-08 15:19:43
+ * @LastEditTime: 2024-04-11 16:07:45
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -75,31 +75,13 @@ export default {
     data() {
         return {
             formInline: {
-                user:'',
-                region: '',
-                ser:''
-            }
-        }
-    },
-    methods: {
-        onSubmit() {
-            console.log('submit!');
-        },
-      
-    },
-
-
-
-    data() {
-        return {
+                user: '',
+                region: ''
+            },
             currentPage1: 5,
             currentPage2: 5,
             currentPage3: 5,
-            currentPage4: 4
-        }
-    },
-    data() {
-        return {
+            currentPage4: 4,
             tableData: [{
                 date: '2016-05-02',
                 name: '王小虎',
@@ -141,31 +123,53 @@ export default {
             formInline: {
                 user: '',
                 region: ''
-            }
+            },
+         
+            
         }
     },
-
-
     methods: {
+        onSubmit() {
+            console.log('submit!');
+        },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`)
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`)
-        }
-    },
-
-    methods: {
+        },
+        open() {
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                center: true
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
         handleClick(row) {
             console.log(row)
         }
+        
     },
 
 
 
-    handleClick(row) {
-        console.log(row)
-    },
+  
+
+
+   
+
+
 }
 
 </script>
@@ -174,7 +178,7 @@ export default {
     -webkit-appearance: none;
     background-color: #FFF;
     background-image: none;
-    border-radius: 18px;
+    border-radius:5px;
     border: 1px solid #161616;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;

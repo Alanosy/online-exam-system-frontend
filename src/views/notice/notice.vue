@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-08 16:04:28
+ * @LastEditTime: 2024-04-11 16:13:27
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,7 +13,7 @@
         <div style=" padding-left: 53px;padding-top: 22px;">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
                 <el-form-item label="证书名称:   ">
-                    <el-select v-model="formInline.user " placeholder="证书名称">
+                    <el-select v-model="formInline.user" placeholder="证书名称">
                         <el-option label="区域一" value="shanghai" />
                         <el-option label="区域二" value="beijing" />
                     </el-select>
@@ -43,8 +43,9 @@
                 <el-table-column prop="zip" label="邮编" align="center" />
                 <el-table-column fixed="right" label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" size="small" @click="bianji">编辑</el-button>
-                        <el-button type="text" size="small" @click="open ">删除</el-button>
+                        <el-button type="text" @click="dialogFormVisible = true">编辑</el-button>
+
+                        <el-button type="text" @click="open">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -55,8 +56,26 @@
                 layout="total, sizes, prev, pager, next, jumper" :total="400" @size-change="handleSizeChange"
                 @current-change="handleCurrentChange" />
         </div>
-        
-   
+
+        <!--弹框-->
+
+
+        <el-dialog title="编辑" :visible.sync="dialogFormVisible">
+            <el-form :model="form"  >
+                <el-form-item label="活动名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="活动区域" :label-width="formLabelWidth">
+                    <el-input v-model="form.region" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
+
+
 
 
 
@@ -73,27 +92,11 @@ export default {
             formInline: {
                 user: '',
                 region: ''
-            }
-        }
-    },
-    methods: {
-        onSubmit() {
-            console.log('submit!');
-        }
-    },
-
-
-
-    data() {
-        return {
+            },
             currentPage1: 5,
             currentPage2: 5,
             currentPage3: 5,
-            currentPage4: 4
-        }
-    },
-    data() {
-        return {
+            currentPage4: 4,
             tableData: [{
                 date: '2016-05-02',
                 name: '王小虎',
@@ -135,51 +138,63 @@ export default {
             formInline: {
                 user: '',
                 region: ''
-            }
+            },
+            dialogTableVisible: false,
+            dialogFormVisible: false,
+            form: {
+                name: '',
+                region: '',
+                date1: '',
+                date2: '',
+                delivery: false,
+                type: [],
+                resource: '',
+                desc: ''
+            },
+            formLabelWidth: '120px'
+
         }
     },
-
-
     methods: {
+        onSubmit() {
+            console.log('submit!');
+        },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`)
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`)
-        }
-    },
-
-    methods: {
+        },
+        open() {
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                center: true
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
         handleClick(row) {
             console.log(row)
         }
+
     },
 
-   
-    methods: {
-      open() {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          center: true
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      }
-    },
-    
-   
 
-  
+
+
+
+
+
 
 
 }
@@ -191,7 +206,7 @@ export default {
     -webkit-appearance: none;
     background-color: #FFF;
     background-image: none;
-    border-radius: 18px;
+    border-radius: 5px;
     border: 1px solid #161616;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
