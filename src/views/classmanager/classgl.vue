@@ -88,15 +88,9 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="班级   " :label-width="formLabelWidth">
-             <el-select v-model="form.class" disabled>
-            <el-option
-                   v-for="item in options"
-                   :key="item.value"
-                   :lable="item.lable"
-                   :value="item.value"
-                   />
+              <el-input v-model="form.count" autocomplete="off"></el-input>
+         
 
-          </el-select>
             </el-form-item>
 
           </el-form>

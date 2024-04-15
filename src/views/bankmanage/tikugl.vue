@@ -32,15 +32,15 @@
       <el-table :data="tableData" border>
         <el-table-column fixed prop="date" label="序号" align="center" />
         <el-table-column prop="name" label="题库名称" align="center" />
-        <el-table-column prop="province" label="单选题数量" align="center" />
-        <el-table-column prop="city" label="多选题数量" align="center" />
-        <el-table-column prop="address" label="判断题数量" align="center" />
+        <el-table-column prop="count" label="单选题数量" align="center" />
+        <el-table-column prop="class" label="多选题数量" align="center" />
+        <el-table-column prop="time" label="判断题数量" align="center" />
         <el-table-column prop="jd" label="简答题数量" align="center"/>
 
         <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleClick(scope.row)">编辑</el-button>
-            <el-button type="text" size="small">删除</el-button>
+          <template slot-scope="row">
+            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
+            <el-button type="text" size="small" @click="open">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -57,103 +57,176 @@
         @current-change="handleCurrentChange"
       />
     </div>
+
+
+    <!--弹框---->
+    
+    <el-dialog title="编辑"  :visible.sync="dialogFormVisible">
+      <el-row >
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="序号  " :label-width="formLabelWidth">
+              <el-input v-model="form.date" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级口令" :label-width="formLabelWidth">
+              <el-input v-model="form.count" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级   " :label-width="formLabelWidth">
+              <el-input v-model="form.class" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="注册时间" :label-width="formLabelWidth">
+              <el-input v-model="form.time" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        
+      </el-row>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 
 </template>
 
 <script>
 export default {
-  methods:{
-      onSubmit() {
-            console.log('submit!');
-        },
-      screenInfo(row, index, done) {
-      console.info("=====", row);
-      this.$router.push({ name: "Add", query: { zhi: row } });
-    },
-     handleSizeChange(val) {
-            console.log(`每页 ${val} 条`)
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`)
-        },
-     handleClick(row) {
-            console.log(row)
-        },
-      
+  methods: {
     handleClick(row) {
-        console.log(row)
+      console.log(row);
     },
-
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+    onSubmit() {
+      console.log("submit!");
+    },
+    open() {
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                center: true
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
+  },
+  data() {
+    return {
+      currentPage1: 5,
+      currentPage2: 5,
+      currentPage3: 5,
+      currentPage4: 4,
+      tableData: [
+        {
+          date: "1001",
+          name: "好好学习班",
+          count: "好好学习，天天向上",
+          class: "2201班",
+          time: "2024.2.28",
+        },
+        {
+          date: "1001",
+          name: "好好学习班",
+          count: "好好学习，天天向上",
+          class: "2201班",
+          time: "2024.2.28",
+        },
+        {
+          date: "1001",
+          name: "好好学习班",
+          count: "好好学习，天天向上",
+          class: "2201班",
+          time: "2024.2.28",
+        },
+        {
+          date: "1001",
+          name: "好好学习班",
+          count: "好好学习，天天向上",
+          class: "2201班",
+          time: "2024.2.28",
+        },
+        {
+          date: "1001",
+          name: "好好学习班",
+          count: "好好学习，天天向上",
+          class: "2201班",
+          time: "2024.2.28",
+        },
+      ],
+      formInline: {
+        user: "",
+        region: "",
+      },
+      cancle(){},
+      updateRow(row){
+      this.dialogFormVisible=true
+      this.form=row
+    },
+      diaTitle:'新增',
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      formLabelWidth: '120px'
+    };
   },
 
-    data() {
-        return {
-            formInline: {
-                user: '',
-                region: ''
-            },
-            currentPage1: 5,
-            currentPage2: 5,
-            currentPage3: 5,
-            currentPage4: 4,
-               tableData: [{
-                date: '88',
-                name: '王小虎',
-                province: '20',
-                city: '5',
-                address: '20',
-                jd:'22',
-                zip: 200333
-            }, {
-                date: '88',
-                name: '王小虎',
-                province: '20',
-                city: '5',
-                address: '20',
-                jd:'22',
-                zip: 200333
-            }, {
-                date: '88',
-                name: '王小虎',
-                province: '20',
-                city: '5',
-                address: '20',
-                jd:'22',
-                zip: 200333
-            },
-            {
-               date: '88',
-                name: '王小虎',
-                province: '20',
-                city: '5',
-                address: '20',
-                jd:'22',
-                zip: 200333
-            },
-            {
-               date: '88',
-                name: '王小虎',
-                province: '20',
-                city: '5',
-                address: '20',
-                jd:'22',
-                zip: 200333
-            }],
-            formInline: {
-                user: '',
-                region: ''
-            }
-
-        }
-            
-    },
-   
-
-
-
-}
-
+};
 </script>
 <style>
 .el-input__inner {
