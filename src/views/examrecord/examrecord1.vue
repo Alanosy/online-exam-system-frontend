@@ -47,8 +47,30 @@
         <template slot-scope="scope">
         
         <el-button type="text" @click="dialogVisible = true">查看</el-button>
+ 
+ 
 
-<el-dialog
+      </template>
+      
+
+      </el-table-column>
+       
+    </el-table>
+    
+</div>
+<div class="block">
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="400">
+    </el-pagination>
+  </div>
+
+      <el-dialog
   title="查看"
   :visible.sync="dialogVisible"
   width="30%"
@@ -74,26 +96,6 @@
     <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
   </span>
 </el-dialog>
-      </template>
-      
-
-      </el-table-column>
-       
-    
-    </el-table>
-</div>
-<div class="block">
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="400">
-    </el-pagination>
-  </div>
-  
 </div>
 
 </template>
