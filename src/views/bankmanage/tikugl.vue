@@ -1,8 +1,13 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
+<<<<<<< HEAD
  * @LastEditors: st 2946594574@qq.com
  * @LastEditTime: 2024-04-15 14:16:36
+=======
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-04-15 14:14:15
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,7 +16,11 @@
   <div>
     <div style="padding-left: 53px; padding-top: 22px">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
+<<<<<<< HEAD
         <el-form-item label="题库名称:   ">
+=======
+        <el-form-item label="题库名称:">
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
           <el-input v-model="input" placeholder="请输入查询内容"></el-input>
         </el-form-item>
         <el-form-item>
@@ -39,6 +48,7 @@
         <el-table-column prop="jd" label="简答题数量" align="center" />
 
         <el-table-column fixed="right" label="操作" align="center">
+<<<<<<< HEAD
           <template slot-scope="{ row }">
             <el-button
               type="text"
@@ -54,6 +64,17 @@
               @click="open"
               >删除</el-button
             >
+=======
+          <template slot-scope=" { row }">
+            <el-button
+              type="text"
+              size="small"
+              style="font-size:14px"
+             @click="updateRow(row)"
+              >编辑</el-button
+            >
+            <el-button type="text" size="small" style="color:red;font-size:14px" @click="open">删除</el-button>
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
           </template>
         </el-table-column>
       </el-table>
@@ -70,6 +91,10 @@
         @current-change="handleCurrentChange"
       />
     </div>
+<<<<<<< HEAD
+=======
+    <!--编辑弹窗-->
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
 
     <el-dialog title="编辑" :visible.sync="dialogFormVisible">
       <el-row>
@@ -82,7 +107,11 @@
         </el-col>
         <el-col :span="12">
           <el-form :model="form">
+<<<<<<< HEAD
             <el-form-item label="班级名称" :label-width="formLabelWidth">
+=======
+            <el-form-item label="题库名称" :label-width="formLabelWidth">
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
               <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
@@ -91,21 +120,38 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
+<<<<<<< HEAD
             <el-form-item label="班级口令" :label-width="formLabelWidth">
               <el-input v-model="form.province" autocomplete="off"></el-input>
+=======
+            <el-form-item label="单选题数量" :label-width="formLabelWidth">
+              <el-input v-model="form. province" autocomplete="off"></el-input>
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="12">
           <el-form :model="form">
+<<<<<<< HEAD
             <el-form-item label="班级   " :label-width="formLabelWidth">
+=======
+            <el-form-item label="多选题数量" :label-width="formLabelWidth">
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
               <el-input v-model="form.city" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
+<<<<<<< HEAD
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="班级   " :label-width="formLabelWidth">
+=======
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="判断题数量" :label-width="formLabelWidth">
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
               <el-input v-model="form.address" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
@@ -114,7 +160,11 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
+<<<<<<< HEAD
             <el-form-item label="注册时间" :label-width="formLabelWidth">
+=======
+            <el-form-item label="简答题数量" :label-width="formLabelWidth">
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
               <el-input v-model="form.jd" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
@@ -134,7 +184,11 @@
 export default {
   data() {
     return {
+<<<<<<< HEAD
       
+=======
+      input: "",
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
       formInline: {
         user: "",
         region: "",
@@ -155,7 +209,11 @@ export default {
         },
         {
           date: "88",
+<<<<<<< HEAD
           name: "王虎",
+=======
+          name: "王小虎",
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
           province: "20",
           city: "5",
           address: "20",
@@ -163,7 +221,11 @@ export default {
           zip: 200333,
         },
         {
+<<<<<<< HEAD
           date: "88",
+=======
+          date: "78",
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
           name: "王da虎",
           province: "20",
           city: "5",
@@ -172,8 +234,13 @@ export default {
           zip: 200333,
         },
         {
+<<<<<<< HEAD
           date: "88",
           name: "王er虎",
+=======
+          date: "87",
+          name: "王虎",
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
           province: "20",
           city: "5",
           address: "20",
@@ -181,8 +248,13 @@ export default {
           zip: 200333,
         },
         {
+<<<<<<< HEAD
           date: "88",
           name: "王d虎",
+=======
+          date: "8",
+          name: "王v虎",
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
           province: "20",
           city: "5",
           address: "20",
@@ -190,6 +262,13 @@ export default {
           zip: 200333,
         },
       ],
+<<<<<<< HEAD
+=======
+      formInline: {
+        user: "",
+        region: "",
+      },
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
       dialogVisible: false,
       cancle() {},
       updateRow(row) {
@@ -209,9 +288,36 @@ export default {
         resource: "",
         desc: "",
       },
+<<<<<<< HEAD
     };
   },
   methods: {
+=======
+      formLabelWidth: "120px"
+    }
+  },
+  methods: {
+    open() {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true,
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
     onSubmit() {
       console.log("submit!");
     },
@@ -227,6 +333,7 @@ export default {
     },
     handleClick(row) {
       console.log(row);
+<<<<<<< HEAD
     },
     open() {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -250,6 +357,28 @@ export default {
     },
    
   },
+=======
+    }
+  },
+  computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }
+      return this.tableData;
+    }
+  },
+
+  
+>>>>>>> 0a1d3a13372a9f2c046b9264b6b747af6bea0413
 };
 </script>
 <style>

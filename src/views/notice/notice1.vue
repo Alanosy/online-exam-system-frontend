@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-11 16:13:27
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-04-15 11:43:11
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -42,7 +42,7 @@
                 <el-table-column prop="address" label="创建时间" align="center" />
                 <el-table-column prop="zip" label="邮编" align="center" />
                 <el-table-column fixed="right" label="操作" align="center">
-                    <template slot-scope="scope">
+                    <template slot-scope="">
                         <el-button type="text" @click="dialogFormVisible = true">编辑</el-button>
 
                         <el-button type="text" @click="open">删除</el-button>
@@ -135,23 +135,7 @@ export default {
                 address: '上海市普陀区金沙江路 1516 弄',
                 zip: 200333
             }],
-            formInline: {
-                user: '',
-                region: ''
-            },
-            dialogTableVisible: false,
-            dialogFormVisible: false,
-            form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
-            formLabelWidth: '120px'
+           
 
         }
     },
@@ -185,7 +169,24 @@ export default {
         },
         handleClick(row) {
             console.log(row)
-        }
+        },
+         formInline: {
+                user: '',
+                region: ''
+            },
+            dialogTableVisible: false,
+            dialogFormVisible: false,
+            form: {
+                name: '',
+                region: '',
+                date1: '',
+                date2: '',
+                delivery: false,
+                type: [],
+                resource: '',
+                desc: ''
+            },
+            formLabelWidth: '120px'
 
     },
 
