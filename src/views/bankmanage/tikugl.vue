@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-04-11 17:21:44
+ * @LastEditTime: 2024-04-15 11:12:01
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -39,8 +39,36 @@
 
         <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleClick(scope.row)">编辑</el-button>
-            <el-button type="text" size="small">删除</el-button>
+             <el-button type="text" @click="dialogVisible = true">编辑</el-button>
+            <el-button type="text" >删除</el-button>
+<el-dialog
+  title="编辑"
+  :visible.sync="dialogVisible"
+  width="30%"
+  :before-close="handleClose">
+  <span>
+   <el-form ref="form" :model="form" label-width="80px">
+    <el-form-item label="考试名称">
+    <el-input v-model="form.name"></el-input>
+  </el-form-item>
+
+    <el-form-item label="考试用时">
+    <el-input v-model="form.name"></el-input>
+  </el-form-item>
+  
+    <el-form-item label="考试得分">
+    <el-input v-model="form.name"></el-input>
+  </el-form-item>
+    </el-form>
+    
+  </span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+</el-dialog>
+            
+            
           </template>
         </el-table-column>
       </el-table>
@@ -63,29 +91,7 @@
 
 <script>
 export default {
-  methods:{
-      onSubmit() {
-            console.log('submit!');
-        },
-      screenInfo(row, index, done) {
-      console.info("=====", row);
-      this.$router.push({ name: "Add", query: { zhi: row } });
-    },
-     handleSizeChange(val) {
-            console.log(`每页 ${val} 条`)
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`)
-        },
-     handleClick(row) {
-            console.log(row)
-        },
-      
-    handleClick(row) {
-        console.log(row)
-    },
-
-  },
+ 
 
     data() {
         return {
@@ -140,18 +146,37 @@ export default {
                 jd:'22',
                 zip: 200333
             }],
-            formInline: {
-                user: '',
-                region: ''
-            }
-
+            dialogVisible: false,
+          form: {
+            name: '',
+          }
         }
             
     },
-   
+     methods:{
+      onSubmit() {
+            console.log('submit!');
+        },
+      screenInfo(row, index, done) {
+      console.info("=====", row);
+      this.$router.push({ name: "Add", query: { zhi: row } });
+    },
+     handleSizeChange(val) {
+            console.log(`每页 ${val} 条`)
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`)
+        },
+         handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      }
 
-
-
+  },
+  
 }
 
 </script>

@@ -17,7 +17,8 @@
         <el-table
       :data="tableData"
       border
-      style="width: 1000px; ">
+      style="width: 1000px;
+       ">
       <el-table-column
         prop="xh"
         label="序号"
@@ -44,7 +45,35 @@
         align="center"
         label="操作">
         <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" style="font-size:14px" type="text" size="small">查看</el-button>
+        
+        <el-button type="text" @click="dialogVisible = true">查看</el-button>
+
+<el-dialog
+  title="查看"
+  :visible.sync="dialogVisible"
+  width="30%"
+  :before-close="handleClose">
+  <span>
+   <el-form ref="form" :model="form" label-width="80px">
+    <el-form-item label="考试名称">
+    <el-input v-model="form.name"></el-input>
+  </el-form-item>
+
+    <el-form-item label="考试用时">
+    <el-input v-model="form.name"></el-input>
+  </el-form-item>
+  
+    <el-form-item label="考试得分">
+    <el-input v-model="form.name"></el-input>
+  </el-form-item>
+    </el-form>
+    
+  </span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+</el-dialog>
       </template>
       
 
@@ -72,25 +101,13 @@
 
 <script>
   export default {
-      methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
-    },
-  
     data() {
       return {
         currentPage1: 5,
         currentPage2: 5,
         currentPage3: 5,
-        currentPage4: 4
-      };
-    },
-    data() {
-      return {
+        currentPage4: 4,
+
         formInline: {
           user: '',
           region: ''
@@ -115,13 +132,29 @@
             sjmc: '历史第一次测试',
             ctsl: '4小时',
             cjsj: '66',
-          }]
+          }],
+          dialogVisible: false,
+          form: {
+            name: '',
+          }
       }
-      
     },
     methods: {
       onSubmit() {
         console.log('submit!');
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+       handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       }
     }
   }
