@@ -109,6 +109,20 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/startkaoshi',
+    name: 'start',
+    hidden:true,
+    component: () => import('@/views/kaishiks/start'),
+    meta: { title: '开始考试', icon: 'dashboard' },
+    // children: [{
+    //   path: '/start',
+    //   name: 'start',
+    //   hidden:true,
+    //   component: () => import('@/views/kaishiks/start'),
+    //   meta: { title: '开始考试', icon: 'dashboard' }
+    // }]
+  },
+  {
     path: '/questcenter',
     component: Layout,
     children: [{

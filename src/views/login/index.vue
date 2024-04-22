@@ -1,8 +1,8 @@
 <!--
  * @Author: st 2946594574@qq.com
  * @Date: 2024-03-04 10:55:05
- * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-04-01 10:51:16
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-04-18 15:29:46
  * @FilePath: \com-project\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,8 +25,9 @@
           <svg-icon icon-class="user" />
         </span>
         <el-input
+          v-model="username"
           ref="username"
-          v-model="loginForm.username"
+        
           placeholder="Username"
           name="username"
           type="text"
@@ -42,7 +43,7 @@
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="loginForm.password"
+          v-model="password"
           :type="passwordType"
           placeholder="Password"
           name="password"
@@ -75,6 +76,9 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import { sendEmail } from '@/api/email'
+import {setToken} from '@/utils/auth'
+import {baseUrl} from '@/api/params'
+import axios from 'axios'
 
 export default {
   name: 'Login',
@@ -94,10 +98,10 @@ export default {
       }
     }
     return {
-      loginForm: {
-        username: 'admin',
-        password: '111111'
-      },
+      // loginForm: {
+        username: '',
+        password: '',
+      // },
       loginRules: {
         username: [
           { required: true, trigger: 'blur', validator: validateUsername }
@@ -142,20 +146,42 @@ export default {
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        // if (valid) {
-        //   this.loading = true
-        //   this.$store.dispatch('user/login', this.loginForm).then(() => {
-        //     this.$router.push({ path: this.redirect || '/' })
-        //     this.loading = false
-        //   }).catch(() => {
-        //     this.loading = false
-        //   })
-        // } else {
-        //   console.log('error submit!!')
-        //   return false
-        // }
-      })
+      if(!this.username){
+        alert("用户名不能为空")
+        return
+      }
+      if(!this.password){
+        alert("密码不能为空")
+        return
+      }
+      axios.post(baseUrl+"/api/auths/login",null,{
+        params:{
+          username:this.username,
+          password:this.password
+        }
+      }).then(res=>{
+        if(res.data.code){
+         setToken(res.data.data)
+         this.$router.push({ path: this.redirect || '/' })
+         this.loading = false
+        }else{
+          alert(res.data.msg)
+        }
+      }).catch(e=>console.log(e))
+      // this.$refs.loginForm.validate(valid => {
+      //   if (valid) {
+      //     this.loading = true
+      //     this.$store.dispatch('user/login', this.loginForm).then(() => {
+      //       this.$router.push({ path: this.redirect || '/' })
+      //       this.loading = false
+      //     }).catch(() => {
+      //       this.loading = false
+      //     })
+      //   } else {
+      //     console.log('error submit!!')
+      //     return false
+      //   }
+      // })
     }
   }
 }

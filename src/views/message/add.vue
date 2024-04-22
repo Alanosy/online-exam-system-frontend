@@ -9,7 +9,7 @@
           <el-input
             placeholder="请输入内容"
             style="width: 500px; height: 50px"
-            v-model="sizeForm.name"
+            v-model="title"
             clearable
           >
           </el-input>
@@ -26,6 +26,10 @@
 </template>
 
 <script>
+
+import {baseUrl} from '@/api/params'
+import {getToken} from '@/utils/auth'
+import axios from 'axios'
 export default {
   data() {
       return {
@@ -35,6 +39,7 @@ export default {
   
   data() {
     return {
+      title:"",
       sizeForm: {
         name: "",
         region: "",
@@ -44,7 +49,18 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log("submit!");
+      if(!this.title){
+        alert("题库标题不能为空")
+        return
+      }
+
+      axios.post(baseUrl+"/api/repo",{
+        "title":this.title
+      },{
+        headers:{Authorization:getToken()}
+      }).then(res=>{
+        alert(res.data.msg)
+      }).catch(e=>console.log(e))
     },
   },
 };

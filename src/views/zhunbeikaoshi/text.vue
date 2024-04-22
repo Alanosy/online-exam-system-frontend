@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <!-- kaitou -->
     <div
       style="
@@ -64,7 +64,7 @@
     </div>
     <!-- 按钮 -->
     <el-row class="ann">
-         <el-button type="primary">▶ 开始考试</el-button>
+         <el-button type="primary"  @click="screenInfo()">▶ 开始考试</el-button>
            <el-button type="primary" plain style="margin-left:20px">返回</el-button>
     </el-row>
   </div>
@@ -72,10 +72,15 @@
 
 <script>
 export default {
-    setup() {
-        
-    },
+   methods:{
+     screenInfo(row, index, done) {
+         console.info("=====", row);
+         this.$router.push({ name: "start", query: { zhi: row } });
+        },
+         
+   },
 }
+
 </script>
 
 <style scoped>
