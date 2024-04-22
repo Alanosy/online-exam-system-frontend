@@ -96,7 +96,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: '123456'
       },
       loginRules: {
         username: [
@@ -120,10 +120,7 @@ export default {
     }
   },
   created() {
-    this.getEmail()
-  },
-  created() {
-    this.getEmail()
+    // this.getEmail()
   },
   methods: {
     async getEmail() {
@@ -143,18 +140,18 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
-        // if (valid) {
-        //   this.loading = true
-        //   this.$store.dispatch('user/login', this.loginForm).then(() => {
-        //     this.$router.push({ path: this.redirect || '/' })
-        //     this.loading = false
-        //   }).catch(() => {
-        //     this.loading = false
-        //   })
-        // } else {
-        //   console.log('error submit!!')
-        //   return false
-        // }
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('user/login', this.loginForm).then(() => {
+            this.$router.push({ path: this.redirect || '/' })
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
       })
     }
   }
