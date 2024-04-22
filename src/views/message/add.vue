@@ -1,4 +1,11 @@
-
+<!--
+ * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @Date: 2024-04-22 13:32:40
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-04-22 13:36:09
+ * @FilePath: \vue-admin-template\src\views\message\add.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <div class="zqb">
     <div class="qb">
@@ -9,7 +16,7 @@
           <el-input
             placeholder="请输入内容"
             style="width: 500px; height: 50px"
-            v-model="title"
+            v-model="sizeForm.title"
             clearable
           >
           </el-input>
@@ -20,28 +27,23 @@
         </el-form-item>
       </el-form>
     </div>
-
-    
   </div>
 </template>
 
 <script>
-
-import {baseUrl} from '@/api/params'
-import {getToken} from '@/utils/auth'
-import axios from 'axios'
+import { tikugl } from "@/api/tikugl";
 export default {
   data() {
-      return {
-        dialogVisible: false
-      };
-    },
-  
+    return {
+      dialogVisible: false,
+    };
+  },
+
   data() {
     return {
       title:"",
       sizeForm: {
-        name: "",
+        title: "",
         region: "",
         type: [],
       },
@@ -49,18 +51,15 @@ export default {
   },
   methods: {
     onSubmit() {
-      if(!this.title){
-        alert("题库标题不能为空")
-        return
-      }
-
-      axios.post(baseUrl+"/api/repo",{
-        "title":this.title
-      },{
-        headers:{Authorization:getToken()}
-      }).then(res=>{
-        alert(res.data.msg)
-      }).catch(e=>console.log(e))
+      tikugl(this.sizeForm)
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "添加成功",
+          });
+          this.$router.push({name: "Bankmanage"});
+        })
+        .catch(() => {});
     },
   },
 };
