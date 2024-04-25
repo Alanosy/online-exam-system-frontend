@@ -4,13 +4,11 @@
     <div class="bj">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="所属题库" style="margin-left: 28px">
-          <el-input v-model="formInline.user" placeholder="输入题库"></el-input>
+          <el-input v-model="input" placeholder="输入题库"></el-input>
         </el-form-item>
         <el-form-item label="题库类型" style="margin-left: 20px">
-          <el-select v-model="formInline.region" placeholder="输入类型">
-            <el-option label="2201班" value="shanghai"></el-option>
-            <el-option label="2202班" value="beijing"></el-option>
-          </el-select>
+          <el-input v-model="input1" placeholder="输入类型">
+          </el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary"
@@ -35,7 +33,7 @@
     </div>
     <!-- table -->
     <div style="width: 90%; margin: auto; margin-top: 20px">
-      <el-table :data="tableData" border>
+      <el-table :data="tables" border>
         <el-table-column prop="date" label="序号" align="center" width="120px">
         </el-table-column>
         <el-table-column prop="name" label="题干" width="180px" align="center">
@@ -52,9 +50,9 @@
         <el-table-column prop="time" label="创建时间" align="center">
         </el-table-column>
         <el-table-column align="center" label="操作">
-          <template slot-scope="scope">
+          <template slot-scope="{row}">
             <el-button
-              @click="handleClick(scope.row)"
+              @click="updateRow(row)"
               type="text"
               size="small"
               style="font-size: 14px"
@@ -83,6 +81,23 @@
       >
       </el-pagination>
     </div>
+     <!--编辑弹窗-->
+
+    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
+      <el-row>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="题库名称" :label-width="formLabelWidth">
+              <el-input v-model="form.title" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateRepo">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -106,6 +121,37 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
+    cancle() {},
+      updateRow(row) {
+        this.dialogFormVisible = true;
+        this.form = row;
+      },
+  },
+  computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+       const input1 = this.input1;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }
+      if (input1) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input1) > -1;
+          });
+        });
+      }
+      return this.tableData;
+    },
   },
  
   
@@ -113,6 +159,8 @@ export default {
 
   data() {
     return {
+      input: "",
+      input1:"",
       currentPage1: 5,
       currentPage2: 5,
       currentPage3: 5,
@@ -158,6 +206,18 @@ export default {
         user: "",
         region: "",
       },
+      dialogVisible: false,
+
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        title: "",
+        id: "",
+        userId: "",
+        createTIme: "",
+        realName: "",
+      },
+      formLabelWidth: "120px",
     };
   },
 };

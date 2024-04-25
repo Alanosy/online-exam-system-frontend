@@ -130,7 +130,7 @@
       <el-row >
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="序号  " :label-width="formLabelWidth">
+            <el-form-item label="序号" :label-width="formLabelWidth">
               <el-input v-model="form.date" autocomplete="off"></el-input>
             </el-form-item>
 
