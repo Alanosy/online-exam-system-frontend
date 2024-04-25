@@ -17,12 +17,17 @@ import locale from 'element-ui/lib/locale/lang/zh-CN'
 
 import '@/styles/index.scss' // global css
 
+import * as echarts from "echarts";
+Vue.prototype.$echarts = echarts
+
 
 
 
 import App from './App'
 import store from './store'
 import router from './router'
+
+
 
 import '@/icons' // icon
 import '@/permission' // permission control

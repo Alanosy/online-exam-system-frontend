@@ -6,14 +6,13 @@
         <el-form-item label="真实姓名" style="margin-left:28px">
           <el-input v-model="formInline.user" placeholder="输入姓名"></el-input>
         </el-form-item>
+        
         <el-form-item label="班级" style="margin-left:20px">
-          <el-select v-model="formInline.region" placeholder="输入班级">
-            <el-option label="2201班" value="shanghai"></el-option>
-            <el-option label="2202班" value="beijing"></el-option>
-          </el-select>
+          <el-input v-model="formInline.region" placeholder="班级名称"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" style="margin-left: 20px">查询</el-button>
+          <el-button type="primary" style="margin-left: 40px" @click="onSubmit"
+            >查询</el-button>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -56,65 +55,18 @@
     :title="diaTitle"
       :visible.sync="dialogTableVisible">
       <el-row >
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="序号  " :label-width="formLabelWidth">
-              <el-input v-model="form.date" autocomplete="off"></el-input>
-            </el-form-item>
-
-          </el-form>
-
-        </el-col>
-        <el-col :span="12">
+        
+        
           <el-form :model="form">
             <el-form-item label="班级名称" :label-width="formLabelWidth">
               <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
 
           </el-form>
-        </el-col>
+       
 
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="班级口令" :label-width="formLabelWidth">
-              <el-input v-model="form.count" autocomplete="off"></el-input>
-            </el-form-item>
-
-          </el-form>
-
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="班级   " :label-width="formLabelWidth">
-             <el-select v-model="form.class" disabled>
-            <el-option
-                   v-for="item in options"
-                   :key="item.value"
-                   :lable="item.lable"
-                   :value="item.value"
-                   />
-
-          </el-select>
-            </el-form-item>
-
-          </el-form>
-        </el-col>
-
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="注册时间" :label-width="formLabelWidth">
-              <el-input v-model="form.time" autocomplete="off"></el-input>
-            </el-form-item>
-
-          </el-form>
-
-        </el-col>
-        
-      </el-row>
+     
       
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -190,6 +142,22 @@
 <script>
 export default {
   methods: {
+    computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }
+      return this.tableData;
+    }
+  },
     handleClick(row) {
       console.log(row);
     },
@@ -202,13 +170,20 @@ export default {
     onSubmit() {
       console.log("submit!");
     },
-    open() {
+    open(index) {
+    
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                 confirmButtonText: '确定',
+
                 cancelButtonText: '取消',
+                
                 type: 'warning',
                 center: true
-            }).then(() => {
+            },
+          
+
+            )
+            this.tableData.splice(index,1).then(() => {
                 this.$message({
                     type: 'success',
                     message: '删除成功!'
@@ -233,7 +208,7 @@ export default {
           name: "好好学习班",
           count: "好好学习，天天向上",
           class: "2201班",
-          time: "2024.2.28",
+          time: "2024.2.27",
         },
         {
           date: "1001",
@@ -247,7 +222,7 @@ export default {
           name: "好好学习班",
           count: "好好学习，天天向上",
           class: "2201班",
-          time: "2024.2.28",
+          time: "2024.2.29",
         },
         {
           date: "1001",
@@ -276,6 +251,7 @@ export default {
       diaTitle:'新增',
       dialogTableVisible: false,
       dialogFormVisible: false,
+     
       form: {
         name: '',
         region: '',
@@ -285,8 +261,9 @@ export default {
         type: [],
         resource: '',
         desc: ''
+        
       },
-      formLabelWidth: '120px'
+      formLabelWidth: '110px'
     };
   },
 
