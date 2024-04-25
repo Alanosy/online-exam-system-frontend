@@ -1,3 +1,11 @@
+/*
+ * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @Date: 2024-04-15 08:52:51
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-04-22 14:57:03
+ * @FilePath: \vue-admin-template\src\router\index.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -107,6 +115,20 @@ export const constantRoutes = [
       component: () => import('@/views/zhunbeikaoshi/text'),
       meta: { title: '准备考试', icon: 'dashboard' }
     }]
+  },
+  {
+    path: '/startkaoshi',
+    name: 'start',
+    hidden:true,
+    component: () => import('@/views/kaishiks/start'),
+    meta: { title: '开始考试', icon: 'dashboard' },
+    // children: [{
+    //   path: '/start',
+    //   name: 'start',
+    //   hidden:true,
+    //   component: () => import('@/views/kaishiks/start'),
+    //   meta: { title: '开始考试', icon: 'dashboard' }
+    // }]
   },
   {
     path: '/questcenter',
