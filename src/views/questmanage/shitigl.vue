@@ -52,18 +52,13 @@
         <el-table-column prop="time" label="创建时间" align="center">
         </el-table-column>
         <el-table-column align="center" label="操作">
-          <template slot-scope="scope">
-            <el-button
-              @click="handleClick(scope.row)"
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              >编辑</el-button
-            >
+          <template slot-scope="{row}">
+            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
             <el-button
               type="text"
               size="small"
               style="color: red; font-size: 14px"
+              @click="open"
               >删除</el-button
             >
           </template>
@@ -83,6 +78,66 @@
       >
       </el-pagination>
     </div>
+    <!--编辑弹窗-->
+
+    <el-dialog title="编辑"  :visible.sync="dialogFormVisible">
+      <el-row >
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="序号  " :label-width="formLabelWidth">
+              <el-input v-model="form.date" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级口令" :label-width="formLabelWidth">
+              <el-input v-model="form.count" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级   " :label-width="formLabelWidth">
+              <el-input v-model="form.class" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="注册时间" :label-width="formLabelWidth">
+              <el-input v-model="form.time" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        
+      </el-row>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -106,6 +161,31 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
+    open(index) {
+    
+    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+
+        cancelButtonText: '取消',
+        
+        type: 'warning',
+        center: true
+    },
+  
+
+    )
+    this.tableData.splice(index,1).then(() => {
+        this.$message({
+            type: 'success',
+            message: '删除成功!'
+        });
+    }).catch(() => {
+        this.$message({
+            type: 'info',
+            message: '已取消删除'
+        });
+    });
+},
   },
  
   
@@ -158,6 +238,27 @@ export default {
         user: "",
         region: "",
       },
+      cancle(){},
+      updateRow(row){
+      this.dialogFormVisible=true
+      this.form=row
+    },
+  
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+     
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+        
+      },
+      formLabelWidth: '110px'
     };
   },
 };
