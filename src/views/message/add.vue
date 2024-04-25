@@ -1,4 +1,3 @@
-
 <template>
   <div class="zqb">
     <div class="qb">
@@ -9,7 +8,7 @@
           <el-input
             placeholder="请输入内容"
             style="width: 500px; height: 50px"
-            v-model="sizeForm.name"
+            v-model="sizeForm.title"
             clearable
           >
           </el-input>
@@ -20,23 +19,22 @@
         </el-form-item>
       </el-form>
     </div>
-
-    
   </div>
 </template>
 
 <script>
+import { tikugl } from "@/api/tikugl";
 export default {
   data() {
-      return {
-        dialogVisible: false
-      };
-    },
-  
+    return {
+      dialogVisible: false,
+    };
+  },
+
   data() {
     return {
       sizeForm: {
-        name: "",
+        title: "",
         region: "",
         type: [],
       },
@@ -44,7 +42,15 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log("submit!");
+      tikugl(this.sizeForm)
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "添加成功",
+          });
+          this.$router.push({name: "Bankmanage"});
+        })
+        .catch(() => {});
     },
   },
 };
