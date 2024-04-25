@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-04-15 11:43:11
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-04-15 15:26:45
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -42,7 +42,7 @@
                 <el-table-column prop="address" label="创建时间" align="center" />
                 <el-table-column prop="zip" label="邮编" align="center" />
                 <el-table-column fixed="right" label="操作" align="center">
-                    <template slot-scope="">
+                    <template slot-scope="scope">
                         <el-button type="text" @click="dialogFormVisible = true">编辑</el-button>
 
                         <el-button type="text" @click="open">删除</el-button>
@@ -86,70 +86,20 @@
 
 <script>
 export default {
-
-    data() {
-        return {
-            formInline: {
-                user: '',
-                region: ''
-            },
-            currentPage1: 5,
-            currentPage2: 5,
-            currentPage3: 5,
-            currentPage4: 4,
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1518 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1517 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1519 弄',
-                zip: 200333
-            },
-            {
-                date: '',
-                name: '',
-                province: '',
-                city: '',
-                address: ''
-
-            },
-            {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1516 弄',
-                zip: 200333
-            }],
-           
-
-        }
+  methods: {
+    handleClick(row) {
+      console.log(row);
     },
-    methods: {
-        onSubmit() {
-            console.log('submit!');
-        },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`)
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`)
-        },
-        open() {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+    onSubmit() {
+      console.log("submit!");
+    },
+    open() {
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -167,39 +117,77 @@ export default {
                 });
             });
         },
-        handleClick(row) {
-            console.log(row)
+  },
+  data() {
+    return {
+      currentPage1: 5,
+      currentPage2: 5,
+      currentPage3: 5,
+      currentPage4: 4,
+      tableData: [
+        {
+          date: "1001",
+          name: "好好学习班",
+          count: "好好学习，天天向上",
+          class: "2201班",
+          time: "2024.2.28",
         },
-         formInline: {
-                user: '',
-                region: ''
-            },
-            dialogTableVisible: false,
-            dialogFormVisible: false,
-            form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
-            formLabelWidth: '120px'
-
+        {
+          date: "1001",
+          name: "好好学习班",
+          count: "好好学习，天天向上",
+          class: "2201班",
+          time: "2024.2.28",
+        },
+        {
+          date: "1001",
+          name: "好好学习班",
+          count: "好好学习，天天向上",
+          class: "2201班",
+          time: "2024.2.28",
+        },
+        {
+          date: "1001",
+          name: "好好学习班",
+          count: "好好学习，天天向上",
+          class: "2201班",
+          time: "2024.2.28",
+        },
+        {
+          date: "1001",
+          name: "好好学习班",
+          count: "好好学习，天天向上",
+          class: "2201班",
+          time: "2024.2.28",
+        },
+      ],
+      formInline: {
+        user: "",
+        region: "",
+      },
+      cancle(){},
+      updateRow(row){
+      this.dialogFormVisible=true
+      this.form=row
     },
+      diaTitle:'新增',
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      formLabelWidth: '120px'
+    };
+  },
 
-
-
-
-
-
-
-
-
-}
-
+};
 </script>
 
 <style>
