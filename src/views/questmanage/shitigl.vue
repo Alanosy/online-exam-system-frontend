@@ -125,7 +125,6 @@
             <el-form-item label="注册时间" :label-width="formLabelWidth">
               <el-input v-model="form.time" autocomplete="off"></el-input>
             </el-form-item>
-
           </el-form>
 
         </el-col>
@@ -141,81 +140,6 @@
 
 <script>
 export default {
-  methods: {
-    onSubmit() {
-      console.log("submit!");
-    },
-    screenInfo(row, index, done) {
-      console.info("=====", row);
-      this.$router.push({ name: "news", query: { zhi: row } });
-    },
-
-    handleClick(row) {
-      console.log(row);
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
-    open(index) {
-    
-    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-
-        cancelButtonText: '取消',
-        
-        type: 'warning',
-        center: true
-    },
-  
-
-    )
-    this.tableData.splice(index,1).then(() => {
-        this.$message({
-            type: 'success',
-            message: '删除成功!'
-        });
-    }).catch(() => {
-        this.$message({
-            type: 'info',
-            message: '已取消删除'
-        });
-    });
-  },
-  computed: {
-    tables() {
-      //在你的数据表格中定义tabels
-      const input = this.input;
-       const input1 = this.input1;
-      if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input) > -1;
-          });
-        });
-      }
-      if (input1) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input1) > -1;
-          });
-        });
-      }
-      return this.tableData;
-    },
-
-},
-  },
- 
-  
- 
-
   data() {
     return {
       input: "",
@@ -288,6 +212,84 @@ export default {
       formLabelWidth: '110px'
     };
   },
+  methods: {
+    onSubmit() {
+      console.log("submit!");
+    },
+    screenInfo(row, index, done) {
+      console.info("=====", row);
+      this.$router.push({ name: "news", query: { zhi: row } });
+    },
+
+    handleClick(row) {
+      console.log(row);
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+    open(index) {
+    
+    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+
+        cancelButtonText: '取消',
+        
+        type: 'warning',
+        center: true
+    },
+  
+
+    )
+    this.tableData.splice(index,1).then(() => {
+        this.$message({
+            type: 'success',
+            message: '删除成功!'
+        });
+    }).catch(() => {
+        this.$message({
+            type: 'info',
+            message: '已取消删除'
+        });
+    });
+  },
+  computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+       const input1 = this.input1;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }else{
+         if (input1) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input1) > -1;
+          });
+        });
+      }
+      }
+    
+      return this.tableData;
+    },
+
+},
+  },
+ 
+  
+ 
+
+  
 };
 </script>
 
