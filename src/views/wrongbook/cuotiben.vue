@@ -136,7 +136,7 @@
     },
     data() {
       return {
-        input: "",
+        input:'',
         currentPage1: 5,
         currentPage2: 5,
         currentPage3: 5,

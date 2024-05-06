@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-05-06 10:50:26
+ * @LastEditTime: 2024-05-06 11:41:12
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -20,7 +20,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
-          <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">新增</el-button>
+          <el-button type="primary" style="margin-left: 40px;" @click="dialogTableVisible = true">新增</el-button>
           <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">导入</el-button>
         </el-form-item>
       </el-form>
@@ -31,9 +31,9 @@
       <el-table :data="tables" border>
         <el-table-column fixed prop="date" label="序号" align="center" />
         <el-table-column prop="name" label="证书名称" align="center" />
-        <el-table-column prop="province" label="认证单位" align="center" />
-        <el-table-column prop="city" label="所属题库" align="center" />
-        <el-table-column prop="address" label="创建时间" align="center" />
+        <el-table-column prop="count" label="认证单位" align="center" />
+        <el-table-column prop="class" label="所属题库" align="center" />
+        <el-table-column prop="time" label="创建时间" align="center" />
 
         <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="{row}">
@@ -55,10 +55,34 @@
         @current-change="handleCurrentChange"
       />
     </div>
+  <!--新增弹窗-->
+  <el-dialog
+    :title="diaTitle"
+      :visible.sync="dialogTableVisible">
+      <el-row >
+        
+        
+          <el-form :model="form">
+            <el-form-item label="证书名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+       
+
+      </el-row>
+     
+      
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
+    
     <!--编辑弹窗-->
 
     <el-dialog title="编辑"  :visible.sync="dialogFormVisible">
-      <el-row :gutter="20">
+      <el-row >
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="序号" :label-width="formLabelWidth">
@@ -82,7 +106,7 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="认证单位" :label-width="formLabelWidth">
-              <el-input v-model="form.province" autocomplete="off"></el-input>
+              <el-input v-model="form.count" autocomplete="off"></el-input>
             </el-form-item>
 
           </el-form>
@@ -91,7 +115,7 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="所属题库" :label-width="formLabelWidth">
-              <el-input v-model="form.city" autocomplete="off"></el-input>
+              <el-input v-model="form.class" autocomplete="off"></el-input>
             </el-form-item>
 
           </el-form>
@@ -102,7 +126,7 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="创建时间" :label-width="formLabelWidth">
-              <el-input v-model="form.address" autocomplete="off"></el-input>
+              <el-input v-model="form.time" autocomplete="off"></el-input>
             </el-form-item>
 
           </el-form>
@@ -130,43 +154,41 @@ export default {
             currentPage2: 5,
             currentPage3: 5,
             currentPage4: 4,
-            tableData: [{
+            tableData: [
+              {
                 date: '2016-05-02',
                 name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1518 弄',
-                zip: 200333
+                count: '上海',
+                class:'普陀区',
+                time: '上海市普陀区金沙江路 1518 弄',
+                
             }, {
-                date: '2016-05-04',
+              date: '2016-05-02',
                 name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1517 弄',
-                zip: 200333
+                count: '上海',
+                class:'普陀区',
+                time: '上海市普陀区金沙江路 1518 弄',
             }, {
-                date: '2016-05-01',
+              date: '2016-05-02',
                 name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1519 弄',
-                zip: 200333
+                count: '上海',
+                class:'普陀区',
+                time: '上海市普陀区金沙江路 1518 弄',
             },
             {
-                date: '',
-                name: '',
-                province: '',
-                city: '',
-                address: ''
+              date: '2016-05-02',
+                name: '王小虎',
+                count: '上海',
+                class:'普陀区',
+                time: '上海市普陀区金沙江路 1518 弄',
 
             },
             {
-                date: '2016-05-03',
+              date: '2016-05-02',
                 name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1516 弄',
-                zip: 200333
+                count: '上海',
+                class:'普陀区',
+                time: '上海市普陀区金沙江路 1518 弄'
             }],
             formInline: {
         user: "",
@@ -177,22 +199,20 @@ export default {
       this.dialogFormVisible=true
       this.form=row
     },
-      diaTitle:'新增',
-      dialogTableVisible: false,
-      dialogFormVisible: false,
-     
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+            dialogTableVisible: false,
+        dialogFormVisible: false,
+        form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        formLabelWidth: '120px'
         
-      },
-      formLabelWidth: '110px'
             
         }
     },
@@ -207,6 +227,34 @@ export default {
             console.log(`当前页: ${val}`)
         },
         open(index) {
+    
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+
+                cancelButtonText: '取消',
+                
+                type: 'warning',
+                center: true
+            },
+          
+
+            )
+            this.tableData.splice(index,1).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
+        handleClick(row) {
+            console.log(row)
+        },
+           open(index) {
     
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                 confirmButtonText: '确定',

@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-05-06 11:01:31
+ * @LastEditTime: 2024-05-06 11:42:36
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -15,28 +15,22 @@
         <el-form-item label="考试名称">
     <el-input v-model="input" ></el-input>
   </el-form-item>
-        <el-form-item label="考试时间：   "  >
-          <el-select v-model="formInline.region" placeholder="开始时间">
-            <el-option label="区域一" value="shanghai" />
-            <el-option label="区域二" value="beijing" />
-          </el-select>
-          <el-select v-model="formInline.ser" placeholder="结束时间">
-            <el-option label="区域一" value="shanghai" />
-            <el-option label="区域二" value="beijing" />
-          </el-select>
-        </el-form-item>
-        
+       
+     <el-form-item label="考试时间" style="margin-left:15px">
+
+      <el-date-picker
+      v-model="value1"
+      type="datetimerange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期">
+     </el-date-picker>
+  </el-form-item>
        
         <el-form-item>
-          <el-button type="primary" style="margin-left: 40px" @click="onSubmit"
-            >查询</el-button
-          >
-          <el-button
-            type="primary"
-            style="margin-left: 40px"
-            @click="screenInfo()"
-            >新增</el-button
-          >
+          <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
+          <el-button type="primary" style="margin-left: 40px;" @click="dialogTableVisible = true">新增</el-button>
+
         </el-form-item>
       </el-form>
     </div>
@@ -133,6 +127,24 @@
         </el-col>
 
       </el-row>
+    
+    <!--新增弹窗---->
+    <el-dialog
+    :title="diaTitle"
+      :visible.sync="dialogTableVisible">
+      <el-row >
+        
+        
+          <el-form :model="form">
+            <el-form-item label="考试名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+       
+
+      </el-row>
+     
       
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -151,8 +163,11 @@ export default {
             input: "",
             formInline: {
                 user: '',
-                region: ''
+                region: '',
+                 date1: '',
+                date2: '',
             },
+            value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
             currentPage1: 5,
             currentPage2: 5,
             currentPage3: 5,
@@ -208,7 +223,11 @@ export default {
       this.dialogFormVisible=true
       this.form=row
     },
+    
+            diaTitle:'新增',
+      dialogTableVisible: false,
       dialogFormVisible: false,
+     
       form: {
         name: '',
         region: '',
@@ -218,15 +237,21 @@ export default {
         type: [],
         resource: '',
         desc: ''
+        
       },
+      formLabelWidth: '110px'
          
-            
-        }
+             }  
+        
     },
     methods: {
         onSubmit() {
             console.log('submit!');
         },
+       screenInfo(row, index, done) {
+       console.info("=====", row);
+       this.$router.push({ name: "ksAdd", query: { zhi: row } });
+    },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`)
         },

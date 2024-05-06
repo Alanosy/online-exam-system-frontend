@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-05-06 11:10:44
+ * @LastEditTime: 2024-05-06 11:07:33
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -141,7 +141,7 @@ export default {
                 province: '上海',
                 city: '普陀区',
                 address: '上海市普陀区金沙江路 1518 弄',
-               
+                
             }, {
                 date: '2016-05-04',
                 name: '王小虎',
@@ -155,7 +155,7 @@ export default {
                 province: '上海',
                 city: '普陀区',
                 address: '上海市普陀区金沙江路 1519 弄',
-               
+                
             },
             {
                 date: '',
@@ -171,7 +171,7 @@ export default {
                 province: '上海',
                 city: '普陀区',
                 address: '上海市普陀区金沙江路 1516 弄',
-              
+                
             }],
             formInline: {
                 user: '',
