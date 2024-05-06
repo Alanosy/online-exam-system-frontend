@@ -2,7 +2,7 @@
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-15 08:52:51
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-04-22 14:57:03
+ * @LastEditTime: 2024-05-06 10:13:57
  * @FilePath: \vue-admin-template\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -178,6 +178,17 @@ export const constantRoutes = [
       name: 'Exammange',
       component: () => import('@/views/exammanage/kaoshigl'),
       meta: { title: '考试管理', icon: 'dashboard' }
+    }]
+  },
+  {
+    path: '/kaoshiAdd',
+    component: Layout,
+    children: [{
+      path: '/ksAdd',
+      name: 'ksAdd',
+      hidden:true,
+      component: () => import('@/views/kaoshiAdd/ksAdd'),
+      meta: { title: '考试添加', icon: 'dashboard' }
     }]
   },
   {

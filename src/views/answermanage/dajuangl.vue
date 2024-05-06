@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-15 08:56:39
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-05-06 09:35:20
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,16 +13,10 @@
     <div style=" padding-left: 53px;">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="所属题库:   ">
-          <el-select v-model="formInline.region" placeholder="所属题库">
-            <el-option label="区域一" value="shanghai" />
-            <el-option label="区域二" value="beijing" />
-          </el-select>
+              <el-input v-model="input" placeholder="输入题库"></el-input>
         </el-form-item>
         <el-form-item label="试题类型:   ">
-          <el-select v-model="formInline.user" placeholder="试题类型">
-            <el-option label="区域一" value="shanghai" />
-            <el-option label="区域二" value="beijing" />
-          </el-select>
+            <el-input v-model="input1" placeholder="输入类型"> </el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
@@ -34,7 +28,7 @@
 
     <!-- table -->
     <div style="margin: auto;width: 1200px; " align="center">
-      <el-table :data="tableData" border>
+      <el-table :data="tables" border>
         <el-table-column fixed prop="date" label="序号" align="center" />
         <el-table-column prop="name" label="题干" align="center" />
         <el-table-column prop="province" label="题目类型" align="center" />
@@ -44,7 +38,7 @@
         <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="handleClick(scope.row)">编辑</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" style="color:red">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -70,6 +64,8 @@ export default {
 
     data() {
         return {
+           input: "",
+           input1: "",
             formInline: {
                 user: '',
                 region: ''
@@ -101,11 +97,11 @@ export default {
                 zip: 200333
             },
             {
-                date: '',
-                name: '',
-                province: '',
-                city: '',
-                address: ''
+                date: 'sdcvfb',
+                name: 'cdvfb',
+                province: 'cdvf',
+                city: 'cv',
+                address: 'dwefrv'
 
             },
             {
@@ -169,6 +165,33 @@ export default {
         }
         
     },
+    computed: {
+    tables() {
+       //在你的数据表格中定义tabels
+      const input = this.input;
+       const input1 = this.input1;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }
+      if (input1) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input1) > -1;
+          });
+        });
+      }
+
+      return this.tableData;
+    },
+  },
 
 
 
