@@ -29,7 +29,7 @@
        
         <el-form-item>
           <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
-          <el-button type="primary" style="margin-left: 40px;" @click="dialogTableVisible = true">新增</el-button>
+          <el-button type="primary" style="margin-left: 40px;"    @click="screenInfo()">新增</el-button>
 
         </el-form-item>
       </el-form>
