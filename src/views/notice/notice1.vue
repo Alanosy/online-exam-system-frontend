@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-05-06 11:43:17
+ * @LastEditTime: 2024-05-06 12:06:39
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,7 +25,7 @@
           <el-button
             type="primary"
             style="margin-left: 40px"
-            @click="dialogVisible = true"
+           @click="dialogTableVisible = true"
             >新增</el-button
           >
           <el-button type="primary" style="margin-left: 40px" @click="daoru"
@@ -80,70 +80,37 @@
       />
     </div>
 
-    <!--新增弹窗-->
+      <!--新增弹窗-->
 
-    <el-dialog :title="diaTitle" :visible.sync="dialogTableVisible">
-      <el-row>
+    <el-dialog
+    :title="diaTitle"
+      :visible.sync="dialogTableVisible">
+      <el-row >
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="序号  " :label-width="formLabelWidth">
+            <el-form-item label="证书名称" :label-width="formLabelWidth">
               <el-input v-model="form.date" autocomplete="off"></el-input>
             </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="认证名称" :label-width="formLabelWidth">
-              <el-input v-model="form.name" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="认证单位" :label-width="formLabelWidth">
-              <el-input v-model="form.count" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="所属题库" :label-width="formLabelWidth">
-              <el-input v-model="form.class" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="创建时间" :label-width="formLabelWidth">
-              <el-input v-model="form.time" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="邮编" :label-width="formLabelWidth">
-              <el-input v-model="form.zip" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
 
+          </el-form>
+
+        </el-col>
+        
+
+      
+        
+      </el-row>
+      
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
       </div>
     </el-dialog>
-
+    
     <!--编辑弹窗-->
 
     <el-dialog title="编辑" :visible.sync="dialogFormVisible">
-      <el-row>
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="序号  " :label-width="formLabelWidth">
