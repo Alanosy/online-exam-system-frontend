@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-15 08:56:39
+ * @LastEditTime: 2024-05-06 09:59:15
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -26,8 +26,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
-          <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">新增</el-button>
-          <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">导入</el-button>
+          
         </el-form-item>
       </el-form>
     </div>
@@ -37,14 +36,14 @@
       <el-table :data="tableData" border>
         <el-table-column fixed prop="date" label="序号" align="center" />
         <el-table-column prop="name" label="题干" align="center" />
-        <el-table-column prop="province" label="题目类型" align="center" />
-        <el-table-column prop="city" label="所属题库" align="center" />
-        <el-table-column prop="address" label="创建时间" align="center" />
+        <el-table-column prop="count" label="题目类型" align="center" />
+        <el-table-column prop="class" label="所属题库" align="center" />
+        <el-table-column prop="time" label="创建时间" align="center" />
 
         <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleClick(scope.row)">编辑</el-button>
-            <el-button type="text" size="small">删除</el-button>
+          <template slot-scope="{row}">
+            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
+            <el-button type="text" size="small" style="color: red; font-size: 14px" @click="open">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -61,6 +60,66 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <!--编辑弹窗-->
+
+    <el-dialog title="编辑"  :visible.sync="dialogFormVisible">
+      <el-row >
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="序号" :label-width="formLabelWidth">
+              <el-input v-model="form.date" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级口令" :label-width="formLabelWidth">
+              <el-input v-model="form.count" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级   " :label-width="formLabelWidth">
+              <el-input v-model="form.class" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="注册时间" :label-width="formLabelWidth">
+              <el-input v-model="form.time" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        
+      </el-row>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 
 </template>
@@ -81,45 +140,47 @@ export default {
             tableData: [{
                 date: '2016-05-02',
                 name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1518 弄',
-                zip: 200333
+                count: '上海',
+                class: '普陀区',
+            time: '上海市普陀区金沙江路 1518 弄',
+                
             }, {
-                date: '2016-05-04',
+              date: '2016-05-02',
                 name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1517 弄',
-                zip: 200333
+                count: '上海',
+                class: '普陀区',
+            time: '上海市普陀区金沙江路 1518 弄',
             }, {
-                date: '2016-05-01',
+              date: '2016-05-02',
                 name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1519 弄',
-                zip: 200333
+                count: '上海',
+                class: '普陀区',
+            time: '上海市普陀区金沙江路 1518 弄',
             },
             {
-                date: '',
-                name: '',
-                province: '',
-                city: '',
-                address: ''
+              date: '2016-05-02',
+                name: '王小虎',
+                count: '上海',
+                class: '普陀区',
+            time: '上海市普陀区金沙江路 1518 弄',
 
             },
             {
-                date: '2016-05-03',
+              date: '2016-05-02',
                 name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1516 弄',
-                zip: 200333
+                count: '上海',
+                class: '普陀区',
+            time: '上海市普陀区金沙江路 1518 弄',
             }],
             formInline: {
                 user: '',
                 region: ''
             },
+            cancle(){},
+      updateRow(row){
+      this.dialogFormVisible=true
+      this.form=row
+    },
             dialogTableVisible: false,
         dialogFormVisible: false,
         form: {
@@ -166,7 +227,7 @@ export default {
         },
         handleClick(row) {
             console.log(row)
-        }
+        },
         
     },
 

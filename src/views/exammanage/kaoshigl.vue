@@ -29,7 +29,7 @@
        
         <el-form-item>
           <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
-          <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">新增</el-button>
+          <el-button type="primary" style="margin-left: 40px;" @click="dialogTableVisible = true">新增</el-button>
 
         </el-form-item>
       </el-form>
@@ -65,6 +65,30 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    
+    <!--新增弹窗---->
+    <el-dialog
+    :title="diaTitle"
+      :visible.sync="dialogTableVisible">
+      <el-row >
+        
+        
+          <el-form :model="form">
+            <el-form-item label="考试名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+       
+
+      </el-row>
+     
+      
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 
 </template>
@@ -124,6 +148,22 @@ export default {
                 user: '',
                 region: ''
             },
+            diaTitle:'新增',
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+     
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+        
+      },
+      formLabelWidth: '110px'
          
             
         }
