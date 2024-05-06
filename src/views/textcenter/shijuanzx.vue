@@ -1,8 +1,8 @@
-<!--
+ <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-04-15 09:23:41
+ * @LastEditTime: 2024-04-29 11:34:46
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,14 +13,13 @@
         <div style=" padding-left: 53px;padding-top: 22px;">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
                 
-                <el-form-item label="试卷名称：      ">
+            <el-form-item label="试卷名称:">
     <el-input v-model="formInline.user" ></el-input>
   </el-form-item>
                 <el-form-item>
                     <el-button type="primary" style="margin-left: 40px;" @click="chaxun">查询</el-button>
                     
-                </el-form-item>
-            </el-form>
+                </el-form-item>            </el-form>
         </div>
 
         <!-- table -->

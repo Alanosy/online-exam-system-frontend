@@ -4,14 +4,12 @@
 <div class="bj">
  <el-form :inline="true" :model="formInline" class="demo-form-inline">
   <el-form-item label="真实姓名">
-    <el-input v-model="formInline.user" placeholder="输入姓名"></el-input>
+    <el-input v-model="input" placeholder="输入姓名"></el-input>
   </el-form-item>
-  <el-form-item label="班级" style="margin-left:20px">
-    <el-select v-model="formInline.region" placeholder="输入班级">
-      <el-option label="2201班" value="shanghai"></el-option>
-      <el-option label="2202班" value="beijing"></el-option>
-    </el-select>
+  <el-form-item label="班级">
+    <el-input v-model="input1" placeholder="输入班级"></el-input>
   </el-form-item>
+
   <el-form-item>
     <el-button type="primary" @click="onSubmit" style="margin-left:20px">查询</el-button>
   </el-form-item>
@@ -20,7 +18,7 @@
 <!-- table -->
 <div style="width:90%;margin: auto;margin-top:20px">
 <el-table
-    :data="tableData"
+    :data="tables"
     border
     
     >
@@ -62,8 +60,8 @@
      align="center"
       label="操作"
      >
-      <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="small" style="font-size:14px;color:red">移除班级</el-button>
+      <template >
+        <el-button type="text" size="small" style="color:red;font-size:14px" @click="open">移除班级</el-button>
       
       </template>
     </el-table-column>
@@ -81,6 +79,14 @@
       :total="400">
     </el-pagination>
 </div>
+<!-- 删除弹框 -->
+     <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
+            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="delVisible = false">取 消</el-button>
+                <el-button type="primary" @click="deleteRow" >确 定</el-button>
+            </span>
+        </el-dialog>
 
 </div>
 
@@ -89,45 +95,37 @@
 
 <script>
 export default {
-   methods: {
-      handleClick(row) {
-        console.log(row);
-      },
-       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
-    },
     data() {
       return {
         currentPage1: 5,
         currentPage2: 5,
         currentPage3: 5,
         currentPage4: 4,
+        input: "",
+        input1: "",
+        
         tableData: [{
           date: '1001',
-          name: '王小虎',
+          name: '王虎',
           real: '王虎',
           class: '2201班',
           time: '2024.2.28',
           
         }, {
            date: '1001',
-          name: '王小虎',
+          name: '虎',
           real: '王虎',
           class: '2201班',
           time: '2024.2.28'
         }, {
            date: '1001',
-          name: '王小虎',
+          name: '王小米',
           real: '王虎',
           class: '2201班',
           time: '2024.2.28'
         }, {
            date: '1001',
-          name: '王小虎',
+          name: '小虎',
           real: '王虎',
           class: '2201班',
           time: '2024.2.28'
@@ -142,8 +140,68 @@ export default {
     methods: {
       onSubmit() {
         console.log('submit!');
+      },
+      open(index) {
+      
+      this.$confirm("此操作将永久删除此班级, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true,
+      })
+        .then(() => {
+          this.tableData.splice(index, 1)
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+     handleClick(row) {
+        console.log(row);
+      },
+       handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+
+    },
+    computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+       const input1 = this.input1;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
       }
+      if (input1) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input1) > -1;
+          });
+        });
+      }
+
+      return this.tableData;
     }
+  },
+
   }
 
 

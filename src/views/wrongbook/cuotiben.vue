@@ -4,7 +4,7 @@
     <div class="xx">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
   <el-form-item label="考试名称">
-    <el-input v-model="formInline.user" placeholder="请输入"></el-input>
+    <el-input v-model="input" placeholder="请输入"></el-input>
   </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -15,7 +15,7 @@
 
 <div style="padding:10px 0 0 50px;">
         <el-table
-      :data="tableData"
+      :data="tables"
       border
       style="width: 1000px; ">
       <el-table-column
@@ -44,8 +44,36 @@
         align="center"
         label="操作">
         <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" style=" font-size:14px" type="text" size="small">查看</el-button>
+        <el-button type="text" @click="dialogVisible = true">查看</el-button>
         <el-button type="text" style="font-size:14px" size="small">重刷</el-button>
+<el-dialog
+  title="查看"
+  :visible.sync="dialogVisible"
+  width="30%"
+  :before-close="handleClose">
+  <span>
+   <el-form ref="form" :model="form" label-width="80px">
+    <el-form-item label="题库名称">
+    <el-input v-model="form.name"></el-input>
+  </el-form-item>
+
+    <el-form-item label="总题数">
+    <el-input v-model="form.name"></el-input>
+  </el-form-item>
+  
+    <el-form-item label="已刷题数">
+    <el-input v-model="form.name"></el-input>
+  </el-form-item>
+    </el-form>
+    
+  </span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+</el-dialog>
+      
+        
       </template>
       </el-table-column>
        
@@ -79,14 +107,11 @@
     },
     data() {
       return {
+        input:'',
         currentPage1: 5,
         currentPage2: 5,
         currentPage3: 5,
-        currentPage4: 4
-      };
-    },
-    data() {
-      return {
+        currentPage4: 4,
         formInline: {
           user: '',
           region: ''
@@ -111,15 +136,41 @@
             sjmc: '历史第一次测试',
             ctsl: '4',
             cjsj: '2024.2.1',
-          }]
-      }
-      
+          }],
+          dialogVisible: false,
+          form: {
+            name: '',
+          }
+      };
     },
     methods: {
       onSubmit() {
         console.log('submit!');
+      },
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       }
+    },
+     computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }
+      return this.tableData;
     }
+  },
   }
 </script>
 <style scoped>
