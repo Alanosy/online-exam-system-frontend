@@ -1,8 +1,8 @@
 /*
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-15 08:52:51
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-06 10:13:57
+ * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @LastEditTime: 2024-05-06 14:41:57
  * @FilePath: \vue-admin-template\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -86,11 +86,33 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/myself',
+    component: Layout,
+    children: [{
+      path: '/myself',
+      name: 'Usermanager',
+      hidden:true,
+      component: () => import('@/views/myself/myself'),
+      meta: { title: '个人中心', icon: 'dashboard' }
+    }]
+  },
+  {
+    path: '/changemima',
+    component: Layout,
+    children: [{
+      path: '/changemima',
+      name: 'Usermanager',
+      hidden:true,
+      component: () => import('@/views/changemima/changemima'),
+      meta: { title: '修改密码', icon: 'dashboard' }
+    }]
+  },
+  {
     path: '/classmanager',
     component: Layout,
     children: [{
       path: '/classgl',
-      name: 'Classmanager',
+      name: 'Classmanager', 
       component: () => import('@/views/classmanager/classgl'),
       meta: { title: '班级管理', icon: 'dashboard' }
     }]
@@ -379,7 +401,7 @@ export const constantRoutes = [
   //   ]
   // },
 
-  // 404 page must be placed at the end !!!
+  
   { path: '*', redirect: '/404', hidden: true }
 ]
 
