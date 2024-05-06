@@ -1,6 +1,8 @@
 <template>
   <div class="navbar">
-    <div>
+    <div
+      style="width:100%;height:66px;box-shadow: rgb(0 21 41 / 9%) 0px 1px 4px;}"
+    >
       <hamburger
         :is-active="sidebar.opened"
         class="hamburger-container"
@@ -15,7 +17,7 @@
             <img
               :src="avatar + '?imageView2/1/w/80/h/80'"
               class="user-avatar"
-            >
+            />
             <i class="el-icon-caret-bottom" />
           </div>
           <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -43,7 +45,14 @@
     </div>
     <!-- tags -->
     <div
-      style="width: 100%; height: 60px; background-color: red; overflow: hidden"
+      style="
+        width: 100%;
+        height: 45px;
+        background-color: write;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+      "
     >
       <el-tag
         v-for="item in tags"
@@ -60,43 +69,67 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
+import { mapGetters } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
   },
   computed: {
-    ...mapGetters(['sidebar', 'avatar', 'tags'])
+    ...mapGetters(["sidebar", "avatar", "tags"]),
   },
   created() {
-    console.log(this.tags)
+    console.log(this.tags);
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      this.$store.dispatch("app/toggleSideBar");
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-    }
-  }
-}
+      await this.$store.dispatch("user/logout");
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-.active {
-  background-color: red;
+
+.el-tag {
+  background-color: #ffffff;
+  border-color: #cacaca;
+  display: inline-block;
+  height: 32px;
+  padding: 0 10px;
+  line-height: 30px;
+  margin-left: 5px;
+  font-size: 12px;
+  color: #000000;
+  border-width: 1.5px;
+  border-style: solid;
+  border-radius: 3px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  white-space: nowrap;
 }
+
+
+
+
+.active {
+  background-color: #58b289;
+  color: rgb(255, 255, 255);
+}
+
 .navbar {
   height: 110px;
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  box-shadow: 0 1px 4px rgb(0 21 41 / 16%);
 
   .hamburger-container {
     line-height: 46px;
@@ -110,6 +143,7 @@ export default {
       background: rgba(0, 0, 0, 0.025);
     }
   }
+ 
 
   .breadcrumb-container {
     float: left;
@@ -141,6 +175,7 @@ export default {
         }
       }
     }
+ 
 
     .avatar-container {
       margin-right: 30px;

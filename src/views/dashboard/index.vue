@@ -1,14 +1,18 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-02-29 18:01:42
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-22 13:45:24
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-05-06 14:43:30
  * @FilePath: \video-manager\src\views\charts\BarChart.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
     <div>
-    <div class="luang"></div>
+    <div class="luang">
+      <com-admin v-if="url == 0"></com-admin>
+      <com-teacher v-else-if="url == 1"></com-teacher>
+      <com-student v-else-if="url == 2"></com-student>
+    </div>
 
     <div style="display: flex;">
      <div class="left"> 
@@ -30,10 +34,14 @@
     </div>
 </template>
 <script>
+import comAdmin from './com/0_com.vue'
+import comTeacher from './com/1_com.vue'
+import comStudent from './com/2_com.vue'
 export default {
  
   data() {
     return {
+      url: 0,
       option: {
         title: { text: "" },
         tooltip: {},
@@ -88,6 +96,11 @@ export default {
   
     };
 
+  },
+  components: {
+comAdmin,
+comTeacher,
+comStudent
   },
   methods: {
     initCharts() {

@@ -1,8 +1,8 @@
 /*
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-03-04 10:34:47
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-04-11 14:27:08
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-05-06 14:51:48
  * @FilePath: \vue-admin-template\src\permission.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -27,6 +27,12 @@ router.beforeEach(async(to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
+  console.log(store);
+  store.commit('menu/ADD_TAG', {
+    path: to.path,
+    checked: false,
+    title: to.meta.title
+  })
   next()
 
   //   if (hasToken) {
