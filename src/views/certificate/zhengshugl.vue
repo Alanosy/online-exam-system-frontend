@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-11 16:07:30
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-05-06 10:50:26
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,17 +12,11 @@
 
     <div style=" padding-left: 53px;">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="证书名称:   ">
-          <el-select v-model="formInline.region" placeholder="证书名称">
-            <el-option label="区域一" value="shanghai" />
-            <el-option label="区域二" value="beijing" />
-          </el-select>
+        <el-form-item label="证书名称" style="margin-left:28px">
+          <el-input v-model="input" placeholder="证书名称"></el-input>
         </el-form-item>
-        <el-form-item label="试题类型:   ">
-          <el-select v-model="formInline.user " placeholder="试题类型">
-            <el-option label="区域一" value="shanghai" />
-            <el-option label="区域二" value="beijing" />
-          </el-select>
+        <el-form-item label="试题类型" style="margin-left:28px">
+          <el-input v-model="input1" placeholder="试题类型"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
@@ -34,7 +28,7 @@
 
     <!-- table -->
     <div style="margin: auto;width: 1200px; " align="center">
-      <el-table :data="tableData" border>
+      <el-table :data="tables" border>
         <el-table-column fixed prop="date" label="序号" align="center" />
         <el-table-column prop="name" label="证书名称" align="center" />
         <el-table-column prop="province" label="认证单位" align="center" />
@@ -42,9 +36,9 @@
         <el-table-column prop="address" label="创建时间" align="center" />
 
         <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleClick(scope.row)">编辑</el-button>
-            <el-button type="text" size="small">删除</el-button>
+          <template slot-scope="{row}">
+            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
+            <el-button type="text" size="small" style="color: red; font-size: 14px" @click="open">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -61,6 +55,66 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <!--编辑弹窗-->
+
+    <el-dialog title="编辑"  :visible.sync="dialogFormVisible">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="序号" :label-width="formLabelWidth">
+              <el-input v-model="form.date" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="证书名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="认证单位" :label-width="formLabelWidth">
+              <el-input v-model="form.province" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="所属题库" :label-width="formLabelWidth">
+              <el-input v-model="form.city" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="创建时间" :label-width="formLabelWidth">
+              <el-input v-model="form.address" autocomplete="off"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        
+      </el-row>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 
 </template>
@@ -70,10 +124,8 @@ export default {
 
     data() {
         return {
-            formInline: {
-                user: '',
-                region: ''
-            },
+          input: "",
+      input1:"",
             currentPage1: 5,
             currentPage2: 5,
             currentPage3: 5,
@@ -117,22 +169,30 @@ export default {
                 zip: 200333
             }],
             formInline: {
-                user: '',
-                region: ''
-            },
-            dialogTableVisible: false,
-        dialogFormVisible: false,
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        },
-        formLabelWidth: '120px'
+        user: "",
+        region: "",
+      },
+      cancle(){},
+      updateRow(row){
+      this.dialogFormVisible=true
+      this.form=row
+    },
+      diaTitle:'新增',
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+     
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+        
+      },
+      formLabelWidth: '110px'
             
         }
     },
@@ -146,13 +206,20 @@ export default {
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`)
         },
-        open() {
+        open(index) {
+    
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                 confirmButtonText: '确定',
+
                 cancelButtonText: '取消',
+                
                 type: 'warning',
                 center: true
-            }).then(() => {
+            },
+          
+
+            )
+            this.tableData.splice(index,1).then(() => {
                 this.$message({
                     type: 'success',
                     message: '删除成功!'
@@ -164,11 +231,35 @@ export default {
                 });
             });
         },
-        handleClick(row) {
-            console.log(row)
-        }
         
     },
+computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+       const input1 = this.input1;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }
+      if (input1) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input1) > -1;
+          });
+        });
+      }
+
+      return this.tableData;
+    }
+  },
 
 
 

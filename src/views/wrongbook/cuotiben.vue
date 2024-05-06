@@ -4,7 +4,7 @@
     <div class="xx">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
   <el-form-item label="考试名称">
-    <el-input v-model="formInline.user" placeholder="请输入"></el-input>
+    <el-input v-model="input" placeholder="请输入"></el-input>
   </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -15,7 +15,7 @@
 
 <div style="padding:10px 0 0 50px;">
         <el-table
-      :data="tableData"
+      :data="tables"
       border
       style="width: 1000px; ">
       <el-table-column
@@ -43,38 +43,18 @@
       <el-table-column
         align="center"
         label="操作">
-        <template slot-scope="scope">
-        <el-button type="text" @click="dialogVisible = true">查看</el-button>
-        <el-button type="text" style="font-size:14px" size="small">重刷</el-button>
-<el-dialog
-  title="查看"
-  :visible.sync="dialogVisible"
-  width="30%"
-  :before-close="handleClose">
-  <span>
-   <el-form ref="form" :model="form" label-width="80px">
-    <el-form-item label="题库名称">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
-
-    <el-form-item label="总题数">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
-  
-    <el-form-item label="已刷题数">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
-    </el-form>
-    
-  </span>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-  </span>
-</el-dialog>
-      
         
-      </template>
+          <template slot-scope="{row}">
+            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">查看</el-button>
+            <el-button
+              type="text"
+              size="small"
+              style="color: red; font-size: 14px"
+              @click="open"
+              >重刷</el-button
+            >
+          </template>
+     
       </el-table-column>
        
     
@@ -91,6 +71,55 @@
       :total="400">
     </el-pagination>
   </div>
+  <el-dialog title="查看"  :visible.sync="dialogFormVisible">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="序号  " :label-width="formLabelWidth">
+              <el-input v-model="form.xh" :disabled="true">
+              
+              </el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="试卷名称" :label-width="formLabelWidth">
+              <el-input v-model="form.sjmc" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="错题数量" :label-width="formLabelWidth">
+              <el-input v-model="form.ctsl" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="创建时间" :label-width="formLabelWidth">
+              <el-input v-model="form.cjsj" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
 </div>
 </template>
 
@@ -107,6 +136,7 @@
     },
     data() {
       return {
+        input: "",
         currentPage1: 5,
         currentPage2: 5,
         currentPage3: 5,
@@ -139,7 +169,23 @@
           dialogVisible: false,
           form: {
             name: '',
-          }
+          },
+          cancle(){},
+      updateRow(row){
+      this.dialogFormVisible=true
+      this.form=row
+    },
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
       };
     },
     methods: {
@@ -153,7 +199,23 @@
           })
           .catch(_ => {});
       }
+    },
+      computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }
+      return this.tableData;
     }
+  },
   }
 </script>
 <style scoped>

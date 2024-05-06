@@ -79,7 +79,7 @@
     <!--编辑弹窗-->
 
     <el-dialog title="编辑"  :visible.sync="dialogFormVisible">
-      <el-row >
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="序号" :label-width="formLabelWidth">
@@ -142,22 +142,7 @@
 <script>
 export default {
   methods: {
-    computed: {
-    tables() {
-      //在你的数据表格中定义tabels
-      const input = this.input;
-      if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input) > -1;
-          });
-        });
-      }
-      return this.tableData;
-    }
-  },
+    
     handleClick(row) {
       console.log(row);
     },

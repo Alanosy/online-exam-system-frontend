@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-11 16:08:27
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-05-06 11:00:34
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,17 +12,11 @@
 
     <div style=" padding-left: 53px;">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="试卷名称:   ">
-          <el-select v-model="formInline.region" placeholder="试卷名称">
-            <el-option label="区域一" value="shanghai" />
-            <el-option label="区域二" value="beijing" />
-          </el-select>
+        <el-form-item label="试卷名称" style="margin-left:28px">
+          <el-input v-model="input" placeholder="试卷名称"></el-input>
         </el-form-item>
-        <el-form-item label="所属班级:   ">
-          <el-select v-model="formInline.user " placeholder="所属班级">
-            <el-option label="区域一" value="shanghai" />
-            <el-option label="区域二" value="beijing" />
-          </el-select>
+        <el-form-item label="所属班级" style="margin-left:28px">
+          <el-input v-model="input1" placeholder="所属班级"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="margin-left: 40px;" @click="onSubmit">查询</el-button>
@@ -34,18 +28,17 @@
 
     <!-- table -->
     <div style="margin: auto;width: 1200px; " align="center">
-      <el-table :data="tableData" border>
+      <el-table :data="tables" border>
         <el-table-column fixed prop="date" label="序号" align="center" />
         <el-table-column prop="name" label="试卷名称" align="center" />
         <el-table-column prop="province" label="考试班级" align="center" />
         <el-table-column prop="city" label="最低分" align="center" />
         <el-table-column prop="address" label="最高分" align="center" />
-        <el-table-column prop="address" label="评价分" align="center" />
+        <el-table-column prop="zip" label="评价分" align="center" />
 
         <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleClick(scope.row)">查看详情</el-button>
-
+          <template slot-scope="{row}">
+            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">查看详情</el-button>  
           </template>
         </el-table-column>
       </el-table>
@@ -62,6 +55,75 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <el-dialog title="查看详情"  :visible.sync="dialogFormVisible">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="序号  " :label-width="formLabelWidth">
+              <el-input v-model="form.date" :disabled="true">
+              
+              </el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="试卷名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="考试班级" :label-width="formLabelWidth">
+              <el-input v-model="form.province" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="最低分" :label-width="formLabelWidth">
+              <el-input v-model="form.city" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+       <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="最高分" :label-width="formLabelWidth">
+              <el-input v-model="form.address" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="评价分" :label-width="formLabelWidth">
+              <el-input v-model="form.zip" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 
 </template>
@@ -75,6 +137,8 @@ export default {
                 user: '',
                 region: ''
             },
+            input: "",
+      input1:"",
             currentPage1: 5,
             currentPage2: 5,
             currentPage3: 5,
@@ -121,6 +185,14 @@ export default {
                 user: '',
                 region: ''
             },
+            form: {
+            name: '',
+          },
+             cancle(){},
+      updateRow(row){
+      this.dialogFormVisible=true
+      this.form=row
+    },
             dialogTableVisible: false,
         dialogFormVisible: false,
         form: {
@@ -170,7 +242,33 @@ export default {
         }
         
     },
+computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+       const input1 = this.input1;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }
+      if (input1) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input1) > -1;
+          });
+        });
+      }
 
+      return this.tableData;
+    }
+  },
 
 
   
