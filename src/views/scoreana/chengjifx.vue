@@ -118,6 +118,7 @@
         </el-col>
 
       </el-row>
+    </el-dialog>
     <!--新增弹窗-->
 
     <el-dialog
