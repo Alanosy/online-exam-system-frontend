@@ -1,4 +1,4 @@
-<!--
+ <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
@@ -19,8 +19,7 @@
                 <el-form-item>
                     <el-button type="primary" style="margin-left: 40px;" @click="chaxun">查询</el-button>
                     
-                </el-form-item>
-            </el-form>
+                </el-form-item>            </el-form>
         </div>
 
         <!-- table -->

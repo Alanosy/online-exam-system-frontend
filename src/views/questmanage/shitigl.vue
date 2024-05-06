@@ -144,6 +144,8 @@ export default {
       currentPage2: 5,
       currentPage3: 5,
       currentPage4: 4,
+      input: "",
+      input1:"",
       tableData: [
         {
           date: "1001",

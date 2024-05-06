@@ -44,9 +44,9 @@
         align="center"
         label="操作"
         >
-        <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" style="font-size:14px" type="text" size="small">查看</el-button>
-      </template>
+        <template slot-scope="{row}">
+            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">查看</el-button>
+          </template>
       </el-table-column>
        
     
@@ -63,30 +63,68 @@
       :total="400">
     </el-pagination>
   </div>
+   <el-dialog title="查看"  :visible.sync="dialogFormVisible">
+      <el-row >
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="序号  " :label-width="formLabelWidth">
+              <el-input v-model="form.xh" :disabled="true">
+              
+              </el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级名称" :label-width="formLabelWidth">
+              <el-input v-model="form.sjmc" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级口令" :label-width="formLabelWidth">
+              <el-input v-model="form.ctsl" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="班级   " :label-width="formLabelWidth">
+              <el-input v-model="form.cjsj" :disabled="true"></el-input>
+            </el-form-item>
+
+          </el-form>
+        </el-col>
+
+      </el-row>
+      
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
 </div>
 </template>
 
 
 <script>
   export default {
-      methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
-    },
+     
     data() {
       return {
         currentPage1: 5,
         currentPage2: 5,
         currentPage3: 5,
-        currentPage4: 4
-      };
-    },
-    data() {
-      return {
+        currentPage4: 4,
         formInline: {
           user: '',
           region: ''
@@ -111,13 +149,48 @@
             sjmc: '历史第一次测试',
             ctsl: '310',
             cjsj: '66',
-          }]
-      }
-      
+          }],
+          dialogVisible: false,
+          form: {
+            name: '',
+          },
+          cancle(){},
+      updateRow(row){
+      this.dialogFormVisible=true
+      this.form=row
     },
+      diaTitle:'新增',
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      }
+    },
+    
     methods: {
       onSubmit() {
         console.log('submit!');
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       }
     }
   }

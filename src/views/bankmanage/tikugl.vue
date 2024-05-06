@@ -1,13 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
-<<<<<<< HEAD
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-04-22 13:33:46
-=======
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-04-22 15:39:01
->>>>>>> df0c2629310ba6631c75604b63936287a66226fb
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-04-25 15:10:53
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -21,7 +16,8 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="margin-left: 40px" @click="onSubmit"
-            >查询</el-button>
+            >查询</el-button
+          >
           <el-button
             type="primary"
             style="margin-left: 40px"
@@ -34,27 +30,24 @@
 
     <!-- table -->
     <div style="margin: auto; width: 1200px" align="center">
-      <el-table :data="data.records" border>
-        <el-table-column fixed prop="id" label="序号" align="center" />
-        <el-table-column prop="title" label="题库名称" align="center" />
-        <el-table-column prop="realName" label="创建人" align="center" />
-        <el-table-column prop="createTime" label="创建时间" align="center" />
+      <el-table :data="tables" border>
+        <el-table-column fixed prop="date" label="序号" align="center" />
+        <el-table-column prop="name" label="题库名称" align="center" />
+        <el-table-column prop="province" label="单选题数量" align="center" />
+        <el-table-column prop="city" label="多选题数量" align="center" />
+        <el-table-column prop="address" label="判断题数量" align="center" />
+        <el-table-column prop="jd" label="简答题数量" align="center" />
+
         <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="{ row }">
+          <template slot-scope=" { row }">
             <el-button
               type="text"
               size="small"
-              style="font-size: 14px"
-              @click="updateRow(row)"
+              style="font-size:14px"
+             @click="updateRow(row)"
               >编辑</el-button
             >
-            <el-button
-              type="text"
-              size="small"
-              style="color: red; font-size: 14px"
-              @click="open(row)"
-              >删除</el-button
-            >
+            <el-button type="text" size="small" style="color:red;font-size:14px" @click="open">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -63,37 +56,87 @@
       <span class="demonstration" />
       <el-pagination
         :current-page="currentPage4"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="10"
+        :page-sizes="[100, 200, 300, 400]"
+        :page-size="100"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="data.total"
+        :total="400"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
     </div>
+    <!-- 删除弹框 -->
+     <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
+            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="delVisible = false">取 消</el-button>
+                <el-button type="primary" @click="deleteRow" >确 定</el-button>
+            </span>
+        </el-dialog>
+        
     <!--编辑弹窗-->
 
     <el-dialog title="编辑" :visible.sync="dialogFormVisible">
       <el-row>
         <el-col :span="12">
           <el-form :model="form">
+            <el-form-item label="序号  " :label-width="formLabelWidth">
+              <el-input v-model="form.date" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
             <el-form-item label="题库名称" :label-width="formLabelWidth">
-              <el-input v-model="form.title" autocomplete="off"></el-input>
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="单选题数量" :label-width="formLabelWidth">
+              <el-input v-model="form.province" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="多选题数量" :label-width="formLabelWidth">
+              <el-input v-model="form.city" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="判断题数量" :label-width="formLabelWidth">
+              <el-input v-model="form.address" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="简答题数量" :label-width="formLabelWidth">
+              <el-input v-model="form.jd" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateRepo">确 定</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { repoPagin, repoDel, repoUpdate } from "@/api/tikugl";
-
 export default {
   data() {
     return {
@@ -106,6 +149,55 @@ export default {
       currentPage2: 5,
       currentPage3: 5,
       currentPage4: 4,
+      tableData: [
+        {
+          date: "8",
+          name: "王虎",
+          province: "20",
+          city: "5",
+          address: "20",
+          jd: "22",
+          zip: 200333,
+        },
+        {
+          date: "78",
+          name: "小虎",
+          province: "20",
+          city: "5",
+          address: "20",
+          jd: "22",
+          zip: 200333,
+        },
+        {
+          date: "7",
+          name: "王da虎",
+          province: "20",
+          city: "5",
+          address: "20",
+          jd: "22",
+          zip: 200333,
+        },
+        {
+          date: "87",
+          name: "王虎",
+          province: "20",
+          city: "5",
+          address: "20",
+          jd: "22",
+          zip: 200333,
+        },
+        {
+          date: "8",
+          name: "王v虎",
+          province: "20",
+          city: "5",
+          address: "20",
+          jd: "22",
+          zip: 200333,
+        },
+      ],
+    
+
       formInline: {
         user: "",
         region: "",
@@ -120,45 +212,21 @@ export default {
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {
-        title: "",
-        id: "",
-        userId: "",
-        createTIme: "",
-        realName: "",
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: "",
       },
-      pageNum: 1,
-      pageSize: 10,
-      data: null,
-      formLabelWidth: "120px",
-    };
-  },
-  created() {
-    this.getRepo();
+      formLabelWidth: "120px"
+    }
   },
   methods: {
-    async getRepo(pageNum, pageSize, title) {
-      const params = { pageNum: pageNum, pageSize: pageSize };
-      const res = await repoPagin(params);
-      this.data = res.data;
-      console.log("我获得了api的返回");
-      console.log(res);
-    },
-    updateRepo() {
-      const data = {
-        title: this.form.title,
-      };
-      repoUpdate(this.form.id , data)
-        .then(() => {
-          this.getRepo()
-          this.$message({
-            type: "success",
-            message: "修改成功",
-          });
-          this.dialogFormVisible = false;
-        })
-        .catch(() => {});
-    },
-    open(row) {
+    open(index) {
+      
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -166,17 +234,10 @@ export default {
         center: true,
       })
         .then(() => {
-          repoDel(row.id).then(() => {
-            this.getRepo();
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            }).catch(() => {
-              this.$message({
-                type: "info",
-                message: "删除失败",
-              });
-            });
+          this.tableData.splice(index, 1)
+          this.$message({
+            type: "success",
+            message: "删除成功!",
           });
         })
         .catch(() => {
@@ -187,7 +248,6 @@ export default {
         });
     },
     onSubmit() {
-      this.getRepo(this.pageNum,this.pageSize,this.input)
       console.log("submit!");
     },
     screenInfo(row, index, done) {
@@ -196,17 +256,13 @@ export default {
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
-      this.pageSize = val;
-      this.getRepo(this.pageNum, val);
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.pageNum = val;
-      this.getRepo(val, this.pageSize);
     },
     handleClick(row) {
       console.log(row);
-    },
+    }
   },
   computed: {
     tables() {
@@ -222,14 +278,34 @@ export default {
         });
       }
       return this.tableData;
-    },
+    }
   },
+
+  
 };
 </script>
 <style>
+.el-input__inner {
+  -webkit-appearance: none;
+  background-color: #fff;
+  background-image: none;
+  border-radius: 18px;
+  border: 1px solid #161616;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  height: 40px;
+  line-height: 40px;
+  outline: 0;
+  padding: 0 15px;
+  -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 100%;
+}
 
-
-
+.el-table--border,
 .el-table--group {
   border: 1px solid #161616;
 }
