@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-05-06 10:19:46
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-05-09 16:13:06
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,42 +12,40 @@
     <div style="padding-left: 53px; padding-top: 22px">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="题库名称:">
-          <el-input v-model="input" placeholder="请输入查询内容"></el-input>
+          <el-input v-model="searchTitle" placeholder="请输入查询内容"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="margin-left: 40px" @click="onSubmit"
+          <el-button type="primary" style="margin-left: 40px" @click="searchRepo"
             >查询</el-button
           >
-          <el-button
-            type="primary"
-            style="margin-left: 40px"
-            @click="screenInfo()"
+          <el-button type="primary" style="margin-left: 40px" @click="screenInfo()"
             >新增</el-button
           >
         </el-form-item>
       </el-form>
     </div>
-
     <!-- table -->
     <div style="margin: auto; width: 1200px" align="center">
-      <el-table :data="tables" border>
-        <el-table-column fixed prop="date" label="序号" align="center" />
-        <el-table-column prop="name" label="题库名称" align="center" />
-        <el-table-column prop="province" label="单选题数量" align="center" />
-        <el-table-column prop="city" label="多选题数量" align="center" />
-        <el-table-column prop="address" label="判断题数量" align="center" />
-        <el-table-column prop="jd" label="简答题数量" align="center" />
-
+      <el-table :data="data.records" border>
+        <el-table-column fixed prop="id" label="序号" align="center" />
+        <el-table-column prop="title" label="题库名称" align="center" />
+        <el-table-column prop="createTime" label="创建时间" align="center" />
         <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope=" { row }">
+          <template slot-scope="{ row }">
             <el-button
               type="text"
               size="small"
-              style="font-size:14px"
-             @click="updateRow(row)"
+              style="font-size: 14px"
+              @click="updateRow(row)"
               >编辑</el-button
             >
-            <el-button type="text" size="small" style="color:red;font-size:14px" @click="open">删除</el-button>
+            <el-button
+              type="text"
+              size="small"
+              style="color: red; font-size: 14px"
+              @click="delRepo(row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -56,173 +54,109 @@
       <span class="demonstration" />
       <el-pagination
         :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="data.total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
     </div>
     <!-- 删除弹框 -->
-     <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" >确 定</el-button>
-            </span>
-        </el-dialog>
-        
+    <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
+      <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="delVisible = false">取 消</el-button>
+        <el-button type="primary" @click="deleteRow">确 定</el-button>
+      </span>
+    </el-dialog>
+
     <!--编辑弹窗-->
 
     <el-dialog title="编辑" :visible.sync="dialogFormVisible">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="序号  " :label-width="formLabelWidth">
-              <el-input v-model="form.date" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
             <el-form-item label="题库名称" :label-width="formLabelWidth">
-              <el-input v-model="form.name" autocomplete="off"></el-input>
+              <el-input v-model="form.title" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="单选题数量" :label-width="formLabelWidth">
-              <el-input v-model="form.province" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="多选题数量" :label-width="formLabelWidth">
-              <el-input v-model="form.city" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="判断题数量" :label-width="formLabelWidth">
-              <el-input v-model="form.address" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="简答题数量" :label-width="formLabelWidth">
-              <el-input v-model="form.jd" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="updateRepo">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { repoPaging, repoDel, repoUpdate, repoAdd } from "@/api/repo";
 export default {
   data() {
     return {
-      input: "",
+      pageNum: 1,
+      pageSize: 10,
+      data: null,
+      searchTitle: "",
       formInline: {
         user: "",
         region: "",
       },
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
-      tableData: [
-        {
-          date: "8",
-          name: "王虎",
-          province: "20",
-          city: "5",
-          address: "20",
-          jd: "22",
-          zip: 200333,
-        },
-        {
-          date: "78",
-          name: "小虎",
-          province: "20",
-          city: "5",
-          address: "20",
-          jd: "22",
-          zip: 200333,
-        },
-        {
-          date: "7",
-          name: "王da虎",
-          province: "20",
-          city: "5",
-          address: "20",
-          jd: "22",
-          zip: 200333,
-        },
-        {
-          date: "87",
-          name: "王虎",
-          province: "20",
-          city: "5",
-          address: "20",
-          jd: "22",
-          zip: 200333,
-        },
-        {
-          date: "8",
-          name: "王v虎",
-          province: "20",
-          city: "5",
-          address: "20",
-          jd: "22",
-          zip: 200333,
-        },
-      ],
-      formInline: {
-        user: "",
-        region: "",
-      },
-      dialogVisible: false,
       cancle() {},
       updateRow(row) {
         this.dialogFormVisible = true;
         this.form = row;
       },
       diaTitle: "新增",
+      form: {
+        title: "",
+      },
+      formLabelWidth: "120px",
+      dialogVisible: false,
       dialogTableVisible: false,
       dialogFormVisible: false,
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
-      },
-      formLabelWidth: "120px"
-    }
+    };
+  },
+  created() {
+    this.getRepoPage();
   },
   methods: {
-    open(index) {
-      
+    // 分页查询
+    async getRepoPage(pageNum, pageSize, title = null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
+      const res = await repoPaging(params);
+      this.data = res.data;
+    },
+    // 编辑题库
+    updateRepo() {
+      repoUpdate(this.form.id, { title: this.form.title })
+        .then((res) => {
+          if (res.code) {
+            this.getRepoPage(this.pageNum, this.pageSize);
+            this.dialogFormVisible = false;
+            this.$message({
+              type: "success",
+              message: "编辑成功!",
+            });
+          } else {
+            this.$message({
+              type: "info",
+              message: res.msg,
+            });
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消编辑",
+          });
+        });
+    },
+    // 删除题库
+    delRepo(row) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -230,10 +164,20 @@ export default {
         center: true,
       })
         .then(() => {
-          this.tableData.splice(index, 1)
-          this.$message({
-            type: "success",
-            message: "删除成功!",
+          repoDel(row.id).then((res) => {
+            if (res.code) {
+              this.getRepoPage(this.pageNum, this.pageSize);
+              this.tableData.splice(index, 1);
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+            } else {
+              this.$message({
+                type: "info",
+                message: res.msg,
+              });
+            }
           });
         })
         .catch(() => {
@@ -243,22 +187,26 @@ export default {
           });
         });
     },
-    onSubmit() {
-      console.log("submit!");
+    searchRepo() {
+      this.getRepoPage(this.pageNum, this.pageSize, this.searchTitle);
     },
     screenInfo(row, index, done) {
       console.info("=====", row);
       this.$router.push({ name: "Add", query: { zhi: row } });
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // 设置每页多少条逻辑
+      this.pageSize = val;
+      this.getRepoPage(this.pageNum, val);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // 设置当前页逻辑
+      this.pageNum = val;
+      this.getRepoPage(val, this.pageSize);
     },
     handleClick(row) {
       console.log(row);
-    }
+    },
   },
   computed: {
     tables() {
@@ -274,10 +222,8 @@ export default {
         });
       }
       return this.tableData;
-    }
+    },
   },
-
-  
 };
 </script>
 <style>
@@ -377,3 +323,4 @@ export default {
   text-align: center;
 }
 </style>
+@/api/repo

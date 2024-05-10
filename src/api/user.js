@@ -2,7 +2,7 @@
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-03-04 10:34:47
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-03-28 14:14:14
+ * @LastEditTime: 2024-05-09 14:28:51
  * @FilePath: \vue-admin-template\src\api\user.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -13,6 +13,12 @@ export function login(data) {
     url: 'auths/login',
     method: 'post',
     data
+  })
+}
+export function verifyCode(code) {
+  return request({
+    url: 'auths/verifyCode/' + code,
+    method: 'post',
   })
 }
 
@@ -26,7 +32,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
+    url: '/auths/logout',
+    method: 'delete'
   })
 }

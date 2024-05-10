@@ -52,13 +52,10 @@
 
     <!-- table -->
     <div style="margin: auto; width: 1200px" align="center">
-      <el-table :data="tables" border>
-        <el-table-column fixed prop="date" label="序号" align="center" />
-        <el-table-column prop="name" label="证书名称" align="center" />
-        <el-table-column prop="count" label="认证单位" align="center" />
-        <el-table-column prop="class" label="所属题库" align="center" />
-        <el-table-column prop="time" label="创建时间" align="center" />
-        <el-table-column prop="zip" label="邮编" align="center" />
+      <el-table :data="data.records" border>
+        <el-table-column fixed prop="id" label="序号" align="center" />
+        <el-table-column prop="title" label="公告标题" align="center" />
+        <el-table-column prop="content" label="内容" align="center" />
         <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="{row}">
             <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
@@ -71,10 +68,10 @@
       <span class="demonstration" />
       <el-pagination
         :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="data.total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -170,16 +167,30 @@
 
 
 <script>
+import { noticePaging, noticeAdd, noticeDel, noticeUpdate } from "@/api/notice";
 export default {
+  created() {
+    this.getNoticePage();
+  },
   methods: {
+    // 分页查询
+    async getNoticePage(pageNum, pageSize, title = null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
+      const res = await noticePaging(params);
+      this.data = res.data;
+    },
     handleClick(row) {
       console.log(row);
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // 设置每页多少条逻辑
+      this.pageSize = val;
+      this.getNoticePage(this.pageNum, val);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // 设置当前页逻辑
+      this.pageNum = val;
+      this.getNoticePage(val, this.pageSize);
     },
     onSubmit() {
       console.log("submit!");
@@ -219,6 +230,9 @@ export default {
   },
   data() {
     return {
+      pageNum: 1,
+      pageSize: 10,
+      data: null,
       input: "",
       input1:"",
       currentPage1: 5,

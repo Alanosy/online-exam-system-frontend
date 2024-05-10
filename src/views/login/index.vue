@@ -2,7 +2,7 @@
  * @Author: st 2946594574@qq.com
  * @Date: 2024-03-04 10:55:05
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-04-22 13:35:52
+ * @LastEditTime: 2024-05-09 15:35:24
  * @FilePath: \com-project\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,9 +25,8 @@
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          v-model="username"
+          v-model="loginForm.username"
           ref="username"
-        
           placeholder="Username"
           name="username"
           type="text"
@@ -43,7 +42,7 @@
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="password"
+          v-model="loginForm.password"
           :type="passwordType"
           placeholder="Password"
           name="password"
@@ -58,12 +57,37 @@
         </span>
       </el-form-item>
 
+      <div style="display: flex">
+        <el-form-item prop="username">
+          <span class="svg-container">
+            <svg-icon icon-class="user" />
+          </span>
+          <el-input
+            v-model="code"
+            ref="username"
+            style="width: 300px"
+            placeholder="code"
+            name="code"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+          />
+        </el-form-item>
+        <img
+          src="/api/auths/captcha"
+          style="margin-left: 20px; height: 47px"
+          @click="getVerify($event.target)"
+          alt=""
+        />
+      </div>
+
       <el-button
         :loading="loading"
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-      >Login</el-button>
+        >Login</el-button
+      >
 
       <div class="tips">
         <span style="margin-right: 20px">username: admin</span>
@@ -74,92 +98,115 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-import { sendEmail } from '@/api/email'
-import {setToken} from '@/utils/auth'
-import {baseUrl} from '@/api/params'
-import axios from 'axios'
+import { validUsername } from "@/utils/validate";
+import { sendEmail } from "@/api/email";
+import { setToken } from "@/utils/auth";
+import { baseUrl } from "@/api/params";
+import axios from "axios";
+import { verifyCode } from "@/api/user";
+import { Message } from 'element-ui';
 
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error("Please enter the correct user name"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error("The password can not be less than 6 digits"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: "admin",
+        password: "123456",
       },
+      code:"",
       loginRules: {
         username: [
-          { required: true, trigger: 'blur', validator: validateUsername }
+          { required: true, trigger: "blur", validator: validateUsername },
         ],
         password: [
-          { required: true, trigger: 'blur', validator: validatePassword }
-        ]
+          { required: true, trigger: "blur", validator: validatePassword },
+        ],
       },
       loading: false,
-      passwordType: 'password',
-      redirect: undefined
-    }
+      passwordType: "password",
+      redirect: undefined,
+    };
   },
   watch: {
     $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
+      handler: function (route) {
+        this.redirect = route.query && route.query.redirect;
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   created() {
     // this.getEmail()
   },
   methods: {
+    getVerify(obj) {
+      obj.src = "/api/auths/captcha?" + Math.random();
+    },
+
     async getEmail() {
-      const res = await sendEmail('3109836428@qq.com')
-      console.log('我获得了api的返回')
-      console.log(res)
+      const res = await sendEmail("3109836428@qq.com");
+      console.log("我获得了api的返回");
+      console.log(res);
     },
     showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
+      if (this.passwordType === "password") {
+        this.passwordType = "";
       } else {
-        this.passwordType = 'password'
+        this.passwordType = "password";
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+        this.$refs.password.focus();
+      });
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
+      verifyCode(this.code).then((res) => {
+        if (res.code) {
+          this.$refs.loginForm.validate((valid) => {
+            if (valid) {
+              this.loading = true;
+              this.$store
+                .dispatch("user/login", this.loginForm)
+                .then(() => {
+                    this.$router.push({ path: this.redirect || "/" });
+                    this.loading = false;
+                })
+                .catch((error) => {
+                  console.log(error)
+                  Message.error(error.msg)
+                  this.loading = false;
+                });
+            } else {
+              console.log("error submit!!");
+              return false;
+            }
+          });
+        }else{
+          this.getVerify()
+          this.$message({
+            type:"info",
+            message:res.msg
           })
-        } else {
-          console.log('error submit!!')
-          return false
         }
-      })
-    }
-  }
-}
+        
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss">

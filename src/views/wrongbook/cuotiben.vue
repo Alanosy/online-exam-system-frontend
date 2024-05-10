@@ -125,6 +125,7 @@
 
 
 <script>
+import { userbookPaging, userbookDel, userbookUpdate, userbookAdd } from "@/api/userbook";
   export default {
       methods: {
       handleSizeChange(val) {

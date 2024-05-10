@@ -1,8 +1,8 @@
 /*
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-04 10:55:05
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-28 15:21:51
+ * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
+ * @LastEditTime: 2024-05-09 15:52:37
  * @FilePath: \com-project\src\store\modules\user.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -41,12 +41,15 @@ const actions = {
     console.log('进入仓库')
     return new Promise((resolve, reject) => {
       login(userInfo).then(response => {
-        console.log('这是登录的返回')
-        console.log(response)
         const { data } = response
-        commit('SET_TOKEN', data)
-        setToken(data)
-        resolve()
+        console.log(response);
+        if (response.code === 1) {
+          commit('SET_TOKEN', data)
+          setToken(data)
+          resolve()
+        } else {
+          reject(response)
+        }
       }).catch(error => {
         reject(error)
       })

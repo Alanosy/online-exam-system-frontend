@@ -15,10 +15,7 @@
           >
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="screenInfo()"
-            style="margin-left: 10px"
+          <el-button type="primary" @click="screenInfo()" style="margin-left: 10px"
             >新增</el-button
           >
         </el-form-item>
@@ -31,21 +28,18 @@
     </div>
     <!-- table -->
     <div style="width: 90%; margin: auto; margin-top: 20px">
-      <el-table :data="tables" border>
-        <el-table-column prop="date" label="序号" align="center" width="120px">
+      <el-table :data="data.records" border>
+        <el-table-column prop="id" label="序号" align="center" width="120px">
         </el-table-column>
-        <el-table-column prop="name" label="题干" width="180px" align="center">
+        <el-table-column prop="content" label="题干" width="180px" align="center">
         </el-table-column>
-        <el-table-column prop="count" label="题目类型" align="center">
+        <el-table-column prop="quType" label="题目类型" width="180px" align="center">
         </el-table-column>
-        <el-table-column
-          prop="class"
-          label="所属题库"
-          align="center"
-          width="150px"
-        >
+        <el-table-column prop="repoTitle" label="所属题库" width="180px" align="center">
         </el-table-column>
-        <el-table-column prop="time" label="创建时间" align="center">
+        <el-table-column prop="analyze" label="分析" width="300px" align="center">
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="180px" align="center">
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
@@ -60,7 +54,7 @@
               type="text"
               size="small"
               style="color: red; font-size: 14px"
-              @click="open"
+              @click="delQu(row)"
               >删除</el-button
             >
           </template>
@@ -73,10 +67,10 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="data.total"
       >
       </el-pagination>
     </div>
@@ -86,15 +80,8 @@
       <el-row>
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="序号  " :label-width="formLabelWidth">
-              <el-input v-model="form.date" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="班级名称" :label-width="formLabelWidth">
-              <el-input v-model="form.name" autocomplete="off"></el-input>
+            <el-form-item label="题干" :label-width="formLabelWidth">
+              <el-input v-model="form.content" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
@@ -102,42 +89,28 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="班级口令" :label-width="formLabelWidth">
-              <el-input v-model="form.count" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="班级   " :label-width="formLabelWidth">
-              <el-input v-model="form.class" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="注册时间" :label-width="formLabelWidth">
-              <el-input v-model="form.time" autocomplete="off"></el-input>
+            <el-form-item label="所属题库" :label-width="formLabelWidth">
+              <el-input v-model="form.repoTitle" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="updateQu">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { quPaging, quAdd, quDel, quUpdate } from "@/api/question";
 export default {
   data() {
     return {
+      pageNum: 1,
+      pageSize: 10,
+      data: null,
       input: "",
       input1: "",
       currentPage1: 5,
@@ -145,44 +118,7 @@ export default {
       currentPage3: 5,
       currentPage4: 4,
       input: "",
-      input1:"",
-      tableData: [
-        {
-          date: "1001",
-          name: "好好学习班",
-          count: "好好学习，天天向上",
-          class: "2201班",
-          time: "2024.2.28",
-        },
-        {
-          date: "1001",
-          name: "好好学习班",
-          count: "好好学习，天天向上",
-          class: "2201班",
-          time: "2024.2.28",
-        },
-        {
-          date: "1001",
-          name: "好好学习班",
-          count: "好好学习，天天向上",
-          class: "2201班",
-          time: "2024.2.28",
-        },
-        {
-          date: "1001",
-          name: "好好学习班",
-          count: "好好学习，天天向上",
-          class: "2201班",
-          time: "2024.2.28",
-        },
-        {
-          date: "1001",
-          name: "好好学习班",
-          count: "好好学习，天天向上",
-          class: "2201班",
-          time: "2024.2.28",
-        },
-      ],
+      input1: "",
       formInline: {
         user: "",
         region: "",
@@ -209,7 +145,76 @@ export default {
       formLabelWidth: "110px",
     };
   },
+  created() {
+    this.getQuPage();
+  },
   methods: {
+    // 分页查询
+    async getQuPage(pageNum, pageSize, title = null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
+      const res = await quPaging(params);
+      this.data = res.data;
+    },
+    // 编辑题库
+    updateQu() {
+      quUpdate(this.form.id, { title: this.form.title })
+        .then((res) => {
+          if (res.code) {
+            this.getRepoPage(this.pageNum, this.pageSize);
+            this.dialogFormVisible = false;
+            this.$message({
+              type: "success",
+              message: "编辑成功!",
+            });
+          } else {
+            this.$message({
+              type: "info",
+              message: res.msg,
+            });
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消编辑",
+          });
+        });
+    },
+    // 删除题库
+    delQu(row) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true,
+      })
+        .then(() => {
+          quDel(row.id).then((res) => {
+            if (res.code) {
+              this.getQuPage(this.pageNum, this.pageSize);
+              this.tableData.splice(index, 1);
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+            } else {
+              this.$message({
+                type: "info",
+                message: res.msg,
+              });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    searchRepo() {
+      this.getQuPage(this.pageNum, this.pageSize, this.searchTitle);
+    },
     onSubmit() {
       console.log("submit!");
     },
@@ -222,10 +227,14 @@ export default {
       console.log(row);
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // 设置每页多少条逻辑
+      this.pageSize = val;
+      this.getQuPage(this.pageNum, val);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // 设置当前页逻辑
+      this.pageNum = val;
+      this.getQuPage(val, this.pageSize);
     },
     open(index) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -254,9 +263,9 @@ export default {
   },
   computed: {
     tables() {
-       //在你的数据表格中定义tabels
+      //在你的数据表格中定义tabels
       const input = this.input;
-       const input1 = this.input1;
+      const input1 = this.input1;
       if (input) {
         // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {

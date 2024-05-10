@@ -24,13 +24,19 @@
 
     <!-- table -->
     <div style="margin: auto; width: 1200px" align="center">
-      <el-table :data="tableData" border>
-        <el-table-column fixed prop="date" label="序号" align="center" />
-        <el-table-column prop="name" label="试卷名称" align="center" />
-        <el-table-column prop="province" label="考试时间" align="center" />
-        <el-table-column prop="city" label="总分" align="center" />
-        <el-table-column prop="address" label="及格分" align="center" />
-        <el-table-column prop="zip" label="创建时间" align="center" />
+      <el-table :data="data" border>
+        <el-table-column fixed prop="id" label="序号" align="center" />
+        <el-table-column prop="title" label="试卷名称" align="center" />
+        <el-table-column prop="examDuration" label="考试时间" align="center" />
+        <el-table-column prop="grossScore" label="总分" align="center" />
+        <el-table-column prop="passedScore" label="及格分" align="center" />
+        <el-table-column prop="radioCount" label="单选题数量" align="center" />
+        <el-table-column prop="multiCount" label="多选题数量" align="center" />
+        <el-table-column prop="judgeCount" label="判断题数量" align="center" />
+        <el-table-column prop="saqCount" label="简答题数量" align="center" />
+        <el-table-column prop="startTime" label="开始时间" align="center" />
+        <el-table-column prop="endTime" label="结束时间" align="center" />
+        <el-table-column prop="createTime" label="创建时间" align="center" />
         <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="screenInfo()"
@@ -56,9 +62,13 @@
 </template>
 
 <script>
+import { getGradeExamList } from '@/api/exam'
 export default {
   data() {
     return {
+      pageNum: 1,
+      pageSize: 10,
+      data: null,
       formInline: {
         user: "",
         region: "",
@@ -127,7 +137,16 @@ export default {
       formLabelWidth: "120px",
     };
   },
-  methods: {
+  created() {
+        this.getExamGradePage();
+    },
+    methods: {
+        // 分页查询
+        async getExamGradePage(pageNum, pageSize) {
+            const params = { pageNum: pageNum, pageSize: pageSize };
+            const res = await getGradeExamList(params);
+            this.data = res.data;
+        },
     onSubmit() {
       console.log("submit!");
     },

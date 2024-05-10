@@ -1,7 +1,6 @@
-
 import request from '@/utils/request'
 
-export function tikugl(data) {
+export function repoAdd(data) {
   return request({
     url: 'repo',
     method: 'post',
@@ -9,7 +8,7 @@ export function tikugl(data) {
   })
 }
 
-export function repoPagin(params) {
+export function repoPaging(params) {
   return request({
     url: 'repo/paging',
     method: 'get',

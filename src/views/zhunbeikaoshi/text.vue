@@ -71,8 +71,17 @@
 </template>
 
 <script>
+import {getExamDetail} from '@/api/exam'
 export default {
-   methods:{
+  created() {
+        this.getExamDetils();
+    },
+    methods: {
+        // 分页查询
+        async getExamDetils() {
+            const res = await getExamDetail(row.id);
+            this.data = res.data;
+        },
      screenInfo(row, index, done) {
          console.info("=====", row);
          this.$router.push({ name: "start", query: { zhi: row } });

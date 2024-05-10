@@ -2,7 +2,7 @@
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-22 13:32:40
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-04-22 13:36:09
+ * @LastEditTime: 2024-05-09 15:59:36
  * @FilePath: \vue-admin-template\src\views\message\add.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { tikugl } from "@/api/tikugl";
+import { repoAdd } from "@/api/repo";
 export default {
   data() {
     return {
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      tikugl(this.sizeForm)
+      repoAdd(this.sizeForm)
         .then(() => {
           this.$message({
             type: "success",
@@ -89,3 +89,4 @@ export default {
   padding: 10px 0 10px 100px;
 }
 </style>
+@/api/repo

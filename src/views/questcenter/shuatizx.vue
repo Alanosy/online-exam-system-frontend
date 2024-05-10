@@ -57,10 +57,14 @@
 </template>
 
 <script>
+
 export default {
 
     data() {
         return {
+            pageNum: 1,
+            pageSize: 10,
+            data: null,
             formInline: {
                 user: '',
                 region: ''
@@ -127,7 +131,9 @@ export default {
             
         }
     },
+
     methods: {
+  
         onSubmit() {
             console.log('submit!');
         },
