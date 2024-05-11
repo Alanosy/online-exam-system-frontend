@@ -1,8 +1,6 @@
 <template>
   <div class="navbar">
-    <div
-      style="width:100%;height:66px;box-shadow: rgb(0 21 41 / 9%) 0px 1px 4px;}"
-    >
+    <div style="width:100%;height:66px;box-shadow: rgb(0 21 41 / 9%) 0px 1px 4px;}">
       <hamburger
         :is-active="sidebar.opened"
         class="hamburger-container"
@@ -14,10 +12,7 @@
       <div class="right-menu">
         <el-dropdown class="avatar-container" trigger="click">
           <div class="avatar-wrapper">
-            <img
-              :src="avatar + '?imageView2/1/w/80/h/80'"
-              class="user-avatar"
-            />
+            <img :src="user.avatar" class="user-avatar" />
             <i class="el-icon-caret-bottom" />
           </div>
           <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -27,7 +22,7 @@
             <router-link to="/changemima">
               <el-dropdown-item> Home </el-dropdown-item>
             </router-link>
-          
+
             <el-dropdown-item divided @click.native="logout">
               <span style="display: block">Log Out</span>
             </el-dropdown-item>
@@ -64,8 +59,14 @@
 import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
-
+import { getToken } from "@/utils/auth";
+import {parseJwt} from "@/utils/jwtUtils"
 export default {
+  data() {
+    return {
+      user: {},
+    };
+  },
   components: {
     Breadcrumb,
     Hamburger,
@@ -76,7 +77,21 @@ export default {
   created() {
     console.log(this.tags);
   },
+  created() {
+    this.decode();
+  },
   methods: {
+
+    decode() {
+      const token = getToken();
+      const user = parseJwt(token);
+
+      console.log("=====================");
+      console.log(user);
+      this.user=JSON.parse(user.userInfo)
+      console.log(this.user);
+      console.log("=====================");
+    },
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
@@ -89,7 +104,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .el-tag {
   background-color: #ffffff;
   border-color: #cacaca;
@@ -107,9 +121,6 @@ export default {
   box-sizing: border-box;
   white-space: nowrap;
 }
-
-
-
 
 .active {
   background-color: #58b289;
@@ -135,7 +146,6 @@ export default {
       background: rgba(0, 0, 0, 0.025);
     }
   }
- 
 
   .breadcrumb-container {
     float: left;
@@ -167,7 +177,6 @@ export default {
         }
       }
     }
- 
 
     .avatar-container {
       margin-right: 30px;

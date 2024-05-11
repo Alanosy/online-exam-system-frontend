@@ -36,3 +36,11 @@ export function logout() {
     method: 'delete'
   })
 }
+
+export function userPaging(params) {
+  return request({
+    url: 'user/paging',
+    method: 'get',
+    params
+  })
+}

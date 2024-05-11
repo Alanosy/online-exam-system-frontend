@@ -8,93 +8,109 @@
         height: 35px;
         margin: auto;
         display: flex;
-        margin-top:10px" >
+        margin-top: 10px;
+      "
+    >
       <div
         style="
           color: rgb(228 59 59);
           align-items: center;
           display: flex;
           margin-left: 10px;
-          letter-spacing:0.1em;" >
+          letter-spacing: 0.1em;
+        "
+      >
         点击'开始考试'后将自动进入考试,请诚信考试！
       </div>
     </div>
     <!-- 内容 -->
-    <div style="width: 98%;height:400px;margin:auto;margin-top:10px;background-color: #f0f2f5;">
-       <div style="padding: 40px 0 0 50px; letter-spacing:0.1em;">
-           <span style="font-size:14px">考试名称:</span>
-           <span style="margin-left:5px;font-size:14px">XXXXXX</span>
-       </div>
-       <div style="padding: 15px 0 0 50px; letter-spacing:0.1em;">
-           <span style="font-size:14px">考试时长:</span>
-           <span style="margin-left:5px;font-size:14px">XXXXXX</span>
-       </div>
-        <div style="padding: 15px 0 0 50px; letter-spacing:0.1em;">
-           <span style="font-size:14px">试卷总分:</span>
-           <span style="margin-left:5px;font-size:14px">XXXXXX</span>
-       </div>
-       <div style="padding: 15px 0 0 50px; letter-spacing:0.1em;">
-           <span style="font-size:14px">及格分数:</span>
-           <span style="margin-left:5px;font-size:14px">XXXXXX</span>
-       </div>
-       <div style="padding: 15px 0 0 50px; letter-spacing:0.1em;">
-           <span style="font-size:14px">发布人:</span>
-           <span style="margin-left:5px;font-size:14px">XXXXXX</span>
-       </div>
-       <div style="padding: 15px 0 0 50px; letter-spacing:0.1em;">
-           <span style="font-size:14px">单选题数量:</span>
-           <span style="margin-left:5px;font-size:14px">XXXXXX</span>
-            <span style="margin-left:5px;font-size:14px">(每题X分)</span>
-       </div>
-       <div style="padding: 15px 0 0 50px; letter-spacing:0.1em;">
-           <span style="font-size:14px">多选题数量:</span>
-           <span style="margin-left:5px;font-size:14px">XXXXXX</span>
-            <span style="margin-left:5px;font-size:14px">(每题X分)</span>
-       </div>
-         <div style="padding: 15px 0 0 50px; letter-spacing:0.1em;">
-           <span style="font-size:14px">判断题数量:</span>
-           <span style="margin-left:5px;font-size:14px">XXXXXX</span>
-            <span style="margin-left:5px;font-size:14px">(每题X分)</span>
-       </div>
-         <div style="padding: 15px 0 0 50px; letter-spacing:0.1em;">
-           <span style="font-size:14px">简答题数量:</span>
-           <span style="margin-left:5px;font-size:14px">XXXXXX</span>
-            <span style="margin-left:5px;font-size:14px">(每题X分)</span>
-       </div>
+    <div
+      style="
+        width: 98%;
+        height: 400px;
+        margin: auto;
+        margin-top: 10px;
+        background-color: #f0f2f5;
+      "
+    >
+      <div style="padding: 40px 0 0 50px; letter-spacing: 0.1em">
+        <span style="font-size: 14px">考试名称:</span>
+        <span style="margin-left: 5px; font-size: 14px">{{ data.title }}</span>
+      </div>
+      <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
+        <span style="font-size: 14px">考试时长:</span>
+        <span style="margin-left: 5px; font-size: 14px">{{data.examDuration}}</span>
+      </div>
+      <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
+        <span style="font-size: 14px">试卷总分:</span>
+        <span style="margin-left: 5px; font-size: 14px">{{ data.grossScore }}</span>
+      </div>
+      <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
+        <span style="font-size: 14px">及格分数:</span>
+        <span style="margin-left: 5px; font-size: 14px">{{data.passedScore }}</span>
+      </div>
+      <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
+        <span style="font-size: 14px">发布人:</span>
+        <span style="margin-left: 5px; font-size: 14px">XXXXXX</span>
+      </div>
+      <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
+        <span style="font-size: 14px">单选题数量:</span>
+        <span style="margin-left: 5px; font-size: 14px">{{ data.radioCount }}</span>
+        <span style="margin-left: 5px; font-size: 14px">({{ data.radioScore }}分)</span>
+      </div>
+      <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
+        <span style="font-size: 14px">多选题数量:</span>
+        <span style="margin-left: 5px; font-size: 14px">{{ data.multiCount }}</span>
+        <span style="margin-left: 5px; font-size: 14px">({{ data.multiScore }}分)</span>
+      </div>
+      <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
+        <span style="font-size: 14px">判断题数量:</span>
+        <span style="margin-left: 5px; font-size: 14px">{{data.judgeCount }}</span>
+        <span style="margin-left: 5px; font-size: 14px">({{ data.judgeScore }}分)</span>
+      </div>
+      <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
+        <span style="font-size: 14px">简答题数量:</span>
+        <span style="margin-left: 5px; font-size: 14px">{{ data.saqCount }}</span>
+        <span style="margin-left: 5px; font-size: 14px">({{data.saqScore}})</span>
+      </div>
     </div>
     <!-- 按钮 -->
     <el-row class="ann">
-         <el-button type="primary"  @click="screenInfo()">▶ 开始考试</el-button>
-           <el-button type="primary" plain style="margin-left:20px">返回</el-button>
+      <el-button type="primary" @click="startExam()">▶ 开始考试</el-button>
+      <el-button type="primary" plain style="margin-left: 20px">返回</el-button>
     </el-row>
   </div>
 </template>
 
 <script>
-import {getExamDetail} from '@/api/exam'
+import { getExamDetail } from "@/api/exam";
 export default {
+  data() {
+    return {
+      receivedRow: null,
+      data:null
+    };
+  },
   created() {
-        this.getExamDetils();
+    this.receivedRow = this.$route.query.zhi;
+    this.getExamDetils(this.receivedRow.id);
+  },
+  methods: {
+    // 分页查询
+    async getExamDetils(examId) {
+      const res = await getExamDetail(examId);
+      this.data = res.data;
     },
-    methods: {
-        // 分页查询
-        async getExamDetils() {
-            const res = await getExamDetail(row.id);
-            this.data = res.data;
-        },
-     screenInfo(row, index, done) {
-         console.info("=====", row);
-         this.$router.push({ name: "start", query: { zhi: row } });
-        },
-         
-   },
-}
-
+    startExam() {
+      this.$router.push({ name: "start", query: { zhi: this.receivedRow } });
+    },
+  },
+};
 </script>
 
 <style scoped>
-.ann{
-    margin-top: 15px;
-    margin-left: 20px;
+.ann {
+  margin-top: 15px;
+  margin-left: 20px;
 }
 </style>

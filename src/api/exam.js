@@ -46,67 +46,34 @@ export function getExamDetail(examId) {
     method: 'get',
   })
 }
-/**
- * 创建试卷
- * @param data
- */
-export function createPaper(data) {
-  return post('/exam/api/paper/paper/create-paper', data)
+export function examStart(examId) {
+  return request({
+    url: 'exams/start?examId='+examId,
+    method: 'get',
+  })
 }
 
-/**
- * 试卷详情
- * @param data
- */
-export function paperDetail(data) {
-  return post('/exam/api/paper/paper/paper-detail', data)
+export function examQuList(examId) {
+  return request({
+    url: 'exams/question/list/'+examId,
+    method: 'get',
+  })
 }
 
-/**
- * 题目详情
- * @param data
- */
-export function quDetail(data) {
-  return post('/exam/api/paper/paper/qu-detail', data)
-}
-
-/**
- * 填充答案
- * @param data
- */
 export function fillAnswer(data) {
-  return post('/exam/api/paper/paper/fill-answer', data)
+  return request({
+    url: 'exams/full-answer',
+    method: 'post',
+    data
+  })
+  
 }
 
-/**
- * 交卷
- * @param data
- */
-export function handExam(data) {
-  return post('/exam/api/paper/paper/hand-exam', data)
-}
-
-/**
- * 试卷详情
- * @param data
- */
-export function paperResult(data) {
-  return post('/exam/api/paper/paper/paper-result', data)
-}
-
-/**
- * 错题训练
- * @param data
- */
-export function training(data) {
-  return post('/exam/api/paper/paper/training', data)
-}
-
-
-/**
- * 检查是否有进行中的考试
- * @returns {*}
- */
-export function checkProcess() {
-  return post('/exam/api/paper/paper/check-process', {})
-}
+  export function quDetail(params) {
+    return request({
+      url: 'exams/question/single',
+      method: 'get',
+      params
+    })
+    
+  }

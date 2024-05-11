@@ -38,8 +38,8 @@
         <el-table-column prop="endTime" label="结束时间" align="center" />
         <el-table-column prop="createTime" label="创建时间" align="center" />
         <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="screenInfo()"
+          <template slot-scope="{ row }">
+            <el-button type="text" size="small" @click="screenInfo(row)"
               >开始考试</el-button
             >
           </template>
@@ -150,7 +150,7 @@ export default {
     onSubmit() {
       console.log("submit!");
     },
-    screenInfo(row, index, done) {
+    screenInfo(row) {
       console.info("=====", row);
       this.$router.push({ name: "text", query: { zhi: row } });
     },
