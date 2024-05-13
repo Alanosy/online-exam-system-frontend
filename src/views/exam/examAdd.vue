@@ -220,6 +220,7 @@
 
 <script>
 import RepoSelect from '@/components/RepoSelect'
+import {saveData} from '@/api/exam'
 export default {
   name: 'ExamDetail',
   components: { RepoSelect },

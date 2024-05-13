@@ -12,10 +12,10 @@
     <div style="padding-left: 53px; padding-top: 22px">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="试卷名称：      ">
-          <el-input v-model="formInline.user"></el-input>
+          <el-input v-model="searchTitle"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="margin-left: 40px" @click="chaxun"
+          <el-button type="primary" style="margin-left: 40px" @click="searchExamStu"
             >查询</el-button
           >
         </el-form-item>
@@ -69,6 +69,7 @@ export default {
       pageNum: 1,
       pageSize: 10,
       data: null,
+      searchTitle:"",
       formInline: {
         user: "",
         region: "",
@@ -142,10 +143,13 @@ export default {
     },
     methods: {
         // 分页查询
-        async getExamGradePage(pageNum, pageSize) {
-            const params = { pageNum: pageNum, pageSize: pageSize };
+        async getExamGradePage(pageNum, pageSize,searchTitle=null) {
+            const params = { pageNum: pageNum, pageSize: pageSize ,title:searchTitle};
             const res = await getGradeExamList(params);
             this.data = res.data;
+        },
+        searchExamStu(){
+          this.getExamGradePage(this.pageNum,this.pageSize,this.searchTitle)
         },
     onSubmit() {
       console.log("submit!");
