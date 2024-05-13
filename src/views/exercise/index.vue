@@ -57,7 +57,7 @@
 </template>
 
 <script>
-
+import { exercisePaging } from '@/api/exam'
 export default {
 
     data() {
@@ -132,8 +132,16 @@ export default {
         }
     },
 
-    methods: {
-  
+    created() {
+    this.getExercisePage();
+  },
+  methods: {
+    // 分页查询
+    async getExercisePage(pageNum, pageSize, title = null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
+      const res = await exercisePaging(params);
+      this.data = res.data;
+    },
         onSubmit() {
             console.log('submit!');
         },

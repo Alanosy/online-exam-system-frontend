@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import { fetchDetail, saveData } from '@/api/qu/qu'
+import { fetchDetail, saveData } from '@/api/question'
 import RepoSelect from '@/components/RepoSelect'
 import FileUpload from '@/components/FileUpload'
 

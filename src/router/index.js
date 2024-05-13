@@ -81,7 +81,7 @@ export const constantRoutes = [
     children: [{
       path: '/yonghu',
       name: 'Usermanager',
-      component: () => import('@/views/usermanager/yonghu'),
+      component: () => import('@/views/user/index'),
       meta: { title: '用户管理', icon: 'dashboard' }
     }]
   },
@@ -92,7 +92,7 @@ export const constantRoutes = [
       path: '/myself',
       name: 'Usermanager',
       hidden:true,
-      component: () => import('@/views/myself/myself'),
+      component: () => import('@/views/user/myself'),
       meta: { title: '个人中心', icon: 'dashboard' }
     }]
   },
@@ -103,7 +103,7 @@ export const constantRoutes = [
       path: '/changemima',
       name: 'Usermanager',
       hidden:true,
-      component: () => import('@/views/changemima/changemima'),
+      component: () => import('@/views/user/updatePassword.vue'),
       meta: { title: '修改密码', icon: 'dashboard' }
     }]
   },
@@ -113,7 +113,7 @@ export const constantRoutes = [
     children: [{
       path: '/classgl',
       name: 'Classmanager', 
-      component: () => import('@/views/classmanager/classgl'),
+      component: () => import('@/views/class/index'),
       meta: { title: '班级管理', icon: 'dashboard' }
     }]
   },
@@ -123,7 +123,7 @@ export const constantRoutes = [
     children: [{
       path: '/shijuanzx',
       name: 'Textcenter',
-      component: () => import('@/views/textcenter/shijuanzx'),
+      component: () => import('@/views/exam/student/index'),
       meta: { title: '试卷中心', icon: 'dashboard' }
     }]
   },
@@ -134,7 +134,7 @@ export const constantRoutes = [
       path: '/text',
       name: 'text',
       hidden:true,
-      component: () => import('@/views/zhunbeikaoshi/text'),
+      component: () => import('@/views/exam/examInformation.vue'),
       meta: { title: '准备考试', icon: 'dashboard' }
     }]
   },
@@ -142,7 +142,7 @@ export const constantRoutes = [
     path: '/startkaoshi',
     name: 'start',
     hidden:true,
-    component: () => import('@/views/kaishiks/start'),
+    component: () => import('@/views/exam/index.vue'),
     meta: { title: '开始考试', icon: 'dashboard' },
     // children: [{
     //   path: '/start',
@@ -158,7 +158,7 @@ export const constantRoutes = [
     children: [{
       path: '/shuatizx',
       name: 'Questcenter',
-      component: () => import('@/views/questcenter/shuatizx'),
+      component: () => import('@/views/exercise/index'),
       meta: { title: '刷题中心', icon: 'dashboard' }
     }]
   },
@@ -171,13 +171,13 @@ export const constantRoutes = [
       {
         path: '/examrecord1',
         name: 'Examrecord1',
-        component: () => import('@/views/examrecord/examrecord1'),
+        component: () => import('@/views/record/exam/index.vue'),
         meta: { title: '考试记录', icon: 'table' }
       },
       {
         path: '/questrecord',
         name: 'Examrecord2',
-        component: () => import('@/views/examrecord/questrecord'),
+        component: () => import('@/views/record/exercise/index.vue'),
         meta: { title: '刷题记录', icon: 'tree' }
       }
     ]
@@ -188,7 +188,7 @@ export const constantRoutes = [
     children: [{
       path: '/cuotiben',
       name: 'Wrongbook',
-      component: () => import('@/views/wrongbook/cuotiben'),
+      component: () => import('@/views/userbook/index'),
       meta: { title: '错题本', icon: 'dashboard' }
     }]
   },
@@ -198,7 +198,7 @@ export const constantRoutes = [
     children: [{
       path: '/kaoshigl',
       name: 'Exammange',
-      component: () => import('@/views/exammanage/kaoshigl'),
+      component: () => import('@/views/exam/teacher/index'),
       meta: { title: '考试管理', icon: 'dashboard' }
     }]
   },
@@ -209,7 +209,7 @@ export const constantRoutes = [
       path: '/ksAdd',
       name: 'ksAdd',
       hidden:true,
-      component: () => import('@/views/kaoshiAdd/ksAdd'),
+      component: () => import('@/views/exam/examAdd'),
       meta: { title: '考试添加', icon: 'dashboard' }
     }]
   },
@@ -219,7 +219,7 @@ export const constantRoutes = [
     children: [{
       path: '/tikugl',
       name: 'Bankmanage',
-      component: () => import('@/views/bankmanage/tikugl'),
+      component: () => import('@/views/repo/index'),
       meta: { title: '题库管理', icon: 'dashboard' }
     }]
   },
@@ -230,7 +230,7 @@ export const constantRoutes = [
       path: '/add',
       name: 'Add',
       hidden:true,
-      component: () => import('@/views/message/add'),
+      component: () => import('@/views/repo/add'),
       meta: { title: '题库管理', icon: 'dashboard' }
     }]
   },
@@ -240,7 +240,7 @@ export const constantRoutes = [
     children: [{
       path: '/shitigl',
       name: 'Questmanage',
-      component: () => import('@/views/questmanage/shitigl'),
+      component: () => import('@/views/question/index'),
       meta: { title: '试题管理', icon: 'dashboard' }
     }]
   },
@@ -251,7 +251,7 @@ export const constantRoutes = [
       path: '/news',
       name: 'news',
       hidden:true,
-      component: () => import('@/views/shitiadd/news'),
+      component: () => import('@/views/question/add.vue'),
       meta: { title: '试题管理', icon: 'dashboard' }
     }]
   },
@@ -271,7 +271,7 @@ export const constantRoutes = [
     children: [{
       path: 'chengjifx',
       name: 'Scoreana',
-      component: () => import('@/views/scoreana/chengjifx'),
+      component: () => import('@/views/score/index'),
       meta: { title: '成绩分析', icon: 'dashboard' }
     }]
   },
@@ -281,7 +281,7 @@ export const constantRoutes = [
     children: [{
       path: 'dajuangl',
       name: 'Answermanage',
-      component: () => import('@/views/answermanage/dajuangl'),
+      component: () => import('@/views/answer/index'),
       meta: { title: '答卷管理', icon: 'dashboard' }
     }]
   },

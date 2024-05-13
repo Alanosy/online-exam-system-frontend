@@ -88,7 +88,9 @@ export default {
   data() {
     return {
       receivedRow: null,
-      data:null
+      data:{
+        title: ""
+      },
     };
   },
   created() {

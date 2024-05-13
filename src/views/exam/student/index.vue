@@ -50,10 +50,10 @@
       <span class="demonstration" />
       <el-pagination
         :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="10"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="2"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />

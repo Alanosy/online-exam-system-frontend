@@ -30,3 +30,11 @@ export function repoUpdate(id, data) {
     data
   })
 }
+
+/**
+ * 保存题库
+ * @param data
+ */
+export function fetchPaging(data) {
+  return post('/exam/api/repo/paging', data)
+}

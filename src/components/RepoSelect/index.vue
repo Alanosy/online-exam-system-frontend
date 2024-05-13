@@ -25,7 +25,7 @@
 
 <script>
 
-import { fetchPaging } from '@/api/qu/repo'
+import { fetchPaging } from '@/api/repo'
 
 export default {
   name: 'RepoSelect',

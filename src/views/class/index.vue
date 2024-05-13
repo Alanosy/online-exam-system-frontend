@@ -111,7 +111,7 @@ export default {
   methods: {
     // 分页查询
     async getClassPage(pageNum, pageSize, title = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
+      const params = { pageNum: pageNum, pageSize: pageSize, gradeName: title };
       const res = await classPaging(params);
       this.data = res.data;
     },
@@ -188,7 +188,7 @@ export default {
         });
     },
     searchExam() {
-      this.getExamPage(this.pageNum, this.pageSize, this.searchTitle);
+      this.getClassPage(this.pageNum, this.pageSize, this.formInline.searchTitle);
     },
     handleClick(row) {
       console.log(row);

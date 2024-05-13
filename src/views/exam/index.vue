@@ -75,7 +75,7 @@
           <div v-if="quData.quType === 1 || quData.quType === 3">
             <el-radio-group v-model="radioValue">
               <el-radio v-for="item in quData.answerList" :label="item.id"
-                >{{ item.abc }}.{{ item.content }}
+                >{{ numberToLetter(item.sort+1) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -168,19 +168,37 @@ export default {
     // this.receivedRow = this.$route.query.zhi;
     this.startExam(28);
     // const id =  this.$route.query.zhi.id;
-    this.paperId = 28
-    this.fetchData(28)
+    this.paperId = 28;
+    this.fetchData(28);
     // if (typeof id !== 'undefined') {
     //   this.paperId = id
     //   this.fetchData(28)
     // }
   },
   methods: {
+    numberToLetter(sort) {
+      switch (sort) {
+        case 1:
+          return "A";
+        case 2:
+          return "B";
+        case 3:
+          return "C";
+        case 4:
+          return "D";
+        case 5:
+          return "E";
+        case 6:
+          return "F";
+        default:
+          return ""; // 默认值，或者可以处理其他情况
+      }
+    },
     startExam(examId) {
       examStart(examId);
       examQuList(28).then((res) => {
         this.paperData = res.data;
-        console(this.paperData)
+        console(this.paperData);
       });
     },
     // 答题卡样式
@@ -246,8 +264,8 @@ export default {
       this.handleText = "正在交卷，请等待...";
       this.loading = true;
 
-      const params = { id: this.paperId };
-      handExam(params).then(() => {
+      // const params = { id: this.paperId };
+      handExam(this.paperId).then(() => {
         this.$message({
           message: "试卷提交成功，即将进入试卷详情！",
           type: "success",
@@ -291,7 +309,6 @@ export default {
 
     // 保存答案
     handSave(item, callback) {
-
       if (item.id === this.allItem[0].id) {
         this.showPrevious = false;
       } else {
@@ -311,12 +328,12 @@ export default {
       if (this.radioValue !== "") {
         answers.push(this.radioValue);
       }
-      console.log("1a")
-      console.log(this.cardItem)
+      console.log("1a");
+      console.log(this.cardItem);
       const params = {
         examId: this.paperId,
         quId: this.cardItem.questionId,
-        answer: answers.join(','),
+        answer: answers.join(","),
         // answer: "",
       };
       fillAnswer(params).then(() => {
@@ -352,7 +369,7 @@ export default {
       quDetail(params).then((response) => {
         // console.log(response);
         console.log("=================");
-        console.log( response.data);
+        console.log(response.data);
         console.log("=================");
         this.quData = response.data;
         this.radioValue = "";

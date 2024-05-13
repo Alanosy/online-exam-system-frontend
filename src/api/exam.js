@@ -69,11 +69,19 @@ export function fillAnswer(data) {
   
 }
 
-  export function quDetail(params) {
-    return request({
-      url: 'exams/question/single',
-      method: 'get',
-      params
-    })
-    
-  }
+export function quDetail(params) {
+  return request({
+    url: 'exams/question/single',
+    method: 'get',
+    params
+  })
+  
+}
+  
+export function handExam(examId) {
+  return request({
+    url: 'exams/hand-exam/'+examId,
+    method: 'get',
+  })
+  
+}
