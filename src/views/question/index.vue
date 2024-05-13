@@ -27,11 +27,11 @@
       </el-form>
     </div>
     <!-- table -->
-    <div style="width: 90%; margin: auto; margin-top: 20px">
+    <div style="width: 95%; margin: auto; margin-top: 20px;margin">
       <el-table :data="data.records" border>
         <el-table-column prop="id" label="序号" align="center" width="120px">
         </el-table-column>
-        <el-table-column prop="content" label="题干" width="400px" align="center">
+        <el-table-column prop="content" label="题干" width="300px" align="center">
         </el-table-column>
         <el-table-column prop="quType" label="题目类型" width="180px" align="center">
         </el-table-column>
@@ -297,5 +297,8 @@ export default {
 .bj {
   margin-top: 40px;
   margin-left: 30px;
+}
+.el-table__body-wrapper::-webkit-scrollbar {
+	width: 0;
 }
 </style>

@@ -4,8 +4,8 @@
     <el-row :gutter="24">
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
-          距离考试结束还有：
-          <exam-timer v-model="paperData.leftSeconds" @timeout="doHandler()" />
+        XXX题库
+        
 
           <el-button
             :loading="loading"
@@ -21,7 +21,14 @@
 
       <el-col :span="5" :xs="24" style="margin-bottom: 10px">
         <el-card class="content-h">
-          <p class="card-title">答题卡</p>
+           <div class="btn_switch">
+               <button class="btn_anniu" @click="change(0)" :class="{ newStyle:0===number}">按题型</button>
+               <button class="btn_anniu" @click="change(1)" :class="{ newStyle:1===number}">按顺序</button>
+            </div>
+             <div>
+          <div v-show="0===number">
+              <p>我是题型</p>
+             <p class="card-title">答题卡</p>
           <el-row :gutter="24" class="card-line" style="padding-left: 10px">
             <el-tag type="info">未作答</el-tag>
             <el-tag type="success">已作答</el-tag>
@@ -62,6 +69,15 @@
               >
             </el-row>
           </div>
+         </div>
+          <div v-show="1===number">
+              <p>我是顺序</p>
+            <p class="card-title">答题卡</p>
+          </div>
+         </div>
+
+          
+         
         </el-card>
       </el-col>
 
@@ -131,13 +147,14 @@ export default {
   components: { ExamTimer },
   data() {
     return {
+      number: 0,
       receivedRow: null,
       // 全屏/不全屏
       isFullscreen: false,
       showPrevious: false,
       showNext: true,
       loading: false,
-      handleText: "交卷",
+      handleText: "提交",
       pageLoading: false,
       // 试卷ID
       paperId: "",
@@ -193,6 +210,9 @@ export default {
           return ""; // 默认值，或者可以处理其他情况
       }
     },
+    change: function (index) {
+            this.number = index; //重要处
+          },
     startExam(examId) {
       examStart(examId);
       examQuList(28).then((res) => {
@@ -431,7 +451,22 @@ export default {
 page {
   background: #ebecee;
 }
-
+.btn_anniu{
+    width: 50%;
+    padding: 10px 0;
+    font-size: 19px;
+    font-weight: bold;
+    border: 0 solid #fff;
+    color: #000;
+    outline: none;
+    background: #fff;
+  }
+  .newStyle{
+    border-bottom: 2px solid #f0892e;
+    color: #f0892e;
+    font-size: 21px;
+    font-weight: bold;
+  }
 .qu-content div {
   line-height: 30px;
   width: 100%;
