@@ -122,10 +122,10 @@
 </template>
 
 <script>
-import { paperDetail, quDetail, handExam, fillAnswer } from "@/api/exam";
+import { paperDetail, quDetail, handExam, fillAnswer,examStart, examQuList  } from "@/api/exam";
 import { Loading } from "element-ui";
 import ExamTimer from "@/components/ExamTimer";
-import { examStart, examQuList } from "@/api/exam";
+
 export default {
   name: "ExamProcess",
   components: { ExamTimer },
@@ -175,6 +175,12 @@ export default {
     // }
   },
   methods: {
+     startExam(examId) {
+      examQuList(28).then((res) => {
+        this.paperData = res.data;
+        console(this.paperData);
+      });
+    },
     numberToLetter(sort) {
       switch (sort) {
         case 1:
@@ -193,13 +199,7 @@ export default {
           return ""; // 默认值，或者可以处理其他情况
       }
     },
-    startExam(examId) {
-      examStart(examId);
-      examQuList(28).then((res) => {
-        this.paperData = res.data;
-        console(this.paperData);
-      });
-    },
+    
     // 答题卡样式
     cardItemClass(answered, quId) {
       if (quId === this.cardItem.quId) {
@@ -270,7 +270,7 @@ export default {
           type: "success",
         });
 
-        this.$router.push({ name: "ShowExam", params: { id: this.paperId } });
+        this.$router.push({ name: "Textcenter", params: { id: this.paperId } });
       });
     },
 
