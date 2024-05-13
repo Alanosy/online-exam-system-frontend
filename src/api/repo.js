@@ -35,6 +35,10 @@ export function repoUpdate(id, data) {
  * 保存题库
  * @param data
  */
-export function fetchPaging(data) {
-  return post('/exam/api/repo/paging', data)
+export function fetchPaging(params) {
+  return request({
+    url: 'repo/list',
+    method: 'get',
+    params
+  })
 }

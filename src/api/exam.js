@@ -85,3 +85,12 @@ export function handExam(examId) {
   })
   
 }
+
+export function saveData(data) {
+  return request({
+    url: 'exams',
+    method: 'post',
+    data
+  })
+  
+}

@@ -4,10 +4,10 @@
     <div class="xx">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
   <el-form-item label="考试名称">
-    <el-input v-model="input" placeholder="请输入"></el-input>
+    <el-input v-model="searchTitle" placeholder="请输入"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="onSubmit">查询</el-button>
+    <el-button type="primary" @click="searchUserBook">查询</el-button>
   </el-form-item>
 </el-form>
     </div>
@@ -15,7 +15,7 @@
 
 <div style="padding:10px 0 0 50px;">
         <el-table
-      :data="tables"
+      :data="data.records"
       border
       style="width: 1000px; ">
       <el-table-column
@@ -25,18 +25,18 @@
         width="80">
       </el-table-column>
       <el-table-column
-        prop="sjmc"
+        prop="title"
         align="center"
         label="试卷名称"
         width="250">
       </el-table-column>
       <el-table-column
-        prop="ctsl"
+        prop="numberOfErrors"
         align="center"
         label="错题数量">
       </el-table-column>
       <el-table-column
-        prop="cjsj"
+        prop="createTime"
         align="center"
         label="创建时间">
       </el-table-column>
@@ -65,10 +65,10 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="data.size"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="400">
+      :total="data.total">
     </el-pagination>
   </div>
   <el-dialog title="查看"  :visible.sync="dialogFormVisible">
@@ -137,6 +137,9 @@ import { userbookPaging, userbookDel, userbookUpdate, userbookAdd } from "@/api/
     },
     data() {
       return {
+        pageNum: 1,
+        pageSize: 10,
+        data: null,
         input:'',
         currentPage1: 5,
         currentPage2: 5,
@@ -176,6 +179,7 @@ import { userbookPaging, userbookDel, userbookUpdate, userbookAdd } from "@/api/
       this.dialogFormVisible=true
       this.form=row
     },
+    searchTitle:"",
       dialogFormVisible: false,
       form: {
         name: '',
@@ -189,7 +193,19 @@ import { userbookPaging, userbookDel, userbookUpdate, userbookAdd } from "@/api/
       },
       };
     },
-    methods: {
+    created() {
+    this.getUserBookPage();
+  },
+  methods: {
+    // 分页查询
+    async getUserBookPage(pageNum, pageSize, examName = null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, examName: examName };
+      const res = await userbookPaging(params);
+      this.data = res.data;
+    },
+    searchUserBook() {
+      this.getUserBookPage(this.pageNum, this.pageSize, this.searchTitle);
+    },
       onSubmit() {
         console.log('submit!');
       },

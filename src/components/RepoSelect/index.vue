@@ -60,11 +60,13 @@ export default {
   methods: {
 
     fetchData(q) {
-      fetchPaging({ current: 1, size: 1000, params: { title: q, excludes: this.excludes }}).then(res => {
-        this.dataList = res.data.records
+      fetchPaging({ current: 1, size: 1000, title: q, excludes: this.excludes }).then(res => {
+        this.dataList = res.data
       })
     },
     handlerChange(e) {
+      console.log(e)
+      console.log(item)
       const obj = this.dataList.find((item) => {
         return item.id === e
       })

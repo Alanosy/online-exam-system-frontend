@@ -14,11 +14,11 @@
     </div>
 
     <div style="padding: 10px 0 0 50px">
-      <el-table :data="tables" border style="width: 1000px">
-        <el-table-column prop="xh" label="序号" align="center" width="80">
+      <el-table :data="data.records" border style="width: 1000px">
+        <el-table-column prop="id" label="序号" align="center" width="80">
         </el-table-column>
         <el-table-column
-          prop="sjmc"
+          prop="title"
           align="center"
           label="试卷名称"
           width="250"
@@ -46,10 +46,10 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="data.total"
       >
       </el-pagination>
     </div>
@@ -100,9 +100,13 @@
 
 
 <script>
+import {recordExamPaging,recordExamDetail} from '@/api/record'
 export default {
   data() {
     return {
+      pageNum:1,
+      pageSize:10,
+      data:null,
       input: "",
       currentPage1: 5,
       currentPage2: 5,
@@ -163,7 +167,17 @@ export default {
       },
     };
   },
+  
+  created() {
+    this.getExamRecordPaging();
+  },
   methods: {
+    // 分页查询
+    async getExamRecordPaging(pageNum, pageSize) {
+      const params = { pageNum: pageNum, pageSize: pageSize};
+      const res = await recordExamPaging(params);
+      this.data = res.data;
+    },
     handleClick(row) {
       console.log(row);
     },

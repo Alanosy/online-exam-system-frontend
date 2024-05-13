@@ -57,8 +57,8 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="10"
       layout="total, sizes, prev, pager, next, jumper"
       :total="400">
     </el-pagination>
@@ -117,10 +117,14 @@
 
 
 <script>
+import {recordExercisePaging,recordExerciseDetail} from '@/api/record'
   export default {
      
     data() {
       return {
+        pageNum:1,
+        pageSize:10,
+        data:null,
         input: "",
         currentPage1: 5,
         currentPage2: 5,
@@ -176,7 +180,16 @@
       }
     },
     
-    methods: {
+    created() {
+    this.getExerciseRecordPaging();
+  },
+  methods: {
+    // 分页查询
+    async getExerciseRecordPaging(pageNum, pageSize) {
+      const params = { pageNum: pageNum, pageSize: pageSize};
+      const res = await recordExercisePaging(params);
+      this.data = res.data;
+    },
       onSubmit() {
         console.log('submit!');
       },

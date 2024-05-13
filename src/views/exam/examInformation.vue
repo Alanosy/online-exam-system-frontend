@@ -51,7 +51,7 @@
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">发布人:</span>
-        <span style="margin-left: 5px; font-size: 14px">XXXXXX</span>
+        <span style="margin-left: 5px; font-size: 14px">{{data.username}}</span>
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">单选题数量:</span>
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { getExamDetail } from "@/api/exam";
+import { getExamDetail,examStart } from "@/api/exam";
 export default {
   data() {
     return {
@@ -104,8 +104,18 @@ export default {
       this.data = res.data;
     },
     startExam() {
-      this.$router.push({ name: "start", query: { zhi: this.receivedRow } });
-    },
+      examStart(this.receivedRow.id).then((res)=>{
+        if(res.code){
+          this.$router.push({ name: "start", query: { zhi: this.receivedRow } });
+        }else{
+          this.$message({
+                type: "info",
+                message: res.msg,
+              });
+        }
+      })
+      
+    }
   },
 };
 </script>
