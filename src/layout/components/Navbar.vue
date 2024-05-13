@@ -17,10 +17,10 @@
           </div>
           <el-dropdown-menu slot="dropdown" class="user-dropdown">
             <router-link to="/myself">
-              <el-dropdown-item> Home </el-dropdown-item>
+              <el-dropdown-item> 个人中心 </el-dropdown-item>
             </router-link>
             <router-link to="/changemima">
-              <el-dropdown-item> Home </el-dropdown-item>
+              <el-dropdown-item> 修改密码</el-dropdown-item>
             </router-link>
 
             <el-dropdown-item divided @click.native="logout">
