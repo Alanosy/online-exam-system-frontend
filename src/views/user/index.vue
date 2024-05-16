@@ -180,8 +180,8 @@ export default {
   methods: {
    
     // 分页查询
-    async getUserPage(pageNum, pageSize, title = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
+    async getUserPage(pageNum, pageSize, realName = null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, realName: realName };
       const res = await userPaging(params);
       this.data = res.data.records;
       this.page.size = res.data.size

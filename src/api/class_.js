@@ -31,3 +31,10 @@ export function classUpdate(id, data) {
     data
   })
 }
+
+export function fetchClasses() {
+  return request({
+    url: 'grades/list',
+    method: 'get',
+  })
+}

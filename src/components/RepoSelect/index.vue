@@ -60,7 +60,8 @@ export default {
   methods: {
 
     fetchData(q) {
-      fetchPaging({ current: 1, size: 1000, title: q, excludes: this.excludes }).then(res => {
+      // , title: q, excludes: this.excludes 
+      fetchPaging({ pageNum: 1, pageSize: 1000}).then(res => {
         this.dataList = res.data
       })
     },

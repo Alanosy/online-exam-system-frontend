@@ -90,7 +90,25 @@
               <el-input-number v-model="scope.row.judgeScore" :min="0" :controls="false" style="width: 100%" />
             </template>
           </el-table-column>
+          <el-table-column
+            label="简答题数量"
+            align="center"
+          >
 
+            <template v-slot="scope">
+              <el-input-number v-model="scope.row.saqCount" :min="0" :max="scope.row.totalJudge" :controls="false" style="width: 100px" />  / {{ scope.row.totalJudge }}
+            </template>
+
+          </el-table-column>
+
+          <el-table-column
+            label="简答题分数"
+            align="center"
+          >
+            <template v-slot="scope">
+              <el-input-number v-model="scope.row.saqScore" :min="0" :controls="false" style="width: 100%" />
+            </template>
+          </el-table-column>
           <el-table-column
             label="删除"
             align="center"
@@ -124,19 +142,35 @@
           <el-input-number :value="postForm.totalScore" disabled />
         </el-form-item>
 
-        <el-form-item label="及格分" prop="qualifyScore">
-          <el-input-number v-model="postForm.qualifyScore" :max="postForm.totalScore" />
+        <el-form-item label="及格分" prop="passedScore">
+          <el-input-number v-model="postForm.passedScore" :max="postForm.totalScore" />
         </el-form-item>
 
-        <el-form-item label="考试时长(分钟)" prop="totalTime">
-          <el-input-number v-model="postForm.totalTime" />
+        <el-form-item label="最多切屏次数" prop="maxCount">
+          <el-input-number v-model="postForm.maxCount"  />
         </el-form-item>
-
+        <el-form-item label="证书" prop="maxCount">
+          <CertificateSelect v-model="postForm.certificateId" @change="onCertificateChange" is-multiple />
+          <!-- <el-input-number v-model="postForm.maxCount"  /> -->
+        </el-form-item>
+        <el-form-item label="考试时长(分钟)" prop="certificateId">
+          <el-input-number v-model="postForm.certificateId" />
+        </el-form-item>
+        <el-form-item label="考试时间范围" prop="start">
+          <el-date-picker
+        v-model="postForm.start"
+        type="datetimerange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期">
+      </el-date-picker>
+    </el-form-item>
+<!-- 
         <el-form-item label="是否限时">
           <el-checkbox v-model="postForm.timeLimit" />
-        </el-form-item>
+        </el-form-item> -->
 
-        <el-form-item v-if="postForm.timeLimit" label="考试时间" prop="totalTime">
+        <el-form-item v-if="postForm.timeLimit" label="考试时间" prop="examDuration">
 
           <el-date-picker
             v-model="dateValues"
@@ -199,7 +233,8 @@
                  考试班级:
            </div>
          <div style="margin-left:10px">
-          <el-input v-model="input" placeholder="请输入内容"></el-input>
+          <ClassSelect v-model="postForm.departIds" is-multiple @change="onClassChange" />
+          <!-- <el-input v-model="input" placeholder="请输入内容"></el-input> -->
          </div>
              
        </div>
@@ -220,10 +255,12 @@
 
 <script>
 import RepoSelect from '@/components/RepoSelect'
+import ClassSelect from '@/components/ClassSelect'
+import CertificateSelect from '@/components/CertificateSelect';
 import {saveData} from '@/api/exam'
 export default {
   name: 'ExamDetail',
-  components: { RepoSelect },
+  components: { RepoSelect ,ClassSelect,CertificateSelect},
   data() {
     return {
       input:'',
@@ -247,6 +284,7 @@ export default {
         openType: 1,
         // 考试班级列表
         departIds: []
+        
       },
       rules: {
         title: [
@@ -265,11 +303,11 @@ export default {
           { required: true, message: '考试分数不能为空！' }
         ],
 
-        qualifyScore: [
+        passedScore: [
           { required: true, message: '及格分不能为空！' }
         ],
 
-        totalTime: [
+        examDuration: [
           { required: true, message: '考试时间不能为空！' }
         ],
 
@@ -341,6 +379,8 @@ export default {
   methods: {
 
     handleSave() {
+      console.log(this.postForm)
+      console.log(this.repoList);
       this.$refs.postForm.validate((valid) => {
         if (!valid) {
           return
