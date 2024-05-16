@@ -43,7 +43,8 @@
             <p class="card-title">多选题</p>
             <el-row :gutter="24" class="card-line">
               <el-tag
-                v-for="item in paperData.multiList"
+                v-for="(item, index) in paperData.multiList"
+                :key="index"
                 :type="cardItemClass(item.answered, item.quId)"
                 @click="handSave(item)"
                 >{{ item.sort + 1 }}</el-tag
