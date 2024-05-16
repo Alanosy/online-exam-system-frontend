@@ -17,7 +17,7 @@
         <el-table
       :data="tables"
       border
-      style="width: 1000px; ">
+      style="width: 90%; margin: auto;">
       <el-table-column
         prop="xh"
         label="序号"
