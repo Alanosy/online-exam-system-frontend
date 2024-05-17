@@ -18,7 +18,7 @@ export function exercisePaging(params) {
 
 export function getQuestion(params,repoId) {
   return request({
-    url: `exercises/${repoId}`,
+    url: 'exercises/'+repoId,
     method: 'get',
     params
   })

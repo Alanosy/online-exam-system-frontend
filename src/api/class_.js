@@ -38,3 +38,11 @@ export function fetchClasses() {
     method: 'get',
   })
 }
+
+
+export function userClassRemove(ids) {
+  return request({
+    url: 'grades/remove/' + ids,
+    method: 'patch',
+  })
+}

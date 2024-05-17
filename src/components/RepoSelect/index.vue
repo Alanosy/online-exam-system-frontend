@@ -66,8 +66,7 @@ export default {
       })
     },
     handlerChange(e) {
-      console.log(e)
-      console.log(item)
+    
       const obj = this.dataList.find((item) => {
         return item.id === e
       })

@@ -9,7 +9,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
-
+import { parseJwt }from '@/utils/jwtUtils'
 const getDefaultState = () => {
   return {
     token: getToken(),
@@ -34,6 +34,13 @@ const mutations = {
     state.avatar = avatar
   }
 }
+const decode = () => {
+  const token = getToken();
+  const user = parseJwt(token);
+
+
+  this.user=JSON.parse(user.userInfo)
+}
 
 const actions = {
   // user login
@@ -44,6 +51,18 @@ const actions = {
         const { data } = response
         console.log(response);
         if (response.code === 1) {
+          console.log(1111111111)
+          const info = parseJwt(data);
+          const roleId = JSON.parse(info.userInfo).roleId
+          if(roleId === 1){
+            window.localStorage.setItem('roles','student')
+          }else if(roleId === 2){
+
+            window.localStorage.setItem('roles','teacher')
+          }else if(roleId === 3){
+            window.localStorage.setItem('roles','admin')
+          }
+          console.log()
           commit('SET_TOKEN', data)
           setToken(data)
           resolve()
