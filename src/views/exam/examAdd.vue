@@ -534,7 +534,7 @@ export default {
           duration: 2000,
         });
 
-        this.$router.push({ name: "ListExam" });
+        this.$router.push({ name: "kaoshigl" });
       });
     },
 

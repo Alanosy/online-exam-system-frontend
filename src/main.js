@@ -20,7 +20,19 @@ import '@/styles/index.scss' // global css
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 
+router.beforeEach((to, from, next) => {
 
+    // 获取token，这里以从localStorage获取为例
+    const token = getToken('Authorization');
+    if (!token && to.path !== '/login') {
+      // 如果没有token，则跳转到登录页面
+      next({ path: '/login', query: { redirect: to.fullPath } }); // 将要访问的路由path作为参数，登录后可直接跳转回来
+    } else {
+      // 如果有token，则允许访问
+      next();
+    }
+
+});
 
 
 import App from './App'
@@ -32,6 +44,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 import axios from 'axios'
+import { getToken } from './utils/auth'
 axios.defaults.withCredentials=true
 
 /**
