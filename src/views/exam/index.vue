@@ -107,7 +107,7 @@
                 v-for="item in quData.answerList"
                 :key="item.id"
                 :label="item.id"
-                >{{ item.abc }}.{{ item.content }}
+                >{{  numberToLetter(item.sort + 1)  }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>

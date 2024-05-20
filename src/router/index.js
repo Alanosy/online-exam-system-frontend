@@ -155,7 +155,7 @@ export const constantRoutes = [
       path: '/shuatizx',
       name: 'Questcenter',
       component: () => import('@/views/exercise/index'),
-      meta: { title: '刷题中心',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+      meta: { title: '刷题中心',visiable:true,roles:['admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -283,7 +283,7 @@ export const constantRoutes = [
       path: '/myCertificates',
       name: 'Myc',
       component: () => import('@/views/myCertificates/index'),
-      meta: { title: '我的证书', icon: 'dashboard' }
+      meta: { title: '我的证书', icon: 'dashboard' ,visiable:true,roles:['admin','student']}
     }]
   },
   
@@ -294,7 +294,7 @@ export const constantRoutes = [
       path: 'chengjifx',
       name: 'Scoreana',
       component: () => import('@/views/score/index'),
-      meta: { title: '成绩分析',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+      meta: { title: '成绩分析',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
     }]
   },
   {
