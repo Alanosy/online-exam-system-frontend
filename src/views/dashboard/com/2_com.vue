@@ -2,16 +2,23 @@
  * @Author: st 2946594574@qq.com
  * @Date: 2024-03-04 15:23:49
  * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-04-08 15:59:06
+ * @LastEditTime: 2024-05-16 14:01:17
  * @FilePath: \com-project\src\views\dashboard\com\2_com.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div>
+<<<<<<< HEAD
+    <div class="luang">
+我是学生
+    </div>
+    <div style="display: flex">
+=======
      <div class="luang">
       我是学生
     </div>
        <div style="display: flex">
+>>>>>>> eb37f9a995080a0ff7c91014bfc35511e93bde74
       <div class="left">
         <el-card class="box-card">
           登录时长
@@ -33,13 +40,23 @@
       </div>
     </div>
   </div>
+<<<<<<< HEAD
+  
+=======
+>>>>>>> eb37f9a995080a0ff7c91014bfc35511e93bde74
 </template>
 
 <script>
 export default {
+<<<<<<< HEAD
+  data() {
+    return {
+      url: 0,
+=======
    data() {
     return {
      
+>>>>>>> eb37f9a995080a0ff7c91014bfc35511e93bde74
       option: {
         title: { text: "" },
         tooltip: {},
@@ -100,7 +117,15 @@ export default {
       },
     };
   },
+<<<<<<< HEAD
+  // components: {
+  //   comAdmin,
+  //   comTeacher,
+  //   comStudent,
+  // },
+=======
  
+>>>>>>> eb37f9a995080a0ff7c91014bfc35511e93bde74
   methods: {
     initCharts() {
       let myChart = this.$echarts.init(this.$refs.charts);
@@ -111,23 +136,47 @@ export default {
       console.log(data);
     },
   },
+<<<<<<< HEAD
+mounted() {
+    this.initCharts();
+  },
+};
+=======
 
   mounted() {
     this.initCharts();
   },
+>>>>>>> eb37f9a995080a0ff7c91014bfc35511e93bde74
 
 
-}
 </script>
 
 <style>
+<<<<<<< HEAD
+.luang {
+=======
 .luang{
  
+>>>>>>> eb37f9a995080a0ff7c91014bfc35511e93bde74
   margin: auto;
   width: 1100px;
   height: 100px;
   background-color: rgb(241, 218, 221);
   margin-top: 30px;
+<<<<<<< HEAD
+  box-shadow: 3px 3px 3px 3px whitesmoke;
+}
+.box-card {
+  margin-top: 50px;
+  width: 500px;
+  margin-left: 85px;
+}
+.chart-div {
+  margin-top: 10px;
+  width: 450px;
+  height: 300px;
+
+=======
   box-shadow: 3px 3px 3px 3px whitesmoke ;
 }
 
@@ -141,6 +190,7 @@ export default {
   width: 450px;
   height: 300px;
 
+>>>>>>> eb37f9a995080a0ff7c91014bfc35511e93bde74
   border: solid black 1px;
 }
 .i {

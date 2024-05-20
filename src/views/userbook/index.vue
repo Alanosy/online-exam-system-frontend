@@ -13,6 +13,7 @@
       </div>
     </div>
 
+<<<<<<< HEAD
     <div style="padding:10px 0 0 50px;">
       <el-table :data="data.records" border style="width: 1000px; ">
         <el-table-column prop="xh" label="序号" align="center" width="80">
@@ -25,6 +26,39 @@
         </el-table-column>
         <el-table-column align="center" label="操作">
 
+=======
+<div style="padding:10px 0 0 50px;">
+        <el-table
+      :data="data.records"
+      border
+      style="width: 90%; margin: auto;">
+      <el-table-column
+        prop="xh"
+        label="序号"
+        align="center"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="title"
+        align="center"
+        label="试卷名称"
+        width="250">
+      </el-table-column>
+      <el-table-column
+        prop="numberOfErrors"
+        align="center"
+        label="错题数量">
+      </el-table-column>
+      <el-table-column
+        prop="createTime"
+        align="center"
+        label="创建时间">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="操作">
+        
+>>>>>>> a707502114d2c2f06a777a19ab80198ca239a51c
           <template slot-scope="{row}">
             <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">查看</el-button>
             <el-button type="text" size="small" style="color: red; font-size: 14px"
