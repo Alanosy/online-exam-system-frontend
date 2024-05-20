@@ -2,7 +2,7 @@
  * @Author: st 2946594574@qq.com
  * @Date: 2024-03-04 10:55:05
  * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-05-13 15:55:41
+ * @LastEditTime: 2024-05-16 15:13:43
  * @FilePath: \com-project\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -86,18 +86,12 @@
         type="primary"
         style="width: 50%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-        >login</el-button
-      >
-      <el-button :loading="loading"
-        type="primary"
-        style="width: 50%; margin-bottom: 30px;
-       
-        
-        ">
+        >login</el-button>
       <router-link to="/rigister">
-              <el-dropdown-item> rigister </el-dropdown-item>
-            </router-link>
-          </el-button>
+        <div style="margin-left: 10px;" class="but">
+               rigister
+            </div>
+              </router-link>
      
     </div>
 
@@ -120,14 +114,14 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error("Please enter the correct user name"));
+        callback(new Error("请输入正确的用户名"));
       } else {
         callback();
       }
     };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("The password can not be less than 6 digits"));
+        callback(new Error("密码不能少于6位"));
       } else {
         callback();
       }
@@ -325,6 +319,22 @@ $light_gray: #eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+  .but{
+    width: 220px;
+    height: 39px;
+    color: #FFF;
+    background-color: #409EFF;
+    border-color: #409EFF;
+    /* border: 1px solid; */
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-align: center;
+    font-family: sans-serif;
+    padding-top: 10px;
+    
   }
 
  
