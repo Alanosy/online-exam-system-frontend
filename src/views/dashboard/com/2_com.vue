@@ -2,16 +2,16 @@
  * @Author: st 2946594574@qq.com
  * @Date: 2024-03-04 15:23:49
  * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-05-16 14:01:17
+ * @LastEditTime: 2024-05-20 09:51:24
  * @FilePath: \com-project\src\views\dashboard\com\2_com.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div>
-     <div class="luang">
-      我是学生
+    <div class="luang">
+我是学生
     </div>
-       <div style="display: flex">
+    <div style="display: flex">
       <div class="left">
         <el-card class="box-card">
           登录时长
@@ -39,6 +39,7 @@
 export default {
    data() {
     return {
+     
       option: {
         title: { text: "" },
         tooltip: {},
@@ -117,9 +118,9 @@ export default {
 }
 
 </script>
-
-<style>
-.luang {
+<style >
+.luang{
+ 
   margin: auto;
   width: 1100px;
   height: 100px;

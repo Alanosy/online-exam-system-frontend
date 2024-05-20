@@ -1,8 +1,8 @@
 /*
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-15 08:52:51
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-16 15:54:35
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-05-20 14:26:19
  * @FilePath: \vue-admin-template\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -192,6 +192,17 @@ export const constantRoutes = [
         meta: { title: '刷题记录',visiable:true,roles:['teacher','admin','student'], icon: 'tree' }
       }
     ]
+  },
+  {
+    path: '/exam',
+    component: Layout,
+    children: [{
+      path: '/newk',
+      name: 'Newk',
+      hidden:true,
+      component: () => import('@/views/record/exam/newk'),
+      meta: { title: '试题查看',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+    }]
   },
   {
     path: '/wrongbook',
