@@ -30,3 +30,15 @@ export function repoUpdate(id, data) {
     data
   })
 }
+
+/**
+ * 保存题库
+ * @param data
+ */
+export function fetchPaging(params) {
+  return request({
+    url: 'repo/list',
+    method: 'get',
+    params
+  })
+}

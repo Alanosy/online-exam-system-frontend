@@ -25,7 +25,7 @@
 
 <script>
 
-import { fetchPaging } from '@/api/qu/repo'
+import { fetchPaging } from '@/api/repo'
 
 export default {
   name: 'RepoSelect',
@@ -60,11 +60,13 @@ export default {
   methods: {
 
     fetchData(q) {
-      fetchPaging({ current: 1, size: 1000, params: { title: q, excludes: this.excludes }}).then(res => {
-        this.dataList = res.data.records
+      // , title: q, excludes: this.excludes 
+      fetchPaging({ pageNum: 1, pageSize: 1000}).then(res => {
+        this.dataList = res.data
       })
     },
     handlerChange(e) {
+    
       const obj = this.dataList.find((item) => {
         return item.id === e
       })
