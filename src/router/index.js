@@ -2,7 +2,7 @@
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-15 08:52:51
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-13 14:10:18
+ * @LastEditTime: 2024-05-16 15:54:35
  * @FilePath: \vue-admin-template\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -280,12 +280,13 @@ export const constantRoutes = [
     path: '/mycertificate',
     component: Layout,
     children: [{
-      path: '/myzhengshugl',
-      name: 'myCertificate',
-      component: () => import('@/views/certificate/mycertificate'),
-      meta: { title: '我的证书',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+      path: '/myCertificates',
+      name: 'Myc',
+      component: () => import('@/views/myCertificates/index'),
+      meta: { title: '我的证书', icon: 'dashboard' }
     }]
   },
+  
   {
     path: '/scoreana',
     component: Layout,

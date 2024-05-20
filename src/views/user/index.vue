@@ -4,7 +4,7 @@
     <div class="bj">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="真实姓名">
-          <el-input v-model="input" placeholder="输入姓名"></el-input>
+          <el-input v-model="searchTitle" placeholder="输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="班级">
           <ClassSelect v-model="input1" :isMultiple="false" @change="onClassChange" />
@@ -22,7 +22,7 @@
           >
           <el-button
             type="primary"
-            @click="fileDialogVisible = true"
+            @click="dialogFormVisible = true"
             style="margin-left: 20px"
             >导入</el-button
           >
@@ -36,7 +36,21 @@
         </el-table-column>
         <el-table-column prop="userName" label="用户名" width="180px" align="center">
         </el-table-column>
-        <el-table-column prop="realName" label="真实姓名" align="center" width="180px">
+        <el-table-column
+          prop="realName"
+          label="真实姓名"
+          align="center"
+          width="180px"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="roleName"
+          label="角色名称"
+          align="center"
+          width="140px"
+        >
+        </el-table-column>
+        <el-table-column prop="gradeName" label="班级" align="center">
         </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="createTime" label="注册时间" align="center">
@@ -71,6 +85,28 @@
         </el-table-column>
       </el-table>
     </div>
+    <!-- 导入弹窗 -->
+    <el-dialog title="导入" :visible.sync="dialogFormVisible" style="width:800px;margin:auto">
+      <el-upload
+        class="upload-demo"
+        drag
+        action="https://jsonplaceholder.typicode.com/posts/"
+        multiple
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">
+          只能上传jpg/png文件，且不超过500kb
+        </div>
+      </el-upload>
+
+       <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addClass">确 定</el-button>
+      </div>
+
+    </el-dialog>
+
     <!-- 新增弹窗 -->
     <el-dialog :title="diaTitle" :visible.sync="dialogTableVisible">
       <el-row>
@@ -181,9 +217,7 @@
 </template>
 
 <script>
-import ClassSelect from "@/components/ClassSelect";
-import { userPaging, classAdd, userDel, userImport } from "@/api/user";
-import {userClassRemove} from "@/api/class_";
+import { userPaging, classAdd } from "@/api/user";
 export default {
   components: { ClassSelect },
   data() {
@@ -199,6 +233,7 @@ export default {
       currentPage2: 5,
       currentPage3: 5,
       currentPage4: 4,
+      searchTitle:"",
       input: "",
       input1: "",
       deleteRow: "",
@@ -218,10 +253,6 @@ export default {
         region: "",
       },
       cancle() {},
-      updateRow(row) {
-        this.updateDialogVisible = true;
-        this.form = row;
-      },
       diaTitle: "新增",
       dialogTableVisible: false,
       dialogFormVisible: false,
@@ -237,28 +268,20 @@ export default {
     this.getUserPage();
   },
   methods: {
-
-   
-    // 上传文件逻辑
-    importUser() {
-      if (this.fileList.length > 0) {
-        const formData = new FormData(); // 创建FormData对象
-        formData.append("file", this.fileList[0].raw); // 添加文件到formData
-        userImport(formData)
-          .then((response) => {
-            this.getUserPage(this.pageNum, this.pageSize);
-            console.log(response.data);
-            this.$message.success("文件上传成功！");
-            this.fileDialogVisible = false; // 关闭对话框
-            // 可以在这里处理成功后的逻辑，如刷新数据等
-          })
-          .catch((error) => {
-            console.error("文件上传失败：", error);
-            this.$message.error("文件上传失败！");
-          });
-      } else {
-        this.$message.warning("请选择文件后再上传！");
-      }
+    Import() {
+      this.dialogFormVisible = true;
+    },
+    // 分页查询
+    async getUserPage(pageNum, pageSize, title = null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
+      const res = await userPaging(params);
+      this.data = res.data.records;
+      this.page.size = res.data.size;
+      this.page.current = res.data.page;
+      this.total = res.data.total;
+    },
+    searchUser(){
+      this.getUserPage(this.pageNum,this.pageSize,this.searchTitle)
     },
     handleFileChange(file, fileList) {
       this.fileList = fileList; // 收集文件信息

@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-13 15:23:20
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-05-11 16:05:47
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -62,6 +62,7 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    
     <!-- 删除弹框 -->
     <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
       <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -93,7 +94,7 @@
 </template>
 
 <script>
-import { repoPaging, repoDel, repoUpdate, repoAdd } from "@/api/repo";
+ import { repoPaging, repoDel, repoUpdate, repoAdd } from "@/api/repo";
 export default {
   data() {
     return {
