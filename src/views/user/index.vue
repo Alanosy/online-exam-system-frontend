@@ -4,7 +4,7 @@
     <div class="bj">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="真实姓名">
-          <el-input v-model="searchTitle" placeholder="输入姓名"></el-input>
+          <el-input v-model="input" placeholder="输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="班级">
           <ClassSelect v-model="input1" :isMultiple="false" @change="onClassChange" />
@@ -22,7 +22,7 @@
           >
           <el-button
             type="primary"
-            @click="dialogFormVisible = true"
+            @click="fileDialogVisible = true"
             style="margin-left: 20px"
             >导入</el-button
           >
@@ -217,7 +217,9 @@
 </template>
 
 <script>
-import { userPaging, classAdd } from "@/api/user";
+import ClassSelect from "@/components/ClassSelect";
+import { userPaging, classAdd, userDel, userImport } from "@/api/user";
+import {userClassRemove} from "@/api/class_";
 export default {
   components: { ClassSelect },
   data() {
@@ -253,6 +255,10 @@ export default {
         region: "",
       },
       cancle() {},
+      updateRow(row) {
+        this.updateDialogVisible = true;
+        this.form = row;
+      },
       diaTitle: "新增",
       dialogTableVisible: false,
       dialogFormVisible: false,
@@ -272,8 +278,8 @@ export default {
       this.dialogFormVisible = true;
     },
     // 分页查询
-    async getUserPage(pageNum, pageSize, title = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
+    async getUserPage(pageNum, pageSize, realName = null,gradeId=null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, realName: realName,gradeId:gradeId };
       const res = await userPaging(params);
       this.data = res.data.records;
       this.page.size = res.data.size;
@@ -281,7 +287,29 @@ export default {
       this.total = res.data.total;
     },
     searchUser(){
-      this.getUserPage(this.pageNum,this.pageSize,this.searchTitle)
+      this.getUserPage(this.pageNum,this.pageSize,this.input,this.input1)
+    },
+   
+    // 上传文件逻辑
+    importUser() {
+      if (this.fileList.length > 0) {
+        const formData = new FormData(); // 创建FormData对象
+        formData.append("file", this.fileList[0].raw); // 添加文件到formData
+        userImport(formData)
+          .then((response) => {
+            this.getUserPage(this.pageNum, this.pageSize);
+            console.log(response.data);
+            this.$message.success("文件上传成功！");
+            this.fileDialogVisible = false; // 关闭对话框
+            // 可以在这里处理成功后的逻辑，如刷新数据等
+          })
+          .catch((error) => {
+            console.error("文件上传失败：", error);
+            this.$message.error("文件上传失败！");
+          });
+      } else {
+        this.$message.warning("请选择文件后再上传！");
+      }
     },
     handleFileChange(file, fileList) {
       this.fileList = fileList; // 收集文件信息

@@ -27,9 +27,7 @@
             @click="dialogTableVisible = true"
             >新增</el-button
           >
-          <el-button type="primary" style="margin-left: 40px" @click="onSubmit"
-            >导入</el-button
-          >
+  
         </el-form-item>
       </el-form>
     </div>
