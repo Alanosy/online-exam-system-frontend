@@ -1,8 +1,13 @@
 /*
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-15 08:52:51
+<<<<<<< HEAD
+ * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @LastEditTime: 2024-05-13 15:22:43
+=======
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-16 15:54:35
+ * @LastEditTime: 2024-05-13 14:10:18
+>>>>>>> fbdf91ab0a900fbb0c5975298b604b7fe4b7a9a5
  * @FilePath: \vue-admin-template\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -57,7 +62,18 @@ export const constantRoutes = [
     hidden: true
   },
 
-
+  // {
+  //     path: '/form',
+  //     component: Layout,
+  //     children: [
+  //       {
+  //         path: 'index',
+  //         name: 'Form',
+  //         component: () => import('@/views/form/index'),
+  //         meta: { title: 'Form', icon: 'form' }
+  //       }
+  //     ]
+  //   },
 
   {
     path: '/', 
@@ -67,7 +83,7 @@ export const constantRoutes = [
       path: '/index',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '主页', icon: 'dashboard' ,visiable:true }
+      meta: { title: '主页', icon: 'dashboard' }
     }]
   },
 
@@ -78,7 +94,7 @@ export const constantRoutes = [
       path: '/yonghu',
       name: 'Usermanager',
       component: () => import('@/views/user/index'),
-      meta: { title: '用户管理', icon: 'dashboard', visiable:true,roles:['teacher','admin']}
+      meta: { title: '用户管理', icon: 'dashboard', visiable:true,roles:['teacher']}
     }]
   },
   {
@@ -200,7 +216,7 @@ export const constantRoutes = [
       path: '/cuotiben',
       name: 'Wrongbook',
       component: () => import('@/views/userbook/index'),
-      meta: { title: '错题本',visiable:true, roles:['admin','student'],icon: 'dashboard' }
+      meta: { title: '错题本',visiable:true, roles:['teacher','admin','student'],icon: 'dashboard' }
     }]
   },
   {
@@ -210,7 +226,7 @@ export const constantRoutes = [
       path: '/kaoshigl',
       name: 'Exammange',
       component: () => import('@/views/exam/teacher/index'),
-      meta: { title: '考试管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '考试管理',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -221,7 +237,7 @@ export const constantRoutes = [
       name: 'ksAdd',
       hidden:true,
       component: () => import('@/views/exam/examAdd'),
-      meta: { title: '考试添加',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '考试添加',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -231,7 +247,7 @@ export const constantRoutes = [
       path: '/tikugl',
       name: 'Bankmanage',
       component: () => import('@/views/repo/index'),
-      meta: { title: '题库管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '题库管理',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -242,7 +258,7 @@ export const constantRoutes = [
       name: 'Add',
       hidden:true,
       component: () => import('@/views/repo/add'),
-      meta: { title: '题库管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '题库管理',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -252,7 +268,7 @@ export const constantRoutes = [
       path: '/shitigl',
       name: 'Questmanage',
       component: () => import('@/views/question/index'),
-      meta: { title: '试题管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '试题管理',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -263,7 +279,7 @@ export const constantRoutes = [
       name: 'news',
       hidden:true,
       component: () => import('@/views/question/add.vue'),
-      meta: { title: '试题管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '试题管理',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -273,20 +289,9 @@ export const constantRoutes = [
       path: '/zhengshugl',
       name: 'Certificate',
       component: () => import('@/views/certificate/zhengshugl'),
-      meta: { title: '证书管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '证书管理',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
-  {
-    path: '/mycertificate',
-    component: Layout,
-    children: [{
-      path: '/myCertificates',
-      name: 'Myc',
-      component: () => import('@/views/myCertificates/index'),
-      meta: { title: '我的证书', icon: 'dashboard' }
-    }]
-  },
-  
   {
     path: '/scoreana',
     component: Layout,
@@ -304,7 +309,7 @@ export const constantRoutes = [
       path: 'dajuangl',
       name: 'Answermanage',
       component: () => import('@/views/answer/index'),
-      meta: { title: '答卷管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '答卷管理',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -314,9 +319,115 @@ export const constantRoutes = [
       path: 'notice1',
       name: 'Notice',
       component: () => import('@/views/notice/notice1'),
-      meta: { title: '公告管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '公告管理',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
+
+  // {
+  //   path: '/example',
+  //   component: Layout,
+  //   redirect: '/example/table',
+  //   name: 'Example',
+  //   meta: { title: 'Example', icon: 'el-icon-s-help' },
+  //   children: [
+  //     {
+  //       path: 'table',
+  //       name: 'Table',
+  //       component: () => import('@/views/table/index'),
+  //       meta: { title: 'Table', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'tree',
+  //       name: 'Tree',
+  //       component: () => import('@/views/tree/index'),
+  //       meta: { title: 'Tree', icon: 'tree' }
+  //     }
+  //   ]
+  // },
+
+  // {
+  //   path: '/form',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Form',
+  //       component: () => import('@/views/form/index'),
+  //       meta: { title: 'Form', icon: 'form' }
+  //     }
+  //   ]
+  // },
+
+  // {
+  //   path: '/nested',
+  //   component: Layout,
+  //   redirect: '/nested/menu1',
+  //   name: 'Nested',
+  //   meta: {
+  //     title: 'Nested',
+  //     icon: 'nested'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'menu1',
+  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
+  //       name: 'Menu1',
+  //       meta: { title: 'Menu1' },
+  //       children: [
+  //         {
+  //           path: 'menu1-1',
+  //           component: () => import('@/views/nested/menu1/menu1-1'),
+  //           name: 'Menu1-1',
+  //           meta: { title: 'Menu1-1' }
+  //         },
+  //         {
+  //           path: 'menu1-2',
+  //           component: () => import('@/views/nested/menu1/menu1-2'),
+  //           name: 'Menu1-2',
+  //           meta: { title: 'Menu1-2' },
+  //           children: [
+  //             {
+  //               path: 'menu1-2-1',
+  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
+  //               name: 'Menu1-2-1',
+  //               meta: { title: 'Menu1-2-1' }
+  //             },
+  //             {
+  //               path: 'menu1-2-2',
+  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
+  //               name: 'Menu1-2-2',
+  //               meta: { title: 'Menu1-2-2' }
+  //             }
+  //           ]
+  //         },
+  //         {
+  //           path: 'menu1-3',
+  //           component: () => import('@/views/nested/menu1/menu1-3'),
+  //           name: 'Menu1-3',
+  //           meta: { title: 'Menu1-3' }
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       path: 'menu2',
+  //       component: () => import('@/views/nested/menu2/index'),
+  //       name: 'Menu2',
+  //       meta: { title: 'menu2' }
+  //     }
+  //   ]
+  // },
+
+  // {
+  //   path: 'external-link',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
+  //       meta: { title: 'External Link', icon: 'link' }
+  //     }
+  //   ]
+  // },
+
   
   { path: '*', redirect: '/404', hidden: true }
 ]

@@ -53,3 +53,20 @@ export function userPaging(params) {
     params
   })
 }
+export function userDel(ids) {
+  return request({
+    url: 'user/'+ids,
+    method: 'delete',
+  })
+}
+export function userImport(data) {
+  return request({
+    url: 'user/import',
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data
+  })
+}
+

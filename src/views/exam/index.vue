@@ -32,7 +32,7 @@
             <el-row :gutter="24" class="card-line">
               <el-tag
                 v-for="item in paperData.radioList"
-                :type="cardItemClass(item.answered, item.quId)"
+                :type="cardItemClass(item.answered, item.questionId)"
                 @click="handSave(item)">
                 {{ item.sort + 1 }}</el-tag
               >
@@ -43,8 +43,9 @@
             <p class="card-title">多选题</p>
             <el-row :gutter="24" class="card-line">
               <el-tag
-                v-for="item in paperData.multiList"
-                :type="cardItemClass(item.answered, item.quId)"
+                v-for="(item, index) in paperData.multiList"
+                :key="index"
+                :type="cardItemClass(item.answered, item.questionId)"
                 @click="handSave(item)"
                 >{{ item.sort + 1 }}</el-tag
               >
@@ -56,7 +57,7 @@
             <el-row :gutter="24" class="card-line">
               <el-tag
                 v-for="item in paperData.judgeList"
-                :type="cardItemClass(item.answered, item.quId)"
+                :type="cardItemClass(item.answered, item.questionId)"
                 @click="handSave(item)"
                 >{{ item.sort + 1 }}</el-tag
               >
@@ -131,6 +132,7 @@ export default {
   components: { ExamTimer },
   data() {
     return {
+      examId : "",
       receivedRow: null,
       // 全屏/不全屏
       isFullscreen: false,
@@ -164,11 +166,12 @@ export default {
     };
   },
   created() {
+    this.examId = localStorage.getItem("examId");
     // this.receivedRow = this.$route.query.zhi;
-    this.startExam(28);
+    this.startExam(localStorage.getItem("examId"));
     // const id =  this.$route.query.zhi.id;
-    this.paperId = 28;
-    this.fetchData(28);
+    this.paperId = localStorage.getItem("examId");
+    this.fetchData(localStorage.getItem("examId"));
     // if (typeof id !== 'undefined') {
     //   this.paperId = id
     //   this.fetchData(28)
@@ -176,7 +179,7 @@ export default {
   },
   methods: {
      startExam(examId) {
-      examQuList(28).then((res) => {
+      examQuList(examId).then((res) => {
         this.paperData = res.data;
         console(this.paperData);
       });
@@ -202,15 +205,20 @@ export default {
     
     // 答题卡样式
     cardItemClass(answered, quId) {
-      if (quId === this.cardItem.quId) {
-        return "warning";
-      }
+      // if (quId === this.cardItem.questionId) {
+      //   return "warning";
+      // }
+      console.log('------');
+      console.log(quId)
+      console.log(this.paperData)
+      // console.log(sessionStorage.getItem("exam_"+quId));
+      
 
-      if (answered) {
+      if (sessionStorage.getItem("exam_"+quId)==1) {
         return "success";
       }
 
-      if (!answered) {
+      if (sessionStorage.getItem("exam_"+quId==0)) {
         return "info";
       }
     },
@@ -264,7 +272,8 @@ export default {
       this.loading = true;
 
       // const params = { id: this.paperId };
-      handExam(this.paperId).then(() => {
+     
+      handExam(this.examId).then(() => {
         this.$message({
           message: "试卷提交成功，即将进入试卷详情！",
           type: "success",
@@ -335,7 +344,12 @@ export default {
         answer: answers.join(","),
         // answer: "",
       };
-      fillAnswer(params).then(() => {
+      fillAnswer(params).then((res) => {
+        if(res.code){
+          sessionStorage.setItem("exam_"+this.cardItem.questionId, 1);
+        }else{
+          sessionStorage.setItem("exam_"+this.cardItem.questionId, 0);
+        }
         // 必须选择一个值
         if (answers.length > 0) {
           // 加入已答列表
@@ -362,9 +376,9 @@ export default {
 
       // 获得详情
       this.cardItem = item;
-
+      const examId = localStorage.getItem("examId");
       // 查找下个详情
-      const params = { examId: this.paperId, questionId: item.questionId };
+      const params = { examId: examId, questionId: item.questionId };
       quDetail(params).then((response) => {
         // console.log(response);
         console.log("=================");
