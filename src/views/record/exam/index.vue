@@ -29,12 +29,12 @@
         <el-table-column prop="cjsj" align="center" label="得分">
         </el-table-column>
         <el-table-column align="center" label="操作">
-          <template slot-scope="{ row }">
+          <template>
             <el-button
               type="text"
               size="small"
               style="font-size: 14px"
-              @click="updateRow(row)"
+              @click="screenInfo()"
               >查看</el-button
             >
           </template>
@@ -53,48 +53,6 @@
       >
       </el-pagination>
     </div>
-
-    <el-dialog title="查看" :visible.sync="dialogFormVisible">
-      <el-row>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="序号  " :label-width="formLabelWidth">
-              <el-input v-model="form.xh" :disabled="true"> </el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="班级名称" :label-width="formLabelWidth">
-              <el-input v-model="form.sjmc" :disabled="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="班级口令" :label-width="formLabelWidth">
-              <el-input v-model="form.ctsl" :disabled="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="班级   " :label-width="formLabelWidth">
-              <el-input v-model="form.cjsj" :disabled="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -177,6 +135,10 @@ export default {
       const params = { pageNum: pageNum, pageSize: pageSize};
       const res = await recordExamPaging(params);
       this.data = res.data;
+    },
+    screenInfo(row, index, done) {
+      console.info("=====", row);
+      this.$router.push({ name: "Newk", query: { zhi: row } });
     },
     handleClick(row) {
       console.log(row);

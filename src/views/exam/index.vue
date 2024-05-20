@@ -32,8 +32,9 @@
             <el-row :gutter="24" class="card-line">
               <el-tag
                 v-for="item in paperData.radioList"
-                :type="cardItemClass(item.answered, item.questionId)"
-                @click="handSave(item)">
+                :type="cardItemClass(item.checkout, item.questionId)"
+                @click="handSave(item)"
+              >
                 {{ item.sort + 1 }}</el-tag
               >
             </el-row>
@@ -45,7 +46,7 @@
               <el-tag
                 v-for="(item, index) in paperData.multiList"
                 :key="index"
-                :type="cardItemClass(item.answered, item.questionId)"
+                :type="cardItemClass(item.checkout, item.questionId)"
                 @click="handSave(item)"
                 >{{ item.sort + 1 }}</el-tag
               >
@@ -57,7 +58,24 @@
             <el-row :gutter="24" class="card-line">
               <el-tag
                 v-for="item in paperData.judgeList"
-                :type="cardItemClass(item.answered, item.questionId)"
+                :type="cardItemClass(item.checkout, item.questionId)"
+                @click="handSave(item)"
+                >{{ item.sort + 1 }}</el-tag
+              >
+            </el-row>
+          </div>
+          <div
+            v-if="
+              paperData.saqList != null &&
+              paperData.saqList !== undefined &&
+              paperData.saqList.length > 0
+            "
+          >
+            <p class="card-title">简答题</p>
+            <el-row :gutter="24" class="card-line">
+              <el-tag
+                v-for="item in paperData.saqList"
+                :type="cardItemClass(item.checkout, item.questionId)"
                 @click="handSave(item)"
                 >{{ item.sort + 1 }}</el-tag
               >
@@ -75,7 +93,7 @@
           <div v-if="quData.quType === 1 || quData.quType === 3">
             <el-radio-group v-model="radioValue">
               <el-radio v-for="item in quData.answerList" :label="item.id"
-                >{{ numberToLetter(item.sort+1) }}.{{ item.content }}
+                >{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -89,7 +107,7 @@
                 v-for="item in quData.answerList"
                 :key="item.id"
                 :label="item.id"
-                >{{ item.abc }}.{{ item.content }}
+                >{{  numberToLetter(item.sort + 1)  }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -202,25 +220,19 @@ export default {
           return ""; // 默认值，或者可以处理其他情况
       }
     },
-    
-    // 答题卡样式
-    cardItemClass(answered, quId) {
-      // if (quId === this.cardItem.questionId) {
-      //   return "warning";
-      // }
-      console.log('------');
-      console.log(quId)
-      console.log(this.paperData)
-      // console.log(sessionStorage.getItem("exam_"+quId));
-      
 
-      if (sessionStorage.getItem("exam_"+quId)==1) {
+    // 答题卡样式
+    cardItemClass(checkout, quId) {
+
+
+      if ( sessionStorage.getItem("exam_"+quId)==1 || checkout) {
         return "success";
       }
 
-      if (sessionStorage.getItem("exam_"+quId==0)) {
+      if (sessionStorage.getItem("exam_"+quId==0)|| checkout) {
         return "info";
       }
+
     },
 
     /**
@@ -266,19 +278,28 @@ export default {
       const index = this.cardItem.sort - 1;
       this.handSave(this.allItem[index]);
     },
+    clearSessionStorageByPrefix(prefix) {
+      for (var key in sessionStorage) {
+          if (sessionStorage.hasOwnProperty(key) && key.startsWith(prefix)) {
+              sessionStorage.removeItem(key);
+          }
+      }
+    },
+
+// 使用函数清除以 "exam_" 开头的所有键值对
 
     doHandler() {
       this.handleText = "正在交卷，请等待...";
       this.loading = true;
 
       // const params = { id: this.paperId };
-     
+
       handExam(this.examId).then(() => {
         this.$message({
           message: "试卷提交成功，即将进入试卷详情！",
           type: "success",
         });
-
+        this.clearSessionStorageByPrefix('exam_');
         this.$router.push({ name: "Textcenter", params: { id: this.paperId } });
       });
     },
@@ -390,11 +411,11 @@ export default {
 
         // 填充该题目的答案
         this.quData.answerList.forEach((item) => {
-          if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checked) {
+          console.log(item,"ttt")
+          if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checkout) {
             this.radioValue = item.id;
           }
-
-          if (this.quData.quType === 2 && item.checked) {
+          if (this.quData.quType === 2 && item.checkout) {
             this.multiValue.push(item.id);
           }
         });
