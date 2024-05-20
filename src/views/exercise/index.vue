@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-13 14:11:14
+ * @LastEditors: 魏进 3413105907@qq.com
+ * @LastEditTime: 2024-05-16 14:39:25
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,13 +11,13 @@
     <div>
 
         <div style=" padding-left: 53px;padding-top: 22px;">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true"  class="demo-form-inline">
                 
                 <el-form-item label="题库名称：      ">
-    <el-input v-model="formInline.user" ></el-input>
+    <el-input v-model="repoTitle" ></el-input>
   </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" style="margin-left: 40px;" @click="chaxun">查询</el-button>
+                    <el-button type="primary" style="margin-left: 40px;" @click="queryRepo()">查询</el-button>
                     
                 </el-form-item>
             </el-form>
@@ -25,16 +25,16 @@
 
         <!-- table -->
         <div style="margin: auto;width: 1200px; " align="center">
-            <el-table :data="tableData" border>
-                <el-table-column fixed prop="date" label="序号" align="center" />
-                <el-table-column prop="name" label="题库标题" align="center" />
-                <el-table-column prop="province" label="单选题数量" align="center" />
-                <el-table-column prop="city" label="多选题数量" align="center" />
-                <el-table-column prop="address" label="判断题数量" align="center" />
-                <el-table-column prop="zip" label="简答题数量" align="center" />
+            <el-table :data="data.records" border>
+                <el-table-column fixed prop="id" label="序号" align="center" />
+                <el-table-column prop="repoTitle" label="题库标题" align="center" />
+                <el-table-column prop="totalCount" label="试题总数" align="center" />
+                <el-table-column prop="exerciseCount" label="已练习题数" align="center" />
+                <!-- <el-table-column prop="address" label="判断题数量" align="center" />
+                <el-table-column prop="zip" label="简答题数量" align="center" /> -->
                 <el-table-column fixed="right" label="操作" align="center">
-                    <template slot-scope="scope">
-                        <el-button type="text" size="small"  @click="screenInfo(row)">开始刷题</el-button>
+                    <template slot-scope="{row}">
+                        <el-button type="text" size="small"  @click="screenInfo(row.id,row.repoTitle)">开始刷题</el-button>
                        
                     </template>
                 </el-table-column>
@@ -42,10 +42,10 @@
         </div>
         <div class="block">
             <span class="demonstration" />
-            <el-pagination :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100"
-                layout="total, sizes, prev, pager, next, jumper" :total="400" @size-change="handleSizeChange"
+            <el-pagination :current-page="data.current" :page-sizes="[10, 20, 30, 40]" :page-size="data.size"
+                layout="total, sizes, prev, pager, next, jumper" :total="data.total" @size-change="handleSizeChange"
                 @current-change="handleCurrentChange" />
-        </div>
+        </div>npm
         
    
 
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { exercisePaging } from '@/api/exam'
+import { exercisePaging } from '@/api/exercise'
 export default {
 
     data() {
@@ -65,94 +65,102 @@ export default {
             pageNum: 1,
             pageSize: 10,
             data: null,
-            formInline: {
-                user: '',
-                region: ''
-            },
-            currentPage1: 5,
-            currentPage2: 5,
-            currentPage3: 5,
-            currentPage4: 4,
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1518 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1517 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1519 弄',
-                zip: 200333
-            },
-            {
-                date: '',
-                name: '',
-                province: '',
-                city: '',
-                address: ''
+            // formInline: {
+            //     user: '',
+            //     region: ''
+            // },
+            repoTitle: '',
+            // currentPage1: 5,
+            // currentPage2: 5,
+            // currentPage3: 5,
+            // currentPage4: 4,
+            // tableData: [{
+            //     date: '2016-05-02',
+            //     name: '王小虎',
+            //     province: '上海',
+            //     city: '普陀区',
+            //     address: '上海市普陀区金沙江路 1518 弄',
+            //     zip: 200333
+            // }, {
+            //     date: '2016-05-04',
+            //     name: '王小虎',
+            //     province: '上海',
+            //     city: '普陀区',
+            //     address: '上海市普陀区金沙江路 1517 弄',
+            //     zip: 200333
+            // }, {
+            //     date: '2016-05-01',
+            //     name: '王小虎',
+            //     province: '上海',
+            //     city: '普陀区',
+            //     address: '上海市普陀区金沙江路 1519 弄',
+            //     zip: 200333
+            // },
+            // {
+            //     date: '',
+            //     name: '',
+            //     province: '',
+            //     city: '',
+            //     address: ''
 
-            },
-            {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1516 弄',
-                zip: 200333
-            }],
-            formInline: {
-                user: '',
-                region: ''
-            },
+            // },
+            // {
+            //     date: '2016-05-03',
+            //     name: '王小虎',
+            //     province: '上海',
+            //     city: '普陀区',
+            //     address: '上海市普陀区金沙江路 1516 弄',
+            //     zip: 200333
+            // }],
+            // formInline: {
+            //     user: '',
+            //     region: ''
+            // },
             dialogTableVisible: false,
         dialogFormVisible: false,
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        },
+        // form: {
+        //   name: '',
+        //   region: '',
+        //   date1: '',
+        //   date2: '',
+        //   delivery: false,
+        //   type: [],
+        //   resource: '',
+        //   desc: ''
+        // },
         formLabelWidth: '120px'
             
         }
     },
 
     created() {
+
     this.getExercisePage();
   },
   methods: {
+   queryRepo(){
+    this.getExercisePage(this.pageNum,this.pageSize,this.repoTitle)
+   },
     // 分页查询
     async getExercisePage(pageNum, pageSize, title = null) {
       const params = { pageNum: pageNum, pageSize: pageSize, title: title };
       const res = await exercisePaging(params);
       this.data = res.data;
     },
-    screenInfo(row) {
-      console.info("=====", row);
-      this.$router.push({ name: "shua", query: { zhi: row } });
+    screenInfo(id,repoTitle) {
+      console.info("=====", id,repoTitle);
+      this.$router.push({ name: "shua", query: { repoId: id ,repoTitle:repoTitle} });
     },
         onSubmit() {
+           
             console.log('submit!');
         },
         handleSizeChange(val) {
+            this.getExercisePage(this.pageNum,val,this.title);
             console.log(`每页 ${val} 条`)
         },
         handleCurrentChange(val) {
+            this.getExercisePage(val,this.pageSize,this.title);
             console.log(`当前页: ${val}`)
         },
         open() {

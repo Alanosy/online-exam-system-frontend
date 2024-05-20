@@ -7,7 +7,7 @@
           <el-input v-model="searchTitle" placeholder="输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="班级">
-          <el-input v-model="input1" placeholder="输入班级"></el-input>
+          <ClassSelect v-model="input1" :isMultiple="false" @change="onClassChange" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="searchUser" style="margin-left: 20px"
@@ -22,7 +22,11 @@
           >
           <el-button
             type="primary"
+<<<<<<< HEAD
             @click="dialogFormVisible = true"
+=======
+            @click="fileDialogVisible = true"
+>>>>>>> 0e58b28f08dfe6c8ded411f46b0765a13188b393
             style="margin-left: 20px"
             >导入</el-button
           >
@@ -31,16 +35,12 @@
     </div>
     <!-- table -->
     <div style="width: 90%; margin: auto; margin-top: 20px">
-      <el-table :data="data" border>
+      <el-table :data="data.records" border>
         <el-table-column prop="id" label="序号" align="center" width="120px">
         </el-table-column>
-        <el-table-column
-          prop="userName"
-          label="用户名"
-          width="180px"
-          align="center"
-        >
+        <el-table-column prop="userName" label="用户名" width="180px" align="center">
         </el-table-column>
+<<<<<<< HEAD
         <el-table-column
           prop="realName"
           label="真实姓名"
@@ -56,17 +56,38 @@
         >
         </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center">
+=======
+        <el-table-column prop="realName" label="真实姓名" align="center" width="180px">
+>>>>>>> 0e58b28f08dfe6c8ded411f46b0765a13188b393
         </el-table-column>
+        <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="createTime" label="注册时间" align="center">
         </el-table-column>
         <el-table-column align="center" label="操作">
-          <template>
+          <template slot-scope="{ row }">
             <el-button
+              v-if="role == 'admin'"
+              type="text"
+              size="small"
+              style="font-size: 14px"
+              @click="updateRow(row)"
+              >编辑</el-button
+            >
+            <el-button
+              v-if="role == 'teacher'"
               type="text"
               size="small"
               style="color: red; font-size: 14px"
-              @click="open"
+              @click="removeUserClass(row)"
               >移除班级</el-button
+            >
+            <el-button
+              v-if="role == 'admin'"
+              type="text"
+              size="small"
+              style="color: red; font-size: 14px"
+              @click="delUser(row)"
+              >删除</el-button
             >
           </template>
         </el-table-column>
@@ -100,20 +121,14 @@
         <el-col :span="12">
           <el-form :model="addForm">
             <el-form-item label="用户名" :label-width="formLabelWidth">
-              <el-input
-                v-model="addForm.userName"
-                autocomplete="off"
-              ></el-input>
+              <el-input v-model="addForm.userName" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="12">
           <el-form :model="addForm">
             <el-form-item label="真实姓名" :label-width="formLabelWidth">
-              <el-input
-                v-model="addForm.realName"
-                autocomplete="off"
-              ></el-input>
+              <el-input v-model="addForm.realName" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
@@ -135,16 +150,66 @@
         <el-button type="primary" @click="addClass">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 编辑 -->
+    <el-dialog title="编辑" :visible.sync="updateDialogVisible">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="用户名" :label-width="formLabelWidth">
+              <el-input v-model="form.userName" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="真实姓名" :label-width="formLabelWidth">
+              <el-input v-model="form.realName" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="updateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateUser">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 文件上传 -->
+    <el-dialog
+      width="400px"
+      :show-close="false"
+      :close-on-click-modal="false"
+      title="上传文件"
+      :visible.sync="fileDialogVisible"
+    >
+      <el-upload
+        class="upload-demo"
+        drag
+        action="xxxxxx"
+        multiple
+        :limit="1"
+        accept=".xlsx, .xls"
+        :auto-upload="false"
+        :on-remove="handleRemove"
+        :on-change="handleFileChange"
+        :file-list="fileList"
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件，且不超过500kb</div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="fileDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="importUser">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <!-- 分页 -->
     <div style="margin-top: 25px; margin-left: 52px">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="page.current"
+        :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
-        :page-size="page.size"
+        :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="page.total"
+        :total="data.total"
       >
       </el-pagination>
     </div>
@@ -160,14 +225,25 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { userPaging, classAdd } from "@/api/user";
+=======
+import ClassSelect from "@/components/ClassSelect";
+import { userPaging, classAdd, userDel, userImport } from "@/api/user";
+import {userClassRemove} from "@/api/class_";
+>>>>>>> 0e58b28f08dfe6c8ded411f46b0765a13188b393
 export default {
+  components: { ClassSelect },
   data() {
     return {
+      role: "",
       pageNum: 1,
       pageSize: 10,
       data: null,
+      fileList: [],
       currentPage1: 5,
+      updateDialogVisible: false,
+      fileDialogVisible: false,
       currentPage2: 5,
       currentPage3: 5,
       currentPage4: 4,
@@ -191,7 +267,14 @@ export default {
         region: "",
       },
       cancle() {},
+<<<<<<< HEAD
 
+=======
+      updateRow(row) {
+        this.updateDialogVisible = true;
+        this.form = row;
+      },
+>>>>>>> 0e58b28f08dfe6c8ded411f46b0765a13188b393
       diaTitle: "新增",
       dialogTableVisible: false,
       dialogFormVisible: false,
@@ -203,9 +286,11 @@ export default {
     };
   },
   created() {
+    this.role = localStorage.getItem("roles");
     this.getUserPage();
   },
   methods: {
+<<<<<<< HEAD
     Import() {
       this.dialogFormVisible = true;
     },
@@ -220,9 +305,57 @@ export default {
     },
     searchUser(){
       this.getUserPage(this.pageNum,this.pageSize,this.searchTitle)
+=======
+
+   
+    // 上传文件逻辑
+    importUser() {
+      if (this.fileList.length > 0) {
+        const formData = new FormData(); // 创建FormData对象
+        formData.append("file", this.fileList[0].raw); // 添加文件到formData
+        userImport(formData)
+          .then((response) => {
+            this.getUserPage(this.pageNum, this.pageSize);
+            console.log(response.data);
+            this.$message.success("文件上传成功！");
+            this.fileDialogVisible = false; // 关闭对话框
+            // 可以在这里处理成功后的逻辑，如刷新数据等
+          })
+          .catch((error) => {
+            console.error("文件上传失败：", error);
+            this.$message.error("文件上传失败！");
+          });
+      } else {
+        this.$message.warning("请选择文件后再上传！");
+      }
+>>>>>>> 0e58b28f08dfe6c8ded411f46b0765a13188b393
     },
-    onSubmit() {
-      console.log("submit!");
+    handleFileChange(file, fileList) {
+      this.fileList = fileList; // 收集文件信息
+    },
+    // 移除文件处理方法
+    handleRemove(file, fileList) {
+      if (fileList.length == 0) {
+        this.hasFiles = false;
+      }
+    },
+    updateUser() {
+      // 修改用户逻辑
+    },
+    updateRow(row) {
+      this.dialogFormVisible = true;
+      this.form = row;
+    },
+    // 分页查询
+    async getUserPage(pageNum, pageSize, realName = null, gradeId = null) {
+      const params = {
+        pageNum: pageNum,
+        pageSize: pageSize,
+        realName: realName,
+        gradeId: gradeId,
+      };
+      const res = await userPaging(params);
+      this.data = res.data;
     },
     addClass() {
       const data = {
@@ -246,18 +379,28 @@ export default {
         }
       });
     },
-    open(index) {
-      this.$confirm("此操作将永久删除此班级, 是否继续?", "提示", {
+    delUser(row) {
+      this.$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
         center: true,
       })
         .then(() => {
-          this.tableData.splice(index, 1);
-          this.$message({
-            type: "success",
-            message: "删除成功!",
+          userDel(row.id).then((res) => {
+            if (res.code) {
+              this.getUserPage(this.pageNum, this.pageSize);
+              this.tableData.splice(index, 1);
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+            } else {
+              this.$message({
+                type: "info",
+                message: res.msg,
+              });
+            }
           });
         })
         .catch(() => {
@@ -267,6 +410,22 @@ export default {
           });
         });
     },
+    removeUserClass(row){
+      userClassRemove(row.id).then((res)=>{
+        if(res.code){
+          this.getUserPage(this.pageNum, this.pageSize);
+          this.$message({
+            type: "success",
+            message: "移除成功!",
+          });
+        }else{
+          this.$message({
+            type: "info",
+            message: res.msg,
+          });
+        }
+      })
+    },
     handleClick(row) {
       console.log(row);
     },
@@ -275,6 +434,10 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+    },
+    searchUser() {
+      console.log(this.input1);
+      this.getUserPage(this.pageNum, this.pageSize, this.input, this.input1);
     },
   },
   computed: {

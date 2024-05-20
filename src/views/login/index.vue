@@ -1,8 +1,8 @@
 <!--
  * @Author: st 2946594574@qq.com
  * @Date: 2024-03-04 10:55:05
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-09 15:35:24
+ * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @LastEditTime: 2024-05-13 15:55:41
  * @FilePath: \com-project\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -80,19 +80,28 @@
           alt=""
         />
       </div>
-
+<div style="display: flex;">
       <el-button
         :loading="loading"
         type="primary"
-        style="width: 100%; margin-bottom: 30px"
+        style="width: 50%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-        >Login</el-button
+        >login</el-button
       >
+      <el-button :loading="loading"
+        type="primary"
+        style="width: 50%; margin-bottom: 30px;
+       
+        
+        ">
+      <router-link to="/rigister">
+              <el-dropdown-item> rigister </el-dropdown-item>
+            </router-link>
+          </el-button>
+     
+    </div>
 
-      <div class="tips">
-        <span style="margin-right: 20px">username: admin</span>
-        <span> password: any</span>
-      </div>
+     
     </el-form>
   </div>
 </template>
@@ -182,7 +191,7 @@ export default {
               this.$store
                 .dispatch("user/login", this.loginForm)
                 .then(() => {
-                    this.$router.push({ path: this.redirect || "/" });
+                    this.$router.push({ path: this.redirect || "index" });
                     this.loading = false;
                 })
                 .catch((error) => {
@@ -317,5 +326,7 @@ $light_gray: #eee;
     cursor: pointer;
     user-select: none;
   }
+
+ 
 }
 </style>

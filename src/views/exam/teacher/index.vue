@@ -15,7 +15,7 @@
           <el-input v-model="input"></el-input>
         </el-form-item>
 
-        <el-form-item label="考试时间" style="margin-left: 15px">
+        <!-- <el-form-item label="考试时间" style="margin-left: 15px">
           <el-date-picker
             v-model="value1"
             type="datetimerange"
@@ -24,10 +24,10 @@
             end-placeholder="结束日期"
           >
           </el-date-picker>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item>
-          <el-button type="primary" style="margin-left: 40px" @click="onSubmit"
+          <el-button type="primary" style="margin-left: 40px" @click="searchExam"
             >查询</el-button
           >
           <el-button type="primary" style="margin-left: 40px" @click="screenInfo()"
@@ -180,6 +180,9 @@ export default {
       const params = { pageNum: pageNum, pageSize: pageSize, title: title };
       const res = await examPaging(params);
       this.data = res.data;
+    },
+    searchExam() {
+      this.getExamPage(this.pageNum, this.pageSize, this.input);
     },
     onSubmit() {
       console.log("submit!");
