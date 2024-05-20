@@ -277,6 +277,16 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/mycertificate',
+    component: Layout,
+    children: [{
+      path: '/myzhengshugl',
+      name: 'myCertificate',
+      component: () => import('@/views/certificate/mycertificate'),
+      meta: { title: '我的证书',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+    }]
+  },
+  {
     path: '/scoreana',
     component: Layout,
     children: [{
