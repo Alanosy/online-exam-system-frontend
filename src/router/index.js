@@ -2,7 +2,7 @@
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-15 08:52:51
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-16 15:54:35
+ * @LastEditTime: 2024-05-20 10:31:23
  * @FilePath: \vue-admin-template\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -307,6 +307,29 @@ export const constantRoutes = [
       meta: { title: '答卷管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
     }]
   },
+  {
+    path: '/answer',
+    component: Layout,
+    children: [{
+      path: '/answerck',
+      name: 'Ansck',
+      hidden:true,
+      component: () => import('@/views/answer/answerck'),
+      meta: { title: '答卷查看',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+    }]
+  },
+  {
+    path: '/makeTest',
+    component: Layout,
+    children: [{
+      path: '/makeTest',
+      name: 'make',
+      hidden:true,
+      component: () => import('@/views/answer/makeTest'),
+      meta: { title: '批改试卷',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+    }]
+  },
+  
   {
     path: '/notice',
     component: Layout,

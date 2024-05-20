@@ -1,13 +1,8 @@
 /*
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-15 08:52:51
-<<<<<<< HEAD
  * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @LastEditTime: 2024-05-13 15:22:43
-=======
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-13 14:10:18
->>>>>>> fbdf91ab0a900fbb0c5975298b604b7fe4b7a9a5
  * @FilePath: \vue-admin-template\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
