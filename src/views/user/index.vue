@@ -4,7 +4,7 @@
     <div class="bj">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="真实姓名">
-          <el-input v-model="searchTitle" placeholder="输入姓名"></el-input>
+          <el-input v-model="input" placeholder="输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="班级">
           <ClassSelect v-model="input1" :isMultiple="false" @change="onClassChange" />
@@ -36,7 +36,25 @@
         </el-table-column>
         <el-table-column prop="userName" label="用户名" width="180px" align="center">
         </el-table-column>
+<<<<<<< HEAD
         <el-table-column prop="realName" label="真实姓名" align="center" width="180px">
+=======
+        <el-table-column
+          prop="realName"
+          label="真实姓名"
+          align="center"
+          width="180px"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="roleName"
+          label="角色名称"
+          align="center"
+          width="140px"
+        >
+        </el-table-column>
+        <el-table-column prop="gradeName" label="班级" align="center">
+>>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
         </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="createTime" label="注册时间" align="center">
@@ -260,7 +278,25 @@ export default {
     this.getUserPage();
   },
   methods: {
+<<<<<<< HEAD
 
+=======
+    Import() {
+      this.dialogFormVisible = true;
+    },
+    // 分页查询
+    async getUserPage(pageNum, pageSize, realName = null,gradeId=null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, realName: realName,gradeId:gradeId };
+      const res = await userPaging(params);
+      this.data = res.data.records;
+      this.page.size = res.data.size;
+      this.page.current = res.data.page;
+      this.total = res.data.total;
+    },
+    searchUser(){
+      this.getUserPage(this.pageNum,this.pageSize,this.input,this.input1)
+    },
+>>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
    
     // 上传文件逻辑
     importUser() {

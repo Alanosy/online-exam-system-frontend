@@ -1,13 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
-<<<<<<< HEAD:src/views/bankmanage/tikugl.vue
  * @LastEditors: st 2946594574@qq.com
  * @LastEditTime: 2024-05-11 16:05:47
-=======
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-13 15:23:20
->>>>>>> eb37f9a995080a0ff7c91014bfc35511e93bde74:src/views/repo/index.vue
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->

@@ -14,10 +14,8 @@
 </div>
 
 <div style="padding:10px 0 0 50px;">
-        <el-table
-      :data="data.records"
-      border
-      style="width: 90%; margin: auto;">
+      <el-table :data="data.records" style="width: 1000px; ">
+
       <el-table-column
         prop="xh"
         label="序号"
@@ -199,7 +197,7 @@ import { userbookPaging, userbookDel, userbookUpdate, userbookAdd } from "@/api/
   methods: {
     // 分页查询
     async getUserBookPage(pageNum, pageSize, examName = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, examName: examName };
+      const params = { pageNum: pageNum, pageSize: pageSize,examNamee: examName };
       const res = await userbookPaging(params);
       this.data = res.data;
     },

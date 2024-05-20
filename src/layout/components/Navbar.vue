@@ -44,12 +44,15 @@
       <el-tag
         v-for="item in tags"
         :key="item.title"
+        v-if="item.title"
         closable
         :class="{ active: item.checked }"
         @click="$router.push(item.path)"
         @close="$store.commit('menu/REMOVE_TAG', item)"
       >
-        {{ item.title }}
+     
+      {{ item.title }}
+
       </el-tag>
     </div>
   </div>

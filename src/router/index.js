@@ -1,8 +1,13 @@
 /*
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-15 08:52:51
+<<<<<<< HEAD
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @LastEditTime: 2024-05-20 10:31:23
+=======
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-05-20 14:26:19
+>>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
  * @FilePath: \vue-admin-template\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -155,7 +160,7 @@ export const constantRoutes = [
       path: '/shuatizx',
       name: 'Questcenter',
       component: () => import('@/views/exercise/index'),
-      meta: { title: '刷题中心',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+      meta: { title: '刷题中心',visiable:true,roles:['admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -192,6 +197,17 @@ export const constantRoutes = [
         meta: { title: '刷题记录',visiable:true,roles:['teacher','admin','student'], icon: 'tree' }
       }
     ]
+  },
+  {
+    path: '/exam',
+    component: Layout,
+    children: [{
+      path: '/newk',
+      name: 'Newk',
+      hidden:true,
+      component: () => import('@/views/record/exam/newk'),
+      meta: { title: '试题查看',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+    }]
   },
   {
     path: '/wrongbook',
@@ -283,7 +299,7 @@ export const constantRoutes = [
       path: '/myCertificates',
       name: 'Myc',
       component: () => import('@/views/myCertificates/index'),
-      meta: { title: '我的证书', icon: 'dashboard' }
+      meta: { title: '我的证书', icon: 'dashboard' ,visiable:true,roles:['admin','student']}
     }]
   },
   
@@ -294,7 +310,7 @@ export const constantRoutes = [
       path: 'chengjifx',
       name: 'Scoreana',
       component: () => import('@/views/score/index'),
-      meta: { title: '成绩分析',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+      meta: { title: '成绩分析',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
     }]
   },
   {
