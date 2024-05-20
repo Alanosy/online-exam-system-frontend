@@ -22,11 +22,7 @@
           >
           <el-button
             type="primary"
-<<<<<<< HEAD
-            @click="dialogFormVisible = true"
-=======
             @click="fileDialogVisible = true"
->>>>>>> 0e58b28f08dfe6c8ded411f46b0765a13188b393
             style="margin-left: 20px"
             >导入</el-button
           >
@@ -40,25 +36,7 @@
         </el-table-column>
         <el-table-column prop="userName" label="用户名" width="180px" align="center">
         </el-table-column>
-<<<<<<< HEAD
-        <el-table-column
-          prop="realName"
-          label="真实姓名"
-          align="center"
-          width="180px"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="roleName"
-          label="角色名称"
-          align="center"
-          width="140px"
-        >
-        </el-table-column>
-        <el-table-column prop="gradeName" label="班级" align="center">
-=======
         <el-table-column prop="realName" label="真实姓名" align="center" width="180px">
->>>>>>> 0e58b28f08dfe6c8ded411f46b0765a13188b393
         </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="createTime" label="注册时间" align="center">
@@ -225,13 +203,9 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-import { userPaging, classAdd } from "@/api/user";
-=======
 import ClassSelect from "@/components/ClassSelect";
 import { userPaging, classAdd, userDel, userImport } from "@/api/user";
 import {userClassRemove} from "@/api/class_";
->>>>>>> 0e58b28f08dfe6c8ded411f46b0765a13188b393
 export default {
   components: { ClassSelect },
   data() {
@@ -267,14 +241,10 @@ export default {
         region: "",
       },
       cancle() {},
-<<<<<<< HEAD
-
-=======
       updateRow(row) {
         this.updateDialogVisible = true;
         this.form = row;
       },
->>>>>>> 0e58b28f08dfe6c8ded411f46b0765a13188b393
       diaTitle: "新增",
       dialogTableVisible: false,
       dialogFormVisible: false,
@@ -290,22 +260,6 @@ export default {
     this.getUserPage();
   },
   methods: {
-<<<<<<< HEAD
-    Import() {
-      this.dialogFormVisible = true;
-    },
-    // 分页查询
-    async getUserPage(pageNum, pageSize, title = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
-      const res = await userPaging(params);
-      this.data = res.data.records;
-      this.page.size = res.data.size;
-      this.page.current = res.data.page;
-      this.total = res.data.total;
-    },
-    searchUser(){
-      this.getUserPage(this.pageNum,this.pageSize,this.searchTitle)
-=======
 
    
     // 上传文件逻辑
@@ -328,7 +282,6 @@ export default {
       } else {
         this.$message.warning("请选择文件后再上传！");
       }
->>>>>>> 0e58b28f08dfe6c8ded411f46b0765a13188b393
     },
     handleFileChange(file, fileList) {
       this.fileList = fileList; // 收集文件信息
