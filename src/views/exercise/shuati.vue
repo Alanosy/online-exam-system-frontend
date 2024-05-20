@@ -1,4 +1,4 @@
-<template>
+<template>icon="el-icon-back"
   <div style="width: 100%; height: 100%; background-color: #f0f2f5; padding: 20px 0 0">
     <!-- 开头 -->
     <el-row :gutter="24">
@@ -95,7 +95,7 @@
           </div>
 
           <div style="margin-top: 20px">
-            <el-button v-if="showPrevious" type="primary" icon="el-icon-back" @click="handPrevious()">
+            <el-button v-if="showPrevious" type="primary"  @click="handPrevious()">
               上一题
             </el-button>
 
