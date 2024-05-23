@@ -31,11 +31,11 @@ export function verifyCode(code) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/vue-admin-template/user/info',
+    url: 'user/info',
     method: 'get',
-    params: { token }
+
   })
 }
 
@@ -70,3 +70,18 @@ export function userImport(data) {
   })
 }
 
+export function changePassword(data) {
+  return request({
+    url: 'user',
+    method: 'put',
+    data
+  })
+}
+
+export function userAddClass(params) {
+  return request({
+    url: 'user/grade/join',
+    method: 'put',
+    params
+  })
+}
