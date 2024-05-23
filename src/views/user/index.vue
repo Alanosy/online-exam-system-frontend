@@ -36,7 +36,21 @@
         </el-table-column>
         <el-table-column prop="userName" label="用户名" width="180px" align="center">
         </el-table-column>
-        <el-table-column prop="realName" label="真实姓名" align="center" width="180px">
+        <el-table-column
+          prop="realName"
+          label="真实姓名"
+          align="center"
+          width="180px"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="roleName"
+          label="角色名称"
+          align="center"
+          width="140px"
+        >
+        </el-table-column>
+        <el-table-column prop="gradeName" label="班级" align="center">
         </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="createTime" label="注册时间" align="center">
@@ -71,6 +85,28 @@
         </el-table-column>
       </el-table>
     </div>
+    <!-- 导入弹窗 -->
+    <el-dialog title="导入" :visible.sync="dialogFormVisible" style="width:800px;margin:auto">
+      <el-upload
+        class="upload-demo"
+        drag
+        action="https://jsonplaceholder.typicode.com/posts/"
+        multiple
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">
+          只能上传jpg/png文件，且不超过500kb
+        </div>
+      </el-upload>
+
+       <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addClass">确 定</el-button>
+      </div>
+
+    </el-dialog>
+
     <!-- 新增弹窗 -->
     <el-dialog :title="diaTitle" :visible.sync="dialogTableVisible">
       <el-row>
@@ -199,6 +235,7 @@ export default {
       currentPage2: 5,
       currentPage3: 5,
       currentPage4: 4,
+      searchTitle:"",
       input: "",
       input1: "",
       deleteRow: "",
@@ -237,7 +274,21 @@ export default {
     this.getUserPage();
   },
   methods: {
-
+    Import() {
+      this.dialogFormVisible = true;
+    },
+    // 分页查询
+    async getUserPage(pageNum, pageSize, realName = null,gradeId=null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, realName: realName,gradeId:gradeId };
+      const res = await userPaging(params);
+      this.data = res.data.records;
+      this.page.size = res.data.size;
+      this.page.current = res.data.page;
+      this.total = res.data.total;
+    },
+    searchUser(){
+      this.getUserPage(this.pageNum,this.pageSize,this.input,this.input1)
+    },
    
     // 上传文件逻辑
     importUser() {

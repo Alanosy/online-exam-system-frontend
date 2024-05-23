@@ -1,8 +1,6 @@
 /*
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-15 08:52:51
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-13 14:10:18
  * @FilePath: \vue-admin-template\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -99,7 +97,7 @@ export const constantRoutes = [
       path: '/changemima',
       name: 'Usermanager',
       hidden:true,
-      component: () => import('@/views/changemima/changemima'),
+      component: () => import('@/views/user/updatePassword.vue'),
       meta: { title: '修改密码',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
@@ -155,7 +153,7 @@ export const constantRoutes = [
       path: '/shuatizx',
       name: 'Questcenter',
       component: () => import('@/views/exercise/index'),
-      meta: { title: '刷题中心',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+      meta: { title: '刷题中心',visiable:true,roles:['admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -164,13 +162,7 @@ export const constantRoutes = [
     hidden:true,
     component: () => import('@/views/exercise/shuati.vue'),
     meta: { title: '开始考试',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' },
-    // children: [{
-    //   path: '/start',
-    //   name: 'start',
-    //   hidden:true,
-    //   component: () => import('@/views/kaishiks/start'),
-    //   meta: { title: '开始考试', icon: 'dashboard' }
-    // }]
+   
   },
  
   {
@@ -194,6 +186,17 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/exam',
+    component: Layout,
+    children: [{
+      path: '/newk',
+      name: 'Newk',
+      hidden:true,
+      component: () => import('@/views/record/exam/newk'),
+      meta: { title: '试题查看',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+    }]
+  },
+  {
     path: '/wrongbook',
     component: Layout,
     children: [{
@@ -202,6 +205,14 @@ export const constantRoutes = [
       component: () => import('@/views/userbook/index'),
       meta: { title: '错题本',visiable:true, roles:['admin','student'],icon: 'dashboard' }
     }]
+  },
+  {
+    path: '/chongshua',
+    name: 'Chongshua',
+    hidden:true,
+    component: () => import('@/views/chongshua/index.vue'),
+    meta: { title: '重刷',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' },
+    
   },
   {
     path: '/exammange',
@@ -277,13 +288,24 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/mycertificate',
+    component: Layout,
+    children: [{
+      path: '/myCertificates',
+      name: 'Myc',
+      component: () => import('@/views/myCertificates/index'),
+      meta: { title: '我的证书', icon: 'dashboard' ,visiable:true,roles:['admin','student']}
+    }]
+  },
+  
+  {
     path: '/scoreana',
     component: Layout,
     children: [{
       path: 'chengjifx',
       name: 'Scoreana',
       component: () => import('@/views/score/index'),
-      meta: { title: '成绩分析',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+      meta: { title: '成绩分析',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
     }]
   },
   {
@@ -296,6 +318,29 @@ export const constantRoutes = [
       meta: { title: '答卷管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
     }]
   },
+  {
+    path: '/answer',
+    component: Layout,
+    children: [{
+      path: '/answerck',
+      name: 'Ansck',
+      hidden:true,
+      component: () => import('@/views/answer/answerck'),
+      meta: { title: '答卷查看',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+    }]
+  },
+  {
+    path: '/makeTest',
+    component: Layout,
+    children: [{
+      path: '/makeTest',
+      name: 'make',
+      hidden:true,
+      component: () => import('@/views/answer/makeTest'),
+      meta: { title: '批改试卷',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+    }]
+  },
+  
   {
     path: '/notice',
     component: Layout,

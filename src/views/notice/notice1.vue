@@ -11,26 +11,25 @@
   <div style="margin-top: 30px">
     <div style="padding-left: 53px">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-       
-        <el-form-item label="证书名称" style="margin-left:28px">
-          <el-input v-model="input" placeholder="证书名称"></el-input>
+        <el-form-item label="公告标题" style="margin-left: 28px">
+          <el-input v-model="searchTitle" placeholder="公告标题"></el-input>
         </el-form-item>
-        <el-form-item label="试题类型" style="margin-left:28px">
+        <!-- <el-form-item label="试题类型" style="margin-left:28px">
           <el-input v-model="input1" placeholder="试题类型"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
-          <el-button type="primary" style="margin-left: 40px" @click="chaxun"
+          <el-button type="primary" style="margin-left: 40px" @click="searchNotice"
             >查询</el-button
           >
           <el-button
             type="primary"
             style="margin-left: 40px"
-           @click="dialogTableVisible = true"
+            @click="dialogTableVisible = true"
             >新增</el-button
           >
-          <el-button type="primary" style="margin-left: 40px" @click="daoru"
+          <!-- <el-button type="primary" style="margin-left: 40px" @click="daoru"
             >导入</el-button
-          >
+          > -->
         </el-form-item>
       </el-form>
     </div>
@@ -41,12 +40,9 @@
       width="30%"
       :before-close="handleClose"
     >
-      
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -57,9 +53,21 @@
         <el-table-column prop="title" label="公告标题" align="center" />
         <el-table-column prop="content" label="内容" align="center" />
         <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="{row}">
-            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
-            <el-button type="text" size="small" style="color: red; font-size: 14px" @click="open">删除</el-button>
+          <template slot-scope="{ row }">
+            <el-button
+              type="text"
+              size="small"
+              style="font-size: 14px"
+              @click="updateRow(row)"
+              >编辑</el-button
+            >
+            <el-button
+              type="text"
+              size="small"
+              style="color: red; font-size: 14px"
+              @click="delNotice(row.id)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -77,94 +85,66 @@
       />
     </div>
 
-      <!--新增弹窗-->
+    <!--新增弹窗-->
 
-    <el-dialog
-    :title="diaTitle"
-      :visible.sync="dialogTableVisible">
-      <el-row >
+    <el-dialog :title="diaTitle" :visible.sync="dialogTableVisible">
+      <el-row>
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="证书名称" :label-width="formLabelWidth">
-              <el-input v-model="form.date" autocomplete="off"></el-input>
+            <el-form-item label="公告标题" :label-width="formLabelWidth">
+              <el-input v-model="form.title" autocomplete="off"></el-input>
             </el-form-item>
-
+            <el-form-item label="公告内容" :label-width="formLabelWidth">
+              <el-input
+                type="textarea"
+                :rows="2"
+                placeholder="请输入内容"
+                v-model="form.content"
+              >
+              </el-input>
+            </el-form-item>
           </el-form>
-
         </el-col>
-        
-
-      
-        
       </el-row>
-      
+
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button @click="dialogTableVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addNotice">确 定</el-button>
       </div>
     </el-dialog>
-    
+
     <!--编辑弹窗-->
 
     <el-dialog title="编辑" :visible.sync="dialogFormVisible">
       <el-row :gutter="20">
         <el-col :span="12">
+          
+
+
           <el-form :model="form">
-            <el-form-item label="序号  " :label-width="formLabelWidth">
-              <el-input v-model="form.date" autocomplete="off"></el-input>
+            <el-form-item label="公告标题" :label-width="formLabelWidth">
+              <el-input v-model="form.title" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="公告内容" :label-width="formLabelWidth">
+              <el-input
+                type="textarea"
+                :rows="2"
+                placeholder="请输入内容"
+                v-model="form.content"
+              >
+              </el-input>
             </el-form-item>
           </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="证书名称" :label-width="formLabelWidth">
-              <el-input v-model="form.name" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="认证单位" :label-width="formLabelWidth">
-              <el-input v-model="form.count" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="所属题库 " :label-width="formLabelWidth">
-              <el-input v-model="form.class" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="创建时间" :label-width="formLabelWidth">
-              <el-input v-model="form.time" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="邮编 " :label-width="formLabelWidth">
-              <el-input v-model="form.zip" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
+
         </el-col>
       </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="updateNotice()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
-
 
 <script>
 import { noticePaging, noticeAdd, noticeDel, noticeUpdate } from "@/api/notice";
@@ -178,6 +158,73 @@ export default {
       const params = { pageNum: pageNum, pageSize: pageSize, title: title };
       const res = await noticePaging(params);
       this.data = res.data;
+    },
+    updateNotice(){
+      const data = {title: this.form.title,content:this.form.content}
+      noticeUpdate(this.form.id,data).then((res) => {
+        if (res.code) {
+          this.getNoticePage(this.pageNum, this.pageSize);
+          this.dialogFormVisible = false;
+          this.$message({
+            type: "success",
+            message: "编辑成功!",
+          });
+        } else {
+          this.$message({
+            type: "info",
+            message: res.msg,
+          });
+        }
+      })
+    },
+    searchNotice() {
+      this.getNoticePage(this.pageNum, this.pageSize, this.searchTitle);
+    },
+    delNotice(id) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+
+        cancelButtonText: "取消",
+
+        type: "warning",
+        center: true,
+      }).then(() => {
+        noticeDel(id).then((res) => {
+        if (res.code) {
+          this.getNoticePage(this.pageNum, this.pageSize);
+          this.tableData.splice(index, 1);
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        } else {
+          this.$message({
+            type: "info",
+            message: res.msg,
+          });
+        }
+      });
+      })
+      
+    },
+
+    addNotice() {
+      const data = { title: this.form.title, content: this.form.content };
+      noticeAdd(data).then((res) => {
+        if (res.code) {
+          this.getNoticePage(this.pageNum, this.pageSize);
+          this.dialogTableVisible = false;
+          this.$message({
+            type: "success",
+            message: "新增成功!",
+          });
+        } else {
+          this.$message({
+            type: "info",
+            message: res.msg,
+          });
+        }
+      });
     },
     handleClick(row) {
       console.log(row);
@@ -196,45 +243,22 @@ export default {
       console.log("submit!");
     },
     handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-      },
-    open(index) {
+      this.$confirm("确认关闭？")
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {});
+    },
+
     
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-
-                cancelButtonText: '取消',
-                
-                type: 'warning',
-                center: true
-            },
-          
-
-            )
-            this.tableData.splice(index,1).then(() => {
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });
-            });
-        },
   },
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
       data: null,
-      input: "",
-      input1:"",
+      searchTitle: "",
+      input1: "",
       currentPage1: 5,
       currentPage2: 5,
       currentPage3: 5,
@@ -295,14 +319,8 @@ export default {
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
+        content: "",
+        title: "",
       },
       formLabelWidth: "120px",
     };
@@ -311,7 +329,7 @@ export default {
     tables() {
       //在你的数据表格中定义tabels
       const input = this.input;
-       const input1 = this.input1;
+      const input1 = this.input1;
       if (input) {
         // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
@@ -332,7 +350,7 @@ export default {
       }
 
       return this.tableData;
-    }
+    },
   },
 };
 </script>

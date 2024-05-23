@@ -12,7 +12,7 @@
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
           {{ repoTitle }} 题库
-          <!-- <el-button
+          <el-button
             :loading="loading"
             style="float: right; margin-top: -10px"
             type="primary"

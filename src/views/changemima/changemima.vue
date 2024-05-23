@@ -1,23 +1,71 @@
-
-import { Input } from 'element-ui';
-<!--
- * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @Date: 2024-05-06 14:41:32
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-05-13 10:13:50
- * @FilePath: \com-project\src\views\changemima\changemima.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
 <template>
-
-    <div style="width:1000px;height:500px;background-color:rgb(240 242 245);margin: auto;margin-top: 40px;">
-
-       <ul style="list-style: none;font-size: 20px;">
-        <li style="padding-top: 90px;padding-left: 220px;">原密码:      <input ></input>  </li>
-        <li style="padding-top: 50px;padding-left: 220px;">新密码:    <input ></input> </li>
-        <li style="padding-top: 50px;padding-left: 200px;">确认密码:    <input ></input> </li>
-       </ul>
-        <button style="margin-top: 50px;margin-left: 370px;font-size: 20px;" >修改密码</button>
+  <el-form class="kj">
+    <div class="sg">
+      <el-form :model="addForm">
+        <el-form-item label="原密码" :label-width="formLabelWidth">
+          <el-input v-model="input1" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" :label-width="formLabelWidth">
+          <el-input v-model="input2" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" :label-width="formLabelWidth">
+          <el-input v-model="input3" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
     </div>
-
+    <div class="an">
+      <!-- <el-button>取消</el-button> -->
+      <el-button  type="primary" @click="updatePassword">确认</el-button>
+    </div>
+  </el-form>
 </template>
+
+<script>
+import {changePassword} from '@/api/user';
+
+export default {
+  data() {
+    return {
+      input1: "",
+      input2: "",
+      input3: "",
+    };
+  },
+  methods:{
+    updatePassword(){
+        const data = {originPassword:this.input1,newPassword:this.input2,checkedPassword:this.input3}
+        changePassword(data).then((res)=>{
+            if(res.code){
+                
+            }
+        })
+    }
+  }
+};
+</script>
+<style scoped>
+.kj {
+  width: 400px;
+  height: 450px;
+  margin: auto;
+  background-color: aliceblue;
+  margin-top: 20px;
+}
+.z {
+  height: 100px;
+  font-size: 20px;
+}
+.sg {
+  width: 90%;
+  height: 350px;
+  margin: auto;
+  padding: 50px 0 0 0;
+}
+.an {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  width: 150px;
+  height: 50px;
+}
+</style>

@@ -15,7 +15,7 @@
 
 <div style="padding:10px 0 0 50px;">
         <el-table
-      :data="tables"
+      :data="data"
       border
       style="width: 1000px; ">
       <el-table-column
