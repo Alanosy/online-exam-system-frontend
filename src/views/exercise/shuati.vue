@@ -1,4 +1,4 @@
-<template>icon="el-icon-back"
+<template>
   <div style="width: 100%; height: 100%; background-color: #f0f2f5; padding: 20px 0 0">
     <!-- 开头 -->
     <el-row :gutter="24">

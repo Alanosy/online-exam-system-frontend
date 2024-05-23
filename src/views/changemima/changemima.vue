@@ -13,9 +13,9 @@ import { Input } from 'element-ui';
     <div style="width:1000px;height:500px;background-color:rgb(240 242 245);margin: auto;margin-top: 40px;">
 
        <ul style="list-style: none;font-size: 20px;">
-        <li style="padding-top: 90px;padding-left: 220px;">原密码:      <input ></input>  </li>
-        <li style="padding-top: 50px;padding-left: 220px;">新密码:    <input ></input> </li>
-        <li style="padding-top: 50px;padding-left: 200px;">确认密码:    <input ></input> </li>
+        <li style="padding-top: 90px;padding-left: 220px;">原密码:      <input></input>  </li>
+        <li style="padding-top: 50px;padding-left: 220px;">新密码:    <input></input> </li>
+        <li style="padding-top: 50px;padding-left: 200px;">确认密码:    <input></input> </li>
        </ul>
         <button style="margin-top: 50px;margin-left: 370px;font-size: 20px;" >修改密码</button>
     </div>
