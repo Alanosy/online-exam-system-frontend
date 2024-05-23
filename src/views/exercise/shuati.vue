@@ -1,5 +1,12 @@
 <template>
-  <div style="width: 100%; height: 100%; background-color: #f0f2f5; padding: 20px 0 0">
+  <div
+    style="
+      width: 100%;
+      height: 100%;
+      background-color: #f0f2f5;
+      padding: 20px 0 0;
+    "
+  >
     <!-- 开头 -->
     <el-row :gutter="24">
       <el-col :span="24">
@@ -13,7 +20,7 @@
             @click="handHandExam()"
           >
             {{ handleText }}
-          </el-button>
+          </el-button> -->
         </el-card>
       </el-col>
 
@@ -34,108 +41,140 @@
             >
               按题型
             </button>
+            <div style="height: 20px"></div>
+            <el-row :gutter="24" class="card-line" style="padding-left: 10px">
+              <el-tag type="success">回答正确</el-tag>
+              <el-tag type="danger">回答错误</el-tag>
+              <el-tag type="info">未作答</el-tag>
+              <el-tag type="warning">当前试题</el-tag>
+              <div style="margin-bottom: 15px"></div>
+            </el-row>
           </div>
-          <div>
-            <div v-show="0 === number">
-              <!-- <p>我是题型</p> -->
-              <p class="card-title">答题卡</p>
-              <el-row :gutter="24" class="card-line" style="padding-left: 10px">
-                <el-tag type="info">未作答</el-tag>
-                <el-tag type="success">已作答</el-tag>
-                <div style="margin-bottom: 15px"></div>
+          <!-- <div> -->
+          <div v-if="0 === number" >
+            <!-- <p>我是题型</p> -->
+            <p class="card-title">答题卡</p>
+            <el-row :gutter="24" class="card-line" style="padding-left: 10px">
+              <el-tag
+                style="width: calc(100% / 8); text-align: center"
+                v-for="(item, index) in quList"
+                :type="cardItemClass(item.exercised, item.quId, item.isRight)"
+                @click="selectQuNum(item, index)"
+                >{{ index + 1 }}</el-tag
+              >
+            </el-row>
+          </div>
+
+          <div v-if="1 === number">
+            <div v-if="paperData.radioList.length > 0">
+              <p class="card-title">单选题</p>
+              <el-row :gutter="24" class="card-line">
                 <el-tag
-                  style="width: calc(100% / 8); text-align: center"
-                  v-for="(item, index) in quList"
-                  :type="cardItemClass(item.answered, item.quId)"
-                  @click="handSave(item)"
+                  v-for="(item, index) in paperData.radioList"
+                  :type="cardItemClass(item.exercised, item.quId, item.isRight)"
+                  @click="selectQuId(item)"
+                >
+                  {{ index + 1 }}</el-tag
+                >
+              </el-row>
+            </div>
+
+            <div
+              v-if="
+                paperData.multiList !== undefined &&
+                paperData.multiList.length > 0
+              "
+            >
+              <p class="card-title">多选题</p>
+              <el-row :gutter="24" class="card-line">
+                <el-tag
+                  v-for="(item, index) in paperData.multiList"
+                  :type="cardItemClass(item.exercised, item.quId, item.isRight)"
+                  @click="selectQuId(item)"
                   >{{ index + 1 }}</el-tag
                 >
               </el-row>
-
-              <div
-                v-if="paperData.radioList !== undefined && paperData.radioList.length > 0"
-              >
-                <p class="card-title">单选题</p>
-                <el-row :gutter="24" class="card-line">
-                  <el-tag
-                    v-for="item in paperData.radioList"
-                    :type="cardItemClass(item.answered, item.quId)"
-                    @click="handSave(item)"
-                  >
-                    {{ item.sort + 1 }}</el-tag
-                  >
-                </el-row>
-              </div>
-
-              <div
-                v-if="paperData.multiList !== undefined && paperData.multiList.length > 0"
-              >
-                <p class="card-title">多选题</p>
-                <el-row :gutter="24" class="card-line">
-                  <el-tag
-                    v-for="item in paperData.multiList"
-                    :type="cardItemClass(item.answered, item.quId)"
-                    @click="handSave(item)"
-                    >{{ item.sort + 1 }}</el-tag
-                  >
-                </el-row>
-              </div>
-
-              <div
-                v-if="paperData.judgeList !== undefined && paperData.judgeList.length > 0"
-              >
-                <p class="card-title">判断题</p>
-                <el-row :gutter="24" class="card-line">
-                  <el-tag
-                    v-for="item in paperData.judgeList"
-                    :type="cardItemClass(item.answered, item.quId)"
-                    @click="handSave(item)"
-                    >{{ item.sort + 1 }}</el-tag
-                  >
-                </el-row>
-              </div>
             </div>
-            <div v-show="1 === number">
-              <!-- <p>我是顺序</p> -->
-              <p class="card-title">答题卡</p>
+
+            <div
+              v-if="
+                paperData.judgeList !== undefined &&
+                paperData.judgeList.length > 0
+              "
+            >
+              <p class="card-title">判断题</p>
+              <el-row :gutter="24" class="card-line">
+                <el-tag
+                  v-for="(item, index) in paperData.judgeList"
+                  :type="cardItemClass(item.exercised, item.quId, item.isRight)"
+                  @click="selectQuId(item)"
+                  >{{ index + 1 }}</el-tag
+                >
+              </el-row>
             </div>
           </div>
+
+         
+          <!-- </div> -->
         </el-card>
       </el-col>
 
       <el-col :span="19" :xs="24">
         <el-card class="qu-content content-h">
-          <p v-if="quData.content">{{ quData.sort + 1 }}.{{ quData.content }}</p>
-          <p v-if="quData.image != null && quData.image != ''">
-            <el-image :src="quData.image" style="max-width: 100%" />
+          <p v-if="quDetail.content">
+            {{ currentQuIndex + 1 }}.{{ quDetail.content }}
+            {{ shouQuType(quDetail.quType) }}
           </p>
-          <div v-if="quData.quType === 1 || quData.quType === 3">
+          <p v-if="quDetail.image != null && quDetail.image != ''">
+            <el-image :src="quDetail.image" style="max-width: 100%" />
+          </p>
+          <div v-if="quDetail.quType === '1' || quDetail.quType === '3'">
             <el-radio-group v-model="radioValue">
-              <el-radio v-for="item in quData.answerList" :label="item.id">{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
-                <div v-if="item.image != null && item.image != ''" style="clear: both">
+              <el-radio v-for="item in quDetail.options" :label="item.id"
+                >{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
+                <div
+                  v-if="item.image != null && item.image != ''"
+                  style="clear: both"
+                >
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
               </el-radio>
             </el-radio-group>
           </div>
 
-          <div v-if="quData.quType === 2">
+          <div v-if="quDetail.quType === '2'">
             <el-checkbox-group v-model="multiValue">
               <el-checkbox
-                v-for="item in quData.answerList"
+                v-for="item in quDetail.options"
                 :key="item.id"
                 :label="item.id"
-                >{{ item.abc }}.{{ item.content }}
-                <div v-if="item.image != null && item.image != ''" style="clear: both">
+                >{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
+                <div
+                  v-if="item.image != null && item.image != ''"
+                  style="clear: both"
+                >
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
               </el-checkbox>
             </el-checkbox-group>
           </div>
 
+          <div v-if="nextText == '下一题'">
+            <p>
+              回答：<span>{{ rightQuAnswer.msg }}</span>
+            </p>
+            <p>正确答案：{{ getRightAnswer() }}</p>
+            <p>试题分析：{{ rightQuAnswer.data.analysis }}</p>
+          </div>
+
           <div style="margin-top: 20px">
-            <el-button v-if="showPrevious" type="primary" @click="handPrevious()">
-              上一题
+            <el-button
+              v-if="showPrevious"
+              type="primary"
+              icon="el-icon-back"
+              @click="handPrevious()"
+            >
+              {{ preText }}
             </el-button>
 
             <el-button
@@ -144,7 +183,7 @@
               icon="el-icon-right"
               @click="handNext()"
             >
-              下一题
+              {{ nextText }}
             </el-button>
           </div>
         </el-card>
@@ -154,7 +193,8 @@
 </template>
 
 <script>
-import { getQuestion } from "@/api/exercise";
+import { getQuestion, getQuestionDetail, submitAnswer } from "@/api/exercise";
+// import { quDetail } from "@/api/question";
 import { Loading } from "element-ui";
 import ExamTimer from "@/components/ExamTimer";
 // import { examStart, examQuList } from "@/api/exam";
@@ -165,10 +205,21 @@ export default {
     return {
       repoId: "",
       repoTitle: "",
+      //当前试题Id，用于按顺序刷题
+      curQuId: "",
+      //单题详情
+      quDetail: {},
       //试题列表
       quList: [],
+      preText: "上一步",
+      nextText: "下一步",
+      rightQuAnswer: {},
       number: 0,
       receivedRow: null,
+      //按题型的当前题号索引
+      curTypeIndex:0,
+      //索引指向哪个列表
+      curListIndex:1,
       // 全屏/不全屏
       isFullscreen: false,
       showPrevious: false,
@@ -176,6 +227,8 @@ export default {
       loading: false,
       handleText: "提交",
       pageLoading: false,
+      //当前试题索引
+      currentQuIndex: 0,
       // 试卷ID
       paperId: "",
       // 当前答题卡
@@ -187,7 +240,6 @@ export default {
       },
       // 试卷信息
       paperData: {
-        leftSeconds: 99999,
         radioList: [],
         multiList: [],
         judgeList: [],
@@ -203,24 +255,20 @@ export default {
   created() {
     this.repoId = this.$route.query.repoId;
     this.repoTitle = this.$route.query.repoTitle;
-    // this.receivedRow = this.$route.query.zhi;
+
+    
+
     this.getQuestionList();
-    // const id =  this.$route.query.zhi.id;
-    // this.paperId = 28;
-    // this.fetchData(28);
-    // if (typeof id !== 'undefined') {
-    //   this.paperId = id
-    //   this.fetchData(28)
-    // }
+    this.initCurrentIndex()
+      this.getCurrentQuDetial();
+   
   },
   methods: {
+    //获取试题Id列表
     async getQuestionList() {
       const res = await getQuestion(null, this.repoId);
       this.quList = res.data;
-      // // alert(res)
-      console.log("-----------------");
-      console.log(res);
-      // console.log(this.quList);
+     
     },
     numberToLetter(sort) {
       switch (sort) {
@@ -242,236 +290,272 @@ export default {
     },
     change: function (index) {
       this.number = index; //重要处
+      this.getQuestionList();
+      // alert(this.number)
+      //按顺序
+      if (this.number == 0) {
+        this.paperData.radioList = [];
+        this.paperData.multiList = [];
+        this.paperData.judgeList = [];
+      }
+      //按题型
+      if (this.number == 1) {
+        this.quList.forEach((item) => {
+          if (item.quType == 1) {
+            this.paperData.radioList.push(item);
+          } else if (item.quType == 2) {
+            this.paperData.multiList.push(item);
+          } else if (item.quType == 3) {
+            this.paperData.judgeList.push(item);
+          }
+        });
+        this.quList = [];
+        //初始化试题Id
+        this.initQuId();
+        // alert(this.curQuId)
+        
+      }
+      this.getCurrentQuDetial()
     },
-    startExam(examId) {
-      examStart(examId);
-      examQuList(28).then((res) => {
-        this.paperData = res.data;
-        console(this.paperData);
+
+    getRightAnswer() {
+      var arr = new Array();
+  
+      this.rightQuAnswer.data.options.forEach((option) => {
+        if (option.isRight) {
+          arr.push(this.numberToLetter(option.sort + 1));
+        }
       });
+      
+      console.log("11111111111111");
+      console.log(arr.join(","));
+      return arr.join(",");
+      // },100)
     },
+    //按题型选择题号
+    selectQuId(item){
+      // console.log("111111111111111")
+      // console.log(item);
+      this.curQuId = item.quId
+      this.getCurrentQuDetial()
+    },
+    async getCurrentQuDetial() {
+      const loading = Loading.service({
+        text: "拼命加载中",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      if (this.number == 0) {
+        // alert("00000000000"+this.currentQuIndex)
+        setTimeout(() => {
+          //
+          getQuestionDetail(this.quList[this.currentQuIndex].quId).then(
+            (res) => {
+              this.quDetail = res.data;
+            }
+          );
+        }, 100);
+      } else if (this.number == 1) {
+        // alert("1111111111111"+this.curQuId);
+        getQuestionDetail(this.curQuId).then((res) => {
+          this.quDetail = res.data;
+        });
+      }
+      loading.close()
+    },
+
     // 答题卡样式
-    cardItemClass(answered, quId) {
-      if (quId === this.cardItem.quId) {
+    cardItemClass(answered, id, isright) {
+      if (id === this.quDetail.id) {
         return "warning";
-      }
-
-      if (answered) {
+      } else if (isright) {
         return "success";
-      }
-
-      if (!answered) {
+      } else if (answered) {
+        return "danger";
+      } else {
         return "info";
       }
     },
-
-    /**
-     * 统计有多少题没答的
-     * @returns {number}
-     */
-    countNotAnswered() {
-      let notAnswered = 0;
-
-      this.paperData.radioList.forEach(function (item) {
-        if (!item.answered) {
-          notAnswered += 1;
-        }
-      });
-
-      this.paperData.multiList.forEach(function (item) {
-        if (!item.answered) {
-          notAnswered += 1;
-        }
-      });
-
-      this.paperData.judgeList.forEach(function (item) {
-        if (!item.answered) {
-          notAnswered += 1;
-        }
-      });
-
-      return notAnswered;
+    //用户按顺序刷题，初始化试题Id
+    initQuId() {
+      this.curQuId = this.paperData.radioList[0].quId;
     },
 
+    //用于按顺序刷题，初始化试题顺序
+    initCurrentIndex() {
+      var exercisedCount = 0;
+
+      setTimeout(() => {
+        this.quList.forEach((element) => {
+          if (element.exercised) {
+            this.currentQuIndex++;
+            exercisedCount++;
+          }
+          if (exercisedCount == this.quList.length) {
+            this.currentQuIndex = 0;
+          }
+        });
+        this.showButton();
+      }, 100);
+    },
+    //选择题号
+    selectQuNum(item, index) {
+      const loading = Loading.service({
+        text: "拼命加载中",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+
+      this.fillAnswer();
+
+      this.currentQuIndex = index;
+      this.showButton();
+      this.getCurrentQuDetial();
+      loading.close();
+    },
+
+    //题干显示题型
+    shouQuType(type) {
+      if (type == 1) {
+        return "(单选题)";
+      } else if (type == 2) {
+        return "(多选题)";
+      } else if (type == 3) {
+        return "(判断题)";
+      } else if (type == 4) {
+        return "(简答题)";
+      }
+    },
     /**
      * 下一题
      */
     handNext() {
-      const index = this.cardItem.sort + 1;
-      this.handSave(this.allItem[index]);
+      const loading = Loading.service({
+        text: "拼命加载中",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      if (this.nextText == "下一题") {
+        this.radioValue = "";
+        this.multiValue = [];
+       //按顺序点击下一题
+        if(this.number == 0){
+          if (this.currentQuIndex < this.quList.length - 1) {
+          this.currentQuIndex++;
+        }}
+        // }else if(this.number == 1){
+        //   //按题型点击下一题
+        //   if(this.curListIndex == 1){
+        //     //单选题
+        //     this.curTypeIndex++;
+        //     if(this.curTypeIndex==this.paperData.radioList.length){
+        //       //单选题超出索引，就去多选题
+        //       this.curListIndex = 2
+        //       this.curTypeIndex = 0
+        //       this.curQuId = this.paperData.multiList[this.curTypeIndex].quId
+        //     }else{
+        //       this.curQuId = this.radioList[this.curTypeIndex].quId
+        //     }
+        //   }else if(this.curListIndex == 2){
+        //     //如果当前列表式多选题
+        //     this.curTypeIndex++
+        //     if(this.curTypeIndex==this.paperData.multiList.length){
+        //       this.curListIndex = 3
+        //       this.curTypeIndex = 0
+        //       this.curQuId = this.paperData.judgeList[this.curTypeIndex].quId
+        //     }else{
+        //       this.curQuId = this.paperData.multiList[this.curTypeIndex].quId
+        //     }
+        //   }else if(this.curListIndex == 3){
+        //     //判断题
+        //     this.curTypeIndex++
+        //     if(this.curTypeIndex==this.paperData.judgeList.length){
+        //       this.curListIndex = 1
+        //       this.curTypeIndex = 0
+        //       this.curQuId = this.paperData.radioList[this.curTypeIndex].quId
+        //     }else{
+        //       this.curQuId = this.paperData.judgeList[this.curTypeIndex].quId
+        //     }
+        //   }
+          
+        // }
+        this.getCurrentQuDetial();
+
+        setTimeout(() => (this.nextText = "下一步"), 100);
+
+        // alert(this.nextTxt)
+      }
+
+      if (this.nextText == "下一步") {
+        this.fillAnswer();
+        setTimeout(() => {
+          this.nextText = "下一题";
+        }, 100);
+      }
+      this.showButton();
+      loading.close();
+    },
+    //填充答案
+    async fillAnswer() {
+      if (this.radioValue || this.multiValue.length) {
+        if (this.radioValue) {
+          var params = {
+            repoId: this.quList[this.currentQuIndex].repoId,
+            quId: this.quDetail.id,
+            answer: this.radioValue,
+            quType: parseInt(this.quDetail.quType),
+          };
+        }
+        //多选提交答案
+        if (this.multiValue.length) {
+          params = {
+            repoId: this.quList[this.currentQuIndex].repoId,
+            quId: this.quDetail.id,
+            answer: this.multiValue.join(","),
+            quType: parseInt(this.quDetail.quType),
+          };
+        }
+
+        const res = await submitAnswer(params);
+        this.rightQuAnswer = res;
+        console.log(res);
+      }
+
+      this.getQuestionList();
+    },
+
+    async showButton() {
+      // alert(this.currentQuIndex)
+      // alert(this.currentQuIndex)
+      // alert(this.quList.length)
+      // console.log(this.currentQuIndex)
+      if (this.currentQuIndex === 0) {
+        this.showPrevious = false;
+      } else {
+        this.showPrevious = true;
+      }
+
+      if (
+        this.currentQuIndex === this.quList.length - 1 &&
+        this.nextText === "下一步"
+      ) {
+        this.showNext = false;
+      } else {
+        this.showNext = true;
+      }
     },
 
     /**
      * 上一题
      */
     handPrevious() {
-      const index = this.cardItem.sort - 1;
-      this.handSave(this.allItem[index]);
-    },
-
-    doHandler() {
-      this.handleText = "正在交卷，请等待...";
-      this.loading = true;
-
-      // const params = { id: this.paperId };
-      handExam(this.paperId).then(() => {
-        this.$message({
-          message: "试卷提交成功，即将进入试卷详情！",
-          type: "success",
-        });
-
-        this.$router.push({ name: "ShowExam", params: { id: this.paperId } });
-      });
-    },
-
-    // 交卷操作
-    handHandExam() {
-      const that = this;
-
-      // 交卷保存答案
-      this.handSave(this.cardItem, function () {
-        const notAnswered = that.countNotAnswered();
-
-        let msg = "确认要交卷吗？";
-
-        if (notAnswered > 0) {
-          msg = "您还有" + notAnswered + "题未作答，确认要交卷吗?";
-        }
-
-        that
-          .$confirm(msg, "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning",
-          })
-          .then(() => {
-            that.doHandler();
-          })
-          .catch(() => {
-            that.$message({
-              type: "info",
-              message: "交卷已取消，您可以继续作答！",
-            });
-          });
-      });
-    },
-
-    // 保存答案
-    handSave(item, callback) {
-      if (item.id === this.allItem[0].id) {
-        this.showPrevious = false;
-      } else {
-        this.showPrevious = true;
-      }
-
-      // 最后一个索引
-      const last = this.allItem.length - 1;
-
-      if (item.id === this.allItem[last].id) {
-        this.showNext = false;
-      } else {
-        this.showNext = true;
-      }
-
-      const answers = this.multiValue;
-      if (this.radioValue !== "") {
-        answers.push(this.radioValue);
-      }
-      console.log("1a");
-      console.log(this.cardItem);
-      const params = {
-        examId: this.paperId,
-        quId: this.cardItem.questionId,
-        answer: answers.join(","),
-        // answer: "",
-      };
-      fillAnswer(params).then(() => {
-        // 必须选择一个值
-        if (answers.length > 0) {
-          // 加入已答列表
-          this.cardItem.answered = true;
-        }
-
-        // 最后一个动作，交卷
-        if (callback) {
-          callback();
-        }
-
-        // 查找详情
-        this.fetchQuData(item);
-      });
-    },
-
-    // 试卷详情
-    fetchQuData(item) {
-      // 打开
       const loading = Loading.service({
         text: "拼命加载中",
         background: "rgba(0, 0, 0, 0.7)",
       });
-
-      // 获得详情
-      this.cardItem = item;
-
-      // 查找下个详情
-      const params = { examId: this.paperId, questionId: item.questionId };
-      quDetail(params).then((response) => {
-        // console.log(response);
-        console.log("=================");
-        console.log(response.data);
-        console.log("=================");
-        this.quData = response.data;
-        this.radioValue = "";
-        this.multiValue = [];
-
-        // 填充该题目的答案
-        this.quData.answerList.forEach((item) => {
-          if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checked) {
-            this.radioValue = item.id;
-          }
-
-          if (this.quData.quType === 2 && item.checked) {
-            this.multiValue.push(item.id);
-          }
-        });
-
-        // 关闭详情
+      if (this.currentQuIndex > 0) {
+        this.currentQuIndex--;
+        this.showButton();
+        this.getCurrentQuDetial();
         loading.close();
-      });
-    },
-
-    // 试卷详情
-    fetchData(examId) {
-      examQuList(examId).then((response) => {
-        // 试卷内容
-        this.paperData = response.data;
-
-        // 获得第一题内容
-        if (this.paperData.radioList && this.paperData.radioList.length > 0) {
-          this.cardItem = this.paperData.radioList[0];
-        } else if (this.paperData.multiList && this.paperData.multiList.length > 0) {
-          this.cardItem = this.paperData.multiList[0];
-        } else if (this.paperData.judgeList && this.paperData.judgeList.length > 0) {
-          this.cardItem = this.paperData.judgeList[0];
-        }
-
-        const that = this;
-
-        this.paperData.radioList.forEach(function (item) {
-          that.allItem.push(item);
-        });
-
-        this.paperData.multiList.forEach(function (item) {
-          that.allItem.push(item);
-        });
-
-        this.paperData.judgeList.forEach(function (item) {
-          that.allItem.push(item);
-        });
-
-        // 当前选定
-        this.fetchQuData(this.cardItem);
-      });
+      }
     },
   },
 };

@@ -1,3 +1,4 @@
+
 import request from '@/utils/request'
 
 export function quAdd(data) {
@@ -27,6 +28,13 @@ export function quDel(ids) {
   return request({
     url: 'questions/batch/'+ ids,
     method: 'delete'
+  })
+}
+
+export function quDetail(id) {
+  return request({
+    url: `questions/single/${id}`,
+    method: 'get'
   })
 }
 
