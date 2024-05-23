@@ -36,8 +36,6 @@
         </el-table-column>
         <el-table-column prop="userName" label="用户名" width="180px" align="center">
         </el-table-column>
-        <el-table-column prop="realName" label="真实姓名" align="center" width="180px">
-        </el-table-column>
         <el-table-column
           prop="realName"
           label="真实姓名"

@@ -15,7 +15,12 @@ import comStudent from "./com/2_com.vue";
 export default {
   data() {
     return {
+<<<<<<< HEAD
+
+      url: 0,    
+=======
       url: 0,
+>>>>>>> d6628b702975fa6325583f1f3800fecdc4c69746
 
     };
   },

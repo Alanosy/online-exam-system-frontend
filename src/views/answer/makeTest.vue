@@ -16,6 +16,16 @@
              <span>提交人</span>
               <span>50</span>
          </div>
+         <el-divider></el-divider>
+         <p>共 <span style="color: #1890ff">5 </span> 题,
+              共 <span style="color: #1890ff">100</span> 分</p>
+          <el-row>
+              <el-tag v-for="index in 5" :type="index === quIndex ? 'success':''"
+                      @click="handleTag(index)" class="type_tag">
+                {{ index }}
+              </el-tag>
+            </el-row>
+            <el-button type="success" class="ann">提交批改</el-button>
 
           </div>
          
@@ -24,53 +34,42 @@
   </div>
   
   <el-container> 
-    <el-main>
-        <el-col :span="16" :xs="24">
+    <el-main class="right">
+        <el-col >
         <el-card class="qu_list">
           <div>
-            <template v-for="index in 5">
+            <template v-for="index in 10">
               <div :class="'index' + index">
+                
+                <!-- 简答 -->
                 <el-row :gutter="24">
-                  <el-col :span="20" style="text-align: left">
+                    <el-col :span="20" style="text-align: left">
                     <!-- 题目: 序号、类型、题干 -->
                     <div>
                       <div class="qu_num">{{ index }}</div>
-                      【 单选题 】
-                      <div class="qu_content"> 这里是单选的题干信息  </div>
+                      【 简答题 】
+                      <div class="qu_content"> 这里是简答题的题干信息  </div>
                     </div>
-
-                    <!-- 选项 -->
-                    <el-radio-group class="qu_choose_group">
-                      <el-radio v-for="item in ['A', 'B', 'C', 'D']"
-                                border class="qu_choose">
-                        <!-- 选项flex浮动 -->
-                        <div class="qu_choose_tag">
-                          <div class="qu_choose_tag_type">
-                            {{ item }}.
-                          </div>
-                          <!-- 选项内容和图片 -->
-                          <div class="qu_choose_tag_content">
-                            这里是选项内容的
-                          </div>
-                        </div>
-                        <div class="qu_choose_answer">
-                          <i class="el-icon-success"
-                             style="color:#1aac1a;">
-                            答案
-                          </i>
-                        </div>
-                      </el-radio>
-                    </el-radio-group>
-
+                    <div class="content">
+                      Model（模型）：是应用程序中用于处理应用程序数据逻辑的部分。通常模型对象负责在数据库中存取数据
+View（视图）：是应用程序中处理数据显示的部分。
+                    </div>
                     <!-- 题目解析 -->
                     <div class="qu_analysis">
                       <el-card>
-                        <span>试题解析：</span><br/>
-                        <div class="qu_analysis_content">这里是试题解析部分</div>
+                        <div style="display:flex;align-items: center;">
+                          <span style="color:#e6a23c;">分数：</span> 
+                          <el-input v-model="input" type="number" style="width:100px;margin-left:20px;"></el-input>
+                        </div>
+                        <div  style="margin-top:18px">
+                          <span> 试题解析：</span>
+                          <span>这里是试题解析部分</span>
+                         </div>
+                        
                       </el-card>
                     </div>
-                  </el-col>
-                  <el-col :span="4">
+                    </el-col>
+                    <el-col :span="4">
                     <el-row class="qu_assign_score">
                       本题
                       <el-input-number :controls="false" :min="0" :precision="2" disabled
@@ -78,7 +77,8 @@
                       分
                     </el-row>
                   </el-col>
-                </el-row>
+                   </el-row>
+            
               </div>
             </template>
           </div>
@@ -97,6 +97,7 @@
    name: 'ExamProcess',
   data() {
     return {
+      input:"",
       quIndex: -1,
     }
   },
@@ -115,7 +116,20 @@
 </script>
 
 <style scoped lang="scss">
-
+.content{
+  width: 97%;
+    height: 60px;
+    border: 1px solid  #0a84ff;;
+    margin-top: 8px;
+    margin-left: 10px;
+    padding: 10px;
+    font-weight: 200;
+}
+.ann{
+  width: 130px;
+  margin-top: 25px;
+   margin-left: 15px;
+}
 .sj{
   margin-top:10px;
   margin-left:10px;
@@ -123,10 +137,11 @@
 }
 .fk{
     width: 200px;
-    height: 600px;
-    box-shadow: 0 0 15px rebeccapurple;
+    height: 100%;
+    box-shadow: 0 0 15px rgb(197, 197, 197);
     margin: auto;
     margin-top: 20px;
+    margin-left: 15px;
 }
  .el-header {
     background-color: #B3C0D1;
@@ -135,14 +150,31 @@
   }
   
 .left{
-    width: 250px;
-    height: 700px;
+    width: 17%;
+    height: 100%;
+        
 }
+.right{
+  width: 70%;
+  height: 100%;
+  
+}
+.el-divider--horizontal {
+    display: block;
+    height: 1px;
+    width: 95%;
+    margin: 24px 0;
+}
+ .type_tag{
+      margin-right: 5px;
+      margin-top: 10px;
+    }
  
     
 // 试题内容样式
   .qu_list{
-    height: 780px;
+    height: 100%;
+    width: 100%;
     overflow: auto;
     page-break-after:always;
 

@@ -1,5 +1,4 @@
 <template>
-  <!-- icon="el-icon-back" -->
   <div style="width: 100%; height: 100%; background-color: #f0f2f5; padding: 20px 0 0">
     <!-- 开头 -->
     <el-row :gutter="24">
@@ -112,8 +111,7 @@
           </p>
           <div v-if="quData.quType === 1 || quData.quType === 3">
             <el-radio-group v-model="radioValue">
-              <el-radio v-for="item in quData.answerList" :label="item.id"
-                >{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
+              <el-radio v-for="item in quData.answerList" :label="item.id">{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
