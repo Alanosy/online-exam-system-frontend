@@ -2,12 +2,17 @@
  * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @Date: 2024-04-15 08:52:51
 <<<<<<< HEAD
+ * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @LastEditTime: 2024-05-20 11:41:25
+=======
+<<<<<<< HEAD
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
  * @LastEditTime: 2024-05-20 10:31:23
 =======
  * @LastEditors: st 2946594574@qq.com
  * @LastEditTime: 2024-05-20 14:26:19
 >>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
+>>>>>>> b0d8852450d18fdaff87b612345cbc2f14787193
  * @FilePath: \vue-admin-template\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -169,13 +174,7 @@ export const constantRoutes = [
     hidden:true,
     component: () => import('@/views/exercise/shuati.vue'),
     meta: { title: '开始考试',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' },
-    // children: [{
-    //   path: '/start',
-    //   name: 'start',
-    //   hidden:true,
-    //   component: () => import('@/views/kaishiks/start'),
-    //   meta: { title: '开始考试', icon: 'dashboard' }
-    // }]
+   
   },
  
   {
@@ -218,6 +217,14 @@ export const constantRoutes = [
       component: () => import('@/views/userbook/index'),
       meta: { title: '错题本',visiable:true, roles:['admin','student'],icon: 'dashboard' }
     }]
+  },
+  {
+    path: '/chongshua',
+    name: 'Chongshua',
+    hidden:true,
+    component: () => import('@/views/chongshua/index.vue'),
+    meta: { title: '重刷',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' },
+    
   },
   {
     path: '/exammange',

@@ -36,6 +36,7 @@
         </el-table-column>
         <el-table-column prop="userName" label="用户名" width="180px" align="center">
         </el-table-column>
+
         <el-table-column
           prop="realName"
           label="真实姓名"
@@ -289,6 +290,7 @@ export default {
     searchUser(){
       this.getUserPage(this.pageNum,this.pageSize,this.input,this.input1)
     },
+
    
     // 上传文件逻辑
     importUser() {
