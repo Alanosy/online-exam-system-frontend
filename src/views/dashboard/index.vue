@@ -1,23 +1,4 @@
-<!--
- * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @Date: 2024-02-29 18:01:42
- * @LastEditors: st 2946594574@qq.com
-<<<<<<< HEAD
- * @LastEditTime: 2024-05-16 15:40:38
-=======
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
-<<<<<<< HEAD
- * @LastEditTime: 2024-05-20 10:04:48
-=======
- * @LastEditTime: 2024-05-16 15:19:21
->>>>>>> eb37f9a995080a0ff7c91014bfc35511e93bde74
->>>>>>> a707502114d2c2f06a777a19ab80198ca239a51c
-=======
- * @LastEditTime: 2024-05-20 11:49:17
->>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
- * @FilePath: \video-manager\src\views\charts\BarChart.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
+
 <template>
   <div>
     <div>
@@ -34,8 +15,12 @@ import comStudent from "./com/2_com.vue";
 export default {
   data() {
     return {
+<<<<<<< HEAD
 
       url: 0,    
+=======
+      url: 0,
+>>>>>>> d6628b702975fa6325583f1f3800fecdc4c69746
 
     };
   },
@@ -43,6 +28,24 @@ export default {
     comAdmin,
     comTeacher,
     comStudent,
+  },
+  created() {
+    // this.url = this.$route.query.url;
+    const roles = localStorage.getItem("roles")
+    switch(roles){
+      case "admin":{
+        this.url = 0;
+        break
+      }
+      case "teacher":{
+        this.url = 1;
+        break
+      }
+      case "student":{
+        this.url = 2;
+        break
+      }
+    }
   },
  
 };

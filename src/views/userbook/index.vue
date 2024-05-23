@@ -13,39 +13,22 @@
       </div>
     </div>
 
-<div style="padding:10px 0 0 50px;">
-      <el-table :data="data.records" style="width: 1000px; ">
+    <div style="padding:10px 0 0 50px;">
+      <el-table :data="data.records" border style="width: 1000px; ">
+        <el-table-column prop="id" label="序号" align="center" width="80">
+        </el-table-column>
+        <el-table-column prop="title" align="center" label="试卷名称" width="250">
+        </el-table-column>
+        <el-table-column prop="numberOfErrors" align="center" label="错题数量">
+        </el-table-column>
+        <el-table-column prop="createTime" align="center" label="创建时间">
+        </el-table-column>
+        <el-table-column align="center" label="操作">
 
-      <el-table-column
-        prop="xh"
-        label="序号"
-        align="center"
-        width="80">
-      </el-table-column>
-      <el-table-column
-        prop="title"
-        align="center"
-        label="试卷名称"
-        width="250">
-      </el-table-column>
-      <el-table-column
-        prop="numberOfErrors"
-        align="center"
-        label="错题数量">
-      </el-table-column>
-      <el-table-column
-        prop="createTime"
-        align="center"
-        label="创建时间">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="操作">
-        
           <template slot-scope="{row}">
             <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">查看</el-button>
             <el-button type="text" size="small" style="color: red; font-size: 14px"
-            @click="screenInfo()">重刷</el-button>
+            @click="screenInfo(row)">重刷</el-button>
           </template>
 
         </el-table-column>
@@ -204,7 +187,7 @@ export default {
         .catch(_ => { });
     },
 
-    screenInfo(row, index, done) {
+    screenInfo(row) {
       console.info("=====", row);
       this.$router.push({ name: "Chongshua", query: { zhi: row } });
     },

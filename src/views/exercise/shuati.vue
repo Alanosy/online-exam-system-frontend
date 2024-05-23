@@ -5,8 +5,13 @@
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
           {{ repoTitle }} 题库
-          <el-button :loading="loading" style="float: right; margin-top: -10px" type="primary" icon="el-icon-plus"
-            @click="handHandExam()">
+          <el-button
+            :loading="loading"
+            style="float: right; margin-top: -10px"
+            type="primary"
+            icon="el-icon-plus"
+            @click="handHandExam()"
+          >
             {{ handleText }}
           </el-button>
         </el-card>
@@ -15,8 +20,20 @@
       <el-col :span="5" :xs="24" style="margin-bottom: 10px">
         <el-card class="content-h">
           <div class="btn_switch">
-            <button class="btn_anniu" @click="change(0)" :class="{ newStyle: 0 === number }">按顺序</button>
-            <button class="btn_anniu" @click="change(1)" :class="{ newStyle: 1 === number }">按题型</button>
+            <button
+              class="btn_anniu"
+              @click="change(0)"
+              :class="{ newStyle: 0 === number }"
+            >
+              按顺序
+            </button>
+            <button
+              class="btn_anniu"
+              @click="change(1)"
+              :class="{ newStyle: 1 === number }"
+            >
+              按题型
+            </button>
           </div>
           <div>
             <div v-show="0 === number">
@@ -24,34 +41,57 @@
               <p class="card-title">答题卡</p>
               <el-row :gutter="24" class="card-line" style="padding-left: 10px">
                 <el-tag type="info">未作答</el-tag>
-                <el-tag type="success">已作答</el-tag><div style="margin-bottom: 15px;"></div>
-                <el-tag style="width: calc(100% / 8); text-align: center;" v-for="(item, index) in quList" :type="cardItemClass(item.answered, item.quId)"
-                  @click="handSave(item)">{{ index + 1  }}</el-tag>
-               
+                <el-tag type="success">已作答</el-tag>
+                <div style="margin-bottom: 15px"></div>
+                <el-tag
+                  style="width: calc(100% / 8); text-align: center"
+                  v-for="(item, index) in quList"
+                  :type="cardItemClass(item.answered, item.quId)"
+                  @click="handSave(item)"
+                  >{{ index + 1 }}</el-tag
+                >
               </el-row>
 
-              <div v-if="paperData.radioList !== undefined && paperData.radioList.length > 0">
+              <div
+                v-if="paperData.radioList !== undefined && paperData.radioList.length > 0"
+              >
                 <p class="card-title">单选题</p>
                 <el-row :gutter="24" class="card-line">
-                  <el-tag v-for="item in paperData.radioList" :type="cardItemClass(item.answered, item.quId)"
-                    @click="handSave(item)">
-                    {{ item.sort + 1 }}</el-tag>
+                  <el-tag
+                    v-for="item in paperData.radioList"
+                    :type="cardItemClass(item.answered, item.quId)"
+                    @click="handSave(item)"
+                  >
+                    {{ item.sort + 1 }}</el-tag
+                  >
                 </el-row>
               </div>
 
-              <div v-if="paperData.multiList !== undefined && paperData.multiList.length > 0">
+              <div
+                v-if="paperData.multiList !== undefined && paperData.multiList.length > 0"
+              >
                 <p class="card-title">多选题</p>
                 <el-row :gutter="24" class="card-line">
-                  <el-tag v-for="item in paperData.multiList" :type="cardItemClass(item.answered, item.quId)"
-                    @click="handSave(item)">{{ item.sort + 1 }}</el-tag>
+                  <el-tag
+                    v-for="item in paperData.multiList"
+                    :type="cardItemClass(item.answered, item.quId)"
+                    @click="handSave(item)"
+                    >{{ item.sort + 1 }}</el-tag
+                  >
                 </el-row>
               </div>
 
-              <div v-if="paperData.judgeList !== undefined && paperData.judgeList.length > 0">
+              <div
+                v-if="paperData.judgeList !== undefined && paperData.judgeList.length > 0"
+              >
                 <p class="card-title">判断题</p>
                 <el-row :gutter="24" class="card-line">
-                  <el-tag v-for="item in paperData.judgeList" :type="cardItemClass(item.answered, item.quId)"
-                    @click="handSave(item)">{{ item.sort + 1 }}</el-tag>
+                  <el-tag
+                    v-for="item in paperData.judgeList"
+                    :type="cardItemClass(item.answered, item.quId)"
+                    @click="handSave(item)"
+                    >{{ item.sort + 1 }}</el-tag
+                  >
                 </el-row>
               </div>
             </div>
@@ -60,9 +100,6 @@
               <p class="card-title">答题卡</p>
             </div>
           </div>
-
-
-
         </el-card>
       </el-col>
 
@@ -74,8 +111,7 @@
           </p>
           <div v-if="quData.quType === 1 || quData.quType === 3">
             <el-radio-group v-model="radioValue">
-              <el-radio v-for="item in quData.answerList" :label="item.id">{{ numberToLetter(item.sort + 1) }}.{{
-      item.content }}
+              <el-radio v-for="item in quData.answerList" :label="item.id">{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -85,8 +121,11 @@
 
           <div v-if="quData.quType === 2">
             <el-checkbox-group v-model="multiValue">
-              <el-checkbox v-for="item in quData.answerList" :key="item.id" :label="item.id">{{ item.abc }}.{{
-      item.content }}
+              <el-checkbox
+                v-for="item in quData.answerList"
+                :key="item.id"
+                :label="item.id"
+                >{{ item.abc }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -95,11 +134,16 @@
           </div>
 
           <div style="margin-top: 20px">
-            <el-button v-if="showPrevious" type="primary"  @click="handPrevious()">
+            <el-button v-if="showPrevious" type="primary" @click="handPrevious()">
               上一题
             </el-button>
 
-            <el-button v-if="showNext" type="warning" icon="el-icon-right" @click="handNext()">
+            <el-button
+              v-if="showNext"
+              type="warning"
+              icon="el-icon-right"
+              @click="handNext()"
+            >
               下一题
             </el-button>
           </div>
@@ -110,7 +154,7 @@
 </template>
 
 <script>
-import { getQuestion, } from "@/api/exercise";
+import { getQuestion } from "@/api/exercise";
 import { Loading } from "element-ui";
 import ExamTimer from "@/components/ExamTimer";
 // import { examStart, examQuList } from "@/api/exam";
@@ -119,8 +163,8 @@ export default {
   components: { ExamTimer },
   data() {
     return {
-      repoId: '',
-      repoTitle: '',
+      repoId: "",
+      repoTitle: "",
       //试题列表
       quList: [],
       number: 0,
@@ -157,10 +201,10 @@ export default {
     };
   },
   created() {
-    this.repoId = this.$route.query.repoId
-    this.repoTitle = this.$route.query.repoTitle
+    this.repoId = this.$route.query.repoId;
+    this.repoTitle = this.$route.query.repoTitle;
     // this.receivedRow = this.$route.query.zhi;
-    this.getQuestionList()
+    this.getQuestionList();
     // const id =  this.$route.query.zhi.id;
     // this.paperId = 28;
     // this.fetchData(28);
@@ -171,9 +215,8 @@ export default {
   },
   methods: {
     async getQuestionList() {
-
-      const res = await getQuestion(null, this.repoId)
-      this.quList = res.data
+      const res = await getQuestion(null, this.repoId);
+      this.quList = res.data;
       // // alert(res)
       console.log("-----------------");
       console.log(res);

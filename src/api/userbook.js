@@ -1,11 +1,10 @@
 
 import request from '@/utils/request'
 
-export function userbookAdd(data) {
+export function getUserBookList(examId) {
   return request({
-    url: 'userbooks',
-    method: 'post',
-    data
+    url: 'userbooks/question/list/' +   examId,
+    method: 'get',
   })
 }
 
@@ -17,17 +16,17 @@ export function userbookPaging(params) {
   })
 }
 
-export function userbookDel(id) {
+export function getSingleQu(quId) {
   return request({
-    url: 'userbooks/' + id,
-    method: 'delete'
+    url: 'userbooks/question/single/'+quId,
+    method: 'get'
   })
 }
 
-export function userbookUpdate(id, data) {
+export function fullBook(data) {
   return request({
-    url: 'userbooks/' + id,
-    method: 'put',
+    url: 'userbooks/full-book/',
+    method: 'post',
     data
   })
 }
