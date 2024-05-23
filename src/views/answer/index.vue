@@ -1,13 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
-<<<<<<< HEAD
  * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-20 10:09:42
-=======
- * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-05-20 10:29:59
->>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
+ * @LastEditTime: 2024-05-23 13:38:20
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -43,11 +38,7 @@
           <template slot-scope="{row}">
             <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
             <el-button type="text" size="small" style="color: red; font-size: 14px" @click="open">删除</el-button>
-<<<<<<< HEAD
             <el-button type="text" size="small" style=" font-size: 14px" @click="screenInfo()">查看详情</el-button>
-=======
-            
->>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
           </template>
         </el-table-column>
       </el-table>

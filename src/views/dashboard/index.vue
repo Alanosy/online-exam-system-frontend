@@ -25,10 +25,6 @@
       <com-teacher v-else-if="url == 1"></com-teacher>
       <com-student v-else-if="url == 2"></com-student>
     </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
   </div>
 </template>
 <script>
@@ -38,15 +34,9 @@ import comStudent from "./com/2_com.vue";
 export default {
   data() {
     return {
-<<<<<<< HEAD
 
-      url: 0,
+      url: 0,    
 
-
-=======
-      url: 1,
-      
->>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
     };
   },
   components: {

@@ -36,9 +36,6 @@
         </el-table-column>
         <el-table-column prop="userName" label="用户名" width="180px" align="center">
         </el-table-column>
-<<<<<<< HEAD
-        <el-table-column prop="realName" label="真实姓名" align="center" width="180px">
-=======
         <el-table-column
           prop="realName"
           label="真实姓名"
@@ -54,7 +51,6 @@
         >
         </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center">
->>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
         </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="createTime" label="注册时间" align="center">
@@ -278,9 +274,6 @@ export default {
     this.getUserPage();
   },
   methods: {
-<<<<<<< HEAD
-
-=======
     Import() {
       this.dialogFormVisible = true;
     },
@@ -296,7 +289,6 @@ export default {
     searchUser(){
       this.getUserPage(this.pageNum,this.pageSize,this.input,this.input1)
     },
->>>>>>> 8144693379da90fbb3c22634ccf894c006fd65c0
    
     // 上传文件逻辑
     importUser() {
