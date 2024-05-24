@@ -52,7 +52,6 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    npm
   </div>
 </template>
 

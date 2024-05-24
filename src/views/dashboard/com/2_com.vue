@@ -8,9 +8,7 @@
 -->
 <template>
   <div>
-    <div class="luang">
-我是学生
-    </div>
+    <div class="luang">我是学生</div>
     <div style="display: flex">
       <div class="left">
         <el-card class="box-card">
@@ -36,10 +34,13 @@
 </template>
 
 <script>
+import { noticeGetNew } from "@/api/notice";
 export default {
-   data() {
+  data() {
     return {
-     
+      pageNum: 1,
+      pageSize: 10,
+      data: null,
       option: {
         title: { text: "" },
         tooltip: {},
@@ -68,40 +69,65 @@ export default {
           },
         ],
       },
-      data: [
-        {
-          label: "公告 1",
-          children: [
-            {
-              label: "二级 1-1",
-            },
-          ],
-        },
-        {
-          label: "公告 2",
-          children: [
-            {
-              label: "二级 2-1",
-            },
-          ],
-        },
-        {
-          label: "公告 3",
-          children: [
-            {
-              label: "二级 3-1",
-            },
-          ],
-        },
-      ],
+      // data: [
+      //   {
+      //     label: "公告 1",
+      //     children: [
+      //       {
+      //         label: "二级 1-1",
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     label: "公告 2",
+      //     children: [
+      //       {
+      //         label: "二级 2-1",
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     label: "公告 3",
+      //     children: [
+      //       {
+      //         label: "二级 3-1",
+      //       },
+      //     ],
+      //   },
+      // ],
       defaultProps: {
         children: "children",
         label: "label",
       },
     };
   },
- 
+  created() {
+    this.getNotice(this.pageNum, this.pageSize);
+  },
   methods: {
+    transformData(originalData) {
+      if (originalData.data && originalData.data.records) {
+        return originalData.data.records.map((record, index) => ({
+          label: ` ${record.title }`,
+          children: [
+            {
+              label: ` ${record.content}`,
+            },
+          ],
+        }));
+      } else {
+        console.error("Invalid data format or missing 'records' key.");
+        return [];
+      }
+    },
+
+    // 分页查询
+    async getNotice(pageNum, pageSize) {
+      const params = { pageNum: pageNum, pageSize: pageSize };
+      const res = await noticeGetNew(params);
+      this.data = this.transformData(res);
+      console.log("this.data",this.data);
+    },
     initCharts() {
       let myChart = this.$echarts.init(this.$refs.charts);
       // 绘制图表
@@ -115,18 +141,16 @@ export default {
   mounted() {
     this.initCharts();
   },
-}
-
+};
 </script>
-<style >
-.luang{
- 
+<style>
+.luang {
   margin: auto;
   width: 1100px;
   height: 100px;
   background-color: rgb(241, 218, 221);
   margin-top: 30px;
-  box-shadow: 3px 3px 3px 3px whitesmoke ;
+  box-shadow: 3px 3px 3px 3px whitesmoke;
 }
 
 .box-card {

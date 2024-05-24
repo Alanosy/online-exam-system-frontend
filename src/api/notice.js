@@ -31,3 +31,12 @@ export function noticeUpdate(id, data) {
     data
   })
 }
+
+
+export function noticeGetNew(params) {
+  return request({
+    url: 'notices/new',
+    method: 'get',
+    params
+  })
+}

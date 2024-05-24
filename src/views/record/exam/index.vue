@@ -29,12 +29,12 @@
         <el-table-column prop="cjsj" align="center" label="得分">
         </el-table-column>
         <el-table-column align="center" label="操作">
-          <template>
+          <template slot-scope="{ row }">
             <el-button
               type="text"
               size="small"
               style="font-size: 14px"
-              @click="screenInfo()"
+              @click="screenInfo(row)"
               >查看</el-button
             >
           </template>
@@ -136,7 +136,7 @@ export default {
       const res = await recordExamPaging(params);
       this.data = res.data;
     },
-    screenInfo(row, index, done) {
+    screenInfo(row) {
       console.info("=====", row);
       this.$router.push({ name: "Newk", query: { zhi: row } });
     },

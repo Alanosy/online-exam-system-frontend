@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function recordExamDetail(params) {
   return request({
-    url: '/api/records/exam/detail',
+    url: 'records/exam/detail',
     method: 'get',
     params
   })

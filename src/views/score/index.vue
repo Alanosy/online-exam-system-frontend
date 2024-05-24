@@ -28,9 +28,9 @@
 
     <!-- table -->
     <div style="margin: auto;width: 1200px; " align="center">
-      <el-table :data="tables" border>
-        <el-table-column fixed prop="date" label="序号" align="center" />
-        <el-table-column prop="name" label="试卷名称" align="center" />
+      <el-table :data="data.records" border>
+        <el-table-column fixed prop="id" label="序号" align="center" />
+        <el-table-column prop="title" label="试卷名称" align="center" />
         <el-table-column prop="province" label="考试班级" align="center" />
         <el-table-column prop="city" label="最低分" align="center" />
         <el-table-column prop="address" label="最高分" align="center" />
@@ -47,10 +47,10 @@
       <span class="demonstration" />
       <el-pagination
         :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="data.total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -148,10 +148,14 @@
 </template>
 
 <script>
+import {scorePaging} from "@/api/score"
 export default {
 
     data() {
         return {
+          pageNum:1,
+          pageSize:10,
+          data:null,
             formInline: {
                 user: '',
                 region: ''
@@ -162,44 +166,6 @@ export default {
             currentPage2: 5,
             currentPage3: 5,
             currentPage4: 4,
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1518 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1517 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1519 弄',
-                zip: 200333
-            },
-            {
-                date: '',
-                name: '',
-                province: '',
-                city: '',
-                address: ''
-
-            },
-            {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1516 弄',
-                zip: 200333
-            }],
             formInline: {
                 user: '',
                 region: ''
@@ -228,7 +194,16 @@ export default {
             
         }
     },
+    created(){
+      this.getScorePage()
+    },
     methods: {
+        // 分页查询
+    async getScorePage(pageNum, pageSize, realName = null,gradeId = null,examId=null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, realName: realName ,gradeId:gradeId,examId:examId};
+      const res = await scorePaging(params);
+      this.data = res.data;
+    },
         onSubmit() {
             console.log('submit!');
         },
