@@ -2,14 +2,14 @@
   <div class="qb">
     <div class="sf">
       <div class="xx">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <!-- <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="考试名称">
             <el-input v-model="input" placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
           </el-form-item>
-        </el-form>
+        </el-form> -->
       </div>
     </div>
 
@@ -45,7 +45,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
+        :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
@@ -138,20 +138,21 @@ export default {
     },
     screenInfo(row) {
       console.info("=====", row);
+      localStorage.setItem("record_exam_examId", row.id);
       this.$router.push({ name: "Newk", query: { zhi: row } });
     },
-    handleClick(row) {
-      console.log(row);
-    },
-    onSubmit() {
-      console.log("submit!");
-    },
+
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // 设置每页多少条逻辑
+      this.pageSize = val;
+      this.getExamRecordPaging(this.pageNum, val);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // 设置当前页逻辑
+      this.pageNum = val;
+      this.getExamRecordPaging(val, this.pageSize);
     },
+
     handleClose(done) {
       this.$confirm("确认关闭？")
         .then((_) => {

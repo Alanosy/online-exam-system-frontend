@@ -53,7 +53,7 @@
     <div class="block">
       <span class="demonstration" />
       <el-pagination
-        :current-page="currentPage4"
+        :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
@@ -206,9 +206,8 @@ export default {
       this.pageNum = val;
       this.getRepoPage(val, this.pageSize);
     },
-    handleClick(row) {
-      console.log(row);
-    },
+
+
   },
   computed: {
     tables() {

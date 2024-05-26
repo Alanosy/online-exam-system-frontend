@@ -20,20 +20,28 @@ import '@/styles/index.scss' // global css
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 
-router.beforeEach((to, from, next) => {
+// 定义白名单
+const whiteList = ['/login', '/register'];
 
+router.beforeEach((to, from, next) => {
     // 获取token，这里以从localStorage获取为例
     const token = getToken('Authorization');
-    if (!token && to.path !== '/login') {
-      // 如果没有token，则跳转到登录页面
-      next({ path: '/login', query: { redirect: to.fullPath } }); // 将要访问的路由path作为参数，登录后可直接跳转回来
+
+    // 检查当前访问的路由是否在白名单内
+    if (whiteList.includes(to.path)) {
+        // 如果在白名单内，不需要token，直接允许访问
+        next();
     } else {
-      // 如果有token，则允许访问
-      next();
+        // 如果不在白名单内，则需要检查token
+        if (!token) {
+            // 如果没有token，则跳转到登录页面，并携带前往的完整路径以便登录后重定向
+            next({ path: '/login', query: { redirect: to.fullPath } });
+        } else {
+            // 如果有token，则允许访问
+            next();
+        }
     }
-
 });
-
 
 import App from './App'
 import store from './store'

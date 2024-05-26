@@ -78,9 +78,6 @@ export default {
     ...mapGetters(["sidebar", "avatar", "tags"]),
   },
   created() {
-    console.log(this.tags);
-  },
-  created() {
     this.decode();
   },
   methods: {
@@ -88,12 +85,7 @@ export default {
     decode() {
       const token = getToken();
       const user = parseJwt(token);
-
-      console.log("=====================");
-      console.log(user);
       this.user=JSON.parse(user.userInfo)
-      console.log(this.user);
-      console.log("=====================");
     },
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");

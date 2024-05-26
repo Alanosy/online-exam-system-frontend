@@ -57,7 +57,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
+        :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
@@ -105,6 +105,26 @@
 <script>
 import { classPaging, classDel, classUpdate, classAdd } from "@/api/class_";
 export default {
+  data() {
+    return {
+      pageNum: 1,
+      pageSize: 10,
+      data: null,
+      diaTitle: "新增",
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      addForm: {
+        gradeName: "",
+      },
+      formInline: {
+        searchTitle: "",
+      },
+      form: {
+        gradeName:""
+      },
+      formLabelWidth: "110px",
+    };
+  },
   created() {
     this.getClassPage();
   },
@@ -187,6 +207,10 @@ export default {
           });
         });
     },
+    updateRow(row) {
+        this.dialogFormVisible = true;
+        this.form = row;
+      },
     searchExam() {
       this.getClassPage(this.pageNum, this.pageSize, this.formInline.searchTitle);
     },
@@ -204,64 +228,33 @@ export default {
       this.getClassPage(val, this.pageSize);
     }
   },
-  data() {
-    return {
-      pageNum: 1,
-      pageSize: 10,
-      data: null,
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
-      input: "",
-      input1: "",
-      addForm: {
-        gradeName: "",
-      },
-      formInline: {
-        searchTitle: "",
-      },
-      cancle() {},
-      updateRow(row) {
-        this.dialogFormVisible = true;
-        this.form = row;
-      },
-      diaTitle: "新增",
-      dialogTableVisible: false,
-      dialogFormVisible: false,
 
-      form: {
-        gradeName:""
-      },
-      formLabelWidth: "110px",
-    };
-  },
   computed: {
-    tables() {
-      //在你的数据表格中定义tabels
-      const input = this.input;
-      const input1 = this.input1;
-      if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input) > -1;
-          });
-        });
-      }
-      if (input1) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input1) > -1;
-          });
-        });
-      }
+    // tables() {
+    //   //在你的数据表格中定义tabels
+    //   const input = this.input;
+    //   const input1 = this.input1;
+    //   if (input) {
+    //     // console.log("input输入的搜索内容：" + this.input)
+    //     return this.tableData.filter((data) => {
+    //       console.log("object:" + Object.keys(data));
+    //       return Object.keys(data).some((key) => {
+    //         return String(data[key]).toLowerCase().indexOf(input) > -1;
+    //       });
+    //     });
+    //   }
+    //   if (input1) {
+    //     // console.log("input输入的搜索内容：" + this.input)
+    //     return this.tableData.filter((data) => {
+    //       console.log("object:" + Object.keys(data));
+    //       return Object.keys(data).some((key) => {
+    //         return String(data[key]).toLowerCase().indexOf(input1) > -1;
+    //       });
+    //     });
+    //   }
 
-      return this.tableData;
-    },
+    //   return this.tableData;
+    // },
   },
 };
 </script>

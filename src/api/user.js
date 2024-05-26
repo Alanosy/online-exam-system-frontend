@@ -85,3 +85,12 @@ export function userAddClass(params) {
     params
   })
 }
+
+
+export function register(data) {
+  return request({
+    url: 'auths/register',
+    method: 'post',
+    data
+  })
+}

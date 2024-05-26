@@ -14,8 +14,8 @@
         <el-form-item label="证书名称" style="margin-left: 28px">
           <el-input v-model="searchCertificateName" placeholder="证书名称"></el-input>
         </el-form-item>
-        <el-form-item label="试题类型" style="margin-left: 28px">
-          <el-input v-model="searchCertificationNuit" placeholder="试题类型"></el-input>
+        <el-form-item label="认证单位" style="margin-left: 28px">
+          <el-input v-model="searchCertificationNuit" placeholder="认证单位"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="margin-left: 40px" @click="searchCertificate"
@@ -64,7 +64,7 @@
     <div class="block">
       <span class="demonstration" />
       <el-pagination
-        :current-page="currentPage4"
+        :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
@@ -241,62 +241,19 @@ export default {
       console.log("submit!");
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // 设置每页多少条逻辑
+      this.pageSize = val;
+      this.getCertificatePage(this.pageNum, val);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
-    open(index) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-
-        cancelButtonText: "取消",
-
-        type: "warning",
-        center: true,
-      });
-      this.tableData
-        .splice(index, 1)
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
+      // 设置当前页逻辑
+      this.pageNum = val;
+      this.getCertificatePage(val, this.pageSize);
     },
     handleClick(row) {
       console.log(row);
     },
-    open(index) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
 
-        cancelButtonText: "取消",
-
-        type: "warning",
-        center: true,
-      });
-      this.tableData
-        .splice(index, 1)
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
   },
   computed: {
     tables() {

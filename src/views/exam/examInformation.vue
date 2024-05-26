@@ -77,7 +77,7 @@
     <!-- 按钮 -->
     <el-row class="ann">
       <el-button type="primary" @click="startExam()">▶ 开始考试</el-button>
-      <el-button type="primary" plain style="margin-left: 20px">返回</el-button>
+      <!-- <el-button type="primary" plain style="margin-left: 20px">返回</el-button> -->
     </el-row>
   </div>
 </template>
@@ -95,7 +95,7 @@ export default {
   },
   created() {
     this.receivedRow = this.$route.query.zhi;
-    this.getExamDetils(this.receivedRow.id);
+    this.getExamDetils(localStorage.getItem("examInfo_examId"));
   },
   methods: {
     // 分页查询

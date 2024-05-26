@@ -3,7 +3,7 @@
     <el-row :gutter="24">
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
-          {{ repoTitle }} 错题aaa
+          {{ repoTitle }} 错题本
           <el-button
             :loading="loading"
             style="float: right; margin-top: -10px"
@@ -17,15 +17,17 @@
       </el-col>
     </el-row>
     <el-row
-      >w
+      >
       <el-col :span="24">
         <el-card class="qu-content content-h">
-          <p v-if="quData.content">{{ quData.sort + 1 }}.{{ quData.content }}</p>
+          <!-- {{ quData.sort + 1 }}. -->
+          <p v-if="quData.content">{{ quData.content }}</p>
           <p v-if="quData.image != null && quData.image != ''">
             <el-image :src="quData.image" style="max-width: 100%" />
           </p>
-          <div v-if="quData.quType === 1 || quData.quType === 3">
-            <el-radio-group v-model="radioValue">
+          <!-- v-if="quData.quType === 1 || quData.quType === 3" v-model="radioValue" -->
+          <div>
+            <el-radio-group>
               <el-radio v-for="item in quData.answerList" :label="item.id"
                 >{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
@@ -50,12 +52,13 @@
           </div>
 
           <div style="margin-top: 20px">
-            <el-button v-if="showPrevious" type="primary" @click="handPrevious()">
+            <!-- v-if="showPrevious" -->
+            <el-button type="primary" @click="handPrevious()">
               上一题
             </el-button>
-
+            <!-- v-if="showNext" -->
             <el-button
-              v-if="showNext"
+             
               type="warning"
               icon="el-icon-right"
               @click="handNext()"
@@ -83,12 +86,15 @@ export default {
       loading: false,
       handleText: "提交",
       pageLoading: false,
-      userBookList:[],
+      userBookList: [],
+      index: 0,
+      examId: "",
       // 当前题目内容
       quData: {
         answerList: [],
       },
       // 试卷信息
+
       paperData: {
         leftSeconds: 99999,
         radioList: [],
@@ -99,28 +105,26 @@ export default {
   },
   created() {
     this.routeData = this.$route.query.zhi;
-    this.getUserBookListFun()
+    this.examId = localStorage.getItem("userbook_examId");
+    this.getUserBookListFun();
     // this.getSingleQuFun()
   },
 
   methods: {
     fullBookFun() {
-      fullBook().then( (res)=>{
-
-      })
-
+      fullBook().then((res) => {});
     },
-    getSingleQuFun() {
-      console.log(this.userBookList[0],"quId");
-      // getSingleQu(this.userBookList[0].quId).then((res)=>{
-      //   console.log(res,"resaaa")
-      // })
+    getSingleQuFun(quId) {
+      // console.log(this.userBookList[0],"quId");
+      getSingleQu(quId).then((res) => {
+        this.quData = res.data;
+      });
     },
     getUserBookListFun() {
-      getUserBookList(this.routeData.examId).then((res)=>{
-        this.userBookList = res.data
-        console.log(res.data[0].quId,"aaaa")
-      })
+      getUserBookList(this.examId).then((res) => {
+        this.userBookList = res.data;
+        this.getSingleQuFun(res.data[this.index]["quId"]);
+      });
     },
     //   handHandExam() {
     //     const that = this;
@@ -152,39 +156,130 @@ export default {
     //         });
     //     });
     //   },
-    //   numberToLetter(sort) {
-    //     switch (sort) {
-    //       case 1:
-    //         return "A";
-    //       case 2:
-    //         return "B";
-    //       case 3:
-    //         return "C";
-    //       case 4:
-    //         return "D";
-    //       case 5:
-    //         return "E";
-    //       case 6:
-    //         return "F";
-    //       default:
-    //         return ""; // 默认值，或者可以处理其他情况
-    //     }
-    //   },
-    //   /**
-    //    * 下一题
-    //    */
-    //   handNext() {
-    //     const index = this.cardItem.sort + 1;
-    //     this.handSave(this.allItem[index]);
-    //   },
+    numberToLetter(sort) {
+      switch (sort) {
+        case 0:
+          return "A";
+        case 1:
+          return "B";
+        case 2:
+          return "C";
+        case 3:
+          return "D";
+        case 4:
+          return "E";
+        case 5:
+          return "F";
+        default:
+          return ""; // 默认值，或者可以处理其他情况
+      }
+    },
+    /**
+     * 下一题
+     */
+    handNext() {
+      this.index = this.index + 1;
+      this.handSave(this.index);
+    },
 
-    //   /**
-    //    * 上一题
-    //    */
-    //   handPrevious() {
-    //     const index = this.cardItem.sort - 1;
-    //     this.handSave(this.allItem[index]);
-    //   },
+    /**
+     * 上一题
+     */
+    handPrevious() {
+      this.index = this.index - 1;
+      this.handSave(this.index);
+
+      // const index = this.cardItem.sort - 1;
+      // this.handSave(this.allItem[index]);
+    },
+    // 保存答案
+    handSave(index) {
+      // if (item.id === this.allItem[0].id) {
+      //   this.showPrevious = false;
+      // } else {
+      //   this.showPrevious = true;
+      // }
+
+      // 最后一个索引
+      // const last = this.quData.length - 1;
+
+      // if (item.id === this.allItem[last].id) {
+      //   this.showNext = false;
+      // } else {
+      //   this.showNext = true;
+      // }
+
+      // const answers = this.multiValue;
+      // if (this.radioValue !== "") {
+      //   answers.push(this.radioValue);
+      // }
+      // console.log("1a");
+      // console.log(this.cardItem);
+      // const params = {
+      //   examId: this.paperId,
+      //   quId: this.cardItem.questionId,
+      //   answer: answers.join(","),
+      //   // answer: "",
+      // };
+      // fillAnswer(params).then((res) => {
+      //   if(res.code){
+      //     sessionStorage.setItem("exam_"+this.cardItem.questionId, 1);
+      //   }else{
+      //     sessionStorage.setItem("exam_"+this.cardItem.questionId, 0);
+      //   }
+      //   // 必须选择一个值
+      //   if (answers.length > 0) {
+      //     // 加入已答列表
+      //     this.cardItem.answered = true;
+      //   }
+
+      //   // 最后一个动作，交卷
+      //   if (callback) {
+      //     callback();
+      //   }
+
+      // 查找详情
+      this.fetchQuData(index);
+      // });
+    },
+    // 试卷详情
+    fetchQuData(index) {
+      // 打开
+      // const loading = Loading.service({
+      //   text: "拼命加载中",
+      //   background: "rgba(0, 0, 0, 0.7)",
+      // });
+
+      // 获得详情
+      // this.cardItem = item;
+      // const examId = localStorage.getItem("examId");
+      // 查找下个详情
+      // const params = { examId: examId, questionId: item.questionId };
+      this.getSingleQuFun(this.userBookList[index]["quId"])
+      // quDetail(params).then((response) => {
+      //   // console.log(response);
+      //   console.log("=================");
+      //   console.log(response.data);
+      //   console.log("=================");
+      //   this.quData = response.data;
+      //   this.radioValue = "";
+      //   this.multiValue = [];
+
+      //   // 填充该题目的答案
+      //   this.quData.answerList.forEach((item) => {
+      //     console.log(item, "ttt");
+      //     if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checkout) {
+      //       this.radioValue = item.id;
+      //     }
+      //     if (this.quData.quType === 2 && item.checkout) {
+      //       this.multiValue.push(item.id);
+      //     }
+      //   });
+
+      //   // 关闭详情
+      //   loading.close();
+      // });
+    },
   },
 };
 </script>

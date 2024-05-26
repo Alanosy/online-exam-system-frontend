@@ -18,9 +18,9 @@ export function repoAdd(data) {
   })
 }
 
-export function repoDel(id) {
+export function examDel(ids) {
   return request({
-    url: 'repo/' + id,
+    url: 'exams/' + ids,
     method: 'delete'
   })
 }

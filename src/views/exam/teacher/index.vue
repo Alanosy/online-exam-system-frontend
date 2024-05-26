@@ -38,7 +38,7 @@
     </div>
 
     <!-- table -->
-    <div style="margin: auto; width: 1200px" align="center">
+    <div style="margin: auto; width: 80%" align="center">
       <el-table :data="data.records" border>
         <el-table-column fixed prop="id" label="序号" align="center" />
         <el-table-column prop="title" label="试卷名称" align="center" />
@@ -61,6 +61,13 @@
               @click="updateRow(row)"
               >查看详情</el-button
             >
+            <el-button
+              type="text"
+              size="small"
+              style="color: red; font-size: 14px"
+              @click="delExam(row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -68,7 +75,7 @@
     <div class="block">
       <span class="demonstration" />
       <el-pagination
-        :current-page="currentPage4"
+        :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
@@ -131,7 +138,7 @@
 </template>
 
 <script>
-import { examPaging, repoAdd, repoUpdate, repoDel } from "@/api/exam";
+import { examPaging, repoAdd, repoUpdate, examDel } from "@/api/exam";
 export default {
   data() {
     return {
@@ -175,6 +182,37 @@ export default {
     this.getExamPage();
   },
   methods: {
+    delExam(row) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true,
+      })
+        .then(() => {
+          examDel(row.id).then((res) => {
+            if (res.code) {
+              this.getExamPage(this.pageNum, this.pageSize);
+              this.tableData.splice(index, 1);
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+            } else {
+              this.$message({
+                type: "info",
+                message: res.msg,
+              });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
     // 分页查询
     async getExamPage(pageNum, pageSize, title = null) {
       const params = { pageNum: pageNum, pageSize: pageSize, title: title };
@@ -187,7 +225,7 @@ export default {
     onSubmit() {
       console.log("submit!");
     },
-    screenInfo(row, index, done) {
+    screenInfo(row) {
       console.info("=====", row);
       this.$router.push({ name: "ksAdd", query: { zhi: row } });
     },
@@ -200,29 +238,6 @@ export default {
       // 设置当前页逻辑
       this.pageNum = val;
       this.getExamPage(val, this.pageSize);
-    },
-    open() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true,
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
-    handleClick(row) {
-      console.log(row);
     },
   },
   computed: {

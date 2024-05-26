@@ -158,7 +158,7 @@ export default {
       quUpdate(this.form.id, { title: this.form.title })
         .then((res) => {
           if (res.code) {
-            this.getRepoPage(this.pageNum, this.pageSize);
+            this.getQuPage(this.pageNum, this.pageSize);
             this.dialogFormVisible = false;
             this.$message({
               type: "success",

@@ -50,8 +50,8 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/rigister',
-    component: () => import('@/views/rigister/rigister'),
+    path: '/register',
+    component: () => import('@/views/login/register'),
     hidden: true
   },
 
@@ -86,7 +86,7 @@ export const constantRoutes = [
       path: '/myself',
       name: 'Usermanager',
       hidden:true,
-      component: () => import('@/views/myself/myself'),
+      component: () => import('@/views/user/myself'),
       meta: { title: '个人中心',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
@@ -177,12 +177,12 @@ export const constantRoutes = [
         component: () => import('@/views/record/exam/index.vue'),
         meta: { title: '考试记录',visiable:true,roles:['teacher','admin','student'], icon: 'table' }
       },
-      {
-        path: '/questrecord',
-        name: 'Examrecord2',
-        component: () => import('@/views/record/exercise/index.vue'),
-        meta: { title: '刷题记录',visiable:true,roles:['teacher','admin','student'], icon: 'tree' }
-      }
+      // {
+      //   path: '/questrecord',
+      //   name: 'Examrecord2',
+      //   component: () => import('@/views/record/exercise/index.vue'),
+      //   meta: { title: '刷题记录',visiable:true,roles:['teacher','admin','student'], icon: 'tree' }
+      // }
     ]
   },
   {
@@ -210,7 +210,7 @@ export const constantRoutes = [
     path: '/chongshua',
     name: 'Chongshua',
     hidden:true,
-    component: () => import('@/views/chongshua/index.vue'),
+    component: () => import('@/views/userbook/chongshua.vue'),
     meta: { title: '重刷',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' },
     
   },
@@ -293,7 +293,7 @@ export const constantRoutes = [
     children: [{
       path: '/myCertificates',
       name: 'Myc',
-      component: () => import('@/views/myCertificates/index'),
+      component: () => import('@/views/certificate/myCertificates'),
       meta: { title: '我的证书', icon: 'dashboard' ,visiable:true,roles:['admin','student']}
     }]
   },
@@ -347,7 +347,7 @@ export const constantRoutes = [
     children: [{
       path: 'notice1',
       name: 'Notice',
-      component: () => import('@/views/notice/notice1'),
+      component: () => import('@/views/notice/notice'),
       meta: { title: '公告管理',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
     }]
   },

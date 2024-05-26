@@ -2,12 +2,12 @@
   <div>
     <!-- form -->
     <div class="bj">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form :inline="true" class="demo-form-inline">
         <el-form-item label="真实姓名">
-          <el-input v-model="input" placeholder="输入姓名"></el-input>
+          <el-input v-model="searchRealName" placeholder="输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="班级">
-          <ClassSelect v-model="input1" :isMultiple="false" @change="onClassChange" />
+          <ClassSelect v-model="searchClassName" :isMultiple="false" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="searchUser" style="margin-left: 20px"
@@ -15,7 +15,6 @@
           >
           <el-button
             type="primary"
-            :title="diaTitle"
             @click="dialogTableVisible = true"
             style="margin-left: 20px"
             >新增</el-button
@@ -36,35 +35,24 @@
         </el-table-column>
         <el-table-column prop="userName" label="用户名" width="180px" align="center">
         </el-table-column>
-        <el-table-column
-          prop="realName"
-          label="真实姓名"
-          align="center"
-          width="180px"
-        >
+        <el-table-column prop="realName" label="真实姓名" align="center" width="180px">
         </el-table-column>
-        <el-table-column
-          prop="roleName"
-          label="角色名称"
-          align="center"
-          width="140px"
-        >
+        <el-table-column prop="roleName" label="角色名称" align="center" width="140px">
         </el-table-column>
-        <el-table-column prop="gradeName" label="班级" align="center">
-        </el-table-column>
+        <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="createTime" label="注册时间" align="center">
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
-            <el-button
+            <!-- <el-button
               v-if="role == 'admin'"
               type="text"
               size="small"
               style="font-size: 14px"
               @click="updateRow(row)"
               >编辑</el-button
-            >
+            > -->
             <el-button
               v-if="role == 'teacher'"
               type="text"
@@ -86,7 +74,11 @@
       </el-table>
     </div>
     <!-- 导入弹窗 -->
-    <el-dialog title="导入" :visible.sync="dialogFormVisible" style="width:800px;margin:auto">
+    <el-dialog
+      title="导入"
+      :visible.sync="dialogInportVisible"
+      style="width: 800px; margin: auto"
+    >
       <el-upload
         class="upload-demo"
         drag
@@ -95,16 +87,13 @@
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip" slot="tip">
-          只能上传jpg/png文件，且不超过500kb
-        </div>
+        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
 
-       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogInportVisible = false">取 消</el-button>
         <el-button type="primary" @click="addClass">确 定</el-button>
       </div>
-
     </el-dialog>
 
     <!-- 新增弹窗 -->
@@ -138,12 +127,12 @@
       </el-row>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="dialogTableVisible = false">取 消</el-button>
         <el-button type="primary" @click="addClass">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 编辑 -->
-    <el-dialog title="编辑" :visible.sync="updateDialogVisible">
+    <!-- <el-dialog title="编辑" :visible.sync="updateDialogVisible">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
@@ -161,7 +150,7 @@
         <el-button @click="updateDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="updateUser">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
     <!-- 文件上传 -->
     <el-dialog
       width="400px"
@@ -205,91 +194,102 @@
       >
       </el-pagination>
     </div>
-    <!-- 删除弹框 -->
-    <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-      <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="delVisible = false">取 消</el-button>
-        <el-button type="primary" @click="deleteRow">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import ClassSelect from "@/components/ClassSelect";
 import { userPaging, classAdd, userDel, userImport } from "@/api/user";
-import {userClassRemove} from "@/api/class_";
+import { userClassRemove } from "@/api/class_";
 export default {
   components: { ClassSelect },
   data() {
     return {
+      searchRealName: "",
+      searchClassName: "",
       role: "",
       pageNum: 1,
+      diaTitle:"新增",
       pageSize: 10,
-      data: null,
+      data: {records:{}},
       fileList: [],
-      currentPage1: 5,
-      updateDialogVisible: false,
+      dialogTableVisible: false,
+      dialogInportVisible: false,
       fileDialogVisible: false,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
-      searchTitle:"",
-      input: "",
-      input1: "",
-      deleteRow: "",
-      delVisible: false,
-      formInline: {
-        user: "",
-        region: "",
-      },
-      page: {
-        size: 10,
-        current: 1,
-      },
-      total: 0,
       addForm: {
         userName: "",
         realName: "",
         region: "",
       },
-      cancle() {},
-      updateRow(row) {
-        this.updateDialogVisible = true;
-        this.form = row;
-      },
-      diaTitle: "新增",
-      dialogTableVisible: false,
-      dialogFormVisible: false,
-
       form: {
         gradeName: "",
       },
       formLabelWidth: "110px",
+      // updateDialogVisible: false,
     };
   },
   created() {
+    // 获取用户角色
     this.role = localStorage.getItem("roles");
+    // 获取分页数据
     this.getUserPage();
   },
   methods: {
-    Import() {
-      this.dialogFormVisible = true;
-    },
     // 分页查询
-    async getUserPage(pageNum, pageSize, realName = null,gradeId=null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, realName: realName,gradeId:gradeId };
+    async getUserPage(pageNum, pageSize, realName = null, gradeId = null) {
+      const params = {
+        pageNum: pageNum,
+        pageSize: pageSize,
+        realName: realName,
+        gradeId: gradeId,
+      };
+      console.log("params", params);
       const res = await userPaging(params);
-      this.data = res.data.records;
-      this.page.size = res.data.size;
-      this.page.current = res.data.page;
-      this.total = res.data.total;
+      this.data = res.data;
     },
-    searchUser(){
-      this.getUserPage(this.pageNum,this.pageSize,this.input,this.input1)
+    // 搜索功能
+    searchUser() {
+      console.log(this.searchRealName, this.searchClassName);
+      this.getUserPage(
+        this.pageNum,
+        this.pageSize,
+        this.searchRealName,
+        this.searchClassName
+      );
     },
-   
+    // 设置每页多少条逻辑
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.getUserPage(this.pageNum, val);
+    },
+    // 设置当前页逻辑
+    handleCurrentChange(val) {
+      this.pageNum = val;
+      this.getUserPage(val, this.pageSize);
+    },
+    // 添加用户逻辑
+    addClass() {
+      const data = {
+        userName: this.addForm.userName,
+        realName: this.addForm.realName,
+        roleId: 1,
+      };
+      classAdd(data).then((res) => {
+        if (res.code) {
+          this.getUserPage(this.pageNum, this.pageSize);
+          this.dialogTableVisible = false;
+          this.$message({
+            type: "success",
+            message: "新增成功!",
+          });
+        } else {
+          this.$message({
+            type: "info",
+            message: res.msg,
+          });
+        }
+      });
+    },
     // 上传文件逻辑
     importUser() {
       if (this.fileList.length > 0) {
@@ -319,46 +319,6 @@ export default {
       if (fileList.length == 0) {
         this.hasFiles = false;
       }
-    },
-    updateUser() {
-      // 修改用户逻辑
-    },
-    updateRow(row) {
-      this.dialogFormVisible = true;
-      this.form = row;
-    },
-    // 分页查询
-    async getUserPage(pageNum, pageSize, realName = null, gradeId = null) {
-      const params = {
-        pageNum: pageNum,
-        pageSize: pageSize,
-        realName: realName,
-        gradeId: gradeId,
-      };
-      const res = await userPaging(params);
-      this.data = res.data;
-    },
-    addClass() {
-      const data = {
-        userName: this.addForm.userName,
-        realName: this.addForm.realName,
-        roleId: 1,
-      };
-      classAdd(data).then((res) => {
-        if (res.code) {
-          this.getUserPage(this.pageNum, this.pageSize);
-          this.dialogTableVisible = false;
-          this.$message({
-            type: "success",
-            message: "新增成功!",
-          });
-        } else {
-          this.$message({
-            type: "info",
-            message: res.msg,
-          });
-        }
-      });
     },
     delUser(row) {
       this.$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
@@ -391,66 +351,60 @@ export default {
           });
         });
     },
-    removeUserClass(row){
-      userClassRemove(row.id).then((res)=>{
-        if(res.code){
+    // 移除用户班级
+    removeUserClass(row) {
+      userClassRemove(row.id).then((res) => {
+        if (res.code) {
           this.getUserPage(this.pageNum, this.pageSize);
           this.$message({
             type: "success",
             message: "移除成功!",
           });
-        }else{
+        } else {
           this.$message({
             type: "info",
             message: res.msg,
           });
         }
-      })
+      });
     },
-    handleClick(row) {
-      console.log(row);
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
-    searchUser() {
-      console.log(this.input1);
-      this.getUserPage(this.pageNum, this.pageSize, this.input, this.input1);
-    },
+    // updateUser() {
+    //   // 修改用户逻辑
+    // },
+    // updateRow(row) {
+    //   this.dialogFormVisible = true;
+    //   this.form = row;
+    // },
+    // 删除用户
   },
   computed: {
-    tables() {
-      //在你的数据表格中定义tabels
-      const input = this.input;
-      const input1 = this.input1;
-      if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input) > -1;
-          });
-        });
-      }
-      if (input1) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input1) > -1;
-          });
-        });
-      }
-
-      return this.tableData;
-    },
+    // tables() {
+    //   //在你的数据表格中定义tabels
+    //   const input = this.input;
+    //   const input1 = this.input1;
+    //   if (input) {
+    //     // console.log("input输入的搜索内容：" + this.input)
+    //     return this.tableData.filter((data) => {
+    //       console.log("object:" + Object.keys(data));
+    //       return Object.keys(data).some((key) => {
+    //         return String(data[key]).toLowerCase().indexOf(input) > -1;
+    //       });
+    //     });
+    //   }
+    //   if (input1) {
+    //     // console.log("input输入的搜索内容：" + this.input)
+    //     return this.tableData.filter((data) => {
+    //       console.log("object:" + Object.keys(data));
+    //       return Object.keys(data).some((key) => {
+    //         return String(data[key]).toLowerCase().indexOf(input1) > -1;
+    //       });
+    //     });
+    //   }
+    //   return this.tableData;
+    // },
   },
 };
 </script>
-
 <style>
 .el-table--border,
 .el-table--group {

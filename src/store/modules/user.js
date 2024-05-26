@@ -37,8 +37,6 @@ const mutations = {
 const decode = () => {
   const token = getToken();
   const user = parseJwt(token);
-
-
   this.user=JSON.parse(user.userInfo)
 }
 
@@ -49,9 +47,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       login(userInfo).then(response => {
         const { data } = response
-        console.log(response);
         if (response.code === 1) {
-          console.log(1111111111)
           const info = parseJwt(data);
           const roleId = JSON.parse(info.userInfo).roleId
           if(roleId === 1){
@@ -62,7 +58,6 @@ const actions = {
           }else if(roleId === 3){
             window.localStorage.setItem('roles','admin')
           }
-          console.log()
           commit('SET_TOKEN', data)
           setToken(data)
           resolve()

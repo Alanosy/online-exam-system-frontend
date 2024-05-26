@@ -31,10 +31,11 @@
       <el-table :data="data.records" border>
         <el-table-column fixed prop="id" label="序号" align="center" />
         <el-table-column prop="title" label="试卷名称" align="center" />
-        <el-table-column prop="province" label="考试班级" align="center" />
-        <el-table-column prop="city" label="最低分" align="center" />
-        <el-table-column prop="address" label="最高分" align="center" />
-        <el-table-column prop="zip" label="评价分" align="center" />
+        <el-table-column prop="realName" label="真实姓名" align="center" />
+        <el-table-column prop="userScore" label="用户得分" align="center" />
+        <el-table-column prop="count" label="切屏次数" align="center" />
+        <el-table-column prop="userTime" label="用户用时" align="center" />
+        <el-table-column prop="limitTime" label="提交时间" align="center" />
 
         <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="{row}">

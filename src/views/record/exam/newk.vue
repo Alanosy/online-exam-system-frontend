@@ -1,6 +1,6 @@
 <template>
   <el-container style="height: 700px; border: 1px solid #eee">
-    <div class="left">
+    <!-- <div class="left">
       <div class="fk">
         <div
           style="
@@ -42,7 +42,7 @@
           </el-row>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <el-container>
       <el-main class="right">
@@ -56,7 +56,7 @@
                       <!-- 题目: 序号、类型、题干 -->
                       <div>
                         <!-- <div class="qu_num">{{ index }}</div> -->
-                        【 单选题 】
+                        <!-- 【 单选题 】 -->
                         <div class="qu_content">{{ index.title }}</div>
                       </div>
 
@@ -65,13 +65,14 @@
                         <!-- ['A', 'B', 'C', 'D'] -->
                         <el-radio
                           v-for="(item, indexs) in index.option"
+                          :label="item.content"
                           border
                           class="qu_choose"
                         >
                           <!-- 选项flex浮动 -->
                           <div class="qu_choose_tag">
                             <div class="qu_choose_tag_type">
-                              {{ indexs }}、{{ item.content }}.
+                              {{ numberToLetter(indexs) }}、{{ item.content }}.
                             </div>
                             <!-- 选项内容和图片 -->
                             <div class="qu_choose_tag_content"></div>
@@ -86,17 +87,22 @@
                       <div class="qu_analysis">
                         <el-card>
                           <div>
-                           
-
                             <span>考生答案：</span>
-                            <span :style="{ color: isRight === 1 ? 'green' : isRight === 0 ? 'red' : 'gray' }">{{
-                              index.myOption
-                            }}</span
+                            <span
+                              :style="{
+                                color:
+                                  isRight === 1
+                                    ? 'green'
+                                    : isRight === 0
+                                    ? 'red'
+                                    : 'gray',
+                              }"
+                              >{{ numberToLetter(index.myOption) }}</span
                             ><br />
                           </div>
                           <div style="margin-top: 8px">
                             <span>正确答案：</span>
-                            <span>{{ index.rightOption }}</span
+                            <span>{{ numberToLetter(index.rightOption) }}</span
                             ><br />
                           </div>
                           <div style="margin-top: 8px">
@@ -111,12 +117,12 @@
                   <el-divider></el-divider>
                 </div>
               </template>
-              <template v-for="index in 10">
+              <!-- <template v-for="index in 10">
                 <div :class="'index' + index">
-                  <!-- 简答 -->
+               
                   <el-row :gutter="24">
                     <el-col :span="20" style="text-align: left">
-                      <!-- 题目: 序号、类型、题干 -->
+                   
                       <div>
                         <div class="qu_num">{{ index }}</div>
                         【 简答题 】
@@ -126,7 +132,7 @@
                         Model（模型）：是应用程序中用于处理应用程序数据逻辑的部分。通常模型对象负责在数据库中存取数据
                         View（视图）：是应用程序中处理数据显示的部分。
                       </div>
-                      <!-- 题目解析 -->
+
                       <div class="qu_analysis">
                         <el-card>
                           <div style="display: flex; align-items: center">
@@ -146,7 +152,7 @@
                     </el-col>
                   </el-row>
                 </div>
-              </template>
+              </template> -->
             </div>
             <el-divider />
           </el-card>
@@ -170,10 +176,40 @@ export default {
   },
   created() {
     // this.examId=this.$route.query.zhi.examId
-    this.examId = this.$route.query.zhi.id;
+    this.examId = localStorage.getItem("record_exam_examId");
     this.ExamDetail();
   },
   methods: {
+    numberToLetter(input) {
+      const numberToCharMap = {
+        0: "A",
+        1: "B",
+        2: "C",
+        3: "D",
+        4: "E",
+        5: "F",
+      };
+
+      // 辅助函数：将单个数字（字符串或数字类型）转换为字母
+      const singleNumberToLetter = (num) => numberToCharMap[parseInt(num, 10)] || "";
+
+      // 辅助函数：处理逗号分隔的数字字符串
+      const commaSeparatedNumbersToLetters = (str) => {
+        const numbers = str.split(",").map((item) => parseInt(item.trim(), 10));
+        return numbers.map((number) => numberToCharMap[number] || "").join(",");
+      };
+
+      // 判断输入类型并调用相应函数
+      if (/^\d+$/.test(input)) {
+        // 单个数字（字符串形式也可以匹配）
+        return singleNumberToLetter(input);
+      } else if (/^\d+(,\d+)*$/.test(input)) {
+        // 包含逗号分隔的数字字符串
+        return commaSeparatedNumbersToLetters(input);
+      } else {
+        return ""; // 输入不符合预期，返回空字符串或根据需要处理
+      }
+    },
     // 分页查询
     async ExamDetail() {
       const params = { examId: this.examId };
@@ -286,7 +322,7 @@ export default {
         // 选项标签
         .qu_choose_tag_type {
           font-weight: bold;
-          color: #0a84ff;
+          // color: #0a84ff;
           width: 10px;
         }
         // 选项内容

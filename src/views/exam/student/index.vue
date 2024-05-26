@@ -24,7 +24,7 @@
 
     <!-- table -->
     <div style="margin: auto; width: 1200px" align="center">
-      <el-table :data="data" border>
+      <el-table :data="data.records" border>
         <el-table-column fixed prop="id" label="序号" align="center" />
         <el-table-column prop="title" label="试卷名称" align="center" />
         <el-table-column prop="examDuration" label="考试时间" align="center" />
@@ -49,11 +49,11 @@
     <div class="block">
       <span class="demonstration" />
       <el-pagination
-        :current-page="currentPage4"
+        :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
-        :page-size="10"
+        :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="2"
+        :total="data.total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -74,51 +74,6 @@ export default {
         user: "",
         region: "",
       },
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1517 弄",
-          zip: 200333,
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1519 弄",
-          zip: 200333,
-        },
-        {
-          date: "",
-          name: "",
-          province: "",
-          city: "",
-          address: "",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1516 弄",
-          zip: 200333,
-        },
-      ],
       formInline: {
         user: "",
         region: "",
@@ -148,22 +103,29 @@ export default {
             const res = await getGradeExamList(params);
             this.data = res.data;
         },
-        searchExamStu(){
-          this.getExamGradePage(this.pageNum,this.pageSize,this.searchTitle)
-        },
+
     onSubmit() {
       console.log("submit!");
     },
     screenInfo(row) {
       console.info("=====", row);
+      localStorage.setItem("examInfo_examId", row.id);
       this.$router.push({ name: "text", query: { zhi: row } });
     },
+    searchExamStu() {
+      this.getExamGradePage(this.pageNum, this.pageSize, this.searchTitle);
+    },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // 设置每页多少条逻辑
+      this.pageSize = val;
+      this.getExamGradePage(this.pageNum, val);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // 设置当前页逻辑
+      this.pageNum = val;
+      this.getExamGradePage(val, this.pageSize);
     },
+
     open() {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",

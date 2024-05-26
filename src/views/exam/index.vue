@@ -185,9 +185,7 @@ export default {
   },
   created() {
     this.examId = localStorage.getItem("examId");
-    // this.receivedRow = this.$route.query.zhi;
     this.startExam(localStorage.getItem("examId"));
-    // const id =  this.$route.query.zhi.id;
     this.paperId = localStorage.getItem("examId");
     this.fetchData(localStorage.getItem("examId"));
     // if (typeof id !== 'undefined') {
@@ -199,22 +197,21 @@ export default {
      startExam(examId) {
       examQuList(examId).then((res) => {
         this.paperData = res.data;
-        console(this.paperData);
       });
     },
     numberToLetter(sort) {
       switch (sort) {
-        case 1:
+        case 0:
           return "A";
-        case 2:
+        case 1:
           return "B";
-        case 3:
+        case 2:
           return "C";
-        case 4:
+        case 3:
           return "D";
-        case 5:
+        case 4:
           return "E";
-        case 6:
+        case 5:
           return "F";
         default:
           return ""; // 默认值，或者可以处理其他情况
@@ -223,8 +220,6 @@ export default {
 
     // 答题卡样式
     cardItemClass(checkout, quId) {
-
-
       if ( sessionStorage.getItem("exam_"+quId)==1 || checkout) {
         return "success";
       }

@@ -2,22 +2,22 @@
  * @Author: st 2946594574@qq.com
  * @Date: 2024-03-04 10:55:05
  * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-05-16 15:13:43
+ * @LastEditTime: 2024-05-20 09:07:35
  * @FilePath: \com-project\src\views\login\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="login-container">
     <el-form
-      ref="loginForm"
-      :model="loginForm"
+      ref="registerForm"
+      :model="registerForm"
       :rules="loginRules"
       class="login-form"
       auto-complete="on"
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">Rigister Form</h3>
       </div>
 
       <el-form-item prop="username">
@@ -25,7 +25,7 @@
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          v-model="loginForm.username"
+          v-model="registerForm.userName"
           ref="username"
           placeholder="Username"
           name="username"
@@ -34,7 +34,20 @@
           auto-complete="on"
         />
       </el-form-item>
-
+      <el-form-item prop="realName">
+        <span class="svg-container">
+          <svg-icon icon-class="user" />
+        </span>
+        <el-input
+          v-model="registerForm.realName"
+          ref="realName"
+          placeholder="realName"
+          name="realName"
+          type="text"
+          tabindex="1"
+          auto-complete="on"
+        />
+      </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
@@ -42,7 +55,7 @@
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="loginForm.password"
+          v-model="registerForm.password"
           :type="passwordType"
           placeholder="Password"
           name="password"
@@ -52,6 +65,26 @@
         />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+        </span>
+      </el-form-item>
+
+      <el-form-item prop="checkedPassword">
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input
+          :key="checkedPasswordType"
+          ref="checkedPassword"
+          v-model="registerForm.checkedPassword"
+          :type="checkedPasswordType"
+          placeholder="checkedPassword"
+          name="checkedPassword"
+          tabindex="2"
+          auto-complete="on"
+          @keyup.enter.native="handleLogin"
+        />
+        <span class="show-pwd" @click="showPwd2">
+          <svg-icon :icon-class="checkedPasswordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
 
@@ -78,27 +111,20 @@
           alt=""
         />
       </div>
-    <div style="display: flex; align-items: center; justify-content: flex-end;margin-bottom: 20px;">
-      <router-link style="color:#66b1ff" to="/register">  
+        <div style="display: flex; align-items: center; justify-content: flex-end;margin-bottom: 20px;">
 
-      立即注册
-
-    </router-link>
+        <router-link style="color: #66b1ff" to="/login"> 登录 </router-link>
     </div>
-      <!-- <div style="display: flex"> -->
-      <el-form-item>
+
+
         <el-button
           :loading="loading"
           type="primary"
-          style="width: 100%;"
-          @click.native.prevent="handleLogin"
-          >login</el-button
+          style="width: 100%; margin-bottom: 30px"
+          @click="registerFn"
+          >rigister</el-button
         >
-      </el-form-item>
-        
-          <!-- <div style="margin-left: 10px" class="but">rigister</div> -->
-      
-      <!-- </div> -->
+
     </el-form>
   </div>
 </template>
@@ -108,7 +134,7 @@ import { validUsername } from "@/utils/validate";
 import { sendEmail } from "@/api/email";
 import { setToken } from "@/utils/auth";
 import axios from "axios";
-import { verifyCode } from "@/api/user";
+import { verifyCode,register } from "@/api/user";
 import { Message } from "element-ui";
 
 export default {
@@ -129,9 +155,12 @@ export default {
       }
     };
     return {
-      loginForm: {
-        username: "admin",
-        password: "123456",
+      registerForm: {
+        userName: "",
+        password: "",
+        realName:"",
+        checkedPassword:"",
+
       },
       code: "",
       loginRules: {
@@ -140,6 +169,7 @@ export default {
       },
       loading: false,
       passwordType: "password",
+      checkedPasswordType: "password",
       redirect: undefined,
     };
   },
@@ -155,6 +185,36 @@ export default {
     // this.getEmail()
   },
   methods: {
+    registerFn(){ 
+      verifyCode(this.code).then((res) => {
+        if (res.code) {
+
+          register(this.registerForm).then((res2)=>{
+            if(res2.code){
+              Message({
+                message: res2.msg,
+                type: "success",
+                duration: 5 * 1000,
+              });
+              this.$router.push({ path: "/login" });
+            }else{
+              Message({
+                message: res2.msg,
+                type: "error",
+                duration: 5 * 1000,
+              });
+          }
+          })
+        } else {
+          this.getVerify();
+          this.$message({
+            type: "info",
+            message: res.msg,
+          });
+        }
+      });
+
+    },
     getVerify(obj) {
       obj.src = "/api/auths/captcha?" + Math.random();
     },
@@ -174,35 +234,14 @@ export default {
         this.$refs.password.focus();
       });
     },
-    handleLogin() {
-      verifyCode(this.code).then((res) => {
-        if (res.code) {
-          this.$refs.loginForm.validate((valid) => {
-            if (valid) {
-              this.loading = true;
-              this.$store
-                .dispatch("user/login", this.loginForm)
-                .then(() => {
-                  this.$router.push({ path: this.redirect || "index" });
-                  this.loading = false;
-                })
-                .catch((error) => {
-                  console.log(error);
-                  Message.error(error.msg);
-                  this.loading = false;
-                });
-            } else {
-              console.log("error submit!!");
-              return false;
-            }
-          });
-        } else {
-          this.getVerify();
-          this.$message({
-            type: "info",
-            message: res.msg,
-          });
-        }
+    showPwd2() {
+      if (this.checkedPasswordType === "password") {
+        this.checkedPasswordType = "";
+      } else {
+        this.checkedPasswordType = "password";
+      }
+      this.$nextTick(() => {
+        this.$refs.password.focus();
       });
     },
   },
@@ -210,9 +249,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
 $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
@@ -317,6 +353,7 @@ $light_gray: #eee;
     cursor: pointer;
     user-select: none;
   }
+
   .but {
     width: 220px;
     height: 39px;

@@ -26,7 +26,7 @@
         <el-table-column align="center" label="操作">
 
           <template slot-scope="{row}">
-            <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">查看</el-button>
+            <!-- <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">查看</el-button> -->
             <el-button type="text" size="small" style="color: red; font-size: 14px"
             @click="screenInfo(row)">重刷</el-button>
           </template>
@@ -37,7 +37,7 @@
       </el-table>
     </div>
     <div class="block">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4"
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]" :page-size="data.size" layout="total, sizes, prev, pager, next, jumper"
         :total="data.total">
       </el-pagination>
@@ -60,7 +60,6 @@
             <el-form-item label="试卷名称" :label-width="formLabelWidth">
               <el-input v-model="form.sjmc" :disabled="true"></el-input>
             </el-form-item>
-
           </el-form>
         </el-col>
 
@@ -113,27 +112,7 @@ export default {
         user: '',
         region: ''
       },
-      tableData: [{
-        xh: '1',
-        sjmc: '数学第一次测试',
-        ctsl: '4',
-        cjsj: '2024.2.1',
-      }, {
-        xh: '2',
-        sjmc: '英语第一次测试',
-        ctsl: '4',
-        cjsj: '2024.2.1',
-      }, {
-        xh: '3',
-        sjmc: '语文第一次测试',
-        ctsl: '4',
-        cjsj: '2024.2.1',
-      }, {
-        xh: '4',
-        sjmc: '历史第一次测试',
-        ctsl: '4',
-        cjsj: '2024.2.1',
-      }],
+    
       dialogVisible: false,
       form: {
         name: '',
@@ -188,8 +167,7 @@ export default {
     },
 
     screenInfo(row) {
-      console.info("=====", row);
-      this.$router.push({ name: "Chongshua", query: { zhi: row } });
+      localStorage.setItem("userbook_examId", row.examId);
     },
   },
   computed: {
