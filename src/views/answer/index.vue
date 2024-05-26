@@ -194,6 +194,7 @@ export default {
     },
     screenInfo(row) {
       console.info("=====", row);
+      localStorage.setItem("answer_examId", row.examId);
       this.$router.push({ name: "Ansck", query: { zhi: row } });
     },
     open(index) {

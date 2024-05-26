@@ -177,12 +177,12 @@ export const constantRoutes = [
         component: () => import('@/views/record/exam/index.vue'),
         meta: { title: '考试记录',visiable:true,roles:['teacher','admin','student'], icon: 'table' }
       },
-      // {
-      //   path: '/questrecord',
-      //   name: 'Examrecord2',
-      //   component: () => import('@/views/record/exercise/index.vue'),
-      //   meta: { title: '刷题记录',visiable:true,roles:['teacher','admin','student'], icon: 'tree' }
-      // }
+      {
+        path: '/questrecord',
+        name: 'Examrecord2',
+        component: () => import('@/views/record/exercise/index.vue'),
+        meta: { title: '刷题记录',visiable:true,roles:['teacher','admin','student'], icon: 'tree' }
+      }
     ]
   },
   {

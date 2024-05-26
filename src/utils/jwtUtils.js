@@ -1,3 +1,5 @@
+import { getToken } from "@/utils/auth";
+import {jwtDecode} from 'jwt-decode';
 export function parseJwt(token) {
     // 分割JWT的三个部分
     var parts = token.split('.');
@@ -23,3 +25,16 @@ function decodeBase64Url(input) {
     return decodeURIComponent(atob(base64));
 }
   
+// export function getTokenInfo() {
+//     const token = getToken();
+//     const user = parseJwt(token);
+//     return JSON.parse(user.userInfo)
+//   }
+
+
+
+export function getTokenInfo() {
+    const token = getToken();
+    const decodedToken = jwtDecode(token);
+    return JSON.parse(decodedToken.userInfo); // 假设userInfo是直接在payload中的
+}

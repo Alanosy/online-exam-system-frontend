@@ -14,9 +14,9 @@
       <!-- table -->
       <div style="margin: auto; width: 1200px" align="center">
         <el-table :data="data.records" border>
-          <el-table-column fixed prop="date" label="序号" align="center" />
-          <el-table-column prop="uesrname" label="用户名字" align="center" />
-          <el-table-column prop="time" label="考试时间" align="center" />
+          <el-table-column fixed prop="userId" label="序号" align="center" />
+          <el-table-column prop="userName" label="用户名字" align="center" />
+          <el-table-column prop="limitTime" label="提交时间" align="center" />
 
           <el-table-column fixed="right" label="操作" align="center">
             <template slot-scope="{ row }">
@@ -34,7 +34,7 @@
       <div class="block">
         <span class="demonstration" />
         <el-pagination
-          :current-page="currentPage4"
+          :current-page="data.current"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="data.size"
           layout="total, sizes, prev, pager, next, jumper"
@@ -55,12 +55,13 @@ export default {
       pageNum: 1,
       pageSize: 10,
       data: null,
+      examId:"",
     };
   },
   created() {
-    console.log(this.$route.query.zhi.examId);
-    // alert(this.$router.query.zhi.examId),,;
-    this.getAnswerUserPage(this.pageNum,this.pageSize,this.$route.query.zhi.examId);
+
+    this.examId=localStorage.getItem("answer_examId")
+    this.getAnswerUserPage(this.pageNum,this.pageSize,localStorage.getItem("answer_examId"));
   },
   methods: {
     getAnswerUserPage(pageNum, pageSize,examId) {
