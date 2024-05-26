@@ -3,7 +3,7 @@
     <el-row :gutter="24">
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
-          {{ repoTitle }} 错题本
+         错题本
           <el-button
             :loading="loading"
             style="float: right; margin-top: -10px"
@@ -20,16 +20,16 @@
       >
       <el-col :span="24">
         <el-card class="qu-content content-h">
-          <!-- {{ quData.sort + 1 }}. -->
+          <!-- 题干 -->
           <p v-if="quData.content">{{ quData.content }}</p>
           <p v-if="quData.image != null && quData.image != ''">
             <el-image :src="quData.image" style="max-width: 100%" />
           </p>
-          <!-- v-if="quData.quType === 1 || quData.quType === 3" v-model="radioValue" -->
-          <div>
-            <el-radio-group>
+          <div v-if="quData.quType === 1 || quData.quType === 3">
+          <!-- 选项 -->
+            <el-radio-group  v-model="radioValue">
               <el-radio v-for="item in quData.answerList" :label="item.id"
-                >{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
+                >{{ numberToLetter(item.sort)}}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -43,7 +43,7 @@
                 v-for="item in quData.answerList"
                 :key="item.id"
                 :label="item.id"
-                >{{ item.abc }}.{{ item.content }}
+                >{{  numberToLetter(item.sort)  }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -51,14 +51,18 @@
             </el-checkbox-group>
           </div>
 
+          <div v-if="nextText">
+            <p>
+              回答：<span>{{ rightQuAnswer.msg }}</span>
+            </p>
+            <p>正确答案：{{ getRightAnswer() }}</p>
+            <p>试题分析：{{ rightQuAnswer.data.analysis }}</p>
+          </div>
           <div style="margin-top: 20px">
-            <!-- v-if="showPrevious" -->
-            <el-button type="primary" @click="handPrevious()">
+            <!-- <el-button type="primary" @click="handPrevious()">
               上一题
-            </el-button>
-            <!-- v-if="showNext" -->
+            </el-button> -->
             <el-button
-             
               type="warning"
               icon="el-icon-right"
               @click="handNext()"
@@ -86,15 +90,21 @@ export default {
       loading: false,
       handleText: "提交",
       pageLoading: false,
+      nextText:false,
       userBookList: [],
       index: 0,
+      quDataLen:0,
       examId: "",
       // 当前题目内容
       quData: {
         answerList: [],
       },
       // 试卷信息
-
+      radioValue: "",
+      // 多选选定值
+      multiValue: [],
+      // 已答ID
+      answeredIds: [],
       paperData: {
         leftSeconds: 99999,
         radioList: [],
@@ -123,39 +133,10 @@ export default {
     getUserBookListFun() {
       getUserBookList(this.examId).then((res) => {
         this.userBookList = res.data;
+        this.quDataLen = res.data.length
         this.getSingleQuFun(res.data[this.index]["quId"]);
       });
     },
-    //   handHandExam() {
-    //     const that = this;
-
-    //     // 交卷保存答案
-    //     this.handSave(this.cardItem, function () {
-    //       const notAnswered = that.countNotAnswered();
-
-    //       let msg = "确认要交卷吗？";
-
-    //       if (notAnswered > 0) {
-    //         msg = "您还有" + notAnswered + "题未作答，确认要交卷吗?";
-    //       }
-
-    //       that
-    //         .$confirm(msg, "提示", {
-    //           confirmButtonText: "确定",
-    //           cancelButtonText: "取消",
-    //           type: "warning",
-    //         })
-    //         .then(() => {
-    //           that.doHandler();
-    //         })
-    //         .catch(() => {
-    //           that.$message({
-    //             type: "info",
-    //             message: "交卷已取消，您可以继续作答！",
-    //           });
-    //         });
-    //     });
-    //   },
     numberToLetter(sort) {
       switch (sort) {
         case 0:
@@ -194,91 +175,45 @@ export default {
     },
     // 保存答案
     handSave(index) {
-      // if (item.id === this.allItem[0].id) {
-      //   this.showPrevious = false;
-      // } else {
-      //   this.showPrevious = true;
-      // }
+      const answers = this.multiValue;
+      if (this.radioValue !== "") {
+        answers.push(this.radioValue);
+      }
+      const params = {
+        examId: this.examId,
+        quId: this.userBookList[index]["quId"],
+        answer: answers.join(","),
+ 
+      };
+      fullBook(params).then((res) => {
+        if (res.code) {
+          console.log(res)
 
-      // 最后一个索引
-      // const last = this.quData.length - 1;
-
-      // if (item.id === this.allItem[last].id) {
-      //   this.showNext = false;
-      // } else {
-      //   this.showNext = true;
-      // }
-
-      // const answers = this.multiValue;
-      // if (this.radioValue !== "") {
-      //   answers.push(this.radioValue);
-      // }
-      // console.log("1a");
-      // console.log(this.cardItem);
-      // const params = {
-      //   examId: this.paperId,
-      //   quId: this.cardItem.questionId,
-      //   answer: answers.join(","),
-      //   // answer: "",
-      // };
-      // fillAnswer(params).then((res) => {
-      //   if(res.code){
-      //     sessionStorage.setItem("exam_"+this.cardItem.questionId, 1);
-      //   }else{
-      //     sessionStorage.setItem("exam_"+this.cardItem.questionId, 0);
-      //   }
-      //   // 必须选择一个值
-      //   if (answers.length > 0) {
-      //     // 加入已答列表
-      //     this.cardItem.answered = true;
-      //   }
-
-      //   // 最后一个动作，交卷
-      //   if (callback) {
-      //     callback();
-      //   }
-
+     if(res.data.correct){
+      this.$message({
+                type: "info",
+                message: res.msg,
+              });
+     }else{
+      this.$message({
+                type: "success",
+                message: res.msg,
+              });
+     }
+        } else {
+          this.$message({
+                type: "success",
+                message: res.msg,
+              });
+        }
+      });
       // 查找详情
       this.fetchQuData(index);
       // });
     },
     // 试卷详情
     fetchQuData(index) {
-      // 打开
-      // const loading = Loading.service({
-      //   text: "拼命加载中",
-      //   background: "rgba(0, 0, 0, 0.7)",
-      // });
-
-      // 获得详情
-      // this.cardItem = item;
-      // const examId = localStorage.getItem("examId");
-      // 查找下个详情
-      // const params = { examId: examId, questionId: item.questionId };
       this.getSingleQuFun(this.userBookList[index]["quId"])
-      // quDetail(params).then((response) => {
-      //   // console.log(response);
-      //   console.log("=================");
-      //   console.log(response.data);
-      //   console.log("=================");
-      //   this.quData = response.data;
-      //   this.radioValue = "";
-      //   this.multiValue = [];
-
-      //   // 填充该题目的答案
-      //   this.quData.answerList.forEach((item) => {
-      //     console.log(item, "ttt");
-      //     if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checkout) {
-      //       this.radioValue = item.id;
-      //     }
-      //     if (this.quData.quType === 2 && item.checkout) {
-      //       this.multiValue.push(item.id);
-      //     }
-      //   });
-
-      //   // 关闭详情
-      //   loading.close();
-      // });
     },
   },
 };

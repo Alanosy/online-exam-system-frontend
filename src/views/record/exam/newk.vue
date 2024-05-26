@@ -49,8 +49,8 @@
         <el-col>
           <el-card class="qu_list">
             <div>
-              <template v-for="index in data">
-                <div :class="'index' + index">
+              <template v-for="index in data" >
+                <div :class="'index' + index" v-if="index.quType===1||index.quType===2||index.quType===3">
                   <el-row :gutter="24">
                     <el-col :span="20" style="text-align: left">
                       <!-- 题目: 序号、类型、题干 -->
@@ -117,42 +117,63 @@
                   <el-divider></el-divider>
                 </div>
               </template>
-              <!-- <template v-for="index in 10">
-                <div :class="'index' + index">
-               
+              <template v-for="index in data" >
+                <div :class="'index' + index" v-if="index.quType===4">
                   <el-row :gutter="24">
                     <el-col :span="20" style="text-align: left">
-                   
+                      <!-- 题目: 序号、类型、题干 -->
                       <div>
-                        <div class="qu_num">{{ index }}</div>
-                        【 简答题 】
-                        <div class="qu_content">这里是简答题的题干信息</div>
-                      </div>
-                      <div class="content">
-                        Model（模型）：是应用程序中用于处理应用程序数据逻辑的部分。通常模型对象负责在数据库中存取数据
-                        View（视图）：是应用程序中处理数据显示的部分。
+                        <!-- <div class="qu_num">{{ index }}</div> -->
+                        <!-- 【 单选题 】 -->
+                        <div class="qu_content">{{ index.title }}</div>
                       </div>
 
+                      <!-- 选项 -->
+                      <el-radio-group class="qu_choose_group">
+                        <!-- ['A', 'B', 'C', 'D'] -->
+                        <el-input
+                        style="margin-top:10px"
+                                type="textarea"
+                                :autosize="{ minRows: 2, maxRows: 4}"
+                                placeholder="请输入内容"
+                                v-model="textarea2">
+                              </el-input>
+                      </el-radio-group>
+
+                      <!-- 题目解析 -->
                       <div class="qu_analysis">
                         <el-card>
-                          <div style="display: flex; align-items: center">
-                            <span style="color: #e6a23c">分数：</span>
-                            <el-input
-                              v-model="input"
-                              type="number"
-                              style="width: 100px; margin-left: 20px"
-                            ></el-input>
+                          <div>
+                            <span>考生答案：</span>
+                            <span
+                              :style="{
+                                color:
+                                  isRight === 1
+                                    ? 'green'
+                                    : isRight === 0
+                                    ? 'red'
+                                    : 'gray',
+                              }"
+                              >{{ numberToLetter(index.myOption) }}</span
+                            ><br />
                           </div>
-                          <div style="margin-top: 18px">
-                            <span> 试题解析：</span>
-                            <span>这里是试题解析部分</span>
+                          <div style="margin-top: 8px">
+                            <span>正确答案：</span>
+                            <span>{{ index.option[0].content  }}</span
+                            ><br />
+                          </div>
+                          <div style="margin-top: 8px">
+                            <span>试题解析：</span>
+                            <span>{{ index.analyse }}</span
+                            ><br />
                           </div>
                         </el-card>
                       </div>
                     </el-col>
                   </el-row>
+                  <el-divider></el-divider>
                 </div>
-              </template> -->
+              </template>
             </div>
             <el-divider />
           </el-card>

@@ -93,7 +93,7 @@
           <div v-if="quData.quType === 1 || quData.quType === 3">
             <el-radio-group v-model="radioValue">
               <el-radio v-for="item in quData.answerList" :label="item.id"
-                >{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
+                >{{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -107,7 +107,7 @@
                 v-for="item in quData.answerList"
                 :key="item.id"
                 :label="item.id"
-                >{{  numberToLetter(item.sort + 1)  }}.{{ item.content }}
+                >{{  numberToLetter(item.sort)  }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -115,6 +115,25 @@
             </el-checkbox-group>
           </div>
 
+          <div v-if="quData.quType === 4">
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 2, maxRows: 4}"
+              placeholder="请输入内容"
+              v-model="saqTextarea">
+            </el-input>
+            <!-- <el-checkbox-group v-model="multiValue"> -->
+              <!-- <el-checkbox
+                v-for="item in quData.answerList"
+                :key="item.id"
+                :label="item.id"
+                >{{  numberToLetter(item.sort)  }}.{{ item.content }}
+                <div v-if="item.image != null && item.image != ''" style="clear: both">
+                  <el-image :src="item.image" style="max-width: 100%" />
+                </div>
+              </el-checkbox> -->
+            <!-- </el-checkbox-group> -->
+          </div>
           <div style="margin-top: 20px">
             <el-button
               v-if="showPrevious"
@@ -137,6 +156,21 @@
         </el-card>
       </el-col>
     </el-row>
+    <!-- 切屏弹窗 -->
+    <el-dialog title="提示" :visible.sync="tipsFlag" width="480px" class="commonDialog multi clickLight" center :close-on-click-modal="false">
+      <div class="dialogTipsbox" v-if="tips===1">你还有试题未作答，确认要交卷？</div>
+      <div class="dialogTipsbox" v-if="tips===2">
+        最多只能切屏{{switchPage.switchPageTimes}}次，你还可切换{{switchPage.remaTimes}}次，
+        <br />
+        超过{{switchPage.switchPageTimes}}次将强行交卷！
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="tipsFlag = false" v-if="tips===1">取 消</el-button>
+        <el-button type="primary" @click="onConfirmTip" v-if="tips===1">确 定</el-button>
+        <el-button type="primary" @click="onConfirmTip" v-if="tips===2">我知道了</el-button>
+      </span>
+</el-dialog>
+
   </div>
 </template>
 
@@ -158,6 +192,7 @@ export default {
       showNext: true,
       loading: false,
       handleText: "交卷",
+      saqTextarea:"",
       pageLoading: false,
       // 试卷ID
       paperId: "",
@@ -193,7 +228,94 @@ export default {
     //   this.fetchData(28)
     // }
   },
+  mounted() {
+    // 监听滚动
+    window.addEventListener("scroll", this.handleScroll);
+    // 监听浏览器窗口变化
+    window.addEventListener("resize", this.getLfetDistance);
+    // 监听页面可见性
+    window.addEventListener("visibilitychange", this.pageHidden);
+    this.$nextTick(function () {
+      let body = document.querySelector("body");
+      body.style.overflow = "auto";
+      this.flexLeft = (body.offsetWidth - 1200) / 2;
+    });
+  },
   methods: {
+        //切换页面检测
+    //isReduce 0扣次数 1不扣次数 router 判断是否为路由转跳
+    //事件默认参数
+    pageHidden(e = null, isReduce = 0, router = false) {
+      return new Promise((resolve, reject) => {
+        if (document.visibilityState === "hidden" || router) {
+          this.axios({
+            method: "post",
+            url: "/knowledge/exam/saveSwitchPageCount",
+            data: {
+              pkExam: this.testData.pkExam,
+              pkPaper: this.testData.pkPaper,
+              startTime: this.testData.startTime,
+              pkCurExam: this.testData.pkCurExam,
+              isFirst: isReduce,
+              endTime: this.testData.endTime
+            }
+          }).then(res => {
+            let data = res.data;
+            if (data.code == "0") {
+              this.switchPage = data.data;
+              //remaTimes 可切片次数大于0
+              if (
+                this.switchPage.remaTimes >= 0 &&
+                !this.isStop &&
+                (this.switchPage.remaTimes != this.switchPage.switchPageTimes ||
+                  (this.switchPage.remaTimes != 0 &&
+                    this.switchPage.switchPageTimes != 0)) &&
+                this.switchPage.switchPageTimes != 1000
+              ) {
+                this.tipsFlag = true;
+                this.tips = 2;
+              } else if (this.switchPage.remaTimes < 0 && !this.isStop) {
+                this.submitTest();  
+              }
+              resolve();
+            } else {
+              reject();
+            }
+          });
+        }
+      });
+    },
+    submitTest() {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "/knowledge/exam/submitPaper",
+        data: {
+          pkExam: this.pkExam,
+          pkPaper: this.testData.pkPaper,
+          startTime: this.testData.startTime,
+          endTime: this.testData.endTime,
+          pkCurExam: this.testData.pkCurExam
+        }
+      }).then(res => {
+        let data = res.data;
+        this.loading = false;
+        if (data.code == "0") {
+          this.isStop = true;
+          this.tipsFlag = false;
+          this.testResult = data.data;
+          clearInterval(this.countdownTime);
+        } else {
+          this.MixerrorMes(data.message);
+        }
+      });
+    },
+    destroyed() {
+    window.removeEventListener("visibilitychange", this.pageHidden);
+    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("resize", this.getLfetDistance);
+    clearInterval(this.countdownTime); // 计时器
+  },
      startExam(examId) {
       examQuList(examId).then((res) => {
         this.paperData = res.data;

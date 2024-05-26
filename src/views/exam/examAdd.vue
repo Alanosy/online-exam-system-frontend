@@ -373,8 +373,6 @@ export default {
   },
   methods: {
     handleSave() {
-      console.log(this.postForm);
-      console.log(this.repoList);
       this.$refs.postForm.validate((valid) => {
         if (!valid) {
           return;
@@ -523,9 +521,6 @@ export default {
         saqCount: this.postForm.repoList[0].saqCount,
         saqScore: this.postForm.repoList[0].saqScore,
       };
-      console.log("================");
-      console.log(params);
-      console.log("================");
       saveData(params).then(() => {
         this.$notify({
           title: "成功",

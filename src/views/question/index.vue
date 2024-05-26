@@ -3,14 +3,28 @@
     <!-- form -->
     <div class="bj">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form-item label="试题名称" style="margin-left: 28px">
+          <el-input v-model="searchName" placeholder="输入试题名称"></el-input>
+        </el-form-item>
         <el-form-item label="所属题库" style="margin-left: 28px">
-          <el-input v-model="input" placeholder="输入题库"></el-input>
+          <repo-select
+               style="margin-bottom:10px"
+               v-model="selectedRepoSingleSearch" 
+               @change="handleRepoChangeSingle"
+              />
         </el-form-item>
         <el-form-item label="题库类型" style="margin-left: 20px">
-          <el-input v-model="input1" placeholder="输入类型"> </el-input>
+          <el-select v-model="selValue" placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" style="margin-left: 20px"
+          <el-button type="primary" @click="searchQu" style="margin-left: 20px"
             >查询</el-button
           >
         </el-form-item>
@@ -20,12 +34,49 @@
           >
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" style="margin-left: 10px"
+          <el-button type="primary" @click="fileDialogVisible = true" style="margin-left: 10px"
             >导入</el-button
           >
         </el-form-item>
       </el-form>
     </div>
+    <!-- 文件上传 -->
+    <el-dialog
+      width="400px"
+      :show-close="false"
+      :close-on-click-modal="false"
+      title="上传文件"
+      :visible.sync="fileDialogVisible"
+    >
+    <!-- v-model="scope.row.repoId" -->
+    <!-- @change="repoChange($event, scope.row)" -->
+    请选择题库：
+    <repo-select
+               style="margin-bottom:10px"
+               v-model="selectedRepoSingle" 
+               @change="handleRepoChangeSingle"
+              />
+      <el-upload
+        class="upload-demo"
+        drag
+        action="xxxxxx"
+        multiple
+        :limit="1"
+        accept=".xlsx, .xls"
+        :auto-upload="false"
+        :on-remove="handleRemove"
+        :on-change="handleFileChange"
+        :file-list="fileList"
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件，且不超过500kb</div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="fileDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="importQu">确 定</el-button>
+      </div>
+    </el-dialog>
     <!-- table -->
     <div style="width: 95%; margin: auto; margin-top: 20px;margin">
       <el-table :data="data.records" border>
@@ -64,7 +115,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
+        :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
@@ -102,19 +153,38 @@
 </template>
 
 <script>
-import { quPaging, quAdd, quDel, quUpdate } from "@/api/question";
+import { quPaging, quAdd, quDel, quUpdate,importQue } from "@/api/question";
+import RepoSelect from "@/components/RepoSelect";
+
 export default {
+  components: { RepoSelect},
   data() {
     return {
+      options: [{
+          value: null,
+          label: '全部类型'
+        },{
+          value: 1,
+          label: '单选题'
+        }, {
+          value: 2,
+          label: '多选题'
+        }, {
+          value: 3,
+          label: '判断题'
+        }, {
+          value: 4,
+          label: '简答题'
+        }, ],
+        selValue: '',
+        searchName:'',
       pageNum: 1,
       pageSize: 10,
       data: null,
-      input: "",
-      input1: "",
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
+      fileDialogVisible:false,
+
+      selectedRepoSingle: '',
+      selectedRepoSingleSearch:'',
       input: "",
       input1: "",
       formInline: {
@@ -129,7 +199,8 @@ export default {
 
       dialogTableVisible: false,
       dialogFormVisible: false,
-
+      hasFiles:null,
+      fileList:null,
       form: {
         name: "",
         region: "",
@@ -147,9 +218,41 @@ export default {
     this.getQuPage();
   },
   methods: {
+    handleRepoChangeSingle(repo) {
+      console.log('单选题库变化:', repo);
+      // 这里可以进一步处理repo对象，比如更新UI或发送网络请求等
+    },
+    importQu(){
+      if (this.fileList.length > 0 && this.selectedRepoSingle !="") {
+        const formData = new FormData(); // 创建FormData对象
+        formData.append("file", this.fileList[0].raw); // 添加文件到formData
+        importQue(this.selectedRepoSingle,formData)
+          .then((response) => {
+            this.getQuPage(this.pageNum, this.pageSize);
+            this.$message.success("文件上传成功！");
+            this.fileDialogVisible = false; // 关闭对话框
+            // 可以在这里处理成功后的逻辑，如刷新数据等
+          })
+          .catch((error) => {
+            console.error("文件上传失败：", error);
+            this.$message.error("文件上传失败！");
+          });
+      } else {
+        this.$message.warning("请选择文件后再上传！");
+      }
+    },
+    handleFileChange(file, fileList) {
+      this.fileList = fileList; // 收集文件信息
+    },
+    // 移除文件处理方法
+    handleRemove(file, fileList) {
+      if (fileList.length == 0) {
+        this.hasFiles = false;
+      }
+    },
     // 分页查询
-    async getQuPage(pageNum, pageSize, title = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
+    async getQuPage(pageNum, pageSize, content = null,repoId=null,type=null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, content:content,repoId:repoId,type:type };
       const res = await quPaging(params);
       this.data = res.data;
     },
@@ -210,20 +313,16 @@ export default {
           });
         });
     },
-    searchRepo() {
-      this.getQuPage(this.pageNum, this.pageSize, this.searchTitle);
+    searchQu() {
+      this.getQuPage(this.pageNum, this.pageSize, this.searchName,this.selectedRepoSingleSearch,this.selValue);
     },
-    onSubmit() {
-      console.log("submit!");
-    },
+
     screenInfo(row, index, done) {
       console.info("=====", row);
       this.$router.push({ name: "news", query: { zhi: row } });
     },
 
-    handleClick(row) {
-      console.log(row);
-    },
+
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val;
@@ -236,31 +335,31 @@ export default {
     },
   },
   computed: {
-    tables() {
-      //在你的数据表格中定义tabels
-      const input = this.input;
-      const input1 = this.input1;
-      if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input) > -1;
-          });
-        });
-      }
-      if (input1) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input1) > -1;
-          });
-        });
-      }
+    // tables() {
+    //   //在你的数据表格中定义tabels
+    //   const input = this.input;
+    //   const input1 = this.input1;
+    //   if (input) {
+    //     // console.log("input输入的搜索内容：" + this.input)
+    //     return this.tableData.filter((data) => {
+    //       console.log("object:" + Object.keys(data));
+    //       return Object.keys(data).some((key) => {
+    //         return String(data[key]).toLowerCase().indexOf(input) > -1;
+    //       });
+    //     });
+    //   }
+    //   if (input1) {
+    //     // console.log("input输入的搜索内容：" + this.input)
+    //     return this.tableData.filter((data) => {
+    //       console.log("object:" + Object.keys(data));
+    //       return Object.keys(data).some((key) => {
+    //         return String(data[key]).toLowerCase().indexOf(input1) > -1;
+    //       });
+    //     });
+    //   }
 
-      return this.tableData;
-    },
+    //   return this.tableData;
+    // },
   },
 };
 </script>
@@ -269,6 +368,7 @@ export default {
 .el-table--border,
 .el-table--group {
   border: 1px solid #b3b3b3;
+  
 }
 .bj {
   margin-top: 40px;

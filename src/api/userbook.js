@@ -25,8 +25,9 @@ export function getSingleQu(quId) {
 
 export function fullBook(data) {
   return request({
-    url: 'userbooks/full-book/',
+    url: 'userbooks/full-book',
     method: 'post',
     data
   })
 }
+

@@ -24,9 +24,9 @@
           width="250"
         >
         </el-table-column>
-        <el-table-column prop="ctsl" align="center" label="用时">
+        <el-table-column prop="passedScore" align="center" label="及格分">
         </el-table-column>
-        <el-table-column prop="cjsj" align="center" label="得分">
+        <el-table-column prop="examDuration" align="center" label="考试时长">
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
@@ -75,32 +75,7 @@ export default {
         user: "",
         region: "",
       },
-      tableData: [
-        {
-          xh: "1",
-          sjmc: "数学第一次测试",
-          ctsl: "2小时",
-          cjsj: "88",
-        },
-        {
-          xh: "2",
-          sjmc: "英语第一次测试",
-          ctsl: "2.5小时",
-          cjsj: "77",
-        },
-        {
-          xh: "3",
-          sjmc: "语文第一次测试",
-          ctsl: "3小时",
-          cjsj: "60",
-        },
-        {
-          xh: "4",
-          sjmc: "历史第一次测试",
-          ctsl: "4小时",
-          cjsj: "66",
-        },
-      ],
+      
       dialogVisible: false,
       form: {
         name: "",

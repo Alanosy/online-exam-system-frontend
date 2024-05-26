@@ -31,13 +31,13 @@
     <!-- table -->
     <div style="width: 90%; margin: auto; margin-top: 20px">
       <el-table :data="data.records" border>
-        <el-table-column prop="id" label="序号" align="center" width="120px">
+        <el-table-column prop="id" label="序号" align="center" >
         </el-table-column>
-        <el-table-column prop="userName" label="用户名" width="180px" align="center">
+        <el-table-column prop="userName" label="用户名"align="center">
         </el-table-column>
-        <el-table-column prop="realName" label="真实姓名" align="center" width="180px">
+        <el-table-column prop="realName" label="真实姓名" align="center" >
         </el-table-column>
-        <el-table-column prop="roleName" label="角色名称" align="center" width="140px">
+        <el-table-column prop="roleName" label="角色名称" align="center" >
         </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>

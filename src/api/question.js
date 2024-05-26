@@ -38,6 +38,15 @@ export function quDetail(id) {
   })
 }
 
+export function importQue(id,data) {
+  return request({
+    url: `/api/questions/import/${id}`,
+    method: 'post',
+    data
+  })
+}
+
+
 // fetchDetail, saveData
 /**
  * 题库详情
