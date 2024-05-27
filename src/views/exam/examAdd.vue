@@ -501,6 +501,10 @@ export default {
 
     submitForm() {
       // 校验和处理数据
+      const cerTemp = ""
+      if(this.postForm.certificateId!=null&& this.postForm.certificateId!=''){
+        cerTemp = this.postForm.certificateId.join(',')
+      }
       this.postForm.repoList = this.repoList;
       const params = {
         title: this.postForm.title,
@@ -511,7 +515,7 @@ export default {
         endTime: this.formatDateToISOString(this.postForm.start[1]),
         gradeIds: this.postForm.classIds.join(","),
         repoId: this.postForm.repoList[0].id,
-        certificateId:  this.postForm.certificateId.join(','),
+        certificateId: cerTemp ,
         radioCount: this.postForm.repoList[0].radioCount,
         radioScore: this.postForm.repoList[0].radioScore,
         multiCount: this.postForm.repoList[0].multiCount,

@@ -47,7 +47,7 @@
     </el-dialog>
 
     <!-- table -->
-    <div style="margin: auto; width: 1200px" align="center">
+    <div style="margin: auto; width: 80%" align="center">
       <el-table :data="data.records" border>
         <el-table-column fixed prop="id" label="序号" align="center" />
         <el-table-column prop="title" label="公告标题" align="center" />

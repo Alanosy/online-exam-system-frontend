@@ -1,5 +1,5 @@
 <template>
-  <el-container style="height: 700px; border: 1px solid #eee">
+  <el-container style="height: 100vh; border: 1px solid #eee">
     <!-- <div class="left">
       <div class="fk">
         <div

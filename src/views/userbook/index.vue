@@ -14,7 +14,7 @@
     </div>
 
     <div style="padding:10px 0 0 50px;">
-      <el-table :data="data.records" border style="width: 1000px; ">
+      <el-table :data="data.records" border style="margin: auto;width: 80%; ">
         <el-table-column prop="id" label="序号" align="center" width="80">
         </el-table-column>
         <el-table-column prop="title" align="center" label="试卷名称" width="250">

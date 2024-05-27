@@ -60,7 +60,7 @@
         <el-table
           :data="postForm.answerList"
           :border="true"
-          style="width: 100%;"
+          style="width: 80%;"
         >
           <el-table-column
             label="是否答案"
