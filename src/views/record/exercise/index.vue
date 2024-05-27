@@ -13,11 +13,11 @@
     </div>
 </div>
 
-<div style="padding:10px 0 0 50px;">
+<div>
         <el-table
       :data="data"
       border
-      style="margin: auto;width: 80%; ">
+      style="margin: auto;width: 90%; ">
       <el-table-column
         prop="xh"
         label="序号"

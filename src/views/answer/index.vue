@@ -26,7 +26,7 @@
     </div>
 
     <!-- table -->
-    <div style="margin: auto; width: 80%" align="center">
+    <div style="margin: auto; width: 90%" align="center">
       <el-table :data="data.records" border>
         <el-table-column fixed prop="examId" label="序号" align="center" />
         <el-table-column prop="examTitle" label="题干" align="center" />

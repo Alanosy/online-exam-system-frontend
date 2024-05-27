@@ -29,7 +29,7 @@
       </el-form>
     </div>
     <!-- table -->
-    <div style="width: 80%; margin: auto; margin-top: 20px">
+    <div style="width: 90%; margin: auto; margin-top: 20px">
       <el-table :data="data.records" border>
         <el-table-column prop="id" label="序号" align="center" >
         </el-table-column>

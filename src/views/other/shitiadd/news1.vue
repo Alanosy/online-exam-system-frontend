@@ -52,7 +52,7 @@
     >
     <el-table
     :data="formData.tableData"
-    style="width: 80%;" border
+    style="width: 90%;" border
     >
     <el-table-column type="index" width="55" align="center">
     </el-table-column>

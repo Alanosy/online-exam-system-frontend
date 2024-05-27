@@ -78,7 +78,7 @@
       </div>
     </el-dialog>
     <!-- table -->
-    <div style="width: 80%; margin: auto; margin-top: 20px;margin">
+    <div style="width: 90%; margin: auto; margin-top: 20px;margin">
       <el-table :data="data.records" border>
         <el-table-column prop="id" label="序号" align="center" width="120px">
         </el-table-column>

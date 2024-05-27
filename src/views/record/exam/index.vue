@@ -13,8 +13,8 @@
       </div>
     </div>
 
-    <div style="padding: 10px 0 0 50px">
-      <el-table :data="data.records" border style="margin: auto;width: 80%">
+    <div>
+      <el-table :data="data.records" border style="margin: auto;width: 90%">
         <el-table-column prop="id" label="序号" align="center" width="80">
         </el-table-column>
         <el-table-column

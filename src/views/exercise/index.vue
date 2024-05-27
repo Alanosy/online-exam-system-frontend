@@ -23,7 +23,7 @@
     </div>
 
     <!-- table -->
-    <div style="margin: auto; width: 80%" align="center">
+    <div style="margin: auto; width: 90%" align="center">
       <el-table :data="data.records" border>
         <el-table-column fixed prop="id" label="序号" align="center" />
         <el-table-column prop="repoTitle" label="题库标题" align="center" />
