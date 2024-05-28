@@ -193,7 +193,18 @@ export const constantRoutes = [
       name: 'Newk',
       hidden:true,
       component: () => import('@/views/record/exam/newk'),
-      meta: { title: '试题查看',visiable:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '试题查看',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+    }]
+  },
+  {
+    path: '/exam',
+    component: Layout,
+    children: [{
+      path: '/newk1',
+      name: 'Newk1',
+      hidden:true,
+      component: () => import('@/views/record/exercise/newk'),
+      meta: { title: '试题查看',visiable:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
   {

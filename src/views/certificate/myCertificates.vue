@@ -105,8 +105,8 @@
               ><center>{{ level }}</center></span>
           </p>
           <p class="con-text">荣誉称号，特发此状，以资鼓励。</p>
-
           <div class="con-unit">
+          <p class="time">证书编号：{{ currentdata.code }}</p>
             <p class="time">{{ currentdata.createTime }}</p>
           </div>
           <div class="chapter" v-show="isShow">
