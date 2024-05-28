@@ -6,13 +6,13 @@
         <el-card style="margin-bottom: 10px">
           距离考试结束还有：
           <exam-timer v-model="paperData.leftSeconds" @timeout="doHandler()" />
-
+          <!-- handHandExam -->
           <el-button
             :loading="loading"
             style="float: right; margin-top: -10px"
             type="primary"
             icon="el-icon-plus"
-            @click="handHandExam()"
+            @click="handHandExamPre()"
           >
             {{ handleText }}
           </el-button>
@@ -135,6 +135,123 @@
               </el-checkbox> -->
             <!-- </el-checkbox-group> -->
           </div>
+          <!-- 提交前汇总 -->
+          <el-dialog
+            top="2vh"
+            title="考前汇总"
+            :visible.sync="examPreVisible"
+            width="80%"
+            :before-close="handleClose"
+          >
+            <el-container style="height: 100vh; border: 1px solid #eee">
+              <el-container>
+                <el-main class="right">
+                  <el-col>
+                    <el-card class="qu_list">
+                      <div>
+                        <template v-for="index in recordData">
+                          <div
+                            :class="'index' + index"
+                            v-if="
+                              index.quType === 1 ||
+                              index.quType === 2 ||
+                              index.quType === 3
+                            "
+                          >
+                            <el-row :gutter="24">
+                              <el-col :span="20" style="text-align: left">
+                                <!-- 题目: 序号、类型、题干 -->
+                                <div>
+                                  <div class="qu_content">{{ index.title }}</div>
+                                </div>
+
+                                <el-radio-group class="qu_choose_group">
+                                  <!-- ['A', 'B', 'C', 'D'] -->
+                                  <el-radio
+                                    v-for="(item, indexs) in index.option"
+                                    :label="item.content"
+                                    border
+                                    class="qu_choose"
+                                  >
+                                    {{ numberToLetter(indexs) }}、{{ item.content }}
+
+                                    <div class="qu_choose_answer">
+                                      <!-- <i class="el-icon-success" style="color: #1aac1a"> 答案 </i> -->
+                                    </div>
+                                  </el-radio>
+                                </el-radio-group>
+
+                                <!-- 题目解析 -->
+                                <div class="qu_analysis">
+                                  <el-card>
+                                    <div>
+                                      <span>我的答案：</span>
+                                      <span
+                                        :style="{
+                                          color:
+                                            isRight === 1
+                                              ? 'green'
+                                              : isRight === 0
+                                              ? 'red'
+                                              : 'gray',
+                                        }"
+                                        >{{ numberToLetter2(index.myOption) }}</span
+                                      ><br />
+                                    </div>
+                                  </el-card>
+                                </div>
+                              </el-col>
+                            </el-row>
+                            <el-divider></el-divider>
+                          </div>
+                        </template>
+                        <template v-for="index in recordData">
+                          <div :class="'index' + index" v-if="index.quType === 4">
+                            <el-row :gutter="24">
+                              <el-col :span="20" style="text-align: left">
+                                <!-- 题目: 序号、类型、题干 -->
+                                <div>
+                                  <!-- <div class="qu_num">{{ index }}</div> -->
+                                  <!-- 【 单选题 】 -->
+                                  <div class="qu_content">{{ index.title }}</div>
+                                </div>
+
+                                <!-- 选项 -->
+                                <el-radio-group class="qu_choose_group">
+                                  <!-- ['A', 'B', 'C', 'D'] -->
+                                  <el-input
+                                    style="margin-top: 10px"
+                                    type="textarea"
+                                    :autosize="{ minRows: 2, maxRows: 4 }"
+                                    placeholder="请输入内容"
+                                    v-model="index.myOption"
+                                  >
+                                  </el-input>
+                                </el-radio-group>
+
+                                <!-- 题目解析 -->
+                                <div class="qu_analysis">
+                                  <el-card>
+                                    <div></div>
+                                  </el-card>
+                                </div>
+                              </el-col>
+                            </el-row>
+                            <el-divider></el-divider>
+                          </div>
+                        </template>
+                      </div>
+                      <el-divider />
+                    </el-card>
+                  </el-col>
+                </el-main>
+              </el-container>
+            </el-container>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="examPreVisible = false">取 消</el-button>
+              <el-button type="primary" @click="handHandExam">确 定</el-button>
+            </span>
+          </el-dialog>
           <div style="margin-top: 20px">
             <el-button
               v-if="showPrevious"
@@ -195,6 +312,7 @@ import {
   handExam,
   fillAnswer,
   examStart,
+  examCollect,
   examCheat,
   examQuList,
 } from "@/api/exam";
@@ -222,6 +340,7 @@ export default {
       cardItem: {},
       allItem: [],
       tipsFlag: false,
+      examPreVisible: false,
       // 当前题目内容
       quData: {
         answerList: [],
@@ -242,6 +361,7 @@ export default {
       multiValue: [],
       // 已答ID
       answeredIds: [],
+      recordData: null,
     };
   },
   created() {
@@ -268,6 +388,50 @@ export default {
     });
   },
   methods: {
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {});
+    },
+    numberToLetter2(input) {
+      const numberToCharMap = {
+        0: "A",
+        1: "B",
+        2: "C",
+        3: "D",
+        4: "E",
+        5: "F",
+      };
+
+      // 辅助函数：将单个数字（字符串或数字类型）转换为字母
+      const singleNumberToLetter = (num) => numberToCharMap[parseInt(num, 10)] || "";
+
+      // 辅助函数：处理逗号分隔的数字字符串
+      const commaSeparatedNumbersToLetters = (str) => {
+        const numbers = str.split(",").map((item) => parseInt(item.trim(), 10));
+        return numbers.map((number) => numberToCharMap[number] || "").join(",");
+      };
+
+      // 判断输入类型并调用相应函数
+      if (/^\d+$/.test(input)) {
+        // 单个数字（字符串形式也可以匹配）
+        return singleNumberToLetter(input);
+      } else if (/^\d+(,\d+)*$/.test(input)) {
+        // 包含逗号分隔的数字字符串
+        return commaSeparatedNumbersToLetters(input);
+      } else {
+        return ""; // 输入不符合预期，返回空字符串或根据需要处理
+      }
+    },
+    handHandExamPre() {
+      examCollect(this.examId).then((res) => {
+        this.recordData = res.data;
+        console.log(res.data);
+      });
+      this.examPreVisible = true;
+    },
     //切换页面检测
     //isReduce 0扣次数 1不扣次数 router 判断是否为路由转跳
     //事件默认参数
@@ -683,5 +847,145 @@ page {
 
 ::v-deep .el-radio__label {
   line-height: 30px;
+}
+
+/* 考试记录 */
+.content {
+  width: 97%;
+  height: 60px;
+  border: 1px solid #0a84ff;
+  margin-top: 8px;
+  margin-left: 10px;
+  padding: 10px;
+  font-weight: 200;
+}
+.sj {
+  margin-top: 10px;
+  margin-left: 10px;
+  line-height: 22px;
+}
+.fk {
+  width: 200px;
+  height: 100%;
+  box-shadow: 0 0 15px rgb(197, 197, 197);
+  margin: auto;
+  margin-top: 20px;
+  margin-left: 15px;
+}
+.el-header {
+  background-color: #b3c0d1;
+  color: #333;
+  line-height: 60px;
+}
+
+.left {
+  width: 250px;
+  height: 100%;
+}
+.right {
+  width: 70%;
+  height: 100%;
+}
+.el-divider--horizontal {
+  display: block;
+  height: 1px;
+  width: 95%;
+  margin: 24px 0;
+}
+.type_tag {
+  margin-right: 5px;
+  margin-top: 10px;
+}
+
+/* // 试题内容样式 */
+.qu_list {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  page-break-after: always;
+
+  .qu_num {
+    display: inline-block;
+    /* // background: url('~@/assets/images/tkxl/btbj.png') no-repeat 100% 100%; */
+    background-size: contain;
+    height: 30px;
+    width: 30px;
+    line-height: 25px;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+  }
+
+  .qu_content {
+    padding-left: 10px;
+  }
+
+  /* // 选项组 */
+  .qu_choose_group {
+    width: 100%;
+
+    /* 单个选项 */
+    .qu_choose {
+      display: block;
+      margin: 10px;
+
+      /* // 去除前面的radio */
+      ::v-deep .el-radio__input .el-radio__inner {
+        display: none;
+      }
+
+      /* // 单个选项内容样式 */
+      .qu_choose_tag {
+        display: inline-flex;
+        width: 90%;
+        /* // 选项标签 */
+        .qu_choose_tag_type {
+          font-weight: bold;
+          /* // color: #0a84ff; */
+          width: 10px;
+        }
+        /* // 选项内容 */
+        .qu_choose_tag_content {
+          padding: 0 10px 10px 10px;
+        }
+        .qu_choose_tag_img {
+          height: auto;
+          display: block;
+          margin: 10px;
+        }
+
+        .qu_choose_tag_el_image {
+          clear: both;
+          padding-top: 10px;
+        }
+      }
+      /* // 选项答案 */
+      .qu_choose_answer {
+        float: right;
+      }
+    }
+  }
+
+  /* // 试题解析 */
+  .qu_analysis {
+    padding: 10px;
+
+    .qu_analysis_content {
+      padding-top: 10px;
+    }
+  }
+
+  /* // 试题赋分 */
+  .qu_assign_score {
+    background: #f5f5f5;
+    height: 100px;
+    padding-top: 35px;
+
+    .qu_assign_score_content {
+      width: 80px;
+    }
+  }
 }
 </style>

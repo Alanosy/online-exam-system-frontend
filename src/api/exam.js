@@ -104,3 +104,11 @@ export function examCheat(examId) {
   })
   
 }
+
+export function examCollect(examId) {
+  return request({
+    url: `exams/collect/${examId}`,
+    method: 'get',
+  })
+  
+}
