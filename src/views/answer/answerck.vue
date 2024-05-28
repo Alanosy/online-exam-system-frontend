@@ -19,12 +19,12 @@
           <el-table-column prop="limitTime" label="提交时间" align="center" />
 
           <el-table-column fixed="right" label="操作" align="center">
-            <template slot-scope="{ row }">
+            <template slot-scope="scope">
               <el-button
                 type="text"
                 size="small"
                 style="font-size: 14px"
-                @click="screenInfo()"
+                @click="screenInfo(scope.row)"
                 >批改试卷</el-button
               >
             </template>
@@ -70,9 +70,10 @@ export default {
         this.data = res.data;
       });
     },
-    screenInfo(row, index, done) {
+    screenInfo(row) {
       console.info("=====", row);
-      this.$router.push({ name: "make", query: { zhi: row } });
+      sessionStorage.setItem("answer_info",JSON.stringify(row))
+      this.$router.push({ name: "make"   });
     },
   },
 };

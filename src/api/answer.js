@@ -26,6 +26,14 @@ export function answerDetail(params) {
     })
   }
 
+  export function correct(data) {
+    return request({
+      url: 'answers/correct',
+      method: 'put',
+      data
+    })
+  }
+
 // export function scorePaging(data) {
 //     return request({
 //       url: 'answers/correct',
