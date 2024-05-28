@@ -12,7 +12,7 @@
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
           {{ repoTitle }} 题库
-          <el-button
+          <!-- <el-button
             :loading="loading"
             style="float: right; margin-top: -10px"
             type="primary"
@@ -51,7 +51,7 @@
             </el-row>
           </div>
           <!-- <div> -->
-          <div v-if="0 === number" >
+          <div v-if="0 === number">
             <!-- <p>我是题型</p> -->
             <p class="card-title">答题卡</p>
             <el-row :gutter="24" class="card-line" style="padding-left: 10px">
@@ -72,7 +72,7 @@
                 <el-tag
                   v-for="(item, index) in paperData.radioList"
                   :type="cardItemClass(item.exercised, item.quId, item.isRight)"
-                  @click="selectQuId(item)"
+                  @click="selectQuId(item,index)"
                 >
                   {{ index + 1 }}</el-tag
                 >
@@ -90,7 +90,7 @@
                 <el-tag
                   v-for="(item, index) in paperData.multiList"
                   :type="cardItemClass(item.exercised, item.quId, item.isRight)"
-                  @click="selectQuId(item)"
+                  @click="selectQuId(item,index)"
                   >{{ index + 1 }}</el-tag
                 >
               </el-row>
@@ -107,14 +107,28 @@
                 <el-tag
                   v-for="(item, index) in paperData.judgeList"
                   :type="cardItemClass(item.exercised, item.quId, item.isRight)"
-                  @click="selectQuId(item)"
+                  @click="selectQuId(item,index)"
+                  >{{ index + 1 }}</el-tag
+                >
+              </el-row>
+            </div>
+            <div
+              v-if="
+                paperData.saqList !== undefined && paperData.saqList.length > 0
+              "
+            >
+              <p class="card-title">简答题</p>
+              <el-row :gutter="24" class="card-line">
+                <el-tag
+                  v-for="(item, index) in paperData.saqList"
+                  :type="cardItemClass(item.exercised, item.quId, item.isRight)"
+                  @click="selectQuId(item,index)"
                   >{{ index + 1 }}</el-tag
                 >
               </el-row>
             </div>
           </div>
 
-         
           <!-- </div> -->
         </el-card>
       </el-col>
@@ -122,11 +136,13 @@
       <el-col :span="19" :xs="24">
         <el-card class="qu-content content-h">
           <p v-if="quDetail.content">
-            {{ currentQuIndex + 1 }}.{{ quDetail.content }}
+            {{ number == 1 ? curTypeIndex + 1 : currentQuIndex + 1 }}.{{
+              quDetail.content
+            }}
             {{ shouQuType(quDetail.quType) }}
           </p>
           <p v-if="quDetail.image != null && quDetail.image != ''">
-            <el-image :src="quDetail.image" style="max-width: 100%" />
+            <el-image :src="quDetail.image" style="max-width: 100px" />
           </p>
           <div v-if="quDetail.quType === '1' || quDetail.quType === '3'">
             <el-radio-group v-model="radioValue">
@@ -136,7 +152,7 @@
                   v-if="item.image != null && item.image != ''"
                   style="clear: both"
                 >
-                  <el-image :src="item.image" style="max-width: 100%" />
+                  <el-image :src="item.image" style="max-width: 100px" />
                 </div>
               </el-radio>
             </el-radio-group>
@@ -153,18 +169,29 @@
                   v-if="item.image != null && item.image != ''"
                   style="clear: both"
                 >
-                  <el-image :src="item.image" style="max-width: 100%" />
+                  <el-image :src="item.image" style="max-width: 100px" />
                 </div>
               </el-checkbox>
             </el-checkbox-group>
           </div>
+          <div v-if="quDetail.quType === '4'">
+            <el-input
+              v-model="radioValue"
+              type="textarea"
+              resize="none"
+              :clearable="true"
+              placeholder="请输入答案"
+            ></el-input>
+          </div>
 
-          <div v-if="nextText == '下一题'">
-            <p>
-              回答：<span>{{ rightQuAnswer.msg }}</span>
-            </p>
-            <p>正确答案：{{ getRightAnswer() }}</p>
-            <p>试题分析：{{ rightQuAnswer.data.analysis }}</p>
+          <div v-if="showAnalysis">
+            
+              <p v-if="quDetail.quType != 4">
+                回答：<span>{{ rightQuAnswer.msg }}</span>
+              </p>
+              <p v-if="rightQuAnswer.data">正确答案：{{ getRightAnswer() }}</p>
+              <p>试题分析：{{ rightQuAnswer.data.analysis }}</p>
+            
           </div>
 
           <div style="margin-top: 20px">
@@ -203,6 +230,7 @@ export default {
   components: { ExamTimer },
   data() {
     return {
+      showAnalysis: 0,
       repoId: "",
       repoTitle: "",
       //当前试题Id，用于按顺序刷题
@@ -217,9 +245,9 @@ export default {
       number: 0,
       receivedRow: null,
       //按题型的当前题号索引
-      curTypeIndex:0,
+      curTypeIndex: 0,
       //索引指向哪个列表
-      curListIndex:1,
+      curListIndex: 1,
       // 全屏/不全屏
       isFullscreen: false,
       showPrevious: false,
@@ -243,6 +271,7 @@ export default {
         radioList: [],
         multiList: [],
         judgeList: [],
+        saqList: [],
       },
       // 单选选定值
       radioValue: "",
@@ -256,11 +285,11 @@ export default {
     this.repoId = this.$route.query.repoId;
     this.repoTitle = this.$route.query.repoTitle;
 
-    
-
     this.getQuestionList();
-    this.initCurrentIndex()
-      this.getCurrentQuDetial();
+    //   this.initCurrentIndex()
+    //    setTimeout(()=> this.getCurrentQuDetial()
+    //  ,100)
+    this.getCurrentQuDetial();
    
   },
   methods: {
@@ -268,7 +297,32 @@ export default {
     async getQuestionList() {
       const res = await getQuestion(null, this.repoId);
       this.quList = res.data;
-     
+
+      //按顺序
+      // if (this.number == 0) {
+      this.paperData.radioList = [];
+      this.paperData.multiList = [];
+      this.paperData.judgeList = [];
+      this.paperData.saqList = [];
+      // }
+      //按题型
+      if (this.number == 1) {
+        this.quList.forEach((item) => {
+          if (item.quType == 1) {
+            this.paperData.radioList.push(item);
+          } else if (item.quType == 2) {
+            this.paperData.multiList.push(item);
+          } else if (item.quType == 3) {
+            this.paperData.judgeList.push(item);
+          } else if (item.quType == 4) {
+            this.paperData.saqList.push(item);
+          }
+        });
+        this.quList = [];
+        //初始化试题Id
+        this.initQuId();
+        // alert(this.curQuId)
+      }
     },
     numberToLetter(sort) {
       switch (sort) {
@@ -290,54 +344,53 @@ export default {
     },
     change: function (index) {
       this.number = index; //重要处
+      this.preText = "上一步";
+      this.nextText = "下一步";
+      this.showAnalysis = 0;
+
       this.getQuestionList();
-      // alert(this.number)
-      //按顺序
-      if (this.number == 0) {
-        this.paperData.radioList = [];
-        this.paperData.multiList = [];
-        this.paperData.judgeList = [];
-      }
-      //按题型
-      if (this.number == 1) {
-        this.quList.forEach((item) => {
-          if (item.quType == 1) {
-            this.paperData.radioList.push(item);
-          } else if (item.quType == 2) {
-            this.paperData.multiList.push(item);
-          } else if (item.quType == 3) {
-            this.paperData.judgeList.push(item);
-          }
-        });
-        this.quList = [];
-        //初始化试题Id
-        this.initQuId();
-        // alert(this.curQuId)
-        
-      }
-      this.getCurrentQuDetial()
+      
+      setTimeout(() => this.getCurrentQuDetial(), 100);
     },
 
     getRightAnswer() {
       var arr = new Array();
-  
-      this.rightQuAnswer.data.options.forEach((option) => {
+      console.log("11111111111111111111111");
+      console.log({ ...this.rightQuAnswer });
+      if(this.rightQuAnswer.data){
+        this.rightQuAnswer.data.options.forEach((option) => {
         if (option.isRight) {
           arr.push(this.numberToLetter(option.sort + 1));
         }
       });
-      
+      }
+    
+
       console.log("11111111111111");
-      console.log(arr.join(","));
-      return arr.join(",");
+      let res = arr.join(",");
+      if (this.quDetail.quType == 4) {
+        res = this.rightQuAnswer.data.options[0].content;
+      }
+      console.log(res);
+      return res;
       // },100)
     },
     //按题型选择题号
-    selectQuId(item){
+    selectQuId(item,index) {
       // console.log("111111111111111")
       // console.log(item);
-      this.curQuId = item.quId
-      this.getCurrentQuDetial()
+      this.curTypeIndex = index
+      this.curQuId = item.quId;
+      if (item.quType == 1) {
+        this.curListIndex = 1;
+      } else if (item.quType == 2) {
+        this.curListIndex = 2;
+      } else if (item.quType == 3) {
+        this.curListIndex = 3;
+      } else if (item.quType == 4) {
+        this.curListIndex = 4;
+      }
+      this.getCurrentQuDetial();
     },
     async getCurrentQuDetial() {
       const loading = Loading.service({
@@ -360,7 +413,7 @@ export default {
           this.quDetail = res.data;
         });
       }
-      loading.close()
+      loading.close();
     },
 
     // 答题卡样式
@@ -399,13 +452,19 @@ export default {
     },
     //选择题号
     selectQuNum(item, index) {
+      // alert(this.nextText)
+      // alert(this.rightQuAnswer);
       const loading = Loading.service({
         text: "拼命加载中",
         background: "rgba(0, 0, 0, 0.7)",
       });
 
-      this.fillAnswer();
-
+      // this.fillAnswer();
+      this.preText = "上一步";
+      this.nextText = "下一步";
+      this.showAnalysis = 0;
+      this.radioValue = "";
+      this.multiValue = [];
       this.currentQuIndex = index;
       this.showButton();
       this.getCurrentQuDetial();
@@ -432,64 +491,83 @@ export default {
         text: "拼命加载中",
         background: "rgba(0, 0, 0, 0.7)",
       });
-      if (this.nextText == "下一题") {
+      if (this.nextText == "下一题"  ) {
         this.radioValue = "";
         this.multiValue = [];
-       //按顺序点击下一题
-        if(this.number == 0){
+        this.showAnalysis = 0;
+        this.rightQuAnswer={}
+        //按顺序点击下一题
+        if (this.number == 0) {
           if (this.currentQuIndex < this.quList.length - 1) {
-          this.currentQuIndex++;
-        }}
-        // }else if(this.number == 1){
-        //   //按题型点击下一题
-        //   if(this.curListIndex == 1){
-        //     //单选题
-        //     this.curTypeIndex++;
-        //     if(this.curTypeIndex==this.paperData.radioList.length){
-        //       //单选题超出索引，就去多选题
-        //       this.curListIndex = 2
-        //       this.curTypeIndex = 0
-        //       this.curQuId = this.paperData.multiList[this.curTypeIndex].quId
-        //     }else{
-        //       this.curQuId = this.radioList[this.curTypeIndex].quId
-        //     }
-        //   }else if(this.curListIndex == 2){
-        //     //如果当前列表式多选题
-        //     this.curTypeIndex++
-        //     if(this.curTypeIndex==this.paperData.multiList.length){
-        //       this.curListIndex = 3
-        //       this.curTypeIndex = 0
-        //       this.curQuId = this.paperData.judgeList[this.curTypeIndex].quId
-        //     }else{
-        //       this.curQuId = this.paperData.multiList[this.curTypeIndex].quId
-        //     }
-        //   }else if(this.curListIndex == 3){
-        //     //判断题
-        //     this.curTypeIndex++
-        //     if(this.curTypeIndex==this.paperData.judgeList.length){
-        //       this.curListIndex = 1
-        //       this.curTypeIndex = 0
-        //       this.curQuId = this.paperData.radioList[this.curTypeIndex].quId
-        //     }else{
-        //       this.curQuId = this.paperData.judgeList[this.curTypeIndex].quId
-        //     }
-        //   }
-          
-        // }
+            this.currentQuIndex++;
+          }
+        } else if (this.number == 1) {
+          // alert(this.number)
+          // alert(this.curListIndex)
+          //按题型点击下一题
+          if (this.curListIndex == 1) {
+            //单选题
+            this.curTypeIndex++;
+            if (this.curTypeIndex == this.paperData.radioList.length) {
+              //单选题超出索引，就去多选题
+              this.curListIndex = 2;
+              this.curTypeIndex = 0;
+              this.curQuId = this.paperData.multiList[this.curTypeIndex].quId;
+            } else {
+              this.curQuId = this.paperData.radioList[this.curTypeIndex].quId;
+            }
+          } else if (this.curListIndex == 2) {
+            //如果当前列表式多选题
+            this.curTypeIndex++;
+            if (this.curTypeIndex == this.paperData.multiList.length) {
+              this.curListIndex = 3;
+              this.curTypeIndex = 0;
+              this.curQuId = this.paperData.judgeList[this.curTypeIndex].quId;
+            } else {
+              this.curQuId = this.paperData.multiList[this.curTypeIndex].quId;
+            }
+          } else if (this.curListIndex == 3) {
+            //判断题
+            this.curTypeIndex++;
+            if (this.curTypeIndex == this.paperData.judgeList.length) {
+              this.curListIndex = 4;
+              this.curTypeIndex = 0;
+              this.curQuId = this.paperData.saqList[this.curTypeIndex].quId;
+            } else {
+              this.curQuId = this.paperData.judgeList[this.curTypeIndex].quId;
+            }
+          } else if (this.curListIndex == 4) {
+            this.curTypeIndex++;
+            // console.log("----------------------");
+            // console.log(this.paperData.saqList.length);
+            // console.log(this.curTypeIndex);
+            // console.log("------------------------");
+            if (this.curTypeIndex == this.paperData.saqList.length) {
+              this.curListIndex = 1;
+              this.curTypeIndex = 0;
+              this.curQuId = this.paperData.radioList[this.curTypeIndex].quId;
+            } else {
+              this.curQuId = this.paperData.saqList[this.curTypeIndex].quId;
+            }
+          }
+        }
         this.getCurrentQuDetial();
 
         setTimeout(() => (this.nextText = "下一步"), 100);
 
         // alert(this.nextTxt)
-      }
-
-      if (this.nextText == "下一步") {
+      }else if (this.nextText == "下一步") {
+        this.rightQuAnswer = {};
         this.fillAnswer();
+
+        this.showAnalysis = 1;
+
         setTimeout(() => {
           this.nextText = "下一题";
         }, 100);
+        
       }
-      this.showButton();
+      this.showButton();  
       loading.close();
     },
     //填充答案
@@ -497,7 +575,7 @@ export default {
       if (this.radioValue || this.multiValue.length) {
         if (this.radioValue) {
           var params = {
-            repoId: this.quList[this.currentQuIndex].repoId,
+            repoId: this.quDetail.repoId,
             quId: this.quDetail.id,
             answer: this.radioValue,
             quType: parseInt(this.quDetail.quType),
@@ -506,7 +584,7 @@ export default {
         //多选提交答案
         if (this.multiValue.length) {
           params = {
-            repoId: this.quList[this.currentQuIndex].repoId,
+            repoId: this.quDetail.repoId,
             quId: this.quDetail.id,
             answer: this.multiValue.join(","),
             quType: parseInt(this.quDetail.quType),
@@ -514,6 +592,9 @@ export default {
         }
 
         const res = await submitAnswer(params);
+        console.log("1111111111111111111111111");
+        console.log(res);
+        console.log("1111111111111111111111111");
         this.rightQuAnswer = res;
         console.log(res);
       }
@@ -526,6 +607,7 @@ export default {
       // alert(this.currentQuIndex)
       // alert(this.quList.length)
       // console.log(this.currentQuIndex)
+
       if (this.currentQuIndex === 0) {
         this.showPrevious = false;
       } else {
@@ -550,12 +632,27 @@ export default {
         text: "拼命加载中",
         background: "rgba(0, 0, 0, 0.7)",
       });
-      if (this.currentQuIndex > 0) {
-        this.currentQuIndex--;
-        this.showButton();
-        this.getCurrentQuDetial();
-        loading.close();
+      
+      if (this.preText == "上一步") {
+        this.fillAnswer();
+        this.showAnalysis = 1;
+        setTimeout(() => (this.preText = "上一题"), 100);
       }
+
+      if (this.preText == "上一题") {
+        this.radioValue = "";
+      this.multiValue = [];
+      this.rightQuAnswer = {};
+        if (this.currentQuIndex > 0) {
+          this.currentQuIndex--;
+          this.showButton();
+          this.getCurrentQuDetial();
+          setTimeout(() => (this.preText = "上一步"), 100);
+        }
+        this.showAnalysis = 0;
+      }
+
+      loading.close();
     },
   },
 };

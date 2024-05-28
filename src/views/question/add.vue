@@ -31,9 +31,9 @@
 
         </el-form-item> -->
 
-        <el-form-item label="归属题库" prop="repoIds">
+        <el-form-item label="归属题库" prop="repoId">
 
-          <repo-select v-model="postForm.repoIds" :multi="true" />
+          <repo-select v-model="postForm.repoId" :multi="false" />
 
         </el-form-item>
 
@@ -58,7 +58,7 @@
         </el-button>
 
         <el-table
-          :data="postForm.answerList"
+          :data="postForm.options"
           :border="true"
           style="width: 90%;"
         >
@@ -99,13 +99,13 @@
             </template>
           </el-table-column>
 
-          <el-table-column
+          <!-- <el-table-column
             label="答案解析"
           >
             <template v-slot="scope">
               <el-input v-model="scope.row.analysis" type="textarea" />
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
           <el-table-column
             label="操作"
@@ -119,8 +119,27 @@
 
         </el-table>
 
-      </div>
 
+
+        
+
+      </div>
+      <el-table
+      v-if="postForm.quType==4"
+      :data="postForm.options"
+      :border="true"
+      style="width: 90%;margin-top:30px;"
+    >
+     
+      <el-table-column
+        label="答案内容"
+      >
+        <template v-slot="scope">
+          <el-input v-model="scope.row.content" type="textarea" />
+        </template>
+      </el-table-column>
+
+    </el-table>
       <div style="margin-top: 20px">
         <el-button type="primary" @click="submitForm">保存</el-button>
         <el-button type="info" @click="onCancel">返回</el-button>
@@ -132,7 +151,7 @@
 </template>
 
 <script>
-import { fetchDetail, saveData } from '@/api/question'
+import { fetchDetail, quAdd } from '@/api/question'
 import RepoSelect from '@/components/RepoSelect'
 import FileUpload from '@/components/FileUpload'
 
@@ -160,13 +179,17 @@ export default {
       {
         value: 3,
         label: '判断题'
+      },
+      {
+        value: 4,
+        label: '简答题'
       }
       ],
 
       postForm: {
-        repoIds: [],
-        tagList: [],
-        answerList: []
+        repoId: '',
+        // tagList: [],
+        options: []
       },
       rules: {
         content: [
@@ -181,8 +204,8 @@ export default {
           { required: true, message: '必须选择难度等级！' }
         ],
 
-        repoIds: [
-          { required: true, message: '至少要选择一个题库！' }
+        repoId: [
+          { required: true, message: '请先选择题库！' }
         ]
       }
     }
@@ -197,27 +220,30 @@ export default {
   methods: {
 
     handleTypeChange(v) {
-      this.postForm.answerList = []
+      this.postForm.options = []
       if (v === 3) {
-        this.postForm.answerList.push({ isRight: true, content: '正确', analysis: '' })
-        this.postForm.answerList.push({ isRight: false, content: '错误', analysis: '' })
+        this.postForm.options.push({ isRight: true, content: '正确'  })
+        this.postForm.options.push({ isRight: false, content: '错误'  })
       }
 
       if (v === 1 || v === 2) {
-        this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
-        this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
-        this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
-        this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
+        this.postForm.options.push({ isRight: false, content: ''})
+        this.postForm.options.push({ isRight: false, content: '' })
+        this.postForm.options.push({ isRight: false, content: '' })
+        this.postForm.options.push({ isRight: false, content: '' })
+      }
+      if(v===4){
+        this.postForm.options.push({  isRight: true,content: '' })
       }
     },
 
     // 添加子项
     handleAdd() {
-      this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
+      this.postForm.options.push({ isRight: false, content: '' })
     },
 
     removeItem(index) {
-      this.postForm.answerList.splice(index, 1)
+      this.postForm.options.splice(index, 1)
     },
 
     fetchData(id) {
@@ -230,7 +256,7 @@ export default {
 
       let rightCount = 0
 
-      this.postForm.answerList.forEach(function(item) {
+      this.postForm.options.forEach(function(item) {
         if (item.isRight) {
           rightCount += 1
         }
@@ -268,27 +294,48 @@ export default {
           return
         }
       }
-
+      
       this.$refs.postForm.validate((valid) => {
         if (!valid) {
           return
         }
+        //选项是否正确转型
+        for (let i = 0; i < this.postForm.options.length; i++) {
+          const option = this.postForm.options[i];
+          if(option.isRight){
+            option.isRight = 1
+          }else{
+            option.isRight = 1
+          }
+        }
+        
 
-        saveData(this.postForm).then(response => {
+        quAdd(this.postForm).then(response => {
           this.postForm = response.data
-          this.$notify({
+          if(response.code){
+            this.$notify({
             title: '成功',
             message: '试题保存成功！',
             type: 'success',
             duration: 2000
           })
 
-          this.$router.push({ name: 'ListQu' })
+          this.$router.push({ name: 'Questmanage' })
+          }else{
+            this.$notify({
+            title: '失败',
+            message: `${response.msg}`,
+            type: 'error',
+            duration: 2000
+          })
+          }
+          
         })
       })
+      
     },
     onCancel() {
-      this.$router.push({ name: 'ListQu' })
+      this.$router.push({ name: 'Questmanage' })
     }
 
   }
