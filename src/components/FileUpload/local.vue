@@ -48,7 +48,7 @@ export default {
   },
   data() {
     return {
-      server: `${process.env.VUE_APP_BASE_API}/common/api/file/upload`,
+      server: `api/questions/uploadImage`,
       fileList: [],
       fileUrl: '',
       header: {}
@@ -66,7 +66,7 @@ export default {
 
   created() {
     this.fillValue()
-    this.header = { token: getToken() }
+    this.header = { Authorization: getToken() }
   },
 
   methods: {
@@ -98,14 +98,14 @@ export default {
     handleSuccess(response) {
       if (response.code === 1) {
         this.$message({
-          type: 'error',
+          type: 'success',
           message: response.msg
         })
-
+        this.$emit('input', response.data)
         this.fileList = []
         return
       }
-      this.$emit('input', response.data.url)
+      
     }
 
   }
