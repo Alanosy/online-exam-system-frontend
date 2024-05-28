@@ -3,7 +3,7 @@
     <el-row :gutter="24">
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
-         错题本
+          错题本
           <el-button
             :loading="loading"
             style="float: right; margin-top: -10px"
@@ -16,8 +16,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row
-      >
+    <el-row>
       <el-col :span="24">
         <el-card class="qu-content content-h">
           <!-- 题干 -->
@@ -26,24 +25,34 @@
             <el-image :src="quData.image" style="max-width: 100%" />
           </p>
           <div v-if="quData.quType === 1 || quData.quType === 3">
-          <!-- 选项 -->
-            <el-radio-group  v-model="radioValue">
+            <!-- 选项 -->
+            <el-radio-group v-model="radioValue">
               <el-radio v-for="item in quData.answerList" :label="item.id"
-                >{{ numberToLetter(item.sort)}}.{{ item.content }}
+                >{{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
               </el-radio>
             </el-radio-group>
           </div>
-
+          <div v-if="(flag == true && quData.quType === 1) || quData.quType === 3">
+            <!-- <div>
+              <span>我的答案:{{ myAnswers }}</span>
+            </div> -->
+            <div>
+              <span>正确答案:{{ this.failQuData.rightAnswers }}</span>
+            </div>
+            <div>
+              <span>试题分析:{{ this.failQuData.analysis }}</span>
+            </div>
+          </div>
           <div v-if="quData.quType === 2">
             <el-checkbox-group v-model="multiValue">
               <el-checkbox
                 v-for="item in quData.answerList"
                 :key="item.id"
                 :label="item.id"
-                >{{  numberToLetter(item.sort)  }}.{{ item.content }}
+                >{{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -51,22 +60,54 @@
             </el-checkbox-group>
           </div>
 
-          <div v-if="nextText">
-            <p>
-              回答：<span>{{ rightQuAnswer.msg }}</span>
-            </p>
-            <p>正确答案：{{ getRightAnswer() }}</p>
-            <p>试题分析：{{ rightQuAnswer.data.analysis }}</p>
+          <div v-if="flag == true && quData.quType === 2">
+            <!-- <div>
+              <span>我的答案:{{ myAnswers }}</span>
+            </div> -->
+            <div>
+              <span>正确答案:{{ this.failQuData.rightAnswers }}</span>
+            </div>
+            <div>
+              <span>试题分析:{{ this.failQuData.analysis }}</span>
+            </div>
+          </div>
+
+          <div v-if="quData.quType === 4">
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 2, maxRows: 4 }"
+              placeholder="请输入内容"
+              v-model="saqTextarea"
+            >
+            </el-input>
+            <!-- <el-checkbox-group v-model="multiValue"> -->
+            <!-- <el-checkbox
+                v-for="item in quData.answerList"
+                :key="item.id"
+                :label="item.id"
+                >{{  numberToLetter(item.sort)  }}.{{ item.content }}
+                <div v-if="item.image != null && item.image != ''" style="clear: both">
+                  <el-image :src="item.image" style="max-width: 100%" />
+                </div>
+              </el-checkbox> -->
+            <!-- </el-checkbox-group> -->
+          </div>
+          <div v-if="flag == true && quData.quType === 4">
+            <!-- <div>
+              <span>我的答案:{{ myAnswers }}</span>
+            </div> -->
+            <div>
+              <span>正确答案:{{ this.failQuData.rightAnswers }}</span>
+            </div>
+            <div>
+              <span>试题分析:{{ this.failQuData.analysis }}</span>
+            </div>
           </div>
           <div style="margin-top: 20px">
             <!-- <el-button type="primary" @click="handPrevious()">
               上一题
             </el-button> -->
-            <el-button
-              type="warning"
-              icon="el-icon-right"
-              @click="handNext()"
-            >
+            <el-button type="warning" icon="el-icon-right" @click="handNext()">
               下一题
             </el-button>
           </div>
@@ -90,21 +131,26 @@ export default {
       loading: false,
       handleText: "提交",
       pageLoading: false,
-      nextText:false,
+      nextText: false,
       userBookList: [],
       index: 0,
-      quDataLen:0,
+      quDataLen: 0,
       examId: "",
+      failQuData: {},
+      flag: false,
       // 当前题目内容
       quData: {
         answerList: [],
       },
       // 试卷信息
       radioValue: "",
+      showAnswer: false,
       // 多选选定值
       multiValue: [],
       // 已答ID
       answeredIds: [],
+      saqTextarea: "",
+      myAnswers: "",
       paperData: {
         leftSeconds: 99999,
         radioList: [],
@@ -133,7 +179,7 @@ export default {
     getUserBookListFun() {
       getUserBookList(this.examId).then((res) => {
         this.userBookList = res.data;
-        this.quDataLen = res.data.length
+        this.quDataLen = res.data.length;
         this.getSingleQuFun(res.data[this.index]["quId"]);
       });
     },
@@ -159,8 +205,12 @@ export default {
      * 下一题
      */
     handNext() {
-      this.index = this.index + 1;
-      this.handSave(this.index);
+      if (!this.flag) {
+        this.index = this.index + 1;
+        this.handSave(this.index);
+      } else {
+        this.handSave(this.index);
+      }
     },
 
     /**
@@ -182,38 +232,45 @@ export default {
       const params = {
         examId: this.examId,
         quId: this.userBookList[index]["quId"],
-        answer: answers.join(","),
- 
+        answer: this.quData.quType == 4 ? this.saqTextarea : answers.join(","),
       };
-      fullBook(params).then((res) => {
-        if (res.code) {
-          console.log(res)
-
-     if(res.data.correct){
-      this.$message({
+      // this.myAnswers = params.answer;
+      if (!this.flag) {
+        fullBook(params).then((res) => {
+          if (res.code) {
+            this.failQuData = res.data;
+            if (res.data.correct) {
+              this.$message({
                 type: "info",
                 message: res.msg,
               });
-     }else{
-      this.$message({
+            } else {
+              this.$message({
                 type: "success",
                 message: res.msg,
               });
-     }
-        } else {
-          this.$message({
-                type: "success",
-                message: res.msg,
-              });
-        }
-      });
-      // 查找详情
-      this.fetchQuData(index);
+            }
+          } else {
+            this.$message({
+              type: "success",
+              message: res.msg,
+            });
+          }
+        });
+      }
+      if (this.flag == true) {
+        // 查找详情
+        this.fetchQuData(index);
+        this.flag = false;
+      } else {
+        this.flag = true;
+      }
+
       // });
     },
     // 试卷详情
     fetchQuData(index) {
-      this.getSingleQuFun(this.userBookList[index]["quId"])
+      this.getSingleQuFun(this.userBookList[index]["quId"]);
     },
   },
 };

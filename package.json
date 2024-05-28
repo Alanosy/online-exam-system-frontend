@@ -26,7 +26,9 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
+    "quill": "^2.0.2",
     "vue": "2.6.10",
+    "vue-quill-editor": "^3.0.6",
     "vue-router": "3.0.6",
     "vuex": "3.1.0"
   },

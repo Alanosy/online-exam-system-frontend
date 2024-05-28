@@ -59,7 +59,7 @@
               size="small"
               style="font-size: 14px"
               @click="updateRow(row)"
-              >查看详情</el-button
+              >编辑</el-button
             >
             <el-button
               type="text"
@@ -84,19 +84,20 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <el-dialog title="查看详情" :visible.sync="dialogFormVisible">
+
+    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="序号  " :label-width="formLabelWidth">
-              <el-input v-model="form.date" :disabled="true"> </el-input>
+            <el-form-item label="考试标题  " :label-width="formLabelWidth">
+              <el-input v-model="form.title"> </el-input>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="试卷名称" :label-width="formLabelWidth">
-              <el-input v-model="form.name" :disabled="true"></el-input>
+            <el-form-item label="考试时长" :label-width="formLabelWidth">
+              <el-input v-model="form.examDuration"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
@@ -104,41 +105,66 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
-            <el-form-item label="考试时间" :label-width="formLabelWidth">
-              <el-input v-model="form.province" :disabled="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="考试班级" :label-width="formLabelWidth">
-              <el-input v-model="form.city" :disabled="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="总分" :label-width="formLabelWidth">
-              <el-input v-model="form.address" :disabled="true"></el-input>
+            <el-form-item label="最大切屏次数" :label-width="formLabelWidth">
+              <el-input v-model="form.maxCount"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="及格分" :label-width="formLabelWidth">
-              <el-input v-model="form.zip" :disabled="true"></el-input>
+              <el-input v-model="form.passedScore"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
+      <el-row :gutter="20">
+        <!-- <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="考试班级" :label-width="formLabelWidth">
+              <el-input v-model="form.address"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col> -->
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="单选题分数" :label-width="formLabelWidth">
+              <el-input v-model="form.radioScore"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="多选题分数" :label-width="formLabelWidth">
+              <el-input v-model="form.multiScore"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="判断题分数" :label-width="formLabelWidth">
+              <el-input v-model="form.judgeScore"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="简答题分数" :label-width="formLabelWidth">
+              <el-input v-model="form.saqScore"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <div style="display: flex; justify-content: flex-end; with: 100%">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateExam()">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { examPaging, repoAdd, repoUpdate, examDel } from "@/api/exam";
+import { examPaging, repoAdd, examUpdate, examDel } from "@/api/exam";
 export default {
   data() {
     return {
@@ -165,16 +191,7 @@ export default {
         this.form = row;
       },
       diaTitle: "新增",
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
-      },
+      form: {},
       formLabelWidth: "110px",
     };
   },
@@ -212,6 +229,41 @@ export default {
             message: "已取消删除",
           });
         });
+    },
+    updateExam() {
+      const data = {
+        examDuration: this.form.examDuration,
+
+        judgeScore: this.form.judgeScore,
+
+        maxCount: this.form.maxCount,
+
+        multiScore: this.form.multiScore,
+
+        passedScore: this.form.passedScore,
+
+        radioScore: this.form.radioScore,
+
+        saqScore: this.form.saqScore,
+
+        title: this.form.title,
+      };
+      examUpdate(this.form.id, data).then((res) => {
+        if (res.code) {
+          this.getExamPage(this.pageNum, this.pageSize)
+          this.dialogFormVisible= false
+          this.$message({
+            type: "success",
+            message: "修改成功",
+          });
+
+        }else{
+          this.$message({
+            type: "info",
+            message: res.msg,
+          });
+        }
+      });
     },
     // 分页查询
     async getExamPage(pageNum, pageSize, title = null) {

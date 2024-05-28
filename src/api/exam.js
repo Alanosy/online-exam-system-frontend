@@ -10,13 +10,13 @@ export function examPaging(params) {
   })
 }
 
-export function repoAdd(data) {
-  return request({
-    url: 'repo',
-    method: 'post',
-    data
-  })
-}
+// export function repoAdd(data) {
+//   return request({
+//     url: 'repo',
+//     method: 'post',
+//     data
+//   })
+// }
 
 export function examDel(ids) {
   return request({
@@ -25,9 +25,9 @@ export function examDel(ids) {
   })
 }
 
-export function repoUpdate(id, data) {
+export function examUpdate(id, data) {
   return request({
-    url: 'repo/' + id,
+    url: `exams/${id}`,
     method: 'put',
     data
   })

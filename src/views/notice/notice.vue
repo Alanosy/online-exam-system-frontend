@@ -94,19 +94,17 @@
             <el-form-item label="公告标题" :label-width="formLabelWidth">
               <el-input v-model="form.title" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="公告内容" :label-width="formLabelWidth">
-              <el-input
-                type="textarea"
-                :rows="2"
-                placeholder="请输入内容"
-                v-model="form.content"
-              >
-              </el-input>
+            <el-form-item label="公告内容" :label-width="formLabelWidth" w>
+              <quill-editor
+                ref="myQuillEditor"
+                v-model="abcd"
+                :options="editorOption"
+                class="my-quill-editor"
+              ></quill-editor>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
-
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogTableVisible = false">取 消</el-button>
         <el-button type="primary" @click="addNotice">确 定</el-button>
@@ -118,9 +116,6 @@
     <el-dialog title="编辑" :visible.sync="dialogFormVisible">
       <el-row :gutter="20">
         <el-col :span="12">
-          
-
-
           <el-form :model="form">
             <el-form-item label="公告标题" :label-width="formLabelWidth">
               <el-input v-model="form.title" autocomplete="off"></el-input>
@@ -135,7 +130,6 @@
               </el-input>
             </el-form-item>
           </el-form>
-
         </el-col>
       </el-row>
       <div slot="footer" class="dialog-footer">
@@ -151,6 +145,38 @@ import { noticePaging, noticeAdd, noticeDel, noticeUpdate } from "@/api/notice";
 export default {
   data() {
     return {
+      content: "",
+      editorOption: {
+        // 占位配置
+        placeholder: "请输入...",
+        height: "300px",
+        modules: {
+          // 配置工具栏
+          toolbar: {
+            container: [
+              ["bold", "italic", "underline", "strike"], // 加粗 斜体 下划线 删除线
+              ["blockquote", "code-block"], // 引用  代码块
+              [{ header: 1 }, { header: 2 }], // 1、2 级标题
+              [{ list: "ordered" }, { list: "bullet" }], // 有序、无序列表
+              [{ script: "sub" }, { script: "super" }], // 上标/下标
+              [{ indent: "-1" }, { indent: "+1" }], // 缩进
+              [{ direction: "rtl" }], // 文本方向
+              ["link", "image", "video"], // 链接、图片、视频
+              [{ align: [] }], // 添加居中按钮
+              [{ color: [] }], // 文字颜色按钮
+            ],
+          },
+          // 更改插入的图片大小
+          imageResize: {
+            displayStyles: {
+              backgroundColor: "black",
+              border: "none",
+              color: "white",
+            },
+            modules: ["Resize", "DisplaySize", "Toolbar"],
+          },
+        },
+      },
       pageNum: 1,
       pageSize: 10,
       data: null,
@@ -160,8 +186,9 @@ export default {
       currentPage2: 5,
       currentPage3: 5,
       currentPage4: 4,
+      abcd: "",
       dialogVisible: false,
-    
+
       formInline: {
         user: "",
         region: "",
@@ -190,9 +217,9 @@ export default {
       const res = await noticePaging(params);
       this.data = res.data;
     },
-    updateNotice(){
-      const data = {title: this.form.title,content:this.form.content}
-      noticeUpdate(this.form.id,data).then((res) => {
+    updateNotice() {
+      const data = { title: this.form.title, content: this.form.content };
+      noticeUpdate(this.form.id, data).then((res) => {
         if (res.code) {
           this.getNoticePage(this.pageNum, this.pageSize);
           this.dialogFormVisible = false;
@@ -206,7 +233,7 @@ export default {
             message: res.msg,
           });
         }
-      })
+      });
     },
     searchNotice() {
       this.getNoticePage(this.pageNum, this.pageSize, this.searchTitle);
@@ -221,26 +248,25 @@ export default {
         center: true,
       }).then(() => {
         noticeDel(id).then((res) => {
-        if (res.code) {
-          this.getNoticePage(this.pageNum, this.pageSize);
-          this.tableData.splice(index, 1);
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-        } else {
-          this.$message({
-            type: "info",
-            message: res.msg,
-          });
-        }
+          if (res.code) {
+            this.getNoticePage(this.pageNum, this.pageSize);
+            this.tableData.splice(index, 1);
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+          } else {
+            this.$message({
+              type: "info",
+              message: res.msg,
+            });
+          }
+        });
       });
-      })
-      
     },
 
     addNotice() {
-      const data = { title: this.form.title, content: this.form.content };
+      const data = { title: this.form.title, content: this.abcd };
       noticeAdd(data).then((res) => {
         if (res.code) {
           this.getNoticePage(this.pageNum, this.pageSize);
@@ -280,8 +306,6 @@ export default {
         })
         .catch((_) => {});
     },
-
-    
   },
 
   computed: {
@@ -315,6 +339,16 @@ export default {
 </script>
 
 <style>
+/* 编辑器高度及背景色 */
+::v-deep .ql-editor {
+  min-height: 300px;
+
+  background-color: #fff;
+}
+.my-quill-editor {
+  width: 40em;
+  height: 30em;
+}
 .el-table--border,
 .el-table--group {
   border: 1px solid #161616;

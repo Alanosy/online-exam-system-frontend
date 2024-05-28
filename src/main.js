@@ -54,6 +54,12 @@ import '@/permission' // permission control
 import axios from 'axios'
 import { getToken } from './utils/auth'
 axios.defaults.withCredentials=true
+// 富文本编辑器
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 
 /**
  * If you don't want to use mock-server
