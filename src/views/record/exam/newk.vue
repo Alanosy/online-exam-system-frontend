@@ -49,8 +49,11 @@
         <el-col>
           <el-card class="qu_list">
             <div>
-              <template v-for="index in data" >
-                <div :class="'index' + index" v-if="index.quType===1||index.quType===2||index.quType===3">
+              <template v-for="index in data">
+                <div
+                  :class="'index' + index"
+                  v-if="index.quType === 1 || index.quType === 2 || index.quType === 3"
+                >
                   <el-row :gutter="24">
                     <el-col :span="20" style="text-align: left">
                       <!-- 题目: 序号、类型、题干 -->
@@ -117,8 +120,8 @@
                   <el-divider></el-divider>
                 </div>
               </template>
-              <template v-for="index in data" >
-                <div :class="'index' + index" v-if="index.quType===4">
+              <template v-for="index in data">
+                <div :class="'index' + index" v-if="index.quType === 4">
                   <el-row :gutter="24">
                     <el-col :span="20" style="text-align: left">
                       <!-- 题目: 序号、类型、题干 -->
@@ -132,19 +135,20 @@
                       <el-radio-group class="qu_choose_group">
                         <!-- ['A', 'B', 'C', 'D'] -->
                         <el-input
-                        style="margin-top:10px"
-                                type="textarea"
-                                :autosize="{ minRows: 2, maxRows: 4}"
-                                placeholder="请输入内容"
-                                v-model="textarea2">
-                              </el-input>
+                          style="margin-top: 10px"
+                          type="textarea"
+                          :autosize="{ minRows: 2, maxRows: 4 }"
+                          placeholder="请输入内容"
+                          v-model="index.myOption"
+                        >
+                        </el-input>
                       </el-radio-group>
 
                       <!-- 题目解析 -->
                       <div class="qu_analysis">
                         <el-card>
                           <div>
-                            <span>考生答案：</span>
+                            <!-- <span>考生答案：</span>
                             <span
                               :style="{
                                 color:
@@ -154,13 +158,13 @@
                                     ? 'red'
                                     : 'gray',
                               }"
-                              >{{ numberToLetter(index.myOption) }}</span
-                            ><br />
+                              >{{}}</span
+                            ><br /> -->
                           </div>
                           <div style="margin-top: 8px">
                             <span>正确答案：</span>
-                            <span>{{ index.option[0].content  }}</span
-                            ><br />
+                            <span>{{ index.rightOption }}</span>
+                            <br />
                           </div>
                           <div style="margin-top: 8px">
                             <span>试题解析：</span>
