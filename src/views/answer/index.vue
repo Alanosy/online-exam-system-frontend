@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-20 10:09:42
+ * @LastEditors: 魏进 3413105907@qq.com
+ * @LastEditTime: 2024-05-28 17:57:08
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -29,14 +29,13 @@
     <div style="margin: auto; width: 90%" align="center">
       <el-table :data="data.records" border>
         <el-table-column fixed prop="examId" label="序号" align="center" />
-        <el-table-column prop="examTitle" label="题干" align="center" />
+        <el-table-column prop="examTitle" label="考试名称" align="center" />
         <el-table-column prop="classSize" label="总人数" align="center" />
-        <el-table-column prop="numberOfApplicants" label="待阅卷人数" align="center" />
+        <el-table-column prop="numberOfApplicants" label="实际参考人数" align="center" />
         <el-table-column prop="correctedPaper" label="已阅卷人数" align="center" />
-
         <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="{ row }">
-            <el-button
+            <!-- <el-button
               type="text"
               size="small"
               style="font-size: 14px"
@@ -49,12 +48,13 @@
               style="color: red; font-size: 14px"
               @click="open"
               >删除</el-button
-            >
+            > -->
             <el-button
               type="text"
               size="small"
               style="font-size: 14px"
               @click="screenInfo(row)"
+              :disabled="row.numberOfApplicants == row.correctedPaper"
               >查看详情</el-button
             >
           </template>
@@ -75,7 +75,7 @@
     </div>
     <!--编辑弹窗-->
 
-    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
+    <!-- <el-dialog title="编辑" :visible.sync="dialogFormVisible">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form :model="form">
@@ -121,7 +121,7 @@
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -150,10 +150,10 @@ export default {
         region: "",
       },
       cancle() {},
-      updateRow(row) {
-        this.dialogFormVisible = true;
-        this.form = row;
-      },
+      // updateRow(row) {
+      //   this.dialogFormVisible = true;
+      //   this.form = row;
+      // },
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {
@@ -197,30 +197,30 @@ export default {
       localStorage.setItem("answer_examId", row.examId);
       this.$router.push({ name: "Ansck", query: { zhi: row } });
     },
-    open(index) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
+    // open(index) {
+    //   this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+    //     confirmButtonText: "确定",
 
-        cancelButtonText: "取消",
+    //     cancelButtonText: "取消",
 
-        type: "warning",
-        center: true,
-      });
-      this.tableData
-        .splice(index, 1)
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
+    //     type: "warning",
+    //     center: true,
+    //   });
+    //   this.tableData
+    //     .splice(index, 1)
+    //     .then(() => {
+    //       this.$message({
+    //         type: "success",
+    //         message: "删除成功!",
+    //       });
+    //     })
+    //     .catch(() => {
+    //       this.$message({
+    //         type: "info",
+    //         message: "已取消删除",
+    //       });
+    //     });
+    // },
   },
   computed: {
     tables() {
