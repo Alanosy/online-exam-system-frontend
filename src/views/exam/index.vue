@@ -897,6 +897,9 @@ page {
   margin-top: 10px;
 }
 
+
+
+
 /* // 试题内容样式 */
 .qu_list {
   height: 100%;
@@ -977,6 +980,11 @@ page {
     }
   }
 
+
+
+
+
+  
   /* // 试题赋分 */
   .qu_assign_score {
     background: #f5f5f5;

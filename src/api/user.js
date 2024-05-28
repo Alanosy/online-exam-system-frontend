@@ -94,3 +94,10 @@ export function register(data) {
     data
   })
 }
+export function trackPresence(data) {
+  return request({
+    url: 'auths/track-presence',
+    method: 'post',
+    data
+  })
+}

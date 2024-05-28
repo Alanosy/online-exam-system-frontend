@@ -189,6 +189,7 @@ export default {
               this.$store
                 .dispatch("user/login", this.loginForm)
                 .then(() => {
+                  this.$store.dispatch('loginUser', { id: '1' });
                   this.$router.push({ path: "index" });
                   this.loading = false;
                 })

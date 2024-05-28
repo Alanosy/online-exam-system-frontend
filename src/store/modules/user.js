@@ -58,6 +58,7 @@ const actions = {
           }else if(roleId === 3){
             window.localStorage.setItem('roles','admin')
           }
+          
           commit('SET_TOKEN', data)
           setToken(data)
           resolve()
