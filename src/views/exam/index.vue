@@ -107,7 +107,7 @@
                 v-for="item in quData.answerList"
                 :key="item.id"
                 :label="item.id"
-                >{{  numberToLetter(item.sort)  }}.{{ item.content }}
+                >{{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100%" />
                 </div>
@@ -118,12 +118,13 @@
           <div v-if="quData.quType === 4">
             <el-input
               type="textarea"
-              :autosize="{ minRows: 2, maxRows: 4}"
+              :autosize="{ minRows: 2, maxRows: 4 }"
               placeholder="请输入内容"
-              v-model="saqTextarea">
+              v-model="saqTextarea"
+            >
             </el-input>
             <!-- <el-checkbox-group v-model="multiValue"> -->
-              <!-- <el-checkbox
+            <!-- <el-checkbox
                 v-for="item in quData.answerList"
                 :key="item.id"
                 :label="item.id"
@@ -157,25 +158,46 @@
       </el-col>
     </el-row>
     <!-- 切屏弹窗 -->
-    <el-dialog title="提示" :visible.sync="tipsFlag" width="480px" class="commonDialog multi clickLight" center :close-on-click-modal="false">
-      <div class="dialogTipsbox" v-if="tips===1">你还有试题未作答，确认要交卷？</div>
-      <div class="dialogTipsbox" v-if="tips===2">
-        最多只能切屏{{switchPage.switchPageTimes}}次，你还可切换{{switchPage.remaTimes}}次，
+    <el-dialog
+      title="提示"
+      :visible.sync="tipsFlag"
+      width="480px"
+      class="commonDialog multi clickLight"
+      center
+      :close-on-click-modal="false"
+    >
+      {{ examMeg }}
+      <!-- <div class="dialogTipsbox" v-if="tips === 1">你还有试题未作答，确认要交卷？</div>
+      <div class="dialogTipsbox" v-if="tips === 2">
+        最多只能切屏{{ switchPage.switchPageTimes }}次，你还可切换{{
+          switchPage.remaTimes
+        }}次，
         <br />
-        超过{{switchPage.switchPageTimes}}次将强行交卷！
-      </div>
+        超过{{ switchPage.switchPageTimes }}次将强行交卷！
+      </div> -->
       <span slot="footer" class="dialog-footer">
-        <el-button @click="tipsFlag = false" v-if="tips===1">取 消</el-button>
-        <el-button type="primary" @click="onConfirmTip" v-if="tips===1">确 定</el-button>
-        <el-button type="primary" @click="onConfirmTip" v-if="tips===2">我知道了</el-button>
+        <el-button @click="tipsFlag = false" v-if="tips === 1">取 消</el-button>
+        <el-button type="primary" @click="onConfirmTip" v-if="tips === 1"
+          >确 定</el-button
+        >
+        <el-button type="primary" @click="onConfirmTip" v-if="tips === 2"
+          >我知道了</el-button
+        >
       </span>
-</el-dialog>
-
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { paperDetail, quDetail, handExam, fillAnswer,examStart, examQuList  } from "@/api/exam";
+import {
+  paperDetail,
+  quDetail,
+  handExam,
+  fillAnswer,
+  examStart,
+  examCheat,
+  examQuList,
+} from "@/api/exam";
 import { Loading } from "element-ui";
 import ExamTimer from "@/components/ExamTimer";
 
@@ -184,7 +206,7 @@ export default {
   components: { ExamTimer },
   data() {
     return {
-      examId : "",
+      examId: "",
       receivedRow: null,
       // 全屏/不全屏
       isFullscreen: false,
@@ -192,17 +214,21 @@ export default {
       showNext: true,
       loading: false,
       handleText: "交卷",
-      saqTextarea:"",
+      saqTextarea: "",
       pageLoading: false,
       // 试卷ID
       paperId: "",
       // 当前答题卡
       cardItem: {},
       allItem: [],
+      tipsFlag: false,
       // 当前题目内容
       quData: {
         answerList: [],
       },
+      testData: {},
+      pkExam: null,
+      examMeg: "",
       // 试卷信息
       paperData: {
         leftSeconds: 99999,
@@ -242,41 +268,45 @@ export default {
     });
   },
   methods: {
-        //切换页面检测
+    //切换页面检测
     //isReduce 0扣次数 1不扣次数 router 判断是否为路由转跳
     //事件默认参数
     pageHidden(e = null, isReduce = 0, router = false) {
+      console.log("e", e);
+      console.log("isReduce", isReduce);
+      console.log("router", router);
       return new Promise((resolve, reject) => {
+        console.log(document.visibilityState);
         if (document.visibilityState === "hidden" || router) {
-          this.axios({
-            method: "post",
-            url: "/knowledge/exam/saveSwitchPageCount",
-            data: {
-              pkExam: this.testData.pkExam,
-              pkPaper: this.testData.pkPaper,
-              startTime: this.testData.startTime,
-              pkCurExam: this.testData.pkCurExam,
-              isFirst: isReduce,
-              endTime: this.testData.endTime
-            }
-          }).then(res => {
-            let data = res.data;
-            if (data.code == "0") {
-              this.switchPage = data.data;
-              //remaTimes 可切片次数大于0
-              if (
-                this.switchPage.remaTimes >= 0 &&
-                !this.isStop &&
-                (this.switchPage.remaTimes != this.switchPage.switchPageTimes ||
-                  (this.switchPage.remaTimes != 0 &&
-                    this.switchPage.switchPageTimes != 0)) &&
-                this.switchPage.switchPageTimes != 1000
-              ) {
-                this.tipsFlag = true;
-                this.tips = 2;
-              } else if (this.switchPage.remaTimes < 0 && !this.isStop) {
-                this.submitTest();  
+          examCheat(this.examId).then((res) => {
+            console.log("res.code", res.code);
+            // let data = res.data;
+            if (res.code) {
+              this.examMeg = res.msg;
+              // this.switchPage = data.data;
+              // //remaTimes 可切片次数大于0
+              // if (
+              //   this.switchPage.remaTimes >= 0 &&
+              //   !this.isStop &&
+              //   (this.switchPage.remaTimes != this.switchPage.switchPageTimes ||
+              //     (this.switchPage.remaTimes != 0 &&
+              //       this.switchPage.switchPageTimes != 0)) &&
+              //   this.switchPage.switchPageTimes != 1000
+              // ) {
+              this.tipsFlag = true;
+              if (res.data) {
+                setTimeout(() => {
+                  //
+                  getQuestionDetail(this.quList[this.currentQuIndex].quId).then((res) => {
+                    this.quDetail = res.data;
+                  });
+                }, 100);
+                this.$router.push({ name: "Textcenter", params: { id: this.paperId } });
               }
+              // this.tips = 2;
+              // } else if (this.switchPage.remaTimes < 0 && !this.isStop) {
+              //   this.submitTest();
+              // }
               resolve();
             } else {
               reject();
@@ -285,38 +315,38 @@ export default {
         }
       });
     },
-    submitTest() {
-      this.loading = true;
-      this.axios({
-        method: "post",
-        url: "/knowledge/exam/submitPaper",
-        data: {
-          pkExam: this.pkExam,
-          pkPaper: this.testData.pkPaper,
-          startTime: this.testData.startTime,
-          endTime: this.testData.endTime,
-          pkCurExam: this.testData.pkCurExam
-        }
-      }).then(res => {
-        let data = res.data;
-        this.loading = false;
-        if (data.code == "0") {
-          this.isStop = true;
-          this.tipsFlag = false;
-          this.testResult = data.data;
-          clearInterval(this.countdownTime);
-        } else {
-          this.MixerrorMes(data.message);
-        }
-      });
-    },
+    // submitTest() {
+    //   this.loading = true;
+    //   this.axios({
+    //     method: "post",
+    //     url: "/knowledge/exam/submitPaper",
+    //     data: {
+    //       pkExam: this.pkExam,
+    //       pkPaper: this.testData.pkPaper,
+    //       startTime: this.testData.startTime,
+    //       endTime: this.testData.endTime,
+    //       pkCurExam: this.testData.pkCurExam,
+    //     },
+    //   }).then((res) => {
+    //     let data = res.data;
+    //     this.loading = false;
+    //     if (data.code == "0") {
+    //       this.isStop = true;
+    //       this.tipsFlag = false;
+    //       this.testResult = data.data;
+    //       clearInterval(this.countdownTime);
+    //     } else {
+    //       this.MixerrorMes(data.message);
+    //     }
+    //   });
+    // },
     destroyed() {
-    window.removeEventListener("visibilitychange", this.pageHidden);
-    window.removeEventListener("scroll", this.handleScroll);
-    window.removeEventListener("resize", this.getLfetDistance);
-    clearInterval(this.countdownTime); // 计时器
-  },
-     startExam(examId) {
+      window.removeEventListener("visibilitychange", this.pageHidden);
+      window.removeEventListener("scroll", this.handleScroll);
+      window.removeEventListener("resize", this.getLfetDistance);
+      clearInterval(this.countdownTime); // 计时器
+    },
+    startExam(examId) {
       examQuList(examId).then((res) => {
         this.paperData = res.data;
       });
@@ -342,14 +372,13 @@ export default {
 
     // 答题卡样式
     cardItemClass(checkout, quId) {
-      if ( sessionStorage.getItem("exam_"+quId)==1 || checkout) {
+      if (sessionStorage.getItem("exam_" + quId) == 1 || checkout) {
         return "success";
       }
 
-      if (sessionStorage.getItem("exam_"+quId==0)|| checkout) {
+      if (sessionStorage.getItem("exam_" + quId == 0) || checkout) {
         return "info";
       }
-
     },
 
     /**
@@ -397,13 +426,13 @@ export default {
     },
     clearSessionStorageByPrefix(prefix) {
       for (var key in sessionStorage) {
-          if (sessionStorage.hasOwnProperty(key) && key.startsWith(prefix)) {
-              sessionStorage.removeItem(key);
-          }
+        if (sessionStorage.hasOwnProperty(key) && key.startsWith(prefix)) {
+          sessionStorage.removeItem(key);
+        }
       }
     },
 
-// 使用函数清除以 "exam_" 开头的所有键值对
+    // 使用函数清除以 "exam_" 开头的所有键值对
 
     doHandler() {
       this.handleText = "正在交卷，请等待...";
@@ -416,7 +445,7 @@ export default {
           message: "试卷提交成功，即将进入试卷详情！",
           type: "success",
         });
-        this.clearSessionStorageByPrefix('exam_');
+        this.clearSessionStorageByPrefix("exam_");
         this.$router.push({ name: "Textcenter", params: { id: this.paperId } });
       });
     },
@@ -474,20 +503,20 @@ export default {
       if (this.radioValue !== "") {
         answers.push(this.radioValue);
       }
-      console.log("1a");
-      console.log(this.cardItem);
+
       const params = {
         examId: this.paperId,
         quId: this.cardItem.questionId,
-        answer: answers.join(","),
+        answer: item.type == 4 ? this.saqTextarea : answers.join(","),
         // answer: "",
       };
       fillAnswer(params).then((res) => {
-        if(res.code){
-          sessionStorage.setItem("exam_"+this.cardItem.questionId, 1);
-        }else{
-          sessionStorage.setItem("exam_"+this.cardItem.questionId, 0);
+        if (res.code) {
+          sessionStorage.setItem("exam_" + this.cardItem.questionId, 1);
+        } else {
+          sessionStorage.setItem("exam_" + this.cardItem.questionId, 0);
         }
+        this.saqTextarea = "";
         // 必须选择一个值
         if (answers.length > 0) {
           // 加入已答列表
@@ -518,25 +547,27 @@ export default {
       // 查找下个详情
       const params = { examId: examId, questionId: item.questionId };
       quDetail(params).then((response) => {
-        // console.log(response);
-        console.log("=================");
-        console.log(response.data);
-        console.log("=================");
         this.quData = response.data;
         this.radioValue = "";
         this.multiValue = [];
 
+        if (response.data.quType === 4 && response.data.answerList != null) {
+          this.saqTextarea = response.data.answerList[0].content;
+        } else if (
+          (response.data.quType === 1,
+          response.data.quType === 2,
+          response.data.quType === 3)
+        ) {
+          this.quData.answerList.forEach((item) => {
+            if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checkout) {
+              this.radioValue = item.id;
+            }
+            if (this.quData.quType === 2 && item.checkout) {
+              this.multiValue.push(item.id);
+            }
+          });
+        }
         // 填充该题目的答案
-        this.quData.answerList.forEach((item) => {
-          console.log(item,"ttt")
-          if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checkout) {
-            this.radioValue = item.id;
-          }
-          if (this.quData.quType === 2 && item.checkout) {
-            this.multiValue.push(item.id);
-          }
-        });
-
         // 关闭详情
         loading.close();
       });
@@ -555,6 +586,8 @@ export default {
           this.cardItem = this.paperData.multiList[0];
         } else if (this.paperData.judgeList && this.paperData.judgeList.length > 0) {
           this.cardItem = this.paperData.judgeList[0];
+        } else if (this.paperData.saqList && this.paperData.saqList.length > 0) {
+          this.cardItem = this.paperData.saqList[0];
         }
 
         const that = this;
@@ -568,6 +601,9 @@ export default {
         });
 
         this.paperData.judgeList.forEach(function (item) {
+          that.allItem.push(item);
+        });
+        this.paperData.saqList.forEach(function (item) {
           that.allItem.push(item);
         });
 

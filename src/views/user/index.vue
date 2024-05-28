@@ -31,15 +31,12 @@
     <!-- table -->
     <div style="width: 90%; margin: auto; margin-top: 20px">
       <el-table :data="data.records" border>
-        <el-table-column prop="id" label="序号" align="center" >
+        <el-table-column prop="id" label="序号" align="center"> </el-table-column>
+        <el-table-column prop="userName" label="用户名" align="center"> </el-table-column>
+        <el-table-column prop="realName" label="真实姓名" align="center">
         </el-table-column>
-        <el-table-column prop="userName" label="用户名"align="center">
+        <el-table-column prop="roleName" label="角色名称" align="center">
         </el-table-column>
-        <el-table-column prop="realName" label="真实姓名" align="center" >
-        </el-table-column>
-        <el-table-column prop="roleName" label="角色名称" align="center" >
-        </el-table-column>
-        <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
         <el-table-column prop="createTime" label="注册时间" align="center">
         </el-table-column>
@@ -117,9 +114,8 @@
           <el-form :model="addForm">
             <el-form-item label="身份选择" :label-width="formLabelWidth">
               <el-select v-model="addForm.region" placeholder="请选择身份">
-                <el-option label="学生" value="shang"></el-option>
-                <el-option label="教师" value="shanghai"></el-option>
-                <el-option label="管理员" value="beijing"></el-option>
+                <el-option label="学生" value="1"></el-option>
+                <el-option label="教师" value="2"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -209,9 +205,9 @@ export default {
       searchClassName: "",
       role: "",
       pageNum: 1,
-      diaTitle:"新增",
+      diaTitle: "新增",
       pageSize: 10,
-      data: {records:{}},
+      data: { records: {} },
       fileList: [],
       dialogTableVisible: false,
       dialogInportVisible: false,
@@ -272,7 +268,7 @@ export default {
       const data = {
         userName: this.addForm.userName,
         realName: this.addForm.realName,
-        roleId: 1,
+        roleId: this.addForm.region,
       };
       classAdd(data).then((res) => {
         if (res.code) {

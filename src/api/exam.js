@@ -94,3 +94,13 @@ export function saveData(data) {
   })
   
 }
+
+
+export function examCheat(examId) {
+  return request({
+    url: `exams/cheat/${examId}`,
+    method: 'put',
+
+  })
+  
+}

@@ -4,7 +4,10 @@
     <div class="bj">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="班级" style="margin-left: 28px">
-          <el-input v-model="formInline.searchTitle" placeholder="输入班级名称"></el-input>
+          <el-input
+            v-model="formInline.searchTitle"
+            placeholder="输入班级名称"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="margin-left: 40px" @click="searchExam"
@@ -26,12 +29,10 @@
     <!-- table -->
     <div style="width: 90%; margin: auto; margin-top: 20px">
       <el-table :data="data.records" border>
-        <el-table-column prop="id" label="序号" align="center" width="180px">
+        <el-table-column prop="id" label="序号" align="center"> </el-table-column>
+        <el-table-column prop="gradeName" label="班级名称" align="center">
         </el-table-column>
-        <el-table-column prop="gradeName" label="班级名称" width="500px" align="center">
-        </el-table-column>
-        <el-table-column prop="code" label="班级口令" width="600px" align="center">
-        </el-table-column>
+        <el-table-column prop="code" label="班级口令" align="center"> </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
             <el-button
@@ -120,7 +121,7 @@ export default {
         searchTitle: "",
       },
       form: {
-        gradeName:""
+        gradeName: "",
       },
       formLabelWidth: "110px",
     };
@@ -159,7 +160,8 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
         center: true,
-      }).then(() => {
+      })
+        .then(() => {
           classDel(row.id).then((res) => {
             if (res.code) {
               this.getClassPage(this.pageNum, this.pageSize);
@@ -183,7 +185,7 @@ export default {
           });
         });
     },
-    updateClass(){
+    updateClass() {
       classUpdate(this.form.id, { gradeName: this.form.gradeName })
         .then((res) => {
           if (res.code) {
@@ -208,9 +210,9 @@ export default {
         });
     },
     updateRow(row) {
-        this.dialogFormVisible = true;
-        this.form = row;
-      },
+      this.dialogFormVisible = true;
+      this.form = row;
+    },
     searchExam() {
       this.getClassPage(this.pageNum, this.pageSize, this.formInline.searchTitle);
     },
@@ -226,7 +228,7 @@ export default {
       // 设置当前页逻辑
       this.pageNum = val;
       this.getClassPage(val, this.pageSize);
-    }
+    },
   },
 
   computed: {
@@ -252,7 +254,6 @@ export default {
     //       });
     //     });
     //   }
-
     //   return this.tableData;
     // },
   },

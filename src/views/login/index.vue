@@ -72,32 +72,36 @@
           />
         </el-form-item>
         <img
+          ref="captchaImg"
           src="/api/auths/captcha"
           style="margin-left: 20px; height: 47px"
-          @click="getVerify($event.target)"
+          @click="getVerify"
           alt=""
         />
       </div>
-    <div style="display: flex; align-items: center; justify-content: flex-end;margin-bottom: 20px;">
-      <router-link style="color:#66b1ff" to="/register">  
-
-      立即注册
-
-    </router-link>
-    </div>
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          margin-bottom: 20px;
+        "
+      >
+        <router-link style="color: #66b1ff" to="/register"> 立即注册 </router-link>
+      </div>
       <!-- <div style="display: flex"> -->
       <el-form-item>
         <el-button
           :loading="loading"
           type="primary"
-          style="width: 100%;"
+          style="width: 100%"
           @click.native.prevent="handleLogin"
           >login</el-button
         >
       </el-form-item>
-        
-          <!-- <div style="margin-left: 10px" class="but">rigister</div> -->
-      
+
+      <!-- <div style="margin-left: 10px" class="but">rigister</div> -->
+
       <!-- </div> -->
     </el-form>
   </div>
@@ -155,8 +159,9 @@ export default {
     // this.getEmail()
   },
   methods: {
-    getVerify(obj) {
-      obj.src = "/api/auths/captcha?" + Math.random();
+    getVerify() {
+      this.$refs.captchaImg.src = `/api/auths/captcha?${Math.random()}`;
+      // obj.src = "/api/auths/captcha?" + Math.random();
     },
 
     async getEmail() {
@@ -176,6 +181,7 @@ export default {
     },
     handleLogin() {
       verifyCode(this.code).then((res) => {
+        console.log(res.code);
         if (res.code) {
           this.$refs.loginForm.validate((valid) => {
             if (valid) {
@@ -197,6 +203,7 @@ export default {
             }
           });
         } else {
+          console.log(11111111);
           this.getVerify();
           this.$message({
             type: "info",

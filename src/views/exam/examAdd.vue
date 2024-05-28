@@ -501,7 +501,7 @@ export default {
 
     submitForm() {
       // 校验和处理数据
-      const cerTemp = ""
+      let cerTemp = ""
       if(this.postForm.certificateId!=null&& this.postForm.certificateId!=''){
         cerTemp = this.postForm.certificateId.join(',')
       }

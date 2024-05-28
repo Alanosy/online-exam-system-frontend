@@ -84,7 +84,9 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd2">
-          <svg-icon :icon-class="checkedPasswordType === 'password' ? 'eye' : 'eye-open'" />
+          <svg-icon
+            :icon-class="checkedPasswordType === 'password' ? 'eye' : 'eye-open'"
+          />
         </span>
       </el-form-item>
 
@@ -105,26 +107,31 @@
           />
         </el-form-item>
         <img
+          ref="captchaImg"
           src="/api/auths/captcha"
           style="margin-left: 20px; height: 47px"
-          @click="getVerify($event.target)"
+          @click="getVerify"
           alt=""
         />
       </div>
-        <div style="display: flex; align-items: center; justify-content: flex-end;margin-bottom: 20px;">
-
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          margin-bottom: 20px;
+        "
+      >
         <router-link style="color: #66b1ff" to="/login"> 登录 </router-link>
-    </div>
+      </div>
 
-
-        <el-button
-          :loading="loading"
-          type="primary"
-          style="width: 100%; margin-bottom: 30px"
-          @click="registerFn"
-          >rigister</el-button
-        >
-
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width: 100%; margin-bottom: 30px"
+        @click="registerFn"
+        >rigister</el-button
+      >
     </el-form>
   </div>
 </template>
@@ -134,7 +141,7 @@ import { validUsername } from "@/utils/validate";
 import { sendEmail } from "@/api/email";
 import { setToken } from "@/utils/auth";
 import axios from "axios";
-import { verifyCode,register } from "@/api/user";
+import { verifyCode, register } from "@/api/user";
 import { Message } from "element-ui";
 
 export default {
@@ -158,9 +165,8 @@ export default {
       registerForm: {
         userName: "",
         password: "",
-        realName:"",
-        checkedPassword:"",
-
+        realName: "",
+        checkedPassword: "",
       },
       code: "",
       loginRules: {
@@ -185,26 +191,25 @@ export default {
     // this.getEmail()
   },
   methods: {
-    registerFn(){ 
+    registerFn() {
       verifyCode(this.code).then((res) => {
         if (res.code) {
-
-          register(this.registerForm).then((res2)=>{
-            if(res2.code){
+          register(this.registerForm).then((res2) => {
+            if (res2.code) {
               Message({
                 message: res2.msg,
                 type: "success",
                 duration: 5 * 1000,
               });
               this.$router.push({ path: "/login" });
-            }else{
+            } else {
               Message({
                 message: res2.msg,
                 type: "error",
                 duration: 5 * 1000,
               });
-          }
-          })
+            }
+          });
         } else {
           this.getVerify();
           this.$message({
@@ -213,10 +218,9 @@ export default {
           });
         }
       });
-
     },
-    getVerify(obj) {
-      obj.src = "/api/auths/captcha?" + Math.random();
+    getVerify() {
+      this.$refs.captchaImg.src = `/api/auths/captcha?${Math.random()}`;
     },
 
     async getEmail() {
