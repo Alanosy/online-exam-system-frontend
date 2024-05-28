@@ -32,6 +32,7 @@ const store = new Vuex.Store({
       }
     },
   },
+  
   actions: {
     sendHeartbeat({ commit, state }) {
       // alert('发送心跳请求');
