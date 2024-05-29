@@ -196,7 +196,7 @@ export default {
       input: "",
       quIndex: -1,
       repoId: 0,
-      data: null,
+      data: {},
     };
   },
   created() {

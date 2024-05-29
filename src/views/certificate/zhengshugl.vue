@@ -8,61 +8,61 @@
 -->
 
 <template>
-  <div style="margin-top: 30px">
-    <div style="padding-left: 53px">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="证书名称" style="margin-left: 28px">
-          <el-input v-model="searchCertificateName" placeholder="证书名称"></el-input>
-        </el-form-item>
-        <el-form-item label="认证单位" style="margin-left: 28px">
-          <el-input v-model="searchCertificationNuit" placeholder="认证单位"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" style="margin-left: 40px" @click="searchCertificate"
-            >查询</el-button
-          >
-          <el-button
-            type="primary"
-            style="margin-left: 40px"
-            @click="dialogTableVisible = true"
-            >新增</el-button
-          >
-  
-        </el-form-item>
-      </el-form>
-    </div>
+  <div class="app-container">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="证书名称">
+        <el-input v-model="searchCertificateName" placeholder="证书名称"></el-input>
+      </el-form-item>
+      <el-form-item label="认证单位">
+        <el-input v-model="searchCertificationNuit" placeholder="认证单位"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="searchCertificate">查询</el-button>
+        <el-button type="primary" @click="dialogTableVisible = true">新增</el-button>
+      </el-form-item>
+    </el-form>
 
     <!-- table -->
-    <div style="margin: auto; width: 90%" align="center">
-      <el-table :data="data.records" border>
-        <el-table-column fixed prop="id" label="序号" align="center" />
-        <el-table-column prop="certificateName" label="证书名称" align="center" />
-        <el-table-column prop="certificationNuit" label="认证单位" align="center" />
 
-        <el-table-column prop="createTime" label="创建时间" align="center" />
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column fixed prop="id" label="序号" align="center" />
+      <el-table-column prop="certificateName" label="证书名称" align="center" />
+      <el-table-column prop="certificationNuit" label="认证单位" align="center" />
 
-        <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="{ row }">
-            <el-button
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              @click="updateRow(row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              size="small"
-              style="color: red; font-size: 14px"
-              @click="delCertificate(row.id)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="block">
-      <span class="demonstration" />
+      <el-table-column prop="createTime" label="创建时间" align="center" />
+
+      <el-table-column fixed="right" label="操作" align="center">
+        <template slot-scope="{ row }">
+          <el-button
+            type="text"
+            size="small"
+            style="font-size: 14px"
+            @click="updateRow(row)"
+            >编辑</el-button
+          >
+          <el-button
+            type="text"
+            size="small"
+            style="color: red; font-size: 14px"
+            @click="delCertificate(row.id)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <div class="pagination-container">
       <el-pagination
         :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
@@ -98,13 +98,13 @@
       <el-row>
         <el-col :span="12">
           <el-form :model="form">
-          <el-form-item label="证书名称" :label-width="formLabelWidth">
-            <el-input v-model="form.certificateName" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="认证单位" :label-width="formLabelWidth">
-            <el-input v-model="form.certificationNuit" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-form>
+            <el-form-item label="证书名称" :label-width="formLabelWidth">
+              <el-input v-model="form.certificateName" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="认证单位" :label-width="formLabelWidth">
+              <el-input v-model="form.certificationNuit" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
         </el-col>
       </el-row>
       <div slot="footer" class="dialog-footer">
@@ -116,21 +116,26 @@
 </template>
 
 <script>
-import {certificatePaging,certificateDel,certificateAdd,certificateUpdate} from "@/api/certificate";
+import {
+  certificatePaging,
+  certificateDel,
+  certificateAdd,
+  certificateUpdate,
+} from "@/api/certificate";
 export default {
   data() {
     return {
-      pageNum:1,
-      pageSize:10,
-      data:null,
+      pageNum: 1,
+      pageSize: 10,
+      data: null,
       input: "",
       input1: "",
       currentPage1: 5,
       currentPage2: 5,
       currentPage3: 5,
       currentPage4: 4,
-      searchCertificateName:"",
-      searchCertificationNuit:"",
+      searchCertificateName: "",
+      searchCertificationNuit: "",
       formInline: {
         user: "",
         region: "",
@@ -160,35 +165,55 @@ export default {
   },
   methods: {
     // 分页查询
-    async getCertificatePage(pageNum, pageSize, certificateName = null,searchCertificationNuit=null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, certificateName: certificateName ,certificationUnit:searchCertificationNuit};
+    async getCertificatePage(
+      pageNum,
+      pageSize,
+      certificateName = null,
+      searchCertificationNuit = null
+    ) {
+      const params = {
+        pageNum: pageNum,
+        pageSize: pageSize,
+        certificateName: certificateName,
+        certificationUnit: searchCertificationNuit,
+      };
       const res = await certificatePaging(params);
       this.data = res.data;
     },
     searchCertificate() {
-      this.getCertificatePage(this.pageNum, this.pageSize, this.searchCertificateName,this.searchCertificationNuit);
+      this.getCertificatePage(
+        this.pageNum,
+        this.pageSize,
+        this.searchCertificateName,
+        this.searchCertificationNuit
+      );
     },
-    updateCertificate(){
-      const data = {certificateName:this.form.certificateName,certificationNuit:this.form.certificationNuit}
-      certificateUpdate(this.form.id,data).then(res => {
-        if(res.code){
+    updateCertificate() {
+      const data = {
+        certificateName: this.form.certificateName,
+        certificationNuit: this.form.certificationNuit,
+      };
+      certificateUpdate(this.form.id, data).then((res) => {
+        if (res.code) {
           this.getCertificatePage(this.pageNum, this.pageSize);
           this.dialogFormVisible = false;
           this.$message({
             type: "success",
             message: "编辑成功!",
           });
-        }else{
+        } else {
           this.$message({
             type: "info",
             message: res.msg,
           });
-     
         }
-      })
+      });
     },
-    addCertificate(){
-      const data = {certificateName:this.form.certificateName,certificationNuit:this.form.certificationNuit}
+    addCertificate() {
+      const data = {
+        certificateName: this.form.certificateName,
+        certificationNuit: this.form.certificationNuit,
+      };
       certificateAdd(data).then((res) => {
         if (res.code) {
           this.getCertificatePage(this.pageNum, this.pageSize);
@@ -205,7 +230,7 @@ export default {
         }
       });
     },
-    delCertificate(id){
+    delCertificate(id) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -213,7 +238,7 @@ export default {
         center: true,
       })
         .then(() => {
-        certificateDel(id).then((res) => {
+          certificateDel(id).then((res) => {
             if (res.code) {
               this.getCertificatePage(this.pageNum, this.pageSize);
               this.$message({
@@ -234,8 +259,6 @@ export default {
             message: "已取消删除",
           });
         });
-
-
     },
     onSubmit() {
       console.log("submit!");
@@ -253,7 +276,6 @@ export default {
     handleClick(row) {
       console.log(row);
     },
-
   },
   computed: {
     tables() {

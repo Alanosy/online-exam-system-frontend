@@ -48,32 +48,35 @@
 </template>
 
 <script>
-import {answerUserPging} from '@/api/answer';
+import { answerUserPging } from "@/api/answer";
 export default {
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
-      data: null,
-      examId:"",
+      data: {},
+      examId: "",
     };
   },
   created() {
-
-    this.examId=localStorage.getItem("answer_examId")
-    this.getAnswerUserPage(this.pageNum,this.pageSize,localStorage.getItem("answer_examId"));
+    this.examId = localStorage.getItem("answer_examId");
+    this.getAnswerUserPage(
+      this.pageNum,
+      this.pageSize,
+      localStorage.getItem("answer_examId")
+    );
   },
   methods: {
-    getAnswerUserPage(pageNum, pageSize,examId) {
-      const params = { pageNum: pageNum, pageSize: pageSize,examId:examId };
+    getAnswerUserPage(pageNum, pageSize, examId) {
+      const params = { pageNum: pageNum, pageSize: pageSize, examId: examId };
       answerUserPging(params).then((res) => {
         this.data = res.data;
       });
     },
     screenInfo(row) {
       console.info("=====", row);
-      sessionStorage.setItem("answer_info",JSON.stringify(row))
-      this.$router.push({ name: "make"   });
+      sessionStorage.setItem("answer_info", JSON.stringify(row));
+      this.$router.push({ name: "make" });
     },
   },
 };

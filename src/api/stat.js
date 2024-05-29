@@ -19,3 +19,10 @@ return request({
     method: 'get'
 })
 }
+
+export function getDaily() {
+  return request({
+      url: 'stat/daily',
+      method: 'get'
+  })
+  }

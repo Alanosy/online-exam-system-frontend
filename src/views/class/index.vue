@@ -1,61 +1,62 @@
 <template>
-  <div>
+  <div class="app-container">
     <!-- form -->
-    <div class="bj">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="班级" style="margin-left: 28px">
-          <el-input
-            v-model="formInline.searchTitle"
-            placeholder="输入班级名称"
-          ></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" style="margin-left: 40px" @click="searchExam"
-            >查询</el-button
-          >
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            :title="diaTitle"
-            type="primary"
-            @click="dialogTableVisible = true"
-            style="margin-left: 10px"
-          >
-            新增</el-button
-          >
-        </el-form-item>
-      </el-form>
-    </div>
-    <!-- table -->
-    <div style="width: 90%; margin: auto; margin-top: 20px">
-      <el-table :data="data.records" border>
-        <el-table-column prop="id" label="序号" align="center"> </el-table-column>
-        <el-table-column prop="gradeName" label="班级名称" align="center">
-        </el-table-column>
-        <el-table-column prop="code" label="班级口令" align="center"> </el-table-column>
-        <el-table-column align="center" label="操作">
-          <template slot-scope="{ row }">
-            <el-button
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              @click="updateRow(row)"
-              >编辑</el-button
-            >
 
-            <el-button
-              type="text"
-              size="small"
-              style="color: red; font-size: 14px"
-              @click="delClass(row)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="班级">
+        <el-input v-model="formInline.searchTitle" placeholder="输入班级名称"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="searchExam">查询</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button :title="diaTitle" type="primary" @click="dialogTableVisible = true">
+          新增</el-button
+        >
+      </el-form-item>
+    </el-form>
+
+    <!-- table -->
+
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column prop="id" label="序号" align="center"> </el-table-column>
+      <el-table-column prop="gradeName" label="班级名称" align="center">
+      </el-table-column>
+      <el-table-column prop="code" label="班级口令" align="center"> </el-table-column>
+      <el-table-column align="center" label="操作">
+        <template slot-scope="{ row }">
+          <el-button
+            type="text"
+            size="small"
+            style="font-size: 14px"
+            @click="updateRow(row)"
+            >编辑</el-button
+          >
+
+          <el-button
+            type="text"
+            size="small"
+            style="color: red; font-size: 14px"
+            @click="delClass(row)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+
     <!-- 分页 -->
-    <div style="margin-top: 25px; margin-left: 52px">
+    <div class="pagination-container">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -111,7 +112,7 @@ export default {
     return {
       pageNum: 1,
       pageSize: 10,
-      data: null,
+      data: {},
       diaTitle: "新增",
       dialogTableVisible: false,
       dialogFormVisible: false,

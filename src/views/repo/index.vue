@@ -8,50 +8,55 @@
 -->
 
 <template>
-  <div>
-    <div style="padding-left: 53px; padding-top: 22px">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="题库名称:">
-          <el-input v-model="searchTitle" placeholder="请输入查询内容"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" style="margin-left: 40px" @click="searchRepo"
-            >查询</el-button
-          >
-          <el-button type="primary" style="margin-left: 40px" @click="screenInfo()"
-            >新增</el-button
-          >
-        </el-form-item>
-      </el-form>
-    </div>
+  <div class="app-container">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="题库名称:">
+        <el-input v-model="searchTitle" placeholder="请输入查询内容"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="searchRepo">查询</el-button>
+        <el-button type="primary" @click="screenInfo()">新增</el-button>
+      </el-form-item>
+    </el-form>
+
     <!-- table -->
-    <div style="margin: auto; width: 90%" align="center">
-      <el-table :data="data.records" border>
-        <el-table-column fixed prop="id" label="序号" align="center" />
-        <el-table-column prop="title" label="题库名称" align="center" />
-        <el-table-column prop="createTime" label="创建时间" align="center" />
-        <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="{ row }">
-            <el-button
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              @click="updateRow(row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              size="small"
-              style="color: red; font-size: 14px"
-              @click="delRepo(row)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="block">
-      <span class="demonstration" />
+
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column fixed prop="id" label="序号" align="center" />
+      <el-table-column prop="title" label="题库名称" align="center" />
+      <el-table-column prop="createTime" label="创建时间" align="center" />
+      <el-table-column fixed="right" label="操作" align="center">
+        <template slot-scope="{ row }">
+          <el-button
+            type="text"
+            size="small"
+            style="font-size: 14px"
+            @click="updateRow(row)"
+            >编辑</el-button
+          >
+          <el-button
+            type="text"
+            size="small"
+            style="color: red; font-size: 14px"
+            @click="delRepo(row)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <div class="pagination-container">
       <el-pagination
         :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
@@ -62,7 +67,7 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    
+
     <!-- 删除弹框 -->
     <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
       <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -94,13 +99,13 @@
 </template>
 
 <script>
- import { repoPaging, repoDel, repoUpdate, repoAdd } from "@/api/repo";
+import { repoPaging, repoDel, repoUpdate, repoAdd } from "@/api/repo";
 export default {
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
-      data: null,
+      data: {},
       searchTitle: "",
       formInline: {
         user: "",
@@ -125,7 +130,6 @@ export default {
     this.getRepoPage();
   },
   methods: {
-    
     // 分页查询
     async getRepoPage(pageNum, pageSize, title = null) {
       const params = { pageNum: pageNum, pageSize: pageSize, title: title };
@@ -206,8 +210,6 @@ export default {
       this.pageNum = val;
       this.getRepoPage(val, this.pageSize);
     },
-
-
   },
   computed: {
     tables() {
@@ -227,101 +229,4 @@ export default {
   },
 };
 </script>
-<style>
-.el-input__inner {
-  -webkit-appearance: none;
-  background-color: #fff;
-  background-image: none;
-  border-radius: 18px;
-  border: 1px solid #161616;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  color: #606266;
-  display: inline-block;
-  font-size: inherit;
-  height: 40px;
-  line-height: 40px;
-  outline: 0;
-  padding: 0 15px;
-  -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-  width: 100%;
-}
-
-.el-table--border,
-.el-table--group {
-  border: 1px solid #161616;
-}
-
-.el-table thead {
-  color: #333;
-  font-weight: 500;
-}
-
-.el-table {
-  position: relative;
-  overflow: hidden;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  width: 100%;
-  max-width: 100%;
-  font-size: 14px;
-  color: #333;
-}
-.el-pagination {
-  white-space: nowrap;
-  padding: 40px 53px;
-  color: #303133;
-  font-weight: 700;
-}
-
-.el-pagination button,
-.el-pagination span:not([class*="suffix"]) {
-  display: inline-block;
-  font-size: 13px;
-  min-width: 35.5px;
-  height: 20px;
-  line-height: 27px;
-  vertical-align: top;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.el-pagination__total {
-  margin-right: 10px;
-  font-weight: 800;
-  color: #606266;
-}
-
-.el-pagination button,
-.el-pagination span:not([class*="suffix"]) {
-  display: inline-block;
-  font-size: 10px;
-  min-width: 30.5px;
-  height: 36px;
-  line-height: 28px;
-  vertical-align: top;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.el-pagination__jump {
-  margin-left: 24px;
-  font-weight: 400;
-  color: #333;
-}
-.el-pager li {
-  padding: 0 4px;
-  font-size: 13px;
-  min-width: 35.5px;
-  height: 28px;
-  line-height: 36px;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  text-align: center;
-}
-</style>
-
+<style></style>

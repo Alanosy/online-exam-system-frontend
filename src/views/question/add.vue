@@ -18,19 +18,6 @@
 
         </el-form-item>
 
-        <!-- <el-form-item label="难度等级 " prop="level">
-
-          <el-select v-model="postForm.level" class="filter-item">
-            <el-option
-              v-for="item in levels"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-
-        </el-form-item> -->
-
         <el-form-item label="归属题库" prop="repoId">
 
           <repo-select v-model="postForm.repoId" :multi="false" />

@@ -8,8 +8,7 @@
 -->
 <template>
   <div>
-    <div class="luang">我是学生</div>
-    <div style="display: flex">
+    <div style="display: flex; justify-content: center; margin-top: 3em">
       <div class="left">
         <el-card class="box-card">
           登录时长
@@ -35,66 +34,30 @@
 
 <script>
 import { noticeGetNew } from "@/api/notice";
+import { getDaily } from "@/api/stat";
 export default {
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
-      data: null,
+      data: {},
+      dateArray: [],
+      formattedData: [],
       option: {
-        title: { text: "" },
+        title: { text: "登录时长" },
         tooltip: {},
         xAxis: {
-          data: [
-            "1月",
-            "2月",
-            "3月",
-            "4月",
-            "5月",
-            "6月",
-            "7月",
-            "8月",
-            "9月",
-            "10月",
-            "11月",
-            "12月",
-          ],
+          data: [], // 初始化为空，稍后用dateArray填充
         },
         yAxis: {},
         series: [
           {
-            name: "点赞数",
+            name: "登录时长(分钟)", // 更新系列名称以匹配单位变更
             type: "bar",
-            data: [5, 20, 36, 10, 10, 20, 5, 20, 36, 10, 10, 20],
+            data: [], // 初始化为空，稍后用转换后的分钟数据填充
           },
         ],
       },
-      // data: [
-      //   {
-      //     label: "公告 1",
-      //     children: [
-      //       {
-      //         label: "二级 1-1",
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     label: "公告 2",
-      //     children: [
-      //       {
-      //         label: "二级 2-1",
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     label: "公告 3",
-      //     children: [
-      //       {
-      //         label: "二级 3-1",
-      //       },
-      //     ],
-      //   },
-      // ],
       defaultProps: {
         children: "children",
         label: "label",
@@ -102,13 +65,53 @@ export default {
     };
   },
   created() {
+    this.getDailyFun();
+
     this.getNotice(this.pageNum, this.pageSize);
   },
   methods: {
+    getDailyFun() {
+      getDaily().then((res) => {
+        if (res.code === 1) {
+          const currentDate = new Date();
+          // 计算15天前的日期
+          const fifteenDaysAgo = new Date(
+            currentDate.getTime() - 15 * 24 * 60 * 60 * 1000
+          );
+
+          // 生成从今天往回15天的日期数组
+          for (let i = 0; i <= 14; i++) {
+            const date = new Date(currentDate.getTime() - i * 24 * 60 * 60 * 1000);
+            this.dateArray.push(date.toISOString().split("T")[0]);
+          }
+          // 确保dateArray是倒序的
+          this.dateArray.reverse();
+
+          // 整理原始数据，确保每个日期都有记录，没有的补0
+          const dataMap = res.data.reduce((acc, item) => {
+            acc[item.loginDate] = item.totalSeconds;
+            return acc;
+          }, {});
+
+          this.formattedData = this.dateArray.map((date) => {
+            const secondsOnDate = dataMap[date] || 0;
+            return secondsOnDate / 60; // 转换秒为分钟
+          });
+
+          // 更新图表配置
+          this.option.xAxis.data = this.dateArray;
+          this.option.series[0].data = this.formattedData;
+          this.$nextTick(() => {
+            this.initCharts(); // 确保DOM已更新后再初始化图表
+          });
+        }
+      });
+    },
+
     transformData(originalData) {
       if (originalData.data && originalData.data.records) {
         return originalData.data.records.map((record, index) => ({
-          label: ` ${record.title }`,
+          label: ` ${record.title}`,
           children: [
             {
               label: ` ${record.content}`,
@@ -126,7 +129,7 @@ export default {
       const params = { pageNum: pageNum, pageSize: pageSize };
       const res = await noticeGetNew(params);
       this.data = this.transformData(res);
-      console.log("this.data",this.data);
+      console.log("this.data", this.data);
     },
     initCharts() {
       let myChart = this.$echarts.init(this.$refs.charts);

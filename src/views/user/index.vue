@@ -1,75 +1,61 @@
 <template>
-  <div>
-    <!-- form -->
-    <div class="bj">
-      <el-form :inline="true" class="demo-form-inline">
-        <el-form-item label="真实姓名">
-          <el-input v-model="searchRealName" placeholder="输入姓名"></el-input>
-        </el-form-item>
-        <el-form-item label="班级">
-          <ClassSelect v-model="searchClassName" :isMultiple="false" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="searchUser" style="margin-left: 20px"
-            >查询</el-button
-          >
-          <el-button
-            type="primary"
-            @click="dialogTableVisible = true"
-            style="margin-left: 20px"
-            >新增</el-button
-          >
-          <el-button
-            type="primary"
-            @click="fileDialogVisible = true"
-            style="margin-left: 20px"
-            >导入</el-button
-          >
-        </el-form-item>
-      </el-form>
-    </div>
+  <div class="app-container">
     <!-- table -->
-    <div style="width: 90%; margin: auto; margin-top: 20px">
-      <el-table :data="data.records" border>
-        <el-table-column prop="id" label="序号" align="center"> </el-table-column>
-        <el-table-column prop="userName" label="用户名" align="center"> </el-table-column>
-        <el-table-column prop="realName" label="真实姓名" align="center">
-        </el-table-column>
-        <el-table-column prop="roleName" label="角色名称" align="center">
-        </el-table-column>
-        <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
-        <el-table-column prop="createTime" label="注册时间" align="center">
-        </el-table-column>
-        <el-table-column align="center" label="操作">
-          <template slot-scope="{ row }">
-            <!-- <el-button
-              v-if="role == 'admin'"
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              @click="updateRow(row)"
-              >编辑</el-button
-            > -->
-            <el-button
-              v-if="role == 'teacher'"
-              type="text"
-              size="small"
-              style="color: red; font-size: 14px"
-              @click="removeUserClass(row)"
-              >移除班级</el-button
-            >
-            <el-button
-              v-if="role == 'admin'"
-              type="text"
-              size="small"
-              style="color: red; font-size: 14px"
-              @click="delUser(row)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+
+    <el-form :inline="true" class="demo-form-inline">
+      <el-form-item label="真实姓名">
+        <el-input v-model="searchRealName" placeholder="输入姓名"></el-input>
+      </el-form-item>
+      <el-form-item label="班级">
+        <ClassSelect v-model="searchClassName" :isMultiple="false" />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="searchUser">查询</el-button>
+        <el-button type="primary" @click="dialogTableVisible = true">新增</el-button>
+        <el-button type="primary" @click="fileDialogVisible = true">导入</el-button>
+      </el-form-item>
+    </el-form>
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column prop="id" label="序号" align="center"> </el-table-column>
+      <el-table-column prop="userName" label="用户名" align="center"> </el-table-column>
+      <el-table-column prop="realName" label="真实姓名" align="center"> </el-table-column>
+      <el-table-column prop="roleName" label="角色名称" align="center"> </el-table-column>
+      <el-table-column prop="gradeName" label="班级" align="center"> </el-table-column>
+      <el-table-column prop="createTime" label="注册时间" align="center">
+      </el-table-column>
+      <el-table-column align="center" label="操作">
+        <template slot-scope="{ row }">
+          <el-button
+            v-if="role == 'teacher'"
+            type="text"
+            size="small"
+            style="color: red; font-size: 14px"
+            @click="removeUserClass(row)"
+            >移除班级</el-button
+          >
+          <el-button
+            v-if="role == 'admin'"
+            type="text"
+            size="small"
+            style="color: red; font-size: 14px"
+            @click="delUser(row)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+
     <!-- 导入弹窗 -->
     <el-dialog
       title="导入"
@@ -127,26 +113,6 @@
         <el-button type="primary" @click="addClass">确 定</el-button>
       </div>
     </el-dialog>
-    <!-- 编辑 -->
-    <!-- <el-dialog title="编辑" :visible.sync="updateDialogVisible">
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="用户名" :label-width="formLabelWidth">
-              <el-input v-model="form.userName" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="真实姓名" :label-width="formLabelWidth">
-              <el-input v-model="form.realName" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="updateDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateUser">确 定</el-button>
-      </div>
-    </el-dialog> -->
     <!-- 文件上传 -->
     <el-dialog
       width="400px"
@@ -178,7 +144,7 @@
     </el-dialog>
 
     <!-- 分页 -->
-    <div style="margin-top: 25px; margin-left: 52px">
+    <div class="pagination-container">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -221,7 +187,6 @@ export default {
         gradeName: "",
       },
       formLabelWidth: "110px",
-      // updateDialogVisible: false,
     };
   },
   created() {
@@ -364,40 +329,6 @@ export default {
         }
       });
     },
-    // updateUser() {
-    //   // 修改用户逻辑
-    // },
-    // updateRow(row) {
-    //   this.dialogFormVisible = true;
-    //   this.form = row;
-    // },
-    // 删除用户
-  },
-  computed: {
-    // tables() {
-    //   //在你的数据表格中定义tabels
-    //   const input = this.input;
-    //   const input1 = this.input1;
-    //   if (input) {
-    //     // console.log("input输入的搜索内容：" + this.input)
-    //     return this.tableData.filter((data) => {
-    //       console.log("object:" + Object.keys(data));
-    //       return Object.keys(data).some((key) => {
-    //         return String(data[key]).toLowerCase().indexOf(input) > -1;
-    //       });
-    //     });
-    //   }
-    //   if (input1) {
-    //     // console.log("input输入的搜索内容：" + this.input)
-    //     return this.tableData.filter((data) => {
-    //       console.log("object:" + Object.keys(data));
-    //       return Object.keys(data).some((key) => {
-    //         return String(data[key]).toLowerCase().indexOf(input1) > -1;
-    //       });
-    //     });
-    //   }
-    //   return this.tableData;
-    // },
   },
 };
 </script>
@@ -405,9 +336,5 @@ export default {
 .el-table--border,
 .el-table--group {
   border: 1px solid #b3b3b3;
-}
-.bj {
-  margin-top: 40px;
-  margin-left: 61px;
 }
 </style>

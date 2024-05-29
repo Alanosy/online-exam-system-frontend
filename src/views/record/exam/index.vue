@@ -1,47 +1,39 @@
 <template>
-  <div class="qb">
-    <div class="sf">
-      <div class="xx">
-        <!-- <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="考试名称">
-            <el-input v-model="input" placeholder="请输入"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-          </el-form-item>
-        </el-form> -->
-      </div>
-    </div>
+  <div class="app-container">
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column prop="id" label="序号" align="center" width="80">
+      </el-table-column>
+      <el-table-column prop="title" align="center" label="试卷名称" width="250">
+      </el-table-column>
+      <el-table-column prop="passedScore" align="center" label="及格分">
+      </el-table-column>
+      <el-table-column prop="examDuration" align="center" label="考试时长">
+      </el-table-column>
+      <el-table-column align="center" label="操作">
+        <template slot-scope="{ row }">
+          <el-button
+            type="text"
+            size="small"
+            style="font-size: 14px"
+            @click="screenInfo(row)"
+            >查看</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
 
-    <div>
-      <el-table :data="data.records" border style="margin: auto;width: 90%">
-        <el-table-column prop="id" label="序号" align="center" width="80">
-        </el-table-column>
-        <el-table-column
-          prop="title"
-          align="center"
-          label="试卷名称"
-          width="250"
-        >
-        </el-table-column>
-        <el-table-column prop="passedScore" align="center" label="及格分">
-        </el-table-column>
-        <el-table-column prop="examDuration" align="center" label="考试时长">
-        </el-table-column>
-        <el-table-column align="center" label="操作">
-          <template slot-scope="{ row }">
-            <el-button
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              @click="screenInfo(row)"
-              >查看</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="block">
+    <div class="pagination-container">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -56,26 +48,21 @@
   </div>
 </template>
 
-
 <script>
-import {recordExamPaging,recordExamDetail} from '@/api/record'
+import { recordExamPaging, recordExamDetail } from "@/api/record";
 export default {
   data() {
     return {
-      pageNum:1,
-      pageSize:10,
-      data:null,
+      pageNum: 1,
+      pageSize: 10,
+      data: {},
       input: "",
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
 
       formInline: {
         user: "",
         region: "",
       },
-      
+
       dialogVisible: false,
       form: {
         name: "",
@@ -100,14 +87,14 @@ export default {
       },
     };
   },
-  
+
   created() {
     this.getExamRecordPaging();
   },
   methods: {
     // 分页查询
     async getExamRecordPaging(pageNum, pageSize) {
-      const params = { pageNum: pageNum, pageSize: pageSize};
+      const params = { pageNum: pageNum, pageSize: pageSize };
       const res = await recordExamPaging(params);
       this.data = res.data;
     },
@@ -154,21 +141,4 @@ export default {
   },
 };
 </script>
-<style scoped>
-.qb {
-  width: 100%;
-  height: 8000px;
-}
-.sf {
-  width: 100%;
-  height: 80px;
-}
-.xx {
-  width: 1200px;
-  height: 40px;
-  padding: 20px 0px 0px 50px;
-}
-.block {
-  padding: 30px 0 0 50px;
-}
-</style>
+<style scoped></style>

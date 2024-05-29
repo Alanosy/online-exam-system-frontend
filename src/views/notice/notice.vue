@@ -8,31 +8,23 @@
 -->
 
 <template>
-  <div style="margin-top: 30px">
-    <div style="padding-left: 53px">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="公告标题" style="margin-left: 28px">
-          <el-input v-model="searchTitle" placeholder="公告标题"></el-input>
-        </el-form-item>
-        <!-- <el-form-item label="试题类型" style="margin-left:28px">
+  <div class="app-container">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="公告标题">
+        <el-input v-model="searchTitle" placeholder="公告标题"></el-input>
+      </el-form-item>
+      <!-- <el-form-item label="试题类型" style="margin-left:28px">
           <el-input v-model="input1" placeholder="试题类型"></el-input>
         </el-form-item> -->
-        <el-form-item>
-          <el-button type="primary" style="margin-left: 40px" @click="searchNotice"
-            >查询</el-button
-          >
-          <el-button
-            type="primary"
-            style="margin-left: 40px"
-            @click="dialogTableVisible = true"
-            >新增</el-button
-          >
-          <!-- <el-button type="primary" style="margin-left: 40px" @click="daoru"
+      <el-form-item>
+        <el-button type="primary" @click="searchNotice">查询</el-button>
+        <el-button type="primary" @click="dialogTableVisible = true">新增</el-button>
+        <!-- <el-button type="primary" style="margin-left: 40px" @click="daoru"
             >导入</el-button
           > -->
-        </el-form-item>
-      </el-form>
-    </div>
+      </el-form-item>
+    </el-form>
+
     <!--弹窗 -->
     <el-dialog
       title="新增"
@@ -47,33 +39,43 @@
     </el-dialog>
 
     <!-- table -->
-    <div style="margin: auto; width: 90%" align="center">
-      <el-table :data="data.records" border>
-        <el-table-column fixed prop="id" label="序号" align="center" />
-        <el-table-column prop="title" label="公告标题" align="center" />
-        <el-table-column prop="content" label="内容" align="center" />
-        <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="{ row }">
-            <el-button
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              @click="updateRow(row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              size="small"
-              style="color: red; font-size: 14px"
-              @click="delNotice(row.id)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="block">
-      <span class="demonstration" />
+
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column fixed prop="id" label="序号" align="center" />
+      <el-table-column prop="title" label="公告标题" align="center" />
+      <el-table-column prop="content" label="内容" align="center" />
+      <el-table-column fixed="right" label="操作" align="center">
+        <template slot-scope="{ row }">
+          <el-button
+            type="text"
+            size="small"
+            style="font-size: 14px"
+            @click="updateRow(row)"
+            >编辑</el-button
+          >
+          <el-button
+            type="text"
+            size="small"
+            style="color: red; font-size: 14px"
+            @click="delNotice(row.id)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <div class="pagination-container">
       <el-pagination
         :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
@@ -179,7 +181,7 @@ export default {
       },
       pageNum: 1,
       pageSize: 10,
-      data: null,
+      data: {},
       searchTitle: "",
       input1: "",
       currentPage1: 5,

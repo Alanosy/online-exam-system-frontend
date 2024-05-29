@@ -1,41 +1,47 @@
 <template>
-  <div class="qb">
-    <div class="sf">
-      <div class="xx">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="题库名称">
-            <el-input v-model="input" placeholder="请输入"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
+  <div class="app-container">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="题库名称">
+        <el-input v-model="input" placeholder="请输入"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">查询</el-button>
+      </el-form-item>
+    </el-form>
 
-    <div>
-      <el-table :data="data.records" border style="margin: auto; width: 90%">
-        <el-table-column prop="id" label="序号" align="center" width="80">
-        </el-table-column>
-        <el-table-column prop="title" align="center" label="题库名称" width="250">
-        </el-table-column>
-        <el-table-column prop="createTime" align="center" label="刷题时间">
-        </el-table-column>
-        <!-- <el-table-column prop="cjsj" align="center" label="已刷题数"> </el-table-column> -->
-        <el-table-column align="center" label="操作">
-          <template slot-scope="{ row }">
-            <el-button
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              @click="updateRow(row)"
-              >查看</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="block">
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column prop="id" label="序号" align="center" width="80">
+      </el-table-column>
+      <el-table-column prop="title" align="center" label="题库名称" width="250">
+      </el-table-column>
+      <el-table-column prop="createTime" align="center" label="刷题时间">
+      </el-table-column>
+      <!-- <el-table-column prop="cjsj" align="center" label="已刷题数"> </el-table-column> -->
+      <el-table-column align="center" label="操作">
+        <template slot-scope="{ row }">
+          <el-button
+            type="text"
+            size="small"
+            style="font-size: 14px"
+            @click="updateRow(row)"
+            >查看</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <div class="pagination-container">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -96,12 +102,9 @@ export default {
     return {
       pageNum: 1,
       pageSize: 10,
-      data: null,
+      data: {},
       input: "",
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
+
       formInline: {
         user: "",
         region: "",

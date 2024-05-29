@@ -8,61 +8,39 @@
 -->
 
 <template>
-  <div style="margin-top: 30px">
-    <div style="padding-left: 53px">
-      <!-- <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="所属题库" style="margin-left: 28px">
-          <el-input v-model="input" placeholder="所属题库"></el-input>
-        </el-form-item>
-        <el-form-item label="试题类型" style="margin-left: 28px">
-          <el-input v-model="input1" placeholder="试题类型"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" style="margin-left: 40px" @click="onSubmit"
-            >查询</el-button
+  <div class="app-container">
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column fixed prop="examId" label="序号" align="center" />
+      <el-table-column prop="examTitle" label="考试名称" align="center" />
+      <el-table-column prop="classSize" label="总人数" align="center" />
+      <el-table-column prop="numberOfApplicants" label="实际参考人数" align="center" />
+      <el-table-column prop="correctedPaper" label="已阅卷人数" align="center" />
+      <el-table-column fixed="right" label="操作" align="center">
+        <template slot-scope="{ row }">
+          <el-button
+            type="text"
+            size="small"
+            style="font-size: 14px"
+            @click="screenInfo(row)"
+            :disabled="row.numberOfApplicants == row.correctedPaper"
+            >查看详情</el-button
           >
-        </el-form-item>
-      </el-form> -->
-    </div>
+        </template>
+      </el-table-column>
+    </el-table>
 
-    <!-- table -->
-    <div style="margin: auto; width: 90%" align="center">
-      <el-table :data="data.records" border>
-        <el-table-column fixed prop="examId" label="序号" align="center" />
-        <el-table-column prop="examTitle" label="考试名称" align="center" />
-        <el-table-column prop="classSize" label="总人数" align="center" />
-        <el-table-column prop="numberOfApplicants" label="实际参考人数" align="center" />
-        <el-table-column prop="correctedPaper" label="已阅卷人数" align="center" />
-        <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="{ row }">
-            <!-- <el-button
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              @click="updateRow(row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              size="small"
-              style="color: red; font-size: 14px"
-              @click="open"
-              >删除</el-button
-            > -->
-            <el-button
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              @click="screenInfo(row)"
-              :disabled="row.numberOfApplicants == row.correctedPaper"
-              >查看详情</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="block">
-      <span class="demonstration" />
+    <div class="pagination-container">
       <el-pagination
         :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
@@ -124,7 +102,6 @@
     </el-dialog> -->
   </div>
 </template>
-
 <script>
 import { answerExamPging } from "@/api/answer";
 export default {
@@ -132,7 +109,7 @@ export default {
     return {
       pageNum: 1,
       pageSize: 10,
-      data: null,
+      data: {},
 
       formInline: {
         user: "",
@@ -169,12 +146,12 @@ export default {
       formLabelWidth: "120px",
     };
   },
-  created(){
-    this.getAnswerPage()
+  created() {
+    this.getAnswerPage();
   },
   methods: {
     getAnswerPage(pageNum, pageSize) {
-      const params = { pageNum: pageNum, pageSize: pageSize};
+      const params = { pageNum: pageNum, pageSize: pageSize };
       answerExamPging(params).then((res) => {
         this.data = res.data;
       });

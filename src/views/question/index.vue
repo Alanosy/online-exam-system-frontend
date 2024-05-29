@@ -1,45 +1,39 @@
 <template>
-  <div>
+  <div class="app-container">
     <!-- form -->
-    <div class="bj">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="试题名称" style="margin-left: 28px">
-          <el-input v-model="searchName" placeholder="输入试题名称"></el-input>
-        </el-form-item>
-        <el-form-item label="所属题库" style="margin-left: 28px">
-          <repo-select
-               style="margin-bottom:10px"
-               v-model="selectedRepoSingleSearch" 
-               @change="handleRepoChangeSingle"
-              />
-        </el-form-item>
-        <el-form-item label="题库类型" style="margin-left: 20px">
-          <el-select v-model="selValue" placeholder="请选择">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="searchQu" style="margin-left: 20px"
-            >查询</el-button
+
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="试题名称">
+        <el-input v-model="searchName" placeholder="输入试题名称"></el-input>
+      </el-form-item>
+      <el-form-item label="所属题库">
+        <repo-select
+          v-model="selectedRepoSingleSearch"
+          @change="handleRepoChangeSingle"
+        />
+      </el-form-item>
+      <el-form-item label="题库类型">
+        <el-select v-model="selValue" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
           >
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="screenInfo()" style="margin-left: 10px"
-            >新增</el-button
-          >
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="fileDialogVisible = true" style="margin-left: 10px"
-            >导入</el-button
-          >
-        </el-form-item>
-      </el-form>
-    </div>
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="searchQu">查询</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="screenInfo()">新增</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="fileDialogVisible = true">导入</el-button>
+      </el-form-item>
+    </el-form>
+
     <!-- 文件上传 -->
     <el-dialog
       width="400px"
@@ -48,14 +42,14 @@
       title="上传文件"
       :visible.sync="fileDialogVisible"
     >
-    <!-- v-model="scope.row.repoId" -->
-    <!-- @change="repoChange($event, scope.row)" -->
-    请选择题库：
-    <repo-select
-               style="margin-bottom:10px"
-               v-model="selectedRepoSingle" 
-               @change="handleRepoChangeSingle"
-              />
+      <!-- v-model="scope.row.repoId" -->
+      <!-- @change="repoChange($event, scope.row)" -->
+      请选择题库：
+      <repo-select
+        style="margin-bottom: 10px"
+        v-model="selectedRepoSingle"
+        @change="handleRepoChangeSingle"
+      />
       <el-upload
         class="upload-demo"
         drag
@@ -78,40 +72,51 @@
       </div>
     </el-dialog>
     <!-- table -->
-    <div style="width: 90%; margin: auto; margin-top: 20px;margin">
-      <el-table :data="data.records" border>
-        <el-table-column prop="id" label="序号" align="center" width="120px">
-        </el-table-column>
-        <el-table-column prop="content" label="题干" width="300px" align="center">
-        </el-table-column>
-        <el-table-column prop="quType" label="题目类型" width="180px" align="center">
-        </el-table-column>
-        <el-table-column prop="repoTitle" label="所属题库" width="180px" align="center">
-        </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="250px" align="center">
-        </el-table-column>
-        <el-table-column align="center" label="操作">
-          <template slot-scope="{ row }">
-            <el-button
-              type="text"
-              size="small"
-              style="font-size: 14px"
-              @click="updateRow(row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              size="small"
-              style="color: red; font-size: 14px"
-              @click="delQu(row)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column prop="id" label="序号" align="center" width="120px">
+      </el-table-column>
+      <el-table-column prop="content" label="题干" width="300px" align="center">
+      </el-table-column>
+      <el-table-column prop="quType" label="题目类型" width="180px" align="center">
+      </el-table-column>
+      <el-table-column prop="repoTitle" label="所属题库" width="180px" align="center">
+      </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" width="250px" align="center">
+      </el-table-column>
+      <el-table-column align="center" label="操作">
+        <template slot-scope="{ row }">
+          <el-button
+            type="text"
+            size="small"
+            style="font-size: 14px"
+            @click="updateRow(row)"
+            >编辑</el-button
+          >
+          <el-button
+            type="text"
+            size="small"
+            style="color: red; font-size: 14px"
+            @click="delQu(row)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+
     <!-- 分页 -->
-    <div style="margin-top: 25px; margin-left: 52px">
+    <div class="pagination-container">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -153,38 +158,44 @@
 </template>
 
 <script>
-import { quPaging, quAdd, quDel, quUpdate,importQue } from "@/api/question";
+import { quPaging, quAdd, quDel, quUpdate, importQue } from "@/api/question";
 import RepoSelect from "@/components/RepoSelect";
 
 export default {
-  components: { RepoSelect},
+  components: { RepoSelect },
   data() {
     return {
-      options: [{
+      options: [
+        {
           value: null,
-          label: '全部类型'
-        },{
+          label: "全部类型",
+        },
+        {
           value: 1,
-          label: '单选题'
-        }, {
+          label: "单选题",
+        },
+        {
           value: 2,
-          label: '多选题'
-        }, {
+          label: "多选题",
+        },
+        {
           value: 3,
-          label: '判断题'
-        }, {
+          label: "判断题",
+        },
+        {
           value: 4,
-          label: '简答题'
-        }, ],
-        selValue: '',
-        searchName:'',
+          label: "简答题",
+        },
+      ],
+      selValue: "",
+      searchName: "",
       pageNum: 1,
       pageSize: 10,
-      data: null,
-      fileDialogVisible:false,
+      data: {},
+      fileDialogVisible: false,
 
-      selectedRepoSingle: '',
-      selectedRepoSingleSearch:'',
+      selectedRepoSingle: "",
+      selectedRepoSingleSearch: "",
       input: "",
       input1: "",
       formInline: {
@@ -199,8 +210,8 @@ export default {
 
       dialogTableVisible: false,
       dialogFormVisible: false,
-      hasFiles:null,
-      fileList:null,
+      hasFiles: null,
+      fileList: null,
       form: {
         name: "",
         region: "",
@@ -219,14 +230,14 @@ export default {
   },
   methods: {
     handleRepoChangeSingle(repo) {
-      console.log('单选题库变化:', repo);
+      console.log("单选题库变化:", repo);
       // 这里可以进一步处理repo对象，比如更新UI或发送网络请求等
     },
-    importQu(){
-      if (this.fileList.length > 0 && this.selectedRepoSingle !="") {
+    importQu() {
+      if (this.fileList.length > 0 && this.selectedRepoSingle != "") {
         const formData = new FormData(); // 创建FormData对象
         formData.append("file", this.fileList[0].raw); // 添加文件到formData
-        importQue(this.selectedRepoSingle,formData)
+        importQue(this.selectedRepoSingle, formData)
           .then((response) => {
             this.getQuPage(this.pageNum, this.pageSize);
             this.$message.success("文件上传成功！");
@@ -251,8 +262,14 @@ export default {
       }
     },
     // 分页查询
-    async getQuPage(pageNum, pageSize, content = null,repoId=null,type=null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, content:content,repoId:repoId,type:type };
+    async getQuPage(pageNum, pageSize, content = null, repoId = null, type = null) {
+      const params = {
+        pageNum: pageNum,
+        pageSize: pageSize,
+        content: content,
+        repoId: repoId,
+        type: type,
+      };
       const res = await quPaging(params);
       this.data = res.data;
     },
@@ -314,14 +331,19 @@ export default {
         });
     },
     searchQu() {
-      this.getQuPage(this.pageNum, this.pageSize, this.searchName,this.selectedRepoSingleSearch,this.selValue);
+      this.getQuPage(
+        this.pageNum,
+        this.pageSize,
+        this.searchName,
+        this.selectedRepoSingleSearch,
+        this.selValue
+      );
     },
 
     screenInfo(row, index, done) {
       console.info("=====", row);
       this.$router.push({ name: "news", query: { zhi: row } });
     },
-
 
     handleSizeChange(val) {
       // 设置每页多少条逻辑
@@ -357,7 +379,6 @@ export default {
     //       });
     //     });
     //   }
-
     //   return this.tableData;
     // },
   },
@@ -368,13 +389,12 @@ export default {
 .el-table--border,
 .el-table--group {
   border: 1px solid #b3b3b3;
-  
 }
 .bj {
   margin-top: 40px;
   margin-left: 30px;
 }
 .el-table__body-wrapper::-webkit-scrollbar {
-	width: 0;
+  width: 0;
 }
 </style>
