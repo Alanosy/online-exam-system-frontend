@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-container">
    <div class="luan">
      <div class="df">
        <div class="x">
@@ -239,47 +239,48 @@ import { classCount,classExamCount,classAllCounts } from "@/api/stat";
 <style>
 .luan {
   margin: auto;
-  width: 1100px;
-  height: 100px; 
+  width: 100%;
+  height: 10vh;
+
   margin-top: 30px;
   box-shadow: 3px 3px 3px 3px whitesmoke;
 }
-.df{
+.df {
   width: 100%;
   height: 80px;
   display: flex;
   justify-content: space-between;
-  
 }
-.x{
+.x {
   width: 260px;
   height: 80px;
   display: flex;
   background-color: #fff;
 }
-.zt{
+.zt {
   font-size: 25px;
   padding: 10px 0 10px 10px;
 }
-.sz{
+.sz {
   font-size: 15px;
   padding: 0 0 0 50px;
 }
-.zy{
-  width: 1100px;
-  height: 450px;
-  
+.zy {
+  width: 100%;
+  height: 60vh;
+
   display: flex;
   margin: auto;
+  margin-top: 20px;
   justify-content: space-between;
 }
 
-.zyk{
-  width: 490px;
-  height: 320px;
+.zyk {
+  width: 49%;
+  height: 100%;
+  padding: 30px;
   margin-top: 50px;
   box-shadow: 0 0 3px 3px whitesmoke;
 }
-
 
 </style>

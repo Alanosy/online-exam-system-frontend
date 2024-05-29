@@ -15,7 +15,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="searchRepo">查询</el-button>
-        <el-button type="primary" @click="screenInfo()">新增</el-button>
+        <el-button type="primary" @click="addRepoDialogVisible = true">新增</el-button>
       </el-form-item>
     </el-form>
 
@@ -68,15 +68,6 @@
       />
     </div>
 
-    <!-- 删除弹框 -->
-    <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-      <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="delVisible = false">取 消</el-button>
-        <el-button type="primary" @click="deleteRow">确 定</el-button>
-      </span>
-    </el-dialog>
-
     <!--编辑弹窗-->
 
     <el-dialog title="编辑" :visible.sync="dialogFormVisible">
@@ -95,6 +86,28 @@
         <el-button type="primary" @click="updateRepo">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      title="新增题库"
+      :visible.sync="addRepoDialogVisible"
+      width="30%"
+      :before-close="handleClose"
+    >
+    
+      <el-row :gutter="20">
+        <el-col >
+          <el-form :model="addTitle">
+            <el-form-item label="题库名称:" :label-width="formLabelWidth">
+              <el-input v-model="addTitle" autocomplete="off" style="width: 80%;"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addRepoDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addRepo">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -106,6 +119,8 @@ export default {
       pageNum: 1,
       pageSize: 10,
       data: {},
+      addTitle: "",
+      delVisible:false,
       searchTitle: "",
       formInline: {
         user: "",
@@ -122,6 +137,7 @@ export default {
       },
       formLabelWidth: "120px",
       dialogVisible: false,
+      addRepoDialogVisible: false,
       dialogTableVisible: false,
       dialogFormVisible: false,
     };
@@ -135,6 +151,27 @@ export default {
       const params = { pageNum: pageNum, pageSize: pageSize, title: title };
       const res = await repoPaging(params);
       this.data = res.data;
+    },
+    addRepo() {
+      repoAdd({title:this.addTitle})
+        .then((res) => {
+          if (res.code) {
+          
+            this.addRepoDialogVisible = false;
+            this.getRepoPage(this.pageNum, this.pageSize);
+            this.$message({
+              type: "success",
+              message: "添加成功",
+            });
+          } else {
+            this.$message({
+              type: "info",
+              message: res.msg,
+            });
+          }
+
+        })
+        .catch(() => {});
     },
     // 编辑题库
     updateRepo() {
@@ -193,12 +230,15 @@ export default {
           });
         });
     },
+    handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      },
     searchRepo() {
       this.getRepoPage(this.pageNum, this.pageSize, this.searchTitle);
-    },
-    screenInfo(row, index, done) {
-      console.info("=====", row);
-      this.$router.push({ name: "Add", query: { zhi: row } });
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑

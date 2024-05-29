@@ -85,15 +85,12 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column prop="id" label="序号" align="center" width="120px">
+      <el-table-column prop="id" label="序号" align="center"> </el-table-column>
+      <el-table-column prop="content" label="题干" align="center"> </el-table-column>
+      <el-table-column prop="quType" label="题目类型" align="center"> </el-table-column>
+      <el-table-column prop="repoTitle" label="所属题库" align="center">
       </el-table-column>
-      <el-table-column prop="content" label="题干" width="300px" align="center">
-      </el-table-column>
-      <el-table-column prop="quType" label="题目类型" width="180px" align="center">
-      </el-table-column>
-      <el-table-column prop="repoTitle" label="所属题库" width="180px" align="center">
-      </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="250px" align="center">
+      <el-table-column prop="createTime" label="创建时间" align="center">
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="{ row }">

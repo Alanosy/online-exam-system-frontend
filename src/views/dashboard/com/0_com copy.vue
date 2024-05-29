@@ -313,14 +313,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .luan {
   margin: auto;
-  width: 100%;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 10px;
-  height: 10vh;
+  width: 1100px;
+  height: 100px;
+
   margin-top: 30px;
   box-shadow: 3px 3px 3px 3px whitesmoke;
 }
@@ -345,19 +343,17 @@ export default {
   padding: 0 0 0 50px;
 }
 .zy {
-  width: 100%;
-  height: 60vh;
+  width: 1100px;
+  height: 450px;
 
   display: flex;
   margin: auto;
-  /* margin-top: 20px; */
   justify-content: space-between;
 }
 
 .zyk {
-  width: 49%;
-  height: 100%;
-  padding: 30px;
+  width: 490px;
+  height: 320px;
   margin-top: 50px;
   box-shadow: 0 0 3px 3px whitesmoke;
 }
