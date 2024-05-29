@@ -108,16 +108,11 @@ export default {
       console.info("=====", id, repoTitle);
       this.$router.push({ name: "shua", query: { repoId: id, repoTitle: repoTitle } });
     },
-    onSubmit() {
-      console.log("submit!");
-    },
     handleSizeChange(val) {
       this.getExercisePage(this.pageNum, val, this.title);
-      console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       this.getExercisePage(val, this.pageSize, this.title);
-      console.log(`当前页: ${val}`);
     },
     open() {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {

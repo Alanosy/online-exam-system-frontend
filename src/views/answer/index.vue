@@ -156,9 +156,6 @@ export default {
         this.data = res.data;
       });
     },
-    onSubmit() {
-      console.log("submit!");
-    },
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val;
@@ -205,18 +202,14 @@ export default {
       const input = this.input;
       const input1 = this.input1;
       if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1;
           });
         });
       }
       if (input1) {
-        // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input1) > -1;
           });

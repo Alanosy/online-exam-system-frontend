@@ -96,21 +96,27 @@
             <el-form-item label="公告标题" :label-width="formLabelWidth">
               <el-input v-model="form.title" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="公告内容" :label-width="formLabelWidth" w>
-              <quill-editor
-                ref="myQuillEditor"
-                v-model="abcd"
-                :options="editorOption"
-                class="my-quill-editor"
-              ></quill-editor>
+            <el-form-item label="公告内容" :label-width="formLabelWidth"
+              ><div>
+                <quill-editor
+                  ref="myQuillEditor"
+                  v-model="content"
+                  :options="editorOption"
+                  class="my-quill-editor"
+                  @blur="onEditorBlur($event)"
+                  @focus="onEditorFocus($event)"
+                  @ready="onEditorReady($event)"
+                />
+              </div>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
-      <div slot="footer" class="dialog-footer">
+
+      <span slot="footer" class="dialog-footer">
         <el-button @click="dialogTableVisible = false">取 消</el-button>
         <el-button type="primary" @click="addNotice">确 定</el-button>
-      </div>
+      </span>
     </el-dialog>
 
     <!--编辑弹窗-->
@@ -143,51 +149,45 @@
 </template>
 
 <script>
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
+
+import { quillEditor } from "vue-quill-editor";
+
 import { noticePaging, noticeAdd, noticeDel, noticeUpdate } from "@/api/notice";
 export default {
+  components: {
+    quillEditor,
+  },
   data() {
     return {
-      content: "",
-      editorOption: {
-        // 占位配置
-        placeholder: "请输入...",
-        height: "300px",
-        modules: {
-          // 配置工具栏
-          toolbar: {
-            container: [
-              ["bold", "italic", "underline", "strike"], // 加粗 斜体 下划线 删除线
-              ["blockquote", "code-block"], // 引用  代码块
-              [{ header: 1 }, { header: 2 }], // 1、2 级标题
-              [{ list: "ordered" }, { list: "bullet" }], // 有序、无序列表
-              [{ script: "sub" }, { script: "super" }], // 上标/下标
-              [{ indent: "-1" }, { indent: "+1" }], // 缩进
-              [{ direction: "rtl" }], // 文本方向
-              ["link", "image", "video"], // 链接、图片、视频
-              [{ align: [] }], // 添加居中按钮
-              [{ color: [] }], // 文字颜色按钮
-            ],
-          },
-          // 更改插入的图片大小
-          imageResize: {
-            displayStyles: {
-              backgroundColor: "black",
-              border: "none",
-              color: "white",
-            },
-            modules: ["Resize", "DisplaySize", "Toolbar"],
-          },
-        },
-      },
+      content: "<br><br><br><br><br>",
+      editorOption: [
+        ["bold", "italic", "underline", "strike"], // 字体
+        ["blockquote", "code-block"],
+
+        [{ header: 1 }, { header: 2 }], // 样式标题
+        // eslint-disable-next-line standard/object-curly-even-spacing
+        [{ list: "ordered" }, { list: "bullet" }],
+        // eslint-disable-next-line standard/object-curly-even-spacing
+        [{ script: "sub" }, { script: "super" }], // 下标、上标
+        // eslint-disable-next-line standard/object-curly-even-spacing
+        [{ indent: "-1" }, { indent: "+1" }], // 缩进
+        [{ direction: "rtl" }],
+        [{ size: ["small", false, "large", "huge"] }], // 字体
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ color: [] }, { background: [] }],
+        [{ font: [] }],
+        [{ align: [] }],
+        ["clean"], // 格式清除
+      ],
       pageNum: 1,
       pageSize: 10,
       data: {},
       searchTitle: "",
       input1: "",
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
+
       abcd: "",
       dialogVisible: false,
 
@@ -213,6 +213,15 @@ export default {
     this.getNoticePage();
   },
   methods: {
+    onEditorBlur(quill) {
+      console.log("editor blur!", quill);
+    },
+    onEditorFocus(quill) {
+      console.log("editor focus!", quill);
+    },
+    onEditorReady(quill) {
+      console.log("editor ready!", quill);
+    },
     // 分页查询
     async getNoticePage(pageNum, pageSize, title = null) {
       const params = { pageNum: pageNum, pageSize: pageSize, title: title };
@@ -268,9 +277,12 @@ export default {
     },
 
     addNotice() {
-      const data = { title: this.form.title, content: this.abcd };
+      console.log(this.content);
+      const data = { title: this.form.title, content: this.content };
       noticeAdd(data).then((res) => {
         if (res.code) {
+          this.form.title = "";
+          this.content = "";
           this.getNoticePage(this.pageNum, this.pageSize);
           this.dialogTableVisible = false;
           this.$message({
@@ -286,7 +298,7 @@ export default {
       });
     },
     handleClick(row) {
-      console.log(row);
+      // console.log(row);
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑
@@ -298,9 +310,7 @@ export default {
       this.pageNum = val;
       this.getNoticePage(val, this.pageSize);
     },
-    onSubmit() {
-      console.log("submit!");
-    },
+
     handleClose(done) {
       this.$confirm("确认关闭？")
         .then((_) => {
@@ -311,6 +321,9 @@ export default {
   },
 
   computed: {
+    editor() {
+      return this.$refs.myQuillEditor.quill;
+    },
     tables() {
       //在你的数据表格中定义tabels
       const input = this.input;
@@ -318,7 +331,7 @@ export default {
       if (input) {
         // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
+          // console.log("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1;
           });
@@ -327,7 +340,7 @@ export default {
       if (input1) {
         // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
+          // console.log("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input1) > -1;
           });
@@ -341,14 +354,7 @@ export default {
 </script>
 
 <style>
-/* 编辑器高度及背景色 */
-::v-deep .ql-editor {
-  min-height: 300px;
-
-  background-color: #fff;
-}
 .my-quill-editor {
   width: 40em;
-  height: 30em;
 }
 </style>

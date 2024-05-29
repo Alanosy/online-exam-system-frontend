@@ -43,7 +43,6 @@ const decode = () => {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    console.log('进入仓库')
     return new Promise((resolve, reject) => {
       login(userInfo).then(response => {
         const { data } = response

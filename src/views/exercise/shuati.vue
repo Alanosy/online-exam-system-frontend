@@ -1,12 +1,5 @@
 <template>
-  <div
-    style="
-      width: 100%;
-      height: 100%;
-      background-color: #f0f2f5;
-      padding: 20px 0 0;
-    "
-  >
+  <div style="width: 100%; height: 100%; background-color: #f0f2f5; padding: 20px 0 0">
     <!-- 开头 -->
     <el-row :gutter="24">
       <el-col :span="24">
@@ -72,7 +65,7 @@
                 <el-tag
                   v-for="(item, index) in paperData.radioList"
                   :type="cardItemClass(item.exercised, item.quId, item.isRight)"
-                  @click="selectQuId(item,index)"
+                  @click="selectQuId(item, index)"
                 >
                   {{ index + 1 }}</el-tag
                 >
@@ -80,49 +73,39 @@
             </div>
 
             <div
-              v-if="
-                paperData.multiList !== undefined &&
-                paperData.multiList.length > 0
-              "
+              v-if="paperData.multiList !== undefined && paperData.multiList.length > 0"
             >
               <p class="card-title">多选题</p>
               <el-row :gutter="24" class="card-line">
                 <el-tag
                   v-for="(item, index) in paperData.multiList"
                   :type="cardItemClass(item.exercised, item.quId, item.isRight)"
-                  @click="selectQuId(item,index)"
+                  @click="selectQuId(item, index)"
                   >{{ index + 1 }}</el-tag
                 >
               </el-row>
             </div>
 
             <div
-              v-if="
-                paperData.judgeList !== undefined &&
-                paperData.judgeList.length > 0
-              "
+              v-if="paperData.judgeList !== undefined && paperData.judgeList.length > 0"
             >
               <p class="card-title">判断题</p>
               <el-row :gutter="24" class="card-line">
                 <el-tag
                   v-for="(item, index) in paperData.judgeList"
                   :type="cardItemClass(item.exercised, item.quId, item.isRight)"
-                  @click="selectQuId(item,index)"
+                  @click="selectQuId(item, index)"
                   >{{ index + 1 }}</el-tag
                 >
               </el-row>
             </div>
-            <div
-              v-if="
-                paperData.saqList !== undefined && paperData.saqList.length > 0
-              "
-            >
+            <div v-if="paperData.saqList !== undefined && paperData.saqList.length > 0">
               <p class="card-title">简答题</p>
               <el-row :gutter="24" class="card-line">
                 <el-tag
                   v-for="(item, index) in paperData.saqList"
                   :type="cardItemClass(item.exercised, item.quId, item.isRight)"
-                  @click="selectQuId(item,index)"
+                  @click="selectQuId(item, index)"
                   >{{ index + 1 }}</el-tag
                 >
               </el-row>
@@ -148,10 +131,7 @@
             <el-radio-group v-model="radioValue">
               <el-radio v-for="item in quDetail.options" :label="item.id"
                 >{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
-                <div
-                  v-if="item.image != null && item.image != ''"
-                  style="clear: both"
-                >
+                <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100px" />
                 </div>
               </el-radio>
@@ -165,10 +145,7 @@
                 :key="item.id"
                 :label="item.id"
                 >{{ numberToLetter(item.sort + 1) }}.{{ item.content }}
-                <div
-                  v-if="item.image != null && item.image != ''"
-                  style="clear: both"
-                >
+                <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100px" />
                 </div>
               </el-checkbox>
@@ -185,13 +162,11 @@
           </div>
 
           <div v-if="showAnalysis">
-            
-              <p v-if="quDetail.quType != 4">
-                回答：<span>{{ rightQuAnswer.msg }}</span>
-              </p>
-              <p v-if="rightQuAnswer.data">正确答案：{{ getRightAnswer() }}</p>
-              <p>试题分析：{{ rightQuAnswer.data.analysis }}</p>
-            
+            <p v-if="quDetail.quType != 4">
+              回答：<span>{{ rightQuAnswer.msg }}</span>
+            </p>
+            <p v-if="rightQuAnswer.data">正确答案：{{ getRightAnswer() }}</p>
+            <p>试题分析：{{ rightQuAnswer.data.analysis }}</p>
           </div>
 
           <div style="margin-top: 20px">
@@ -290,7 +265,6 @@ export default {
     //    setTimeout(()=> this.getCurrentQuDetial()
     //  ,100)
     this.getCurrentQuDetial();
-   
   },
   methods: {
     //获取试题Id列表
@@ -349,37 +323,33 @@ export default {
       this.showAnalysis = 0;
 
       this.getQuestionList();
-      
+
       setTimeout(() => this.getCurrentQuDetial(), 100);
     },
 
     getRightAnswer() {
       var arr = new Array();
-      console.log("11111111111111111111111");
-      console.log({ ...this.rightQuAnswer });
-      if(this.rightQuAnswer.data){
+      if (this.rightQuAnswer.data) {
         this.rightQuAnswer.data.options.forEach((option) => {
-        if (option.isRight) {
-          arr.push(this.numberToLetter(option.sort + 1));
-        }
-      });
+          if (option.isRight) {
+            arr.push(this.numberToLetter(option.sort + 1));
+          }
+        });
       }
-    
 
-      console.log("11111111111111");
       let res = arr.join(",");
       if (this.quDetail.quType == 4) {
         res = this.rightQuAnswer.data.options[0].content;
       }
-      console.log(res);
+
       return res;
       // },100)
     },
     //按题型选择题号
-    selectQuId(item,index) {
+    selectQuId(item, index) {
       // console.log("111111111111111")
       // console.log(item);
-      this.curTypeIndex = index
+      this.curTypeIndex = index;
       this.curQuId = item.quId;
       if (item.quType == 1) {
         this.curListIndex = 1;
@@ -401,11 +371,9 @@ export default {
         // alert("00000000000"+this.currentQuIndex)
         setTimeout(() => {
           //
-          getQuestionDetail(this.quList[this.currentQuIndex].quId).then(
-            (res) => {
-              this.quDetail = res.data;
-            }
-          );
+          getQuestionDetail(this.quList[this.currentQuIndex].quId).then((res) => {
+            this.quDetail = res.data;
+          });
         }, 100);
       } else if (this.number == 1) {
         // alert("1111111111111"+this.curQuId);
@@ -491,11 +459,11 @@ export default {
         text: "拼命加载中",
         background: "rgba(0, 0, 0, 0.7)",
       });
-      if (this.nextText == "下一题"  ) {
+      if (this.nextText == "下一题") {
         this.radioValue = "";
         this.multiValue = [];
         this.showAnalysis = 0;
-        this.rightQuAnswer={}
+        this.rightQuAnswer = {};
         //按顺序点击下一题
         if (this.number == 0) {
           if (this.currentQuIndex < this.quList.length - 1) {
@@ -556,7 +524,7 @@ export default {
         setTimeout(() => (this.nextText = "下一步"), 100);
 
         // alert(this.nextTxt)
-      }else if (this.nextText == "下一步") {
+      } else if (this.nextText == "下一步") {
         this.rightQuAnswer = {};
         this.fillAnswer();
 
@@ -565,9 +533,8 @@ export default {
         setTimeout(() => {
           this.nextText = "下一题";
         }, 100);
-        
       }
-      this.showButton();  
+      this.showButton();
       loading.close();
     },
     //填充答案
@@ -592,11 +559,8 @@ export default {
         }
 
         const res = await submitAnswer(params);
-        console.log("1111111111111111111111111");
-        console.log(res);
-        console.log("1111111111111111111111111");
+
         this.rightQuAnswer = res;
-        console.log(res);
       }
 
       this.getQuestionList();
@@ -614,10 +578,7 @@ export default {
         this.showPrevious = true;
       }
 
-      if (
-        this.currentQuIndex === this.quList.length - 1 &&
-        this.nextText === "下一步"
-      ) {
+      if (this.currentQuIndex === this.quList.length - 1 && this.nextText === "下一步") {
         this.showNext = false;
       } else {
         this.showNext = true;
@@ -632,7 +593,7 @@ export default {
         text: "拼命加载中",
         background: "rgba(0, 0, 0, 0.7)",
       });
-      
+
       if (this.preText == "上一步") {
         this.fillAnswer();
         this.showAnalysis = 1;
@@ -641,8 +602,8 @@ export default {
 
       if (this.preText == "上一题") {
         this.radioValue = "";
-      this.multiValue = [];
-      this.rightQuAnswer = {};
+        this.multiValue = [];
+        this.rightQuAnswer = {};
         if (this.currentQuIndex > 0) {
           this.currentQuIndex--;
           this.showButton();

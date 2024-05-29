@@ -82,7 +82,7 @@ export const constantRoutes = [
     component: Layout,
     children: [{
       path: '/myself',
-      name: 'Usermanager',
+      name: 'myself',
       hidden:true,
       component: () => import('@/views/user/myself'),
       meta: { title: '个人中心',visible:true,roles:['teacher','admin','student'], icon: 'dashboard' }
@@ -93,7 +93,7 @@ export const constantRoutes = [
     component: Layout,
     children: [{
       path: '/changemima',
-      name: 'Usermanager',
+      name: 'changemima',
       hidden:true,
       component: () => import('@/views/user/updatePassword.vue'),
       meta: { title: '修改密码',visible:true,roles:['teacher','admin','student'], icon: 'dashboard' }
@@ -195,7 +195,7 @@ export const constantRoutes = [
     }]
   },
   {
-    path: '/exam',
+    path: '/exam1',
     component: Layout,
     children: [{
       path: '/newk1',

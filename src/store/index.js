@@ -48,7 +48,6 @@ const store = new Vuex.Store({
       });
       // this.$axios.post('/api/auths/track-presence', { userId: state.userId })
       //   .then(response => {
-      //     console.log('心跳发送成功');
       //   })
       //   .catch(error => {
       //     console.error('心跳发送失败:', error);

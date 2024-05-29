@@ -76,9 +76,7 @@ export default {
 
       // 更新v-model绑定的值，如果是单选，父组件应该期望接收到的是单个值，但这里仍按照多选逻辑发送数组
       // 父组件可以通过判断数组长度来区分是单选还是多选
-      console.log(selectedIds)
-      console.log(idsArray)
-      
+
       this.$emit("input", selectedIds);
     },
   },

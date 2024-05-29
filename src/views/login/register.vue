@@ -138,7 +138,6 @@
 
 <script>
 import { validUsername } from "@/utils/validate";
-import { sendEmail } from "@/api/email";
 import { setToken } from "@/utils/auth";
 import axios from "axios";
 import { verifyCode, register } from "@/api/user";
@@ -223,11 +222,6 @@ export default {
       this.$refs.captchaImg.src = `/api/auths/captcha?${Math.random()}`;
     },
 
-    async getEmail() {
-      const res = await sendEmail("3109836428@qq.com");
-      console.log("我获得了api的返回");
-      console.log(res);
-    },
     showPwd() {
       if (this.passwordType === "password") {
         this.passwordType = "";
