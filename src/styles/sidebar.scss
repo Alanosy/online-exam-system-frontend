@@ -13,7 +13,7 @@
     background-color: $menuBg;
     height: 100%;
     position: fixed;
-    font-size: 0px;
+    font-size: 14px;
     top: 0;
     bottom: 0;
     left: 0;
@@ -32,7 +32,9 @@
     .el-scrollbar__bar.is-vertical {
       right: 0px;
     }
-
+    // .el-menu-item{
+    //   font-size: 14px;
+    // }
     .el-scrollbar {
       height: 100%;
     }
