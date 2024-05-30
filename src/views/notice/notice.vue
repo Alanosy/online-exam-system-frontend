@@ -55,8 +55,11 @@
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" label="公告标题" align="center" />
-
-      <el-table-column prop="content" label="内容" align="center" />
+      <el-table-column prop="content" label="内容" align="center">
+        <template slot-scope="scope">
+          <div v-html="scope.row.content"></div>
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button
@@ -128,16 +131,22 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="公告标题" :label-width="formLabelWidth">
-              <el-input v-model="form.title" autocomplete="off"></el-input>
+              <el-input
+                v-model="form.title"
+                :disabled="true"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
             <el-form-item label="公告内容" :label-width="formLabelWidth">
-              <el-input
-                type="textarea"
-                :rows="2"
-                placeholder="请输入内容"
+              <quill-editor
+                ref="myQuillEditor"
                 v-model="form.content"
-              >
-              </el-input>
+                :options="editorOption"
+                class="my-quill-editor"
+                @blur="onEditorBlur($event)"
+                @focus="onEditorFocus($event)"
+                @ready="onEditorReady($event)"
+              />
             </el-form-item>
           </el-form>
         </el-col>

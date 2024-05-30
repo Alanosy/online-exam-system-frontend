@@ -116,7 +116,7 @@ export const constantRoutes = [
       path: '/shijuanzx',
       name: 'Textcenter',
       component: () => import('@/views/exam/student/index'),
-      meta: { title: '试卷中心', visible:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+      meta: { title: '试卷中心', visible:true,roles:['admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -173,7 +173,7 @@ export const constantRoutes = [
         path: '/examrecord1',
         name: 'Examrecord1',
         component: () => import('@/views/record/exam/index.vue'),
-        meta: { title: '考试记录',visible:true,roles:['teacher','admin','student'], icon: 'table' }
+        meta: { title: '考试记录',visible:true,roles:['admin','student'], icon: 'table' }
       },
       {
         path: '/questrecord',
