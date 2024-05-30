@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-05-06 12:06:39
+ * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @LastEditTime: 2024-05-30 16:01:06
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -260,19 +260,19 @@ export default {
     searchNotice() {
       this.getNoticePage(this.pageNum, this.pageSize, this.searchTitle);
     },
+    
     delNotice(id) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
-
         cancelButtonText: "取消",
-
         type: "warning",
         center: true,
       }).then(() => {
         noticeDel(id).then((res) => {
-          if (res.code) {
+          if (this.tableData && Data.isData(this.myData)) {
             this.getNoticePage(this.pageNum, this.pageSize);
             this.tableData.splice(index, 1);
+            
             this.$message({
               type: "success",
               message: "删除成功!",
