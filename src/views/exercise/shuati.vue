@@ -233,6 +233,7 @@ export default {
       showAnalysis: 0,
       repoId: "",
       repoTitle: "",
+      quId:"",
       //当前试题Id，用于按顺序刷题
       curQuId: "",
       //单题详情

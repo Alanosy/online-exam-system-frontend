@@ -159,7 +159,7 @@ export const constantRoutes = [
     name: 'shua',
     hidden:true,
     component: () => import('@/views/exercise/shuati.vue'),
-    meta: { title: '开始考试',visible:true,roles:['teacher','admin','student'], icon: 'dashboard' },
+    meta: { title: '开始刷题',visible:true,roles:['teacher','admin','student'], icon: 'dashboard' },
    
   },
  
@@ -202,7 +202,7 @@ export const constantRoutes = [
       name: 'Newk1',
       hidden:true,
       component: () => import('@/views/record/exercise/newk'),
-      meta: { title: '试题查看',visible:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+      meta: { title: '刷题查看',visible:true,roles:['teacher','admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -272,7 +272,7 @@ export const constantRoutes = [
       name: 'news',
       hidden:true,
       component: () => import('@/views/question/add.vue'),
-      meta: { title: '试题管理',visible:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '试题添加',visible:true,roles:['teacher','admin'], icon: 'dashboard' }
     }]
   },
   {
