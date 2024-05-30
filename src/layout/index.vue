@@ -73,7 +73,7 @@ export default {
         });
 
         // 循环结束后根据isVisible的值设置visiable
-        element.children[0].meta.visiable = isVisible;
+        element.children[0].meta.visible = isVisible;
       }
     });
   },
