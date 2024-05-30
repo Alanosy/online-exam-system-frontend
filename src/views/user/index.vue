@@ -27,7 +27,11 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column prop="id" label="序号" align="center"> </el-table-column>
+      <el-table-column label="序号" align="center">
+        <template slot-scope="scope">
+          {{ scope.$index + 1 }}
+        </template>
+      </el-table-column>
       <el-table-column prop="userName" label="用户名" align="center"> </el-table-column>
       <el-table-column prop="realName" label="真实姓名" align="center"> </el-table-column>
       <el-table-column prop="roleName" label="角色名称" align="center"> </el-table-column>
@@ -96,7 +100,7 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" v-if="role == 'admin'">
           <el-form :model="addForm">
             <el-form-item label="身份选择" :label-width="formLabelWidth">
               <el-select v-model="addForm.region" placeholder="请选择身份">
@@ -194,6 +198,7 @@ export default {
     this.role = localStorage.getItem("roles");
     // 获取分页数据
     this.getUserPage();
+  
   },
   methods: {
     // 分页查询
@@ -256,9 +261,14 @@ export default {
         formData.append("file", this.fileList[0].raw); // 添加文件到formData
         userImport(formData)
           .then((response) => {
-            this.getUserPage(this.pageNum, this.pageSize);
-            this.$message.success("文件上传成功！");
+            if(response.code){
+              this.getUserPage(this.pageNum, this.pageSize);
+            this.$message.success(`${response.msg}`);
             this.fileDialogVisible = false; // 关闭对话框
+            }else{
+              this.$message.error(`${response.msg}`);
+            }
+           
             // 可以在这里处理成功后的逻辑，如刷新数据等
           })
           .catch((error) => {

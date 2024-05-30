@@ -85,9 +85,18 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column prop="id" label="序号" align="center"> </el-table-column>
+      <el-table-column  label="序号" align="center"> 
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
       <el-table-column prop="content" label="题干" align="center"> </el-table-column>
-      <el-table-column prop="quType" label="题目类型" align="center"> </el-table-column>
+      <el-table-column label="题目类型" align="center"> 
+        <template slot-scope="scope">
+          <span v-if="scope.row.quType == 1">单选题</span>
+          <span v-else-if="scope.row.quType == 2">多选题</span>
+          <span v-else-if="scope.row.quType == 3">判断题</span>
+          <span v-else-if="scope.row.quType == 4">简答题</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="repoTitle" label="所属题库" align="center">
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" align="center">
@@ -127,7 +136,7 @@
     </div>
     <!--编辑弹窗-->
 
-    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
+    <!-- <el-dialog title="编辑" :visible.sync="dialogFormVisible">
       <el-row>
         <el-col :span="12">
           <el-form :model="form">
@@ -150,7 +159,7 @@
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="updateQu">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -200,10 +209,7 @@ export default {
         region: "",
       },
       cancle() {},
-      updateRow(row) {
-        this.dialogFormVisible = true;
-        this.form = row;
-      },
+     
 
       dialogTableVisible: false,
       dialogFormVisible: false,
@@ -230,6 +236,10 @@ export default {
       console.log("单选题库变化:", repo);
       // 这里可以进一步处理repo对象，比如更新UI或发送网络请求等
     },
+    updateRow(row) {
+        localStorage.setItem("quId",row.id)
+        this.$router.push({ name: "news"});
+      },
     importQu() {
       if (this.fileList.length > 0 && this.selectedRepoSingle != "") {
         const formData = new FormData(); // 创建FormData对象
