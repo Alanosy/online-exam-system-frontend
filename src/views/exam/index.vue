@@ -27,7 +27,13 @@
             <el-tag type="success">已作答</el-tag>
           </el-row>
 
-          <div v-if="paperData.radioList !== undefined && paperData.radioList.length > 0">
+          <div
+            v-if="
+              paperData.radioList !== null &&
+              paperData.radioList !== undefined &&
+              paperData.radioList.length > 0
+            "
+          >
             <p class="card-title">单选题</p>
             <el-row :gutter="24" class="card-line">
               <el-tag
@@ -40,7 +46,13 @@
             </el-row>
           </div>
 
-          <div v-if="paperData.multiList !== undefined && paperData.multiList.length > 0">
+          <div
+            v-if="
+              paperData.multiList !== null &&
+              paperData.multiList !== undefined &&
+              paperData.multiList.length > 0
+            "
+          >
             <p class="card-title">多选题</p>
             <el-row :gutter="24" class="card-line">
               <el-tag
@@ -53,7 +65,13 @@
             </el-row>
           </div>
 
-          <div v-if="paperData.judgeList !== undefined && paperData.judgeList.length > 0">
+          <div
+            v-if="
+              paperData.judgeList !== null &&
+              paperData.judgeList !== undefined &&
+              paperData.judgeList.length > 0
+            "
+          >
             <p class="card-title">判断题</p>
             <el-row :gutter="24" class="card-line">
               <el-tag
@@ -123,17 +141,6 @@
               v-model="saqTextarea"
             >
             </el-input>
-            <!-- <el-checkbox-group v-model="multiValue"> -->
-            <!-- <el-checkbox
-                v-for="item in quData.answerList"
-                :key="item.id"
-                :label="item.id"
-                >{{  numberToLetter(item.sort)  }}.{{ item.content }}
-                <div v-if="item.image != null && item.image != ''" style="clear: both">
-                  <el-image :src="item.image" style="max-width: 100%" />
-                </div>
-              </el-checkbox> -->
-            <!-- </el-checkbox-group> -->
           </div>
           <!-- 提交前汇总 -->
           <el-dialog
@@ -162,7 +169,9 @@
                               <el-col :span="20" style="text-align: left">
                                 <!-- 题目: 序号、类型、题干 -->
                                 <div>
-                                  <div class="qu_content">{{ index.title }}</div>
+                                  <div class="qu_content">
+                                    {{ index.title }}
+                                  </div>
                                 </div>
 
                                 <el-radio-group class="qu_choose_group">
@@ -213,7 +222,9 @@
                                 <div>
                                   <!-- <div class="qu_num">{{ index }}</div> -->
                                   <!-- 【 单选题 】 -->
-                                  <div class="qu_content">{{ index.title }}</div>
+                                  <div class="qu_content">
+                                    {{ index.title }}
+                                  </div>
                                 </div>
 
                                 <!-- 选项 -->
@@ -249,7 +260,7 @@
             </el-container>
             <span slot="footer" class="dialog-footer">
               <el-button @click="examPreVisible = false">取 消</el-button>
-              <el-button type="primary" @click="handHandExam">确 定</el-button>
+              <el-button type="primary" @click="doHandler">确 定</el-button>
             </span>
           </el-dialog>
           <div style="margin-top: 20px">
@@ -426,33 +437,21 @@ export default {
       }
     },
     handHandExamPre() {
+      // 交卷保存答案
+      this.handSave(this.cardItem);
       examCollect(this.examId).then((res) => {
         this.recordData = res.data;
       });
       this.examPreVisible = true;
     },
     //切换页面检测
-    //isReduce 0扣次数 1不扣次数 router 判断是否为路由转跳
-    //事件默认参数
     pageHidden(e = null, isReduce = 0, router = false) {
       return new Promise((resolve, reject) => {
-
         if (document.visibilityState === "hidden" || router) {
           examCheat(this.examId).then((res) => {
-
             // let data = res.data;
             if (res.code) {
               this.examMeg = res.msg;
-              // this.switchPage = data.data;
-              // //remaTimes 可切片次数大于0
-              // if (
-              //   this.switchPage.remaTimes >= 0 &&
-              //   !this.isStop &&
-              //   (this.switchPage.remaTimes != this.switchPage.switchPageTimes ||
-              //     (this.switchPage.remaTimes != 0 &&
-              //       this.switchPage.switchPageTimes != 0)) &&
-              //   this.switchPage.switchPageTimes != 1000
-              // ) {
               this.tipsFlag = true;
               if (res.data) {
                 setTimeout(() => {
@@ -461,12 +460,12 @@ export default {
                     this.quDetail = res.data;
                   });
                 }, 100);
-                this.$router.push({ name: "Textcenter", params: { id: this.paperId } });
+                this.$router.push({
+                  name: "Textcenter",
+                  params: { id: this.paperId },
+                });
               }
-              // this.tips = 2;
-              // } else if (this.switchPage.remaTimes < 0 && !this.isStop) {
-              //   this.submitTest();
-              // }
+
               resolve();
             } else {
               reject();
@@ -475,31 +474,7 @@ export default {
         }
       });
     },
-    // submitTest() {
-    //   this.loading = true;
-    //   this.axios({
-    //     method: "post",
-    //     url: "/knowledge/exam/submitPaper",
-    //     data: {
-    //       pkExam: this.pkExam,
-    //       pkPaper: this.testData.pkPaper,
-    //       startTime: this.testData.startTime,
-    //       endTime: this.testData.endTime,
-    //       pkCurExam: this.testData.pkCurExam,
-    //     },
-    //   }).then((res) => {
-    //     let data = res.data;
-    //     this.loading = false;
-    //     if (data.code == "0") {
-    //       this.isStop = true;
-    //       this.tipsFlag = false;
-    //       this.testResult = data.data;
-    //       clearInterval(this.countdownTime);
-    //     } else {
-    //       this.MixerrorMes(data.message);
-    //     }
-    //   });
-    // },
+
     destroyed() {
       window.removeEventListener("visibilitychange", this.pageHidden);
       window.removeEventListener("scroll", this.handleScroll);
@@ -597,8 +572,6 @@ export default {
     doHandler() {
       this.handleText = "正在交卷，请等待...";
       this.loading = true;
-
-      // const params = { id: this.paperId };
 
       handExam(this.examId).then(() => {
         this.$message({
@@ -751,22 +724,27 @@ export default {
         }
 
         const that = this;
-
-        this.paperData.radioList.forEach(function (item) {
-          that.allItem.push(item);
-        });
-
-        this.paperData.multiList.forEach(function (item) {
-          that.allItem.push(item);
-        });
-
-        this.paperData.judgeList.forEach(function (item) {
-          that.allItem.push(item);
-        });
-        this.paperData.saqList.forEach(function (item) {
-          that.allItem.push(item);
-        });
-
+        if (this.paperData.radioList && this.paperData.radioList.length > 0) {
+          this.paperData.radioList.forEach(function (item) {
+            that.allItem.push(item);
+          });
+        }
+        if (this.paperData.multiList && this.paperData.multiList.length > 0) {
+          this.paperData.multiList.forEach(function (item) {
+            that.allItem.push(item);
+          });
+        }
+        if (this.paperData.judgeList && this.paperData.judgeList.length > 0) {
+          this.paperData.judgeList.forEach(function (item) {
+            that.allItem.push(item);
+          });
+        }
+        if (this.paperData.saqList && this.paperData.saqList.length > 0) {
+          this.paperData.saqList.forEach(function (item) {
+            that.allItem.push(item);
+          });
+        }
+        console.log("this.paperData", this.paperData);
         // 当前选定
         this.fetchQuData(this.cardItem);
       });

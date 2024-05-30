@@ -483,27 +483,27 @@ export default {
         this.repoList = this.postForm.repoList;
       });
     },
-     formatDateToISOString(date) {
-  // 确保输入是一个Date对象
-  if (!(date instanceof Date)) {
-    throw new TypeError('Expected a Date object');
-  }
+    formatDateToISOString(date) {
+      // 确保输入是一个Date对象
+      if (!(date instanceof Date)) {
+        throw new TypeError("Expected a Date object");
+      }
 
-  // 格式化为ISO 8601格式，注意这里的时区会自动调整为UTC
-  let isoString = date.toISOString();
+      // 格式化为ISO 8601格式，注意这里的时区会自动调整为UTC
+      let isoString = date.toISOString();
 
-  // 截取并重新组合字符串，去除毫秒部分并替换T为大写
-  // 这一步是根据你的需求调整，通常ISO 8601格式包含毫秒且T是小写
-  isoString = isoString.split('.')[0].replace('T', 'T');
+      // 截取并重新组合字符串，去除毫秒部分并替换T为大写
+      // 这一步是根据你的需求调整，通常ISO 8601格式包含毫秒且T是小写
+      isoString = isoString.split(".")[0].replace("T", "T");
 
-  return isoString;
-},
+      return isoString;
+    },
 
     submitForm() {
       // 校验和处理数据
-      let cerTemp = ""
-      if(this.postForm.certificateId!=null&& this.postForm.certificateId!=''){
-        cerTemp = this.postForm.certificateId.join(',')
+      let cerTemp = "";
+      if (this.postForm.certificateId != null && this.postForm.certificateId != "") {
+        cerTemp = this.postForm.certificateId.join(",");
       }
       this.postForm.repoList = this.repoList;
       const params = {
@@ -515,7 +515,7 @@ export default {
         endTime: this.formatDateToISOString(this.postForm.start[1]),
         gradeIds: this.postForm.classIds.join(","),
         repoId: this.postForm.repoList[0].id,
-        certificateId: cerTemp ,
+        certificateId: cerTemp,
         radioCount: this.postForm.repoList[0].radioCount,
         radioScore: this.postForm.repoList[0].radioScore,
         multiCount: this.postForm.repoList[0].multiCount,
@@ -525,15 +525,24 @@ export default {
         saqCount: this.postForm.repoList[0].saqCount,
         saqScore: this.postForm.repoList[0].saqScore,
       };
-      saveData(params).then(() => {
-        this.$notify({
-          title: "成功",
-          message: "考试保存成功！",
-          type: "success",
-          duration: 2000,
-        });
+      saveData(params).then((res) => {
+        if (res.code) {
+          this.$notify({
+            title: "成功",
+            message: "考试保存成功！",
+            type: "success",
+            duration: 2000,
+          });
 
-        this.$router.push({ name: "Exammange" });
+          this.$router.push({ name: "Exammange" });
+        } else {
+          this.$notify({
+            title: "失败",
+            message: res.msg,
+            type: "error",
+            duration: 2000,
+          });
+        }
       });
     },
 
