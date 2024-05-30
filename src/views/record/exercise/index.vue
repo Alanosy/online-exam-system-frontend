@@ -124,7 +124,9 @@ export default {
       },
       diaTitle: "新增",
       dialogTableVisible: false,
+
       dialogFormVisible: false,
+      formLabelWidth: "110px",
       form: {
         name: "",
         region: "",
@@ -149,13 +151,13 @@ export default {
       this.data = res.data;
     },
     onSubmit() {
-      console.log("submit!");
+      // console.log("submit!");
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
     },
     handleClose(done) {
       this.$confirm("确认关闭？")
@@ -172,7 +174,7 @@ export default {
       if (input) {
         // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
+          // console.log("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1;
           });

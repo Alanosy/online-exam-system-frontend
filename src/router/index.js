@@ -82,7 +82,7 @@ export const constantRoutes = [
     component: Layout,
     children: [{
       path: '/myself',
-      name: 'Usermanager',
+      name: 'myself',
       hidden:true,
       component: () => import('@/views/user/myself'),
       meta: { title: '个人中心',visible:true,roles:['teacher','admin','student'], icon: 'dashboard' }
@@ -93,7 +93,7 @@ export const constantRoutes = [
     component: Layout,
     children: [{
       path: '/changemima',
-      name: 'Usermanager',
+      name: 'changemima',
       hidden:true,
       component: () => import('@/views/user/updatePassword.vue'),
       meta: { title: '修改密码',visible:true,roles:['teacher','admin','student'], icon: 'dashboard' }
@@ -116,7 +116,7 @@ export const constantRoutes = [
       path: '/shijuanzx',
       name: 'Textcenter',
       component: () => import('@/views/exam/student/index'),
-      meta: { title: '试卷中心', visible:true,roles:['teacher','admin','student'], icon: 'dashboard' }
+      meta: { title: '试卷中心', visible:true,roles:['admin','student'], icon: 'dashboard' }
     }]
   },
   {
@@ -173,7 +173,7 @@ export const constantRoutes = [
         path: '/examrecord1',
         name: 'Examrecord1',
         component: () => import('@/views/record/exam/index.vue'),
-        meta: { title: '考试记录',visible:true,roles:['teacher','admin','student'], icon: 'table' }
+        meta: { title: '考试记录',visible:true,roles:['admin','student'], icon: 'table' }
       },
       {
         path: '/questrecord',
@@ -195,7 +195,7 @@ export const constantRoutes = [
     }]
   },
   {
-    path: '/exam',
+    path: '/exam1',
     component: Layout,
     children: [{
       path: '/newk1',

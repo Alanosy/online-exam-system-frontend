@@ -129,7 +129,7 @@ export default {
       const params = { pageNum: pageNum, pageSize: pageSize };
       const res = await noticeGetNew(params);
       this.data = this.transformData(res);
-      console.log("this.data", this.data);
+      // console.log("this.data", this.data);
     },
     initCharts() {
       let myChart = this.$echarts.init(this.$refs.charts);
@@ -137,7 +137,7 @@ export default {
       myChart.setOption(this.option);
     },
     handleNodeClick(data) {
-      console.log(data);
+      // console.log(data);
     },
   },
 

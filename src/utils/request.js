@@ -25,8 +25,6 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
 
-    console.log('发送请求')
-    console.log(config)
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
@@ -37,7 +35,6 @@ service.interceptors.request.use(
   },
   error => {
     // do something with request error
-    console.log(error) // for debug
     return Promise.reject(error)
   }
 )
@@ -56,8 +53,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log('这是响应拦截')
-    console.log(res)
+
     return res
 
     // if the custom code is not 20000, it is judged as an error.
@@ -87,7 +83,6 @@ service.interceptors.response.use(
     // }
   },
   error => {
-    console.log('err' + error) // for debug
     Message({
       message: error.message,
       type: 'error',

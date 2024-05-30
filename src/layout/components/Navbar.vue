@@ -50,9 +50,7 @@
         @click="$router.push(item.path)"
         @close="$store.commit('menu/REMOVE_TAG', item)"
       >
-     
-      {{ item.title }}
-
+        {{ item.title }}
       </el-tag>
     </div>
   </div>
@@ -63,7 +61,7 @@ import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
 import { getToken } from "@/utils/auth";
-import {parseJwt} from "@/utils/jwtUtils"
+import { parseJwt } from "@/utils/jwtUtils";
 export default {
   data() {
     return {
@@ -81,17 +79,16 @@ export default {
     this.decode();
   },
   methods: {
-
     decode() {
       const token = getToken();
       const user = parseJwt(token);
-      this.user=JSON.parse(user.userInfo)
+      this.user = JSON.parse(user.userInfo);
     },
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
     async logout() {
-      this.$store.dispatch('logoutUser');
+      this.$store.dispatch("logoutUser");
       await this.$store.dispatch("user/logout");
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
     },

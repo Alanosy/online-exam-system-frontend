@@ -7,7 +7,10 @@
         !item.alwaysShow
       "
     >
-      <app-link v-if="onlyOneChild.meta && onlyOneChild.meta.visible" :to="resolvePath(onlyOneChild.path)">
+      <app-link
+        v-if="onlyOneChild.meta && onlyOneChild.meta.visible"
+        :to="resolvePath(onlyOneChild.path)"
+      >
         <el-menu-item
           :index="resolvePath(onlyOneChild.path)"
           :class="{ 'submenu-title-noDropdown': !isNest }"
@@ -79,7 +82,7 @@ export default {
     return {};
   },
   created() {
-    console.log(this.item);
+    // console.log(this.item);
   },
   methods: {
     hasOneShowingChild(children = [], parent) {

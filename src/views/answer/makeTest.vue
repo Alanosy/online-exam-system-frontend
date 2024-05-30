@@ -27,8 +27,7 @@
           </div> -->
           <el-divider></el-divider>
           <p>
-            共 <span style="color: #1890ff"> {{ waitQuList.length }} </span> 题,
-            共
+            共 <span style="color: #1890ff"> {{ waitQuList.length }} </span> 题, 共
             <span style="color: #1890ff">{{
               waitQuList.length * waitQuList[0].totalScore
             }}</span>
@@ -44,9 +43,7 @@
               {{ index + 1 }}
             </el-tag>
           </el-row>
-          <el-button @click="subCorrect" type="success" class="ann"
-            >提交批改</el-button
-          >
+          <el-button @click="subCorrect" type="success" class="ann">提交批改</el-button>
         </div>
       </div>
     </div>
@@ -65,9 +62,7 @@
                       <div>
                         <!-- <div class="qu_num">{{ item.quId }}</div>
                       【 简答题 】 -->
-                        <div class="qu_content">
-                          {{ index + 1 }}. {{ item.quTitle }}
-                        </div>
+                        <div class="qu_content">{{ index + 1 }}. {{ item.quTitle }}</div>
                       </div>
                       <div class="content">
                         {{ item.answer }}
@@ -172,10 +167,7 @@ export default {
           });
           return;
         }
-        if (
-          element.correctScore < 0 ||
-          element.correctScore > element.totalScore
-        ) {
+        if (element.correctScore < 0 || element.correctScore > element.totalScore) {
           this.$message({
             message: `第${i + 1}题的评分只能在0-${element.totalScore}之间`,
             type: "error",
@@ -209,10 +201,6 @@ export default {
           });
         }
       });
-
-      // console.log("-------------------");
-      // console.log(res);
-      // console.log("--------------------");
     },
   },
 };

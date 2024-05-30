@@ -151,9 +151,18 @@ export default {
     this.getCerPage();
 
     this.jwtInfo = getTokenInfo();
-    console.log("jwt", this.jwtInfo);
   },
   methods: {
+    handleSizeChange(val) {
+      // 设置每页多少条逻辑
+      this.pageSize = val;
+      this.getCerPage(this.pageNum, val);
+    },
+    handleCurrentChange(val) {
+      // 设置当前页逻辑
+      this.pageNum = val;
+      this.getCerPage(val, this.pageSize);
+    },
     // 分页查询
     async getCerPage(pageNum, pageSize) {
       const params = { pageNum: pageNum, pageSize: pageSize };
@@ -169,7 +178,6 @@ export default {
       //获取当前日期
       var data = new Date(new Date().setHours(0, 0, 0, 0));
       vm.start = data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate();
-      console.log(vm.start);
 
       this.dialogVisible = true;
       this.$nextTick(() => {

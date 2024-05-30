@@ -27,7 +27,6 @@ router.beforeEach(async(to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
-  console.log(store);
   store.commit('menu/ADD_TAG', {
     path: to.path,
     checked: false,

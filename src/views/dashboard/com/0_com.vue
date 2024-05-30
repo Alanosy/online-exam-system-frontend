@@ -320,7 +320,7 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 10px;
-  height: 10vh;
+  height: 100%;
   margin-top: 30px;
   box-shadow: 3px 3px 3px 3px whitesmoke;
 }
@@ -331,7 +331,7 @@ export default {
   justify-content: space-between;
 }
 .x {
-  width: 260px;
+  width: 60vh;
   height: 80px;
   display: flex;
   background-color: #fff;

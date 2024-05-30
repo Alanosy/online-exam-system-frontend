@@ -302,7 +302,7 @@ export default {
       if (input) {
         // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
+          // console.log("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1;
           });

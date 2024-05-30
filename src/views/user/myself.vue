@@ -39,7 +39,40 @@
         <li style="padding-top: 50px; padding-left: 80px">
           注册时间: {{ this.data.createTime }}
         </li>
+        <li style="padding-top: 50px; padding-left: 80px">
+          <el-button type="primary" icon="el-icon-edit" @click="fileDialogVisible = true"
+            >编辑头像</el-button
+          >
+        </li>
       </ul>
+      <!-- 编辑个人信息 -->
+      <el-dialog
+        width="400px"
+        :show-close="false"
+        :close-on-click-modal="false"
+        title="上传文件"
+        :visible.sync="fileDialogVisible"
+      >
+        <el-upload
+          class="upload-demo"
+          drag
+          action="xxxxxx"
+          multiple
+          :limit="1"
+          :auto-upload="false"
+          :on-remove="handleRemove"
+          :on-change="handleFileChange"
+          :file-list="fileList"
+        >
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件，且不超过500kb</div>
+        </el-upload>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="fileDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="importAvatar">确 定</el-button>
+        </div>
+      </el-dialog>
       <!-- 添加班级 -->
       <el-dialog title="加入班级" :visible.sync="addClassDialogVisible">
         <el-row :gutter="20">
@@ -76,10 +109,13 @@
 </template>
 
 <script>
-import { getInfo, userAddClass } from "@/api/user";
+import { getInfo, userAddClass, uploadAvatar } from "@/api/user";
 export default {
   data() {
     return {
+      imageUrl: "",
+      fileDialogVisible: false,
+      fileList: [],
       data: {},
       form: {
         code: "",
@@ -89,13 +125,46 @@ export default {
   },
   created() {
     getInfo().then((res) => {
-      console.log(res);
       if (res.code) {
         this.data = res.data;
       }
     });
   },
   methods: {
+    handleFileChange(file, fileList) {
+      this.fileList = fileList; // 收集文件信息
+    },
+    // 移除文件处理方法
+    handleRemove(file, fileList) {
+      if (fileList.length == 0) {
+        this.hasFiles = false;
+      }
+    },
+    // 上传文件逻辑
+    importAvatar() {
+      if (this.fileList.length > 0) {
+        const formData = new FormData(); // 创建FormData对象
+        formData.append("file", this.fileList[0].raw); // 添加文件到formData
+        uploadAvatar(formData)
+          .then((response) => {
+            getInfo().then((res) => {
+              if (res.code) {
+                this.data = res.data;
+              }
+            });
+            this.$message.success("文件上传成功！");
+            this.fileDialogVisible = false; // 关闭对话框
+            // 可以在这里处理成功后的逻辑，如刷新数据等
+          })
+          .catch((error) => {
+            console.error("文件上传失败：", error);
+            this.$message.error("文件上传失败！");
+          });
+      } else {
+        this.$message.warning("请选择文件后再上传！");
+      }
+    },
+
     addClassBt() {
       this.addClassDialogVisible = true;
     },
@@ -120,4 +189,29 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+/* 修改个人头像 */
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>

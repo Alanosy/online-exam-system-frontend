@@ -101,3 +101,11 @@ export function trackPresence(data) {
     data
   })
 }
+
+export function uploadAvatar(data) {
+  return request({
+    url: 'user/uploadAvatar',
+    method: 'put',
+    data
+  })
+}

@@ -109,7 +109,6 @@
 
 <script>
 import { validUsername } from "@/utils/validate";
-import { sendEmail } from "@/api/email";
 import { setToken } from "@/utils/auth";
 import axios from "axios";
 import { verifyCode } from "@/api/user";
@@ -164,11 +163,6 @@ export default {
       // obj.src = "/api/auths/captcha?" + Math.random();
     },
 
-    async getEmail() {
-      const res = await sendEmail("3109836428@qq.com");
-      console.log("我获得了api的返回");
-      console.log(res);
-    },
     showPwd() {
       if (this.passwordType === "password") {
         this.passwordType = "";
@@ -181,7 +175,6 @@ export default {
     },
     handleLogin() {
       verifyCode(this.code).then((res) => {
-        console.log(res.code);
         if (res.code) {
           this.$refs.loginForm.validate((valid) => {
             if (valid) {
@@ -189,22 +182,19 @@ export default {
               this.$store
                 .dispatch("user/login", this.loginForm)
                 .then(() => {
-                  this.$store.dispatch('loginUser', { id: '1' });
+                  this.$store.dispatch("loginUser", { id: "1" });
                   this.$router.push({ path: "index" });
                   this.loading = false;
                 })
                 .catch((error) => {
-                  console.log(error);
                   Message.error(error.msg);
                   this.loading = false;
                 });
             } else {
-              console.log("error submit!!");
               return false;
             }
           });
         } else {
-          console.log(11111111);
           this.getVerify();
           this.$message({
             type: "info",

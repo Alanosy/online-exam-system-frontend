@@ -40,7 +40,7 @@ export function quDetail(id) {
 
 export function importQue(id,data) {
   return request({
-    url: `/api/questions/import/${id}`,
+    url: `questions/import/${id}`,
     method: 'post',
     data
   })
