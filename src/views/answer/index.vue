@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: 魏进 3413105907@qq.com
- * @LastEditTime: 2024-05-30 14:17:50
+ * @LastEditTime: 2024-05-30 23:13:59
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -35,7 +35,7 @@
             size="small"
             style="font-size: 14px"
             @click="screenInfo(row)"
-            :disabled="row.numberOfApplicants < row.correctedPaper"
+            :disabled="row.numberOfApplicants <= row.correctedPaper"
             >查看详情</el-button
           >
         </template>

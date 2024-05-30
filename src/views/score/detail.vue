@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: 魏进 3413105907@qq.com
- * @LastEditTime: 2024-05-31 00:37:25
+ * @LastEditTime: 2024-05-31 00:33:02
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -10,12 +10,12 @@
 <template>
   <div class="app-container">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item label="试卷名称">
-        <el-input v-model="input" placeholder="试卷名称"></el-input>
+      <el-form-item label="真实姓名">
+        <el-input v-model="realName" placeholder="真实姓名"></el-input>
       </el-form-item>
-      <el-form-item label="所属班级">
-        <ClassSelect v-model="gradeId" />
-      </el-form-item>
+      <!-- <el-form-item label="所属班级">
+        <el-input v-model="input1" placeholder="所属班级"></el-input>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
@@ -35,29 +35,27 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column fixed label="序号" align="center">
+      <el-table-column fixed  label="序号" align="center" >
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column prop="examTitle" label="考试名称" align="center" />
-      <el-table-column prop="gradeName" label="班级" align="center" />
-      <el-table-column prop="maxScore" label="最高分" align="center" />
-      <el-table-column prop="minScore" label="最低分" align="center" />
-      <el-table-column prop="avgScore" label="平均分" align="center" />
-      <el-table-column prop="attendNum" label="参考人数" align="center" />
-      <!-- <el-table-column prop="limitTime" label="提交时间" align="center" /> -->
-
+      <el-table-column prop="title" label="试卷名称" align="center" />
+      <el-table-column prop="realName" label="真实姓名" align="center" />
+      <el-table-column prop="userScore" label="用户得分" align="center" />
+      <el-table-column prop="count" label="切屏次数" align="center" />
+      <el-table-column prop="userTime" label="用户用时" align="center" />
+      <el-table-column prop="limitTime" label="提交时间" align="center" />
+<!-- 
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button
             type="text"
             size="small"
-            :disabled="row.maxScore == null"
             style="font-size: 14px"
             @click="updateRow(row)"
             >查看详情</el-button
           >
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <div class="pagination-container">
@@ -71,20 +69,85 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <el-dialog title="查看详情" :visible.sync="dialogFormVisible">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="序号  " :label-width="formLabelWidth">
+              <el-input v-model="form.date" :disabled="true"> </el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="试卷名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" :disabled="true"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="考试班级" :label-width="formLabelWidth">
+              <el-input v-model="form.province" :disabled="true"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="最低分" :label-width="formLabelWidth">
+              <el-input v-model="form.city" :disabled="true"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="最高分" :label-width="formLabelWidth">
+              <el-input v-model="form.address" :disabled="true"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+          <el-form :model="form">
+            <el-form-item label="评价分" :label-width="formLabelWidth">
+              <el-input v-model="form.zip" :disabled="true"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+    </el-dialog>
+    <!--新增弹窗-->
+
+    <el-dialog :title="diaTitle" :visible.sync="dialogTableVisible">
+      <el-row>
+        <el-form :model="form">
+          <el-form-item label="班级名称" :label-width="formLabelWidth">
+            <el-input v-model="form.name" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+      </el-row>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import ClassSelect from "@/components/ClassSelect";
-import { getExamScore } from "@/api/score";
+import { scorePaging } from "@/api/score";
 export default {
-  components: { ClassSelect },
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
-      gradeId: "",
-      examTitle: "",
+      gradeId:'',
+      examId:'',
+      realName:'',
       data: {},
       formInline: {
         user: "",
@@ -102,10 +165,8 @@ export default {
       },
       cancle() {},
       updateRow(row) {
-        localStorage.setItem('examId',row.examId);
-        localStorage.setItem('gradeId',row.gradeId)
-        this.$router.push({ name: "UserScore"});
-        
+        this.dialogFormVisible = true;
+        this.form = row;
       },
       diaTitle: "",
       dialogTableVisible: false,
@@ -124,7 +185,13 @@ export default {
     };
   },
   created() {
+    this.examId = localStorage.getItem('examId')
+    this.gradeId = localStorage.getItem('gradeId')
     this.getScorePage();
+  },
+  beforeDestroy () {
+    localStorage.removeItem('examId');
+    localStorage.removeItem('gradeId')
   },
   methods: {
     // 分页查询
@@ -132,14 +199,16 @@ export default {
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
+        examId:this.examId,
         gradeId: this.gradeId,
-        examTitle: this.examTitle,
+        realName: this.realName,
       };
-      const res = await getExamScore(params);
+      const res = await scorePaging(params);
       this.data = res.data;
     },
     onSubmit() {
-      this.getScorePage();
+      this.getScorePage()
+      // console.log("submit!");
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑
