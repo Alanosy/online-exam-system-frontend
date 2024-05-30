@@ -39,7 +39,6 @@
     </el-dialog>
 
     <!-- table -->
-
     <el-table
       :data="data.records"
       border
@@ -54,6 +53,7 @@
     >
       <el-table-column fixed prop="id" label="序号" align="center" />
       <el-table-column prop="title" label="公告标题" align="center" />
+
       <el-table-column prop="content" label="内容" align="center" />
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
@@ -162,7 +162,7 @@ export default {
   },
   data() {
     return {
-      content: "<br><br><br><br><br>",
+      content: "",
       editorOption: [
         ["bold", "italic", "underline", "strike"], // 字体
         ["blockquote", "code-block"],
