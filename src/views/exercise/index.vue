@@ -32,7 +32,9 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column fixed prop="id" label="序号" align="center" />
+      <el-table-column fixed  label="序号" align="center" >
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
       <el-table-column prop="repoTitle" label="题库标题" align="center" />
       <el-table-column prop="totalCount" label="试题总数" align="center" />
       <el-table-column prop="exerciseCount" label="已练习题数" align="center" />

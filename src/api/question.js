@@ -18,7 +18,7 @@ export function quPaging(params) {
 
 export function quUpdate(id,data) {
   return request({
-    url: 'questions/' + id,
+    url: `questions/${id}`,
     method: 'put',
     data: data
   })
