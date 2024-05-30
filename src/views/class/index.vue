@@ -30,7 +30,11 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column prop="id" label="序号" align="center"> </el-table-column>
+      <el-table-column label="序号" align="center"> 
+        <template slot-scope="scope">
+          {{ scope.$index + 1 }}
+        </template>
+      </el-table-column>
       <el-table-column prop="gradeName" label="班级名称" align="center">
       </el-table-column>
       <el-table-column prop="code" label="班级口令" align="center"> </el-table-column>
