@@ -100,6 +100,7 @@ import { recordExercisePaging, recordExerciseDetail } from "@/api/record";
 export default {
   data() {
     return {
+      formLabelWidth:"",
       pageNum: 1,
       pageSize: 10,
       data: {},

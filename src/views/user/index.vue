@@ -167,6 +167,7 @@ export default {
   components: { ClassSelect },
   data() {
     return {
+      formLabelWidth:"",
       searchRealName: "",
       searchClassName: "",
       role: "",
@@ -233,7 +234,7 @@ export default {
       const data = {
         userName: this.addForm.userName,
         realName: this.addForm.realName,
-        roleId: this.addForm.region,
+        region: this.addForm.region,
       };
       classAdd(data).then((res) => {
         if (res.code) {

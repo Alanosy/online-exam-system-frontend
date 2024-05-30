@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "axios": "0.18.1",
-    "core-js": "3.6.5",
+    "core-js": "^3.37.1",
     "echarts": "^4.9.0",
     "element-ui": "2.13.2",
     "html2canvas": "^1.4.1",
@@ -27,6 +27,7 @@
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
     "quill": "^2.0.2",
+    "svg-baker-runtime": "^1.4.7",
     "vue": "2.6.10",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "3.0.6",
