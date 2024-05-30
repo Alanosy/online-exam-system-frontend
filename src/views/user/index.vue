@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <!-- table -->
-
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item label="真实姓名">
         <el-input v-model="searchRealName" placeholder="输入姓名"></el-input>

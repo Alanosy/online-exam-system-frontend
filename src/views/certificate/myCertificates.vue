@@ -89,14 +89,16 @@
             >同学：<br />
           </p>
           <p class="con-text">
-            <span>在{{ currentdata.examName }}考试中荣获</span>
+            <span
+              >在{{ currentdata.examName }}考试中荣获,荣誉称号，特发此状，以资鼓励。</span
+            >
           </p>
           <p class="con-height">
             <span
               ><center>{{ level }}</center></span
             >
           </p>
-          <p class="con-text">荣誉称号，特发此状，以资鼓励。</p>
+          <!-- <p class="con-text">荣誉称号，特发此状，以资鼓励。</p> -->
           <div class="con-unit">
             <p class="time">证书编号：{{ currentdata.code }}</p>
             <p class="time">{{ currentdata.createTime }}</p>
