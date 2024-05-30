@@ -127,7 +127,7 @@
           <p v-if="quDetail.image != null && quDetail.image != ''">
             <el-image :src="quDetail.image" style="max-width: 100px" />
           </p>
-          <div v-if="quDetail.quType === '1' || quDetail.quType === '3'">
+          <div v-if="quDetail.quType == 1 || quDetail.quType == 3">
             <el-radio-group v-model="radioValue">
               <el-radio
                 v-for="item in quDetail.options"
@@ -141,7 +141,7 @@
             </el-radio-group>
           </div>
 
-          <div v-if="quDetail.quType === '2'">
+          <div v-if="quDetail.quType == 2">
             <el-checkbox-group v-model="multiValue">
               <el-checkbox
                 v-for="item in quDetail.options"
@@ -154,7 +154,7 @@
               </el-checkbox>
             </el-checkbox-group>
           </div>
-          <div v-if="quDetail.quType === '4'">
+          <div v-if="quDetail.quType === 4">
             <el-input
               v-model="radioValue"
               type="textarea"
@@ -328,7 +328,7 @@ export default {
 
       this.getQuestionList()
 
-      setTimeout(() => this.getCurrentQuDetial(), 100)
+      setTimeout(() => this.getCurrentQuDetial(), 200);
     },
 
     getRightAnswer() {

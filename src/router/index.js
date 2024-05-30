@@ -306,13 +306,24 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/detail',
+    component: Layout,
+    children: [{
+      path: 'userscore',
+      name: 'UserScore',
+      hidden:true,
+      component: () => import('@/views/score/detail'),
+      meta: { title: '用户成绩',visible:true,roles:['teacher','admin'], icon: 'dashboard' }
+    }]
+  },
+  {
     path: '/answermanage',
     component: Layout,
     children: [{
       path: 'dajuangl',
       name: 'Answermanage',
       component: () => import('@/views/answer/index'),
-      meta: { title: '答卷管理', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
+      meta: { title: '阅卷管理',visible:true,roles:['teacher','admin'], icon: 'dashboard' }
     }]
   },
   {

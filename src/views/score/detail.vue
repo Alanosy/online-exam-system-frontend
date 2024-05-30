@@ -1,0 +1,198 @@
+<!--
+ * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @Date: 2024-04-01 11:00:21
+ * @LastEditors: 魏进 3413105907@qq.com
+ * @LastEditTime: 2024-05-31 02:12:19
+ * @FilePath: \com-project\src\views\notice\notice.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+
+<template>
+  <div class="app-container">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="真实姓名">
+        <el-input v-model="realName" placeholder="真实姓名"></el-input>
+      </el-form-item>
+      <!-- <el-form-item label="所属班级">
+        <el-input v-model="input1" placeholder="所属班级"></el-input>
+      </el-form-item> -->
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">查询</el-button>
+      </el-form-item>
+    </el-form>
+
+    <!-- table -->
+
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column fixed  label="序号" align="center" >
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
+      <el-table-column prop="title" label="试卷名称" align="center" />
+      <el-table-column prop="realName" label="真实姓名" align="center" />
+      <el-table-column prop="userScore" label="用户得分" align="center" />
+      <el-table-column prop="count" label="切屏次数" align="center" />
+      <el-table-column prop="userTime" label="用户用时" align="center" />
+      <el-table-column prop="limitTime" label="提交时间" align="center" />
+<!-- 
+      <el-table-column fixed="right" label="操作" align="center">
+        <template slot-scope="{ row }">
+          <el-button
+            type="text"
+            size="small"
+            style="font-size: 14px"
+            @click="updateRow(row)"
+            >查看详情</el-button
+          >
+        </template>
+      </el-table-column> -->
+    </el-table>
+
+  </div>
+</template>
+
+<script>
+import { scorePaging } from "@/api/score";
+export default {
+  data() {
+    return {
+      pageNum: 1,
+      pageSize: 10,
+      gradeId:'',
+      examId:'',
+      realName:'',
+      data: {},
+      formInline: {
+        user: "",
+        region: "",
+      },
+      input: "",
+      input1: "",
+
+      formInline: {
+        user: "",
+        region: "",
+      },
+      form: {
+        name: "",
+      },
+      cancle() {},
+      updateRow(row) {
+        this.dialogFormVisible = true;
+        this.form = row;
+      },
+      diaTitle: "",
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: "",
+      },
+      formLabelWidth: "120px",
+    };
+  },
+  created() {
+    this.examId = localStorage.getItem('examId')
+    this.gradeId = localStorage.getItem('gradeId')
+    this.getScorePage();
+  },
+  beforeDestroy () {
+    localStorage.removeItem('examId');
+    localStorage.removeItem('gradeId')
+  },
+  methods: {
+    // 分页查询
+    async getScorePage() {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        examId:this.examId,
+        gradeId: this.gradeId,
+        realName: this.realName,
+      };
+      const res = await scorePaging(params);
+      this.data = res.data;
+    },
+    onSubmit() {
+      this.getScorePage()
+      // console.log("submit!");
+    },
+    handleSizeChange(val) {
+      // 设置每页多少条逻辑
+      this.pageSize = val;
+      this.getScorePage(this.pageNum, val);
+    },
+    handleCurrentChange(val) {
+      // 设置当前页逻辑
+      this.pageNum = val;
+      this.getScorePage(val, this.pageSize);
+    },
+    open() {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true,
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    handleClick(row) {
+      // console.log(row);
+    },
+  },
+  computed: {
+    tables() {
+      //在你的数据表格中定义tabels
+      const input = this.input;
+      const input1 = this.input1;
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          // console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1;
+          });
+        });
+      }
+      if (input1) {
+        return this.tableData.filter((data) => {
+          // console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input1) > -1;
+          });
+        });
+      }
+
+      return this.tableData;
+    },
+  },
+};
+</script>
+<style></style>
