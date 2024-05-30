@@ -25,8 +25,8 @@
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          v-model="registerForm.userName"
           ref="username"
+          v-model="registerForm.userName"
           placeholder="Username"
           name="username"
           type="text"
@@ -39,8 +39,8 @@
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          v-model="registerForm.realName"
           ref="realName"
+          v-model="registerForm.realName"
           placeholder="realName"
           name="realName"
           type="text"
@@ -96,8 +96,8 @@
             <svg-icon icon-class="user" />
           </span>
           <el-input
-            v-model="code"
             ref="username"
+            v-model="code"
             style="width: 300px"
             placeholder="code"
             name="code"
@@ -110,9 +110,9 @@
           ref="captchaImg"
           src="/api/auths/captcha"
           style="margin-left: 20px; height: 47px"
-          @click="getVerify"
           alt=""
-        />
+          @click="getVerify"
+        >
       </div>
       <div
         style="
@@ -130,61 +130,60 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click="registerFn"
-        >rigister</el-button
-      >
+      >rigister</el-button>
     </el-form>
   </div>
 </template>
 
 <script>
-import { validUsername } from "@/utils/validate";
-import { setToken } from "@/utils/auth";
-import axios from "axios";
-import { verifyCode, register } from "@/api/user";
-import { Message } from "element-ui";
+import { validUsername } from '@/utils/validate'
+import { setToken } from '@/utils/auth'
+import axios from 'axios'
+import { verifyCode, register } from '@/api/user'
+import { Message } from 'element-ui'
 
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error("请输入正确的用户名"));
+        callback(new Error('请输入正确的用户名'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("密码不能少于6位"));
+        callback(new Error('密码不能少于6位'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       registerForm: {
-        userName: "",
-        password: "",
-        realName: "",
-        checkedPassword: "",
+        userName: '',
+        password: '',
+        realName: '',
+        checkedPassword: ''
       },
-      code: "",
+      code: '',
       loginRules: {
-        username: [{ required: true, trigger: "blur", validator: validateUsername }],
-        password: [{ required: true, trigger: "blur", validator: validatePassword }],
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
-      passwordType: "password",
-      checkedPasswordType: "password",
-      redirect: undefined,
-    };
+      passwordType: 'password',
+      checkedPasswordType: 'password',
+      redirect: undefined
+    }
   },
   watch: {
     $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect;
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   created() {
     // this.getEmail()
@@ -197,53 +196,53 @@ export default {
             if (res2.code) {
               Message({
                 message: res2.msg,
-                type: "success",
-                duration: 5 * 1000,
-              });
-              this.$router.push({ path: "/login" });
+                type: 'success',
+                duration: 5 * 1000
+              })
+              this.$router.push({ path: '/login' })
             } else {
               Message({
                 message: res2.msg,
-                type: "error",
-                duration: 5 * 1000,
-              });
+                type: 'error',
+                duration: 5 * 1000
+              })
             }
-          });
+          })
         } else {
-          this.getVerify();
+          this.getVerify()
           this.$message({
-            type: "info",
-            message: res.msg,
-          });
+            type: 'info',
+            message: res.msg
+          })
         }
-      });
+      })
     },
     getVerify() {
-      this.$refs.captchaImg.src = `/api/auths/captcha?${Math.random()}`;
+      this.$refs.captchaImg.src = `/api/auths/captcha?${Math.random()}`
     },
 
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     showPwd2() {
-      if (this.checkedPasswordType === "password") {
-        this.checkedPasswordType = "";
+      if (this.checkedPasswordType === 'password') {
+        this.checkedPasswordType = ''
       } else {
-        this.checkedPasswordType = "password";
+        this.checkedPasswordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
-    },
-  },
-};
+        this.$refs.password.focus()
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss">

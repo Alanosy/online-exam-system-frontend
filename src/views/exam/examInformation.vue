@@ -39,7 +39,7 @@
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">考试时长:</span>
-        <span style="margin-left: 5px; font-size: 14px">{{data.examDuration}}</span>
+        <span style="margin-left: 5px; font-size: 14px">{{ data.examDuration }}</span>
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">试卷总分:</span>
@@ -47,11 +47,11 @@
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">及格分数:</span>
-        <span style="margin-left: 5px; font-size: 14px">{{data.passedScore }}</span>
+        <span style="margin-left: 5px; font-size: 14px">{{ data.passedScore }}</span>
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">发布人:</span>
-        <span style="margin-left: 5px; font-size: 14px">{{data.username}}</span>
+        <span style="margin-left: 5px; font-size: 14px">{{ data.username }}</span>
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">单选题数量:</span>
@@ -65,13 +65,13 @@
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">判断题数量:</span>
-        <span style="margin-left: 5px; font-size: 14px">{{data.judgeCount }}</span>
+        <span style="margin-left: 5px; font-size: 14px">{{ data.judgeCount }}</span>
         <span style="margin-left: 5px; font-size: 14px">({{ data.judgeScore }}分)</span>
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">简答题数量:</span>
         <span style="margin-left: 5px; font-size: 14px">{{ data.saqCount }}</span>
-        <span style="margin-left: 5px; font-size: 14px">({{data.saqScore}})</span>
+        <span style="margin-left: 5px; font-size: 14px">({{ data.saqScore }})</span>
       </div>
     </div>
     <!-- 按钮 -->
@@ -83,42 +83,41 @@
 </template>
 
 <script>
-import { getExamDetail,examStart } from "@/api/exam";
+import { getExamDetail, examStart } from '@/api/exam'
 export default {
   data() {
     return {
       receivedRow: null,
-      data:{
-        title: ""
-      },
-    };
+      data: {
+        title: ''
+      }
+    }
   },
   created() {
-    this.receivedRow =localStorage.getItem("examInfo_examId");
-    this.getExamDetils(localStorage.getItem("examInfo_examId"));
+    this.receivedRow = localStorage.getItem('examInfo_examId')
+    this.getExamDetils(localStorage.getItem('examInfo_examId'))
   },
   methods: {
     // 分页查询
     async getExamDetils(examId) {
-      const res = await getExamDetail(examId);
-      this.data = res.data;
+      const res = await getExamDetail(examId)
+      this.data = res.data
     },
     startExam() {
-      examStart(this.receivedRow).then((res)=>{
-        if(res.code){
-          localStorage.setItem("examId", this.receivedRow.id);
-          this.$router.push({ name: "start", query: { zhi: this.receivedRow } });
-        }else{
+      examStart(this.receivedRow).then((res) => {
+        if (res.code) {
+          localStorage.setItem('examId', this.receivedRow.id)
+          this.$router.push({ name: 'start', query: { zhi: this.receivedRow }})
+        } else {
           this.$message({
-                type: "info",
-                message: res.msg,
-              });
+            type: 'info',
+            message: res.msg
+          })
         }
       })
-      
     }
-  },
-};
+  }
+}
 </script>
 
 <style scoped>

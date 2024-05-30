@@ -25,7 +25,7 @@
             <span>提交人</span>
             <span>50</span>
           </div> -->
-          <el-divider></el-divider>
+          <el-divider />
           <p>
             共 <span style="color: #1890ff"> {{ waitQuList.length }} </span> 题, 共
             <span style="color: #1890ff">{{
@@ -36,14 +36,15 @@
           <el-row>
             <el-tag
               v-for="(item, index) in waitQuList"
+              :key="index"
               :type="index === quIndex ? 'success' : ''"
-              @click="handleTag(index)"
               class="type_tag"
+              @click="handleTag(index)"
             >
               {{ index + 1 }}
             </el-tag>
           </el-row>
-          <el-button @click="subCorrect" type="success" class="ann">提交批改</el-button>
+          <el-button type="success" class="ann" @click="subCorrect">提交批改</el-button>
         </div>
       </div>
     </div>
@@ -76,11 +77,11 @@
                               v-model="item.correctScore"
                               type="number"
                               style="width: 100px; margin-left: 20px"
-                            ></el-input>
+                            />
                             <span
                               v-if="
                                 item.correctScore < 0 ||
-                                item.correctScore > item.totalScore
+                                  item.correctScore > item.totalScore
                               "
                               style="color: #f00; margin-left: 10px"
                             >
@@ -121,89 +122,89 @@
 </template>
 
 <script>
-import { answerDetail, correct } from "@/api/answer";
+import { answerDetail, correct } from '@/api/answer'
 export default {
-  name: "ExamProcess",
+  name: 'ExamProcess',
   data() {
     return {
       quIndex: -1,
-      //考试信息
+      // 考试信息
       info: {},
-      //待批改试题
-      waitQuList: [],
-    };
+      // 待批改试题
+      waitQuList: []
+    }
   },
   created() {
-    this.info = JSON.parse(sessionStorage.getItem("answer_info"));
+    this.info = JSON.parse(sessionStorage.getItem('answer_info'))
 
-    this.getUserAnswerDetail();
+    this.getUserAnswerDetail()
   },
   methods: {
     // 点击答题卡题号, 右侧题目滑动
     handleTag(index) {
       // 高亮选中的题目index标签
-      this.quIndex = index;
+      this.quIndex = index
       // 题目滑动到锚定点
-      let page = document.querySelector(".index" + index);
-      page.scrollIntoView();
+      const page = document.querySelector('.index' + index)
+      page.scrollIntoView()
     },
-    //获取用户作答信息
+    // 获取用户作答信息
     async getUserAnswerDetail() {
-      const params = { userId: this.info.userId, examId: this.info.examId };
+      const params = { userId: this.info.userId, examId: this.info.examId }
 
-      const res = await answerDetail(params);
-      this.waitQuList = res.data;
+      const res = await answerDetail(params)
+      this.waitQuList = res.data
     },
     subCorrect() {
-      let list = [];
-      //校验合法
+      const list = []
+      // 校验合法
       for (let i = 0; i < this.waitQuList.length; i++) {
-        const element = this.waitQuList[i];
+        const element = this.waitQuList[i]
         if (!element.correctScore) {
           // 显示警告的操作
           this.$message({
             message: `请先给第${i + 1}题评分`,
-            type: "error",
-          });
-          return;
+            type: 'error'
+          })
+          return
         }
         if (element.correctScore < 0 || element.correctScore > element.totalScore) {
           this.$message({
             message: `第${i + 1}题的评分只能在0-${element.totalScore}之间`,
-            type: "error",
-          });
-          return;
+            type: 'error'
+          })
+          return
         }
-        let obj = {
+        const obj = {
           userId: element.userId,
           examId: element.examId,
           questionId: element.quId,
-          score: element.correctScore,
-        };
-        list.push(obj);
+          score: element.correctScore
+        }
+        list.push(obj)
       }
-      //发送请求
+      // 发送请求
       correct(list).then((res) => {
         if (res.code) {
           this.$notify({
-            title: "成功",
+            title: '成功',
             message: `${res.msg}`,
-            type: "success",
-            duration: 2000,
-          });
-          this.$router.push({ name: "Ansck" });
+            type: 'success',
+            duration: 2000
+          })
+          this.$router.push({ name: 'Ansck' })
         } else {
           this.$notify({
-            title: "失败",
+            title: '失败',
             message: `${res.msg}`,
-            type: "error",
-            duration: 2000,
-          });
+            type: 'error',
+            duration: 2000
+          })
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">

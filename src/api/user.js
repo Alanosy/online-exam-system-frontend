@@ -16,7 +16,6 @@ export function classAdd(data) {
   })
 }
 
-
 export function login(data) {
   return request({
     url: 'auths/login',
@@ -27,14 +26,14 @@ export function login(data) {
 export function verifyCode(code) {
   return request({
     url: 'auths/verifyCode/' + code,
-    method: 'post',
+    method: 'post'
   })
 }
 
 export function getInfo() {
   return request({
     url: 'user/info',
-    method: 'get',
+    method: 'get'
 
   })
 }
@@ -55,8 +54,8 @@ export function userPaging(params) {
 }
 export function userDel(ids) {
   return request({
-    url: 'user/'+ids,
-    method: 'delete',
+    url: 'user/' + ids,
+    method: 'delete'
   })
 }
 export function userImport(data) {
@@ -85,7 +84,6 @@ export function userAddClass(params) {
     params
   })
 }
-
 
 export function register(data) {
   return request({

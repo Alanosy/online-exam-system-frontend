@@ -166,8 +166,8 @@
         <el-form-item label="证书" prop="maxCount">
           <CertificateSelect
             v-model="postForm.certificateId"
-            @change="onCertificateChange"
             is-multiple
+            @change="onCertificateChange"
           />
           <!-- <el-input-number v-model="postForm.maxCount"  /> -->
         </el-form-item>
@@ -181,10 +181,9 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-          >
-          </el-date-picker>
+          />
         </el-form-item>
-        <!-- 
+        <!--
         <el-form-item label="是否限时">
           <el-checkbox v-model="postForm.timeLimit" />
         </el-form-item> -->
@@ -196,8 +195,7 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-          >
-          </el-date-picker>
+          />
         </el-form-item>
       </el-form>
     </el-card>
@@ -254,27 +252,27 @@
 </template>
 
 <script>
-import RepoSelect from "@/components/RepoSelect";
-import ClassSelect from "@/components/ClassSelect";
-import CertificateSelect from "@/components/CertificateSelect";
-import { saveData } from "@/api/exam";
+import RepoSelect from '@/components/RepoSelect'
+import ClassSelect from '@/components/ClassSelect'
+import CertificateSelect from '@/components/CertificateSelect'
+import { saveData } from '@/api/exam'
 export default {
-  name: "ExamDetail",
+  name: 'ExamDetail',
   components: { RepoSelect, ClassSelect, CertificateSelect },
   data() {
     return {
-      input: "",
+      input: '',
       treeData: [],
       defaultProps: {
-        label: "deptName",
+        label: 'deptName'
       },
-      filterText: "",
+      filterText: '',
       treeLoading: false,
       dateValues: [],
       // 题库
       repoList: [
         {
-          id: "",
+          id: '',
           rowId: 0,
           radioCount: 0,
           radioScore: 0,
@@ -283,8 +281,8 @@ export default {
           judgeCount: 0,
           judgeScore: 0,
           saqCount: 0,
-          saqScore: 0,
-        },
+          saqScore: 0
+        }
       ],
       // 已选择的题库
       excludes: [],
@@ -296,109 +294,109 @@ export default {
         // 开放类型
         openType: 1,
         // 考试班级列表
-        departIds: [],
+        departIds: []
       },
       rules: {
-        title: [{ required: true, message: "考试名称不能为空！" }],
+        title: [{ required: true, message: '考试名称不能为空！' }],
 
-        content: [{ required: true, message: "考试名称不能为空！" }],
+        content: [{ required: true, message: '考试名称不能为空！' }],
 
-        open: [{ required: true, message: "考试权限不能为空！" }],
+        open: [{ required: true, message: '考试权限不能为空！' }],
 
-        totalScore: [{ required: true, message: "考试分数不能为空！" }],
+        totalScore: [{ required: true, message: '考试分数不能为空！' }],
 
-        passedScore: [{ required: true, message: "及格分不能为空！" }],
+        passedScore: [{ required: true, message: '及格分不能为空！' }],
 
-        examDuration: [{ required: true, message: "考试时间不能为空！" }],
+        examDuration: [{ required: true, message: '考试时间不能为空！' }],
 
-        ruleId: [{ required: true, message: "考试规则不能为空" }],
-        password: [{ required: true, message: "考试口令不能为空！" }],
-      },
-    };
+        ruleId: [{ required: true, message: '考试规则不能为空' }],
+        password: [{ required: true, message: '考试口令不能为空！' }]
+      }
+    }
   },
 
   watch: {
     filterText(val) {
-      this.$refs.tree.filter(val);
+      this.$refs.tree.filter(val)
     },
 
     dateValues: {
       handler() {
-        this.postForm.startTime = this.dateValues[0];
-        this.postForm.endTime = this.dateValues[1];
-      },
+        this.postForm.startTime = this.dateValues[0]
+        this.postForm.endTime = this.dateValues[1]
+      }
     },
 
     // 题库变换
     repoList: {
       handler(val) {
-        let totalScore = 0;
-        this.excludes = [];
+        let totalScore = 0
+        this.excludes = []
         for (let i = 0; i < val.length; i++) {
-          const item = val[i];
+          const item = val[i]
           if (item.radioCount > 0 && item.radioScore > 0) {
-            totalScore += item.radioCount * item.radioScore;
+            totalScore += item.radioCount * item.radioScore
           }
 
           if (item.multiCount > 0 && item.multiScore > 0) {
-            totalScore += item.multiCount * item.multiScore;
+            totalScore += item.multiCount * item.multiScore
           }
 
           if (item.judgeCount > 0 && item.judgeScore > 0) {
-            totalScore += item.judgeCount * item.judgeScore;
+            totalScore += item.judgeCount * item.judgeScore
           }
           if (item.saqCount > 0 && item.saqScore > 0) {
-            totalScore += item.saqCount * item.saqScore;
+            totalScore += item.saqCount * item.saqScore
           }
-          this.excludes.push(item.id);
+          this.excludes.push(item.id)
         }
 
         // 赋值
-        this.postForm.totalScore = totalScore;
-        this.postForm.repoList = val;
-        this.$forceUpdate();
+        this.postForm.totalScore = totalScore
+        this.postForm.repoList = val
+        this.$forceUpdate()
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   created() {
-    const id = this.$route.params.id;
+    const id = this.$route.params.id
     if (typeof id !== undefined) {
-      this.fetchData(id);
+      this.fetchData(id)
     }
 
     fetchTree({}).then((response) => {
-      this.treeData = response.data;
-    });
+      this.treeData = response.data
+    })
   },
   methods: {
     handleSave() {
       this.$refs.postForm.validate((valid) => {
         if (!valid) {
-          return;
+          return
         }
 
         if (this.postForm.totalScore === 0) {
           this.$notify({
-            title: "提示信息",
-            message: "考试规则设置不正确，请确认！",
-            type: "warning",
-            duration: 2000,
-          });
+            title: '提示信息',
+            message: '考试规则设置不正确，请确认！',
+            type: 'warning',
+            duration: 2000
+          })
 
-          return;
+          return
         }
 
         for (let i = 0; i < this.postForm.repoList.length; i++) {
-          const repo = this.postForm.repoList[i];
+          const repo = this.postForm.repoList[i]
           if (!repo.repoId) {
             this.$notify({
-              title: "提示信息",
-              message: "考试题库选择不正确！",
-              type: "warning",
-              duration: 2000,
-            });
-            return;
+              title: '提示信息',
+              message: '考试题库选择不正确！',
+              type: 'warning',
+              duration: 2000
+            })
+            return
           }
 
           if (
@@ -406,13 +404,13 @@ export default {
             (repo.radioCount === 0 && repo.radioScore > 0)
           ) {
             this.$notify({
-              title: "提示信息",
-              message: "题库第：[" + (i + 1) + "]项存在无效的单选题配置！",
-              type: "warning",
-              duration: 2000,
-            });
+              title: '提示信息',
+              message: '题库第：[' + (i + 1) + ']项存在无效的单选题配置！',
+              type: 'warning',
+              duration: 2000
+            })
 
-            return;
+            return
           }
 
           if (
@@ -420,13 +418,13 @@ export default {
             (repo.multiCount === 0 && repo.multiScore > 0)
           ) {
             this.$notify({
-              title: "提示信息",
-              message: "题库第：[" + (i + 1) + "]项存在无效的多选题配置！",
-              type: "warning",
-              duration: 2000,
-            });
+              title: '提示信息',
+              message: '题库第：[' + (i + 1) + ']项存在无效的多选题配置！',
+              type: 'warning',
+              duration: 2000
+            })
 
-            return;
+            return
           }
 
           if (
@@ -434,78 +432,78 @@ export default {
             (repo.judgeCount === 0 && repo.judgeScore > 0)
           ) {
             this.$notify({
-              title: "提示信息",
-              message: "题库第：[" + (i + 1) + "]项存在无效的判断题配置！",
-              type: "warning",
-              duration: 2000,
-            });
-            return;
+              title: '提示信息',
+              message: '题库第：[' + (i + 1) + ']项存在无效的判断题配置！',
+              type: 'warning',
+              duration: 2000
+            })
+            return
           }
         }
 
-        this.$confirm("确实要提交保存吗？", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+        this.$confirm('确实要提交保存吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         }).then(() => {
-          this.submitForm();
-        });
-      });
+          this.submitForm()
+        })
+      })
     },
 
     handleCheckChange() {
-      const that = this;
+      const that = this
       // 置空
-      this.postForm.departIds = [];
-      const nodes = this.$refs.tree.getCheckedNodes();
-      nodes.forEach(function (item) {
-        that.postForm.departIds.push(item.id);
-      });
+      this.postForm.departIds = []
+      const nodes = this.$refs.tree.getCheckedNodes()
+      nodes.forEach(function(item) {
+        that.postForm.departIds.push(item.id)
+      })
     },
 
     // 添加子项
     handleAdd() {
-      this.repoList.push();
+      this.repoList.push()
     },
 
     removeItem(index) {
-      this.repoList.splice(index, 1);
+      this.repoList.splice(index, 1)
     },
 
     fetchData(id) {
       fetchDetail(id).then((response) => {
-        this.postForm = response.data;
+        this.postForm = response.data
 
         if (this.postForm.startTime && this.postForm.endTime) {
-          this.dateValues[0] = this.postForm.startTime;
-          this.dateValues[1] = this.postForm.endTime;
+          this.dateValues[0] = this.postForm.startTime
+          this.dateValues[1] = this.postForm.endTime
         }
-        this.repoList = this.postForm.repoList;
-      });
+        this.repoList = this.postForm.repoList
+      })
     },
     formatDateToISOString(date) {
       // 确保输入是一个Date对象
       if (!(date instanceof Date)) {
-        throw new TypeError("Expected a Date object");
+        throw new TypeError('Expected a Date object')
       }
 
       // 格式化为ISO 8601格式，注意这里的时区会自动调整为UTC
-      let isoString = date.toISOString();
+      let isoString = date.toISOString()
 
       // 截取并重新组合字符串，去除毫秒部分并替换T为大写
       // 这一步是根据你的需求调整，通常ISO 8601格式包含毫秒且T是小写
-      isoString = isoString.split(".")[0].replace("T", "T");
+      isoString = isoString.split('.')[0].replace('T', 'T')
 
-      return isoString;
+      return isoString
     },
 
     submitForm() {
       // 校验和处理数据
-      let cerTemp = "";
-      if (this.postForm.certificateId != null && this.postForm.certificateId != "") {
-        cerTemp = this.postForm.certificateId.join(",");
+      let cerTemp = ''
+      if (this.postForm.certificateId != null && this.postForm.certificateId != '') {
+        cerTemp = this.postForm.certificateId.join(',')
       }
-      this.postForm.repoList = this.repoList;
+      this.postForm.repoList = this.repoList
       const params = {
         title: this.postForm.title,
         examDuration: this.postForm.examDuration,
@@ -513,7 +511,7 @@ export default {
         passedScore: this.postForm.passedScore,
         startTime: this.formatDateToISOString(this.postForm.start[0]),
         endTime: this.formatDateToISOString(this.postForm.start[1]),
-        gradeIds: this.postForm.classIds.join(","),
+        gradeIds: this.postForm.classIds.join(','),
         repoId: this.postForm.repoList[0].id,
         certificateId: cerTemp,
         radioCount: this.postForm.repoList[0].radioCount,
@@ -523,48 +521,48 @@ export default {
         judgeCount: this.postForm.repoList[0].judgeCount,
         judgeScore: this.postForm.repoList[0].judgeScore,
         saqCount: this.postForm.repoList[0].saqCount,
-        saqScore: this.postForm.repoList[0].saqScore,
-      };
+        saqScore: this.postForm.repoList[0].saqScore
+      }
       saveData(params).then((res) => {
         if (res.code) {
           this.$notify({
-            title: "成功",
-            message: "考试保存成功！",
-            type: "success",
-            duration: 2000,
-          });
+            title: '成功',
+            message: '考试保存成功！',
+            type: 'success',
+            duration: 2000
+          })
 
-          this.$router.push({ name: "Exammange" });
+          this.$router.push({ name: 'Exammange' })
         } else {
           this.$notify({
-            title: "失败",
+            title: '失败',
             message: res.msg,
-            type: "error",
-            duration: 2000,
-          });
+            type: 'error',
+            duration: 2000
+          })
         }
-      });
+      })
     },
 
     filterNode(value, data) {
-      if (!value) return true;
-      return data.deptName.indexOf(value) !== -1;
+      if (!value) return true
+      return data.deptName.indexOf(value) !== -1
     },
 
     repoChange(e, row) {
       // 赋值ID
-      row.id = e.id;
+      row.id = e.id
 
       if (e != null) {
-        row.totalRadio = e.radioCount;
-        row.totalMulti = e.multiCount;
-        row.totalJudge = e.judgeCount;
+        row.totalRadio = e.radioCount
+        row.totalMulti = e.multiCount
+        row.totalJudge = e.judgeCount
       } else {
-        row.totalRadio = 0;
-        row.totalMulti = 0;
-        row.totalJudge = 0;
+        row.totalRadio = 0
+        row.totalMulti = 0
+        row.totalJudge = 0
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>

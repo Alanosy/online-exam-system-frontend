@@ -1,7 +1,6 @@
 
 import request from '@/utils/request'
 
-
 export function examPaging(params) {
   return request({
     url: 'exams/paging',
@@ -42,21 +41,21 @@ export function getGradeExamList(params) {
 
 export function getExamDetail(examId) {
   return request({
-    url: 'exams/detail?examId='+examId,
-    method: 'get',
+    url: 'exams/detail?examId=' + examId,
+    method: 'get'
   })
 }
 export function examStart(examId) {
   return request({
-    url: 'exams/start?examId='+examId,
-    method: 'get',
+    url: 'exams/start?examId=' + examId,
+    method: 'get'
   })
 }
 
 export function examQuList(examId) {
   return request({
-    url: 'exams/question/list/'+examId,
-    method: 'get',
+    url: 'exams/question/list/' + examId,
+    method: 'get'
   })
 }
 
@@ -66,7 +65,6 @@ export function fillAnswer(data) {
     method: 'post',
     data
   })
-  
 }
 
 export function quDetail(params) {
@@ -75,15 +73,13 @@ export function quDetail(params) {
     method: 'get',
     params
   })
-  
 }
-  
+
 export function handExam(examId) {
   return request({
-    url: 'exams/hand-exam/'+examId,
-    method: 'get',
+    url: 'exams/hand-exam/' + examId,
+    method: 'get'
   })
-  
 }
 
 export function saveData(data) {
@@ -92,23 +88,19 @@ export function saveData(data) {
     method: 'post',
     data
   })
-  
 }
-
 
 export function examCheat(examId) {
   return request({
     url: `exams/cheat/${examId}`,
-    method: 'put',
+    method: 'put'
 
   })
-  
 }
 
 export function examCollect(examId) {
   return request({
     url: `exams/collect/${examId}`,
-    method: 'get',
+    method: 'get'
   })
-  
 }

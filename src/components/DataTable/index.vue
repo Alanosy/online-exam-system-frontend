@@ -10,8 +10,7 @@
             type="primary"
             icon="el-icon-plus"
             @click="handleAdd"
-            >添加</el-button
-          >
+          >添加</el-button>
         </el-col>
       </el-row>
     </div>
@@ -63,11 +62,11 @@
 </template>
 
 <script>
-import { fetchList, deleteData, changeState } from "@/api/common";
-import Pagination from "@/components/Pagination";
+import { fetchList, deleteData, changeState } from '@/api/common'
+import Pagination from '@/components/Pagination'
 
 export default {
-  name: "PagingTable",
+  name: 'PagingTable',
   components: { Pagination },
   // 组件入参
   props: {
@@ -78,15 +77,15 @@ export default {
           // 批量操作
           multiActions: [],
           // 列表请求URL
-          listUrl: "/exam/api",
+          listUrl: '/exam/api',
           // 删除请求URL
-          deleteUrl: "",
+          deleteUrl: '',
           // 启用禁用
-          stateUrl: "",
+          stateUrl: '',
           // 可批量操作
-          multi: false,
-        };
-      },
+          multi: false
+        }
+      }
     },
 
     // 列表查询参数
@@ -97,16 +96,16 @@ export default {
           current: 1,
           size: 10,
           params: {},
-          t: 0,
-        };
-      },
-    },
+          t: 0
+        }
+      }
+    }
   },
   data() {
     return {
       // 接口数据返回
       dataList: {
-        total: 0,
+        total: 0
       },
       // 数据加载标识
       listLoading: true,
@@ -114,24 +113,24 @@ export default {
       selectedIds: [],
       selectedObjs: [],
       // 显示已中多少项
-      selectedLabel: "",
+      selectedLabel: '',
       // 显示批量操作
       multiShow: false,
       // 批量操作的标识
-      multiNow: "",
-    };
+      multiNow: ''
+    }
   },
   watch: {
     // 检测查询变化
     listQuery: {
       handler() {
-        this.getList();
+        this.getList()
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     /**
@@ -139,8 +138,8 @@ export default {
      */
     handleAdd() {
       if (this.options.addRoute) {
-        this.$router.push({ name: this.options.addRoute, params: {} });
-        return;
+        this.$router.push({ name: this.options.addRoute, params: {}})
+        return
       }
     },
 
@@ -148,12 +147,12 @@ export default {
      * 查询数据列表
      */
     getList() {
-      this.listLoading = true;
-      this.listQuery.t = new Date().getTime();
+      this.listLoading = true
+      this.listQuery.t = new Date().getTime()
       fetchList(this.options.listUrl, this.listQuery).then((response) => {
-        this.dataList = response.data;
-        this.listLoading = false;
-      });
+        this.dataList = response.data
+        this.listLoading = false
+      })
     },
 
     /**
@@ -161,33 +160,33 @@ export default {
      */
     handleFilter() {
       // 重新搜索
-      this.getList();
+      this.getList()
     },
 
     /**
      * 批量操作回调
      */
     handleOption(v) {
-      this.multiNow = "";
+      this.multiNow = ''
 
       // 内部消化的操作
-      if (v === "delete") {
-        this.handleDelete();
-        return;
+      if (v === 'delete') {
+        this.handleDelete()
+        return
       }
 
-      if (v === "enable") {
-        this.handleState(0);
-        return;
+      if (v === 'enable') {
+        this.handleState(0)
+        return
       }
 
-      if (v === "disable") {
-        this.handleState(1);
-        return;
+      if (v === 'disable') {
+        this.handleState(1)
+        return
       }
 
       // 向外回调的操作
-      this.$emit("multi-actions", { opt: v, ids: this.selectedIds });
+      this.$emit('multi-actions', { opt: v, ids: this.selectedIds })
     },
 
     /**
@@ -198,14 +197,14 @@ export default {
       changeState(this.options.stateUrl, this.selectedIds, state).then((response) => {
         if (response.code === 0) {
           this.$message({
-            type: "success",
-            message: "状态修改成功!",
-          });
+            type: 'success',
+            message: '状态修改成功!'
+          })
 
           // 重新搜索
-          this.getList();
+          this.getList()
         }
-      });
+      })
     },
 
     /**
@@ -214,26 +213,26 @@ export default {
     handleDelete() {
       if (this.selectedIds.length === 0) {
         this.$message({
-          message: "请至少选择一条数据！",
-          type: "warning",
-        });
-        return;
+          message: '请至少选择一条数据！',
+          type: 'warning'
+        })
+        return
       }
 
       // 删除
-      this.$confirm("确实要删除吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('确实要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       }).then(() => {
         deleteData(this.options.deleteUrl, this.selectedIds).then(() => {
           this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-          this.getList();
-        });
-      });
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.getList()
+        })
+      })
     },
 
     /**
@@ -241,20 +240,20 @@ export default {
      * @param val
      */
     handleSelection(val) {
-      const ids = [];
+      const ids = []
       val.forEach((row) => {
-        ids.push(row.id);
-      });
+        ids.push(row.id)
+      })
 
-      this.selectedObjs = val;
-      this.selectedIds = ids;
-      this.multiShow = ids.length > 0;
-      this.selectedLabel = "已选" + ids.length + "项";
+      this.selectedObjs = val
+      this.selectedIds = ids
+      this.multiShow = ids.length > 0
+      this.selectedLabel = '已选' + ids.length + '项'
 
-      this.$emit("select-changed", { ids: this.selectedIds, objs: this.selectedObjs });
-    },
-  },
-};
+      this.$emit('select-changed', { ids: this.selectedIds, objs: this.selectedObjs })
+    }
+  }
+}
 </script>
 
 <style>

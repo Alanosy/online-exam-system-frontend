@@ -8,21 +8,21 @@ export function classCount() {
 }
 
 export function classExamCount() {
-    return request({
-      url: 'stat/exam',
-      method: 'get'
-    })
-  }
+  return request({
+    url: 'stat/exam',
+    method: 'get'
+  })
+}
 export function classAllCounts() {
-return request({
+  return request({
     url: 'stat/allCounts',
     method: 'get'
-})
+  })
 }
 
 export function getDaily() {
   return request({
-      url: 'stat/daily',
-      method: 'get'
+    url: 'stat/daily',
+    method: 'get'
   })
-  }
+}

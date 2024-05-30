@@ -16,7 +16,7 @@ export function quPaging(params) {
   })
 }
 
-export function quUpdate(id,data) {
+export function quUpdate(id, data) {
   return request({
     url: `questions/${id}`,
     method: 'put',
@@ -26,7 +26,7 @@ export function quUpdate(id,data) {
 
 export function quDel(ids) {
   return request({
-    url: 'questions/batch/'+ ids,
+    url: 'questions/batch/' + ids,
     method: 'delete'
   })
 }
@@ -38,14 +38,13 @@ export function quDetail(id) {
   })
 }
 
-export function importQue(id,data) {
+export function importQue(id, data) {
   return request({
     url: `questions/import/${id}`,
     method: 'post',
     data
   })
 }
-
 
 // fetchDetail, saveData
 /**

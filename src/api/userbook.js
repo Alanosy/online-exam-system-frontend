@@ -3,8 +3,8 @@ import request from '@/utils/request'
 
 export function getUserBookList(examId) {
   return request({
-    url: 'userbooks/question/list/' +   examId,
-    method: 'get',
+    url: 'userbooks/question/list/' + examId,
+    method: 'get'
   })
 }
 
@@ -18,7 +18,7 @@ export function userbookPaging(params) {
 
 export function getSingleQu(quId) {
   return request({
-    url: 'userbooks/question/single/'+quId,
+    url: 'userbooks/question/single/' + quId,
     method: 'get'
   })
 }

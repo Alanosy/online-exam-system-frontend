@@ -105,7 +105,6 @@ export default {
         this.fileList = []
         return
       }
-      
     }
 
   }
