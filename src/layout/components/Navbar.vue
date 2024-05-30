@@ -41,9 +41,10 @@
         align-items: center;
       "
     >
+    <template  v-for="(item,index) in tags"
+        >
       <el-tag
-        v-for="item in tags"
-        :key="item.title"
+       :key="index"
         v-if="item.title"
         closable
         :class="{ active: item.checked }"
@@ -52,6 +53,7 @@
       >
         {{ item.title }}
       </el-tag>
+      </template>
     </div>
   </div>
 </template>

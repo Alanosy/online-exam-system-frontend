@@ -92,14 +92,7 @@
                           <div>
                             <span>考生答案：</span>
                             <span
-                              :style="{
-                                color:
-                                  isRight === 1
-                                    ? 'green'
-                                    : isRight === 0
-                                    ? 'red'
-                                    : 'gray',
-                              }"
+                             
                               >{{ numberToLetter(index.myOption) }}</span
                             ><br />
                           </div>

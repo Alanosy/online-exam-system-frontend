@@ -52,6 +52,7 @@
 <script>
 import { recordExamPaging, recordExamDetail } from "@/api/record";
 export default {
+  namespaced: true,
   data() {
     return {
       pageNum: 1,
