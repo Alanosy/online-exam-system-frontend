@@ -174,7 +174,7 @@ export default {
       pageNum: 1,
       diaTitle: "新增",
       pageSize: 10,
-      data: { records: {} },
+      data: {},
       fileList: [],
       dialogTableVisible: false,
       dialogInportVisible: false,
@@ -205,13 +205,11 @@ export default {
         realName: realName,
         gradeId: gradeId,
       };
-      console.log("params", params);
       const res = await userPaging(params);
       this.data = res.data;
     },
     // 搜索功能
     searchUser() {
-      console.log(this.searchRealName, this.searchClassName);
       this.getUserPage(
         this.pageNum,
         this.pageSize,
@@ -260,7 +258,6 @@ export default {
         userImport(formData)
           .then((response) => {
             this.getUserPage(this.pageNum, this.pageSize);
-            console.log(response.data);
             this.$message.success("文件上传成功！");
             this.fileDialogVisible = false; // 关闭对话框
             // 可以在这里处理成功后的逻辑，如刷新数据等

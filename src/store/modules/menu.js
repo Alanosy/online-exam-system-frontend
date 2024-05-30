@@ -29,7 +29,6 @@ const mutations = {
   },
   // 删除标签
   REMOVE_TAG(state, tag) {
-    console.log(tag)
     state.tags.map((item, index) => {
       if (item.title === tag.title) {
         state.tags.splice(index, 1)

@@ -428,7 +428,6 @@ export default {
     handHandExamPre() {
       examCollect(this.examId).then((res) => {
         this.recordData = res.data;
-        console.log(res.data);
       });
       this.examPreVisible = true;
     },
@@ -436,14 +435,11 @@ export default {
     //isReduce 0扣次数 1不扣次数 router 判断是否为路由转跳
     //事件默认参数
     pageHidden(e = null, isReduce = 0, router = false) {
-      console.log("e", e);
-      console.log("isReduce", isReduce);
-      console.log("router", router);
       return new Promise((resolve, reject) => {
-        console.log(document.visibilityState);
+
         if (document.visibilityState === "hidden" || router) {
           examCheat(this.examId).then((res) => {
-            console.log("res.code", res.code);
+
             // let data = res.data;
             if (res.code) {
               this.examMeg = res.msg;
@@ -897,9 +893,6 @@ page {
   margin-top: 10px;
 }
 
-
-
-
 /* // 试题内容样式 */
 .qu_list {
   height: 100%;
@@ -980,11 +973,6 @@ page {
     }
   }
 
-
-
-
-
-  
   /* // 试题赋分 */
   .qu_assign_score {
     background: #f5f5f5;

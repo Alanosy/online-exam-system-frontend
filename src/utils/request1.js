@@ -19,7 +19,6 @@ instance.interceptors.request.use(
     return config
   },
   error => {
-    console.log(error)
     return Promise.reject(error)
   }
 )
@@ -65,7 +64,7 @@ instance.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error)
+
     Message({
       message: error.message,
       type: 'error',
@@ -104,7 +103,6 @@ export function upload(url, file, data) {
       data: formData,
       timeout: 1200000
     }).then(response => {
-      console.log(response)
       loading.close()
       resolve(response)
     }).catch(err => {

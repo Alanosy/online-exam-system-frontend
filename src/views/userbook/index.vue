@@ -127,6 +127,7 @@ export default {
       },
       searchTitle: "",
       dialogFormVisible: false,
+      formLabelWidth: "110px",
       form: {
         name: "",
         region: "",
@@ -144,10 +145,14 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // 设置每页多少条逻辑
+      this.pageSize = val;
+      this.getUserBookPage(this.pageNum, val);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // 设置当前页逻辑
+      this.pageNum = val;
+      this.getUserBookPage(val, this.pageSize);
     },
     // 分页查询
     async getUserBookPage(pageNum, pageSize, examName = null) {
@@ -158,9 +163,7 @@ export default {
     searchUserBook() {
       this.getUserBookPage(this.pageNum, this.pageSize, this.searchTitle);
     },
-    onSubmit() {
-      console.log("submit!");
-    },
+
     handleClose(done) {
       this.$confirm("确认关闭？")
         .then((_) => {
@@ -179,9 +182,7 @@ export default {
       //在你的数据表格中定义tabels
       const input = this.input;
       if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1;
           });

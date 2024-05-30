@@ -92,12 +92,15 @@
       width="30%"
       :before-close="handleClose"
     >
-    
       <el-row :gutter="20">
-        <el-col >
+        <el-col>
           <el-form :model="addTitle">
             <el-form-item label="题库名称:" :label-width="formLabelWidth">
-              <el-input v-model="addTitle" autocomplete="off" style="width: 80%;"></el-input>
+              <el-input
+                v-model="addTitle"
+                autocomplete="off"
+                style="width: 80%"
+              ></el-input>
             </el-form-item>
           </el-form>
         </el-col>
@@ -120,7 +123,7 @@ export default {
       pageSize: 10,
       data: {},
       addTitle: "",
-      delVisible:false,
+      delVisible: false,
       searchTitle: "",
       formInline: {
         user: "",
@@ -153,10 +156,9 @@ export default {
       this.data = res.data;
     },
     addRepo() {
-      repoAdd({title:this.addTitle})
+      repoAdd({ title: this.addTitle })
         .then((res) => {
           if (res.code) {
-          
             this.addRepoDialogVisible = false;
             this.getRepoPage(this.pageNum, this.pageSize);
             this.$message({
@@ -169,7 +171,6 @@ export default {
               message: res.msg,
             });
           }
-
         })
         .catch(() => {});
     },
@@ -231,12 +232,12 @@ export default {
         });
     },
     handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-      },
+      this.$confirm("确认关闭？")
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {});
+    },
     searchRepo() {
       this.getRepoPage(this.pageNum, this.pageSize, this.searchTitle);
     },
@@ -256,9 +257,7 @@ export default {
       //在你的数据表格中定义tabels
       const input = this.input;
       if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1;
           });

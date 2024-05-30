@@ -151,6 +151,7 @@ export default {
       answeredIds: [],
       saqTextarea: "",
       myAnswers: "",
+      lastIndex: 0,
       paperData: {
         leftSeconds: 99999,
         radioList: [],
@@ -171,7 +172,6 @@ export default {
       fullBook().then((res) => {});
     },
     getSingleQuFun(quId) {
-      // console.log(this.userBookList[0],"quId");
       getSingleQu(quId).then((res) => {
         this.quData = res.data;
       });
@@ -181,6 +181,7 @@ export default {
         this.userBookList = res.data;
         this.quDataLen = res.data.length;
         this.getSingleQuFun(res.data[this.index]["quId"]);
+        this.lastIndex = this.userBookList.length - 1;
       });
     },
     numberToLetter(sort) {
@@ -229,16 +230,19 @@ export default {
       if (this.radioValue !== "") {
         answers.push(this.radioValue);
       }
+
       const params = {
         examId: this.examId,
         quId: this.userBookList[index]["quId"],
         answer: this.quData.quType == 4 ? this.saqTextarea : answers.join(","),
       };
+
       // this.myAnswers = params.answer;
       if (!this.flag) {
         fullBook(params).then((res) => {
           if (res.code) {
             this.failQuData = res.data;
+
             if (res.data.correct) {
               this.$message({
                 type: "info",
@@ -257,6 +261,10 @@ export default {
             });
           }
         });
+      }
+      console.log("index", index);
+      if (index == this.lastIndex) {
+        this.$router.push({ name: "Wrongbook" });
       }
       if (this.flag == true) {
         // 查找详情

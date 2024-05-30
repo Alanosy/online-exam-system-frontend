@@ -110,9 +110,6 @@ export default {
       this.data = res.data;
     },
 
-    onSubmit() {
-      console.log("submit!");
-    },
     screenInfo(row) {
       console.info("=====", row);
       localStorage.setItem("examInfo_examId", row.id);
@@ -153,7 +150,7 @@ export default {
         });
     },
     handleClick(row) {
-      console.log(row);
+      // console.log(row);
     },
   },
 };

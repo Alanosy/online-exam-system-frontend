@@ -143,17 +143,14 @@ export default {
     return {
       pageNum: 1,
       pageSize: 10,
-      data: null,
+      data: {},
       formInline: {
         user: "",
         region: "",
       },
       input: "",
       input1: "",
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
+
       formInline: {
         user: "",
         region: "",
@@ -166,6 +163,7 @@ export default {
         this.dialogFormVisible = true;
         this.form = row;
       },
+      diaTitle: "",
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {
@@ -204,13 +202,17 @@ export default {
       this.data = res.data;
     },
     onSubmit() {
-      console.log("submit!");
+      // console.log("submit!");
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // 设置每页多少条逻辑
+      this.pageSize = val;
+      this.getScorePage(this.pageNum, val);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // 设置当前页逻辑
+      this.pageNum = val;
+      this.getScorePage(val, this.pageSize);
     },
     open() {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -233,7 +235,7 @@ export default {
         });
     },
     handleClick(row) {
-      console.log(row);
+      // console.log(row);
     },
   },
   computed: {
@@ -244,16 +246,15 @@ export default {
       if (input) {
         // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
+          // console.log("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1;
           });
         });
       }
       if (input1) {
-        // console.log("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          console.log("object:" + Object.keys(data));
+          // console.log("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input1) > -1;
           });
