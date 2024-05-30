@@ -45,7 +45,9 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column fixed prop="id" label="序号" align="center" />
+      <el-table-column fixed label="序号" align="center" >
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
       <el-table-column prop="title" label="试卷名称" align="center" />
       <el-table-column prop="examDuration" label="考试时间" align="center" />
       <el-table-column prop="maxCount" label="最多切屏次数" align="center" />

@@ -14,7 +14,9 @@
       <!-- table -->
       <div style="margin: auto; width: 90%" align="center">
         <el-table :data="data.records" border>
-          <el-table-column fixed prop="userId" label="序号" align="center" />
+          <el-table-column fixed label="序号" align="center" >
+            <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+          </el-table-column>
           <el-table-column prop="userName" label="用户名字" align="center" />
           <el-table-column prop="limitTime" label="提交时间" align="center" />
 

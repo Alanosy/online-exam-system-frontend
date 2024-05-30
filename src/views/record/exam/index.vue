@@ -12,7 +12,8 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column prop="id" label="序号" align="center" width="80">
+      <el-table-column  label="序号" align="center" width="80">
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" align="center" label="试卷名称" width="250">
       </el-table-column>

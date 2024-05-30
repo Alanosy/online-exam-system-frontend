@@ -14,7 +14,9 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column fixed prop="id" label="序号" align="center" />
+      <el-table-column fixed label="序号" align="center" >
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
       <el-table-column prop="certificateName" label="证书名称" align="center" />
       <el-table-column prop="certificationNuit" label="证书颁发单位" align="center" />
       <el-table-column prop="certificationNuit" label="证书颁发单位" align="center" />
@@ -89,14 +91,16 @@
             >同学：<br />
           </p>
           <p class="con-text">
-            <span>在{{ currentdata.examName }}考试中荣获</span>
+            <span
+              >在{{ currentdata.examName }}考试中荣获,荣誉称号，特发此状，以资鼓励。</span
+            >
           </p>
           <p class="con-height">
             <span
               ><center>{{ level }}</center></span
             >
           </p>
-          <p class="con-text">荣誉称号，特发此状，以资鼓励。</p>
+          <!-- <p class="con-text">荣誉称号，特发此状，以资鼓励。</p> -->
           <div class="con-unit">
             <p class="time">证书编号：{{ currentdata.code }}</p>
             <p class="time">{{ currentdata.createTime }}</p>

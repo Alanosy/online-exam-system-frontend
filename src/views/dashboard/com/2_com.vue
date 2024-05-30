@@ -24,7 +24,12 @@
               :props="defaultProps"
               @node-click="handleNodeClick"
               style="height: 36px; margin-top: 20px"
-            ></el-tree>
+            >
+              <template slot-scope="{ node, data }">
+                <div @click="node.expand()" v-html="data.label"></div>
+                <!-- 确保data.label是已经处理过的安全HTML字符串 -->
+              </template>
+            </el-tree>
           </div>
         </el-card>
       </div>
@@ -165,7 +170,6 @@ export default {
   margin-top: 10px;
   width: 450px;
   height: 300px;
-
   border: solid black 1px;
 }
 .i {

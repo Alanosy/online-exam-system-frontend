@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: 魏进 3413105907@qq.com
- * @LastEditTime: 2024-05-28 17:57:08
+ * @LastEditTime: 2024-05-30 14:17:50
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -21,7 +21,9 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column fixed prop="examId" label="序号" align="center" />
+      <el-table-column fixed  label="序号" align="center" >
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
       <el-table-column prop="examTitle" label="考试名称" align="center" />
       <el-table-column prop="classSize" label="总人数" align="center" />
       <el-table-column prop="numberOfApplicants" label="实际参考人数" align="center" />
@@ -33,7 +35,7 @@
             size="small"
             style="font-size: 14px"
             @click="screenInfo(row)"
-            :disabled="row.numberOfApplicants == row.correctedPaper"
+            :disabled="row.numberOfApplicants < row.correctedPaper"
             >查看详情</el-button
           >
         </template>
