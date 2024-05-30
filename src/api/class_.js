@@ -35,14 +35,13 @@ export function classUpdate(id, data) {
 export function fetchClasses() {
   return request({
     url: 'grades/list',
-    method: 'get',
+    method: 'get'
   })
 }
-
 
 export function userClassRemove(ids) {
   return request({
     url: 'grades/remove/' + ids,
-    method: 'patch',
+    method: 'patch'
   })
 }

@@ -11,7 +11,7 @@
   <div class="app-container">
     <el-form :inline="true" :model="formInline">
       <el-form-item label="试卷名称：      ">
-        <el-input v-model="searchTitle"></el-input>
+        <el-input v-model="searchTitle" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="searchExamStu">查询</el-button>
@@ -32,7 +32,7 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column fixed  label="序号" align="center" >
+      <el-table-column fixed label="序号" align="center">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" label="试卷名称" align="center" />
@@ -48,9 +48,11 @@
       <el-table-column prop="createTime" label="创建时间" align="center" />
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
-          <el-button type="text" size="small" @click="screenInfo(row)"
-            >开始考试</el-button
-          >
+          <el-button
+            type="text"
+            size="small"
+            @click="screenInfo(row)"
+          >开始考试</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -70,92 +72,92 @@
 </template>
 
 <script>
-import { getGradeExamList } from "@/api/exam";
+import { getGradeExamList } from '@/api/exam'
 export default {
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
       data: {},
-      searchTitle: "",
+      searchTitle: '',
       formInline: {
-        user: "",
-        region: "",
+        user: '',
+        region: ''
       },
       formInline: {
-        user: "",
-        region: "",
+        user: '',
+        region: ''
       },
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
         delivery: false,
         type: [],
-        resource: "",
-        desc: "",
+        resource: '',
+        desc: ''
       },
-      formLabelWidth: "120px",
-    };
+      formLabelWidth: '120px'
+    }
   },
   created() {
-    this.getExamGradePage();
+    this.getExamGradePage()
   },
   methods: {
     // 分页查询
     async getExamGradePage(pageNum, pageSize, searchTitle = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, title: searchTitle };
-      const res = await getGradeExamList(params);
-      this.data = res.data;
+      const params = { pageNum: pageNum, pageSize: pageSize, title: searchTitle }
+      const res = await getGradeExamList(params)
+      this.data = res.data
     },
 
     screenInfo(row) {
-      console.info("=====", row);
-      localStorage.setItem("examInfo_examId", row.id);
-      this.$router.push({ name: "text", query: { zhi: row } });
+      console.info('=====', row)
+      localStorage.setItem('examInfo_examId', row.id)
+      this.$router.push({ name: 'text', query: { zhi: row }})
     },
     searchExamStu() {
-      this.getExamGradePage(this.pageNum, this.pageSize, this.searchTitle);
+      this.getExamGradePage(this.pageNum, this.pageSize, this.searchTitle)
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑
-      this.pageSize = val;
-      this.getExamGradePage(this.pageNum, val);
+      this.pageSize = val
+      this.getExamGradePage(this.pageNum, val)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
-      this.pageNum = val;
-      this.getExamGradePage(val, this.pageSize);
+      this.pageNum = val
+      this.getExamGradePage(val, this.pageSize)
     },
 
     open() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true,
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
       })
         .then(() => {
           this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
+            type: 'success',
+            message: '删除成功!'
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     handleClick(row) {
       // console.log(row);
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style></style>

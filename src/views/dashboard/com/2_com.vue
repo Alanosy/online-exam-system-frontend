@@ -12,41 +12,44 @@
       <div class="left">
         <el-card class="box-card">
           登录时长
-          <div ref="charts" class="chart-div"></div>
+          <div ref="charts" class="chart-div" />
         </el-card>
       </div>
-      <div class= "right" :style="{'max-height': this.timeLineHeight + 'px' }"
-       style="overflow-y:scroll;">
+      <div
+        class="right"
+        :style="{'max-height': this.timeLineHeight + 'px' }"
+        style="overflow-y:scroll;"
+      >
         <el-card class="box-card">
           最新公告
           <div>最新公告</div>
-           <div>最新公告</div>
-            <div>最新公告</div>
-             <div>最新公告</div>
-              <div>最新公告</div>
-               <div>最新公告</div>
-                <div>最新公告</div>
-                 <div>最新公告</div>
-                  <div>最新公告</div>
-                   <div>最新公告</div> <div>最新公告</div>
-                    <div>最新公告</div>
-                     <div>最新公告</div>
-                      <div>最新公告</div>
-                       <div>最新公告</div>
-                        <div>最新公告</div>
-                         <div>最新公告</div>
-                          <div>最新公告</div> <div>最新公告</div>
-                           <div>最新公告</div>
-                            <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div> <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div> <div>最新公告</div>
+          <div>最新公告</div>
+          <div>最新公告</div>
           <div class="i">
             <el-tree
               :data="data"
               :props="defaultProps"
-              @node-click="handleNodeClick"
               style="height: 36px; margin-top: 20px"
+              @node-click="handleNodeClick"
             >
               <template slot-scope="{ node, data }">
-                <div @click="node.expand()" v-html="data.label"></div>
+                <div @click="node.expand()" v-html="data.label" />
                 <!-- 确保data.label是已经处理过的安全HTML字符串 -->
               </template>
             </el-tree>
@@ -58,80 +61,88 @@
 </template>
 
 <script>
-import { noticeGetNew } from "@/api/notice";
-import { getDaily } from "@/api/stat";
+import { noticeGetNew } from '@/api/notice'
+import { getDaily } from '@/api/stat'
 export default {
   data() {
     return {
-      timeLineHeight: "",
+      timeLineHeight: '',
       pageNum: 1,
       pageSize: 10,
       data: {},
       dateArray: [],
       formattedData: [],
       option: {
-        title: { text: "登录时长" },
+        title: { text: '登录时长' },
         tooltip: {},
         xAxis: {
-          data: [], // 初始化为空，稍后用dateArray填充
+          data: [] // 初始化为空，稍后用dateArray填充
         },
         yAxis: {},
         series: [
           {
-            name: "登录时长(分钟)", // 更新系列名称以匹配单位变更
-            type: "bar",
-            data: [], // 初始化为空，稍后用转换后的分钟数据填充
-          },
-        ],
+            name: '登录时长(分钟)', // 更新系列名称以匹配单位变更
+            type: 'bar',
+            data: [] // 初始化为空，稍后用转换后的分钟数据填充
+          }
+        ]
       },
       defaultProps: {
-        children: "children",
-        label: "label",
-      },
-    };
+        children: 'children',
+        label: 'label'
+      }
+    }
   },
   created() {
-    this.getDailyFun();
+    this.getDailyFun()
 
-    this.getNotice(this.pageNum, this.pageSize);
+    this.getNotice(this.pageNum, this.pageSize)
+  },
+
+  mounted() {
+    this.initCharts()
+    this.timeLineHeight = document.documentElement.clientHeight - 210
+    window.onresize = () => {
+      this.timeLineHeight = document.documentElement.clientHeight - 210
+    }
   },
   methods: {
     getDailyFun() {
       getDaily().then((res) => {
         if (res.code === 1) {
-          const currentDate = new Date();
+          const currentDate = new Date()
           // 计算15天前的日期
           const fifteenDaysAgo = new Date(
             currentDate.getTime() - 15 * 24 * 60 * 60 * 1000
-          );
+          )
 
           // 生成从今天往回15天的日期数组
           for (let i = 0; i <= 14; i++) {
-            const date = new Date(currentDate.getTime() - i * 24 * 60 * 60 * 1000);
-            this.dateArray.push(date.toISOString().split("T")[0]);
+            const date = new Date(currentDate.getTime() - i * 24 * 60 * 60 * 1000)
+            this.dateArray.push(date.toISOString().split('T')[0])
           }
           // 确保dateArray是倒序的
-          this.dateArray.reverse();
+          this.dateArray.reverse()
 
           // 整理原始数据，确保每个日期都有记录，没有的补0
           const dataMap = res.data.reduce((acc, item) => {
-            acc[item.loginDate] = item.totalSeconds;
-            return acc;
-          }, {});
+            acc[item.loginDate] = item.totalSeconds
+            return acc
+          }, {})
 
           this.formattedData = this.dateArray.map((date) => {
-            const secondsOnDate = dataMap[date] || 0;
-            return secondsOnDate / 60; // 转换秒为分钟
-          });
+            const secondsOnDate = dataMap[date] || 0
+            return secondsOnDate / 60 // 转换秒为分钟
+          })
 
           // 更新图表配置
-          this.option.xAxis.data = this.dateArray;
-          this.option.series[0].data = this.formattedData;
+          this.option.xAxis.data = this.dateArray
+          this.option.series[0].data = this.formattedData
           this.$nextTick(() => {
-            this.initCharts(); // 确保DOM已更新后再初始化图表
-          });
+            this.initCharts() // 确保DOM已更新后再初始化图表
+          })
         }
-      });
+      })
     },
 
     transformData(originalData) {
@@ -140,43 +151,34 @@ export default {
           label: ` ${record.title}`,
           children: [
             {
-              label: ` ${record.content}`,
-            },
-          ],
-        }));
+              label: ` ${record.content}`
+            }
+          ]
+        }))
       } else {
-        console.error("Invalid data format or missing 'records' key.");
-        return [];
+        console.error("Invalid data format or missing 'records' key.")
+        return []
       }
     },
 
     // 分页查询
     async getNotice(pageNum, pageSize) {
-      const params = { pageNum: pageNum, pageSize: pageSize };
-      const res = await noticeGetNew(params);
-      this.data = this.transformData(res);
+      const params = { pageNum: pageNum, pageSize: pageSize }
+      const res = await noticeGetNew(params)
+      this.data = this.transformData(res)
       // console.log("this.data", this.data);
     },
     initCharts() {
-      let myChart = this.$echarts.init(this.$refs.charts);
+      const myChart = this.$echarts.init(this.$refs.charts)
       // 绘制图表
-      myChart.setOption(this.option);
+      myChart.setOption(this.option)
     },
     handleNodeClick(data) {
       // console.log(data);
-    },
-  },
-
-  mounted() {
-    this.initCharts();
-      this.timeLineHeight = document.documentElement.clientHeight - 210;
-    window.onresize = () => {
-      this.timeLineHeight = document.documentElement.clientHeight - 210;
-    };
- 
+    }
   }
-  
-};
+
+}
 </script>
 <style>
 .luang {

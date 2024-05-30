@@ -34,15 +34,17 @@
             size="mini"
             style="margin-left: 15px"
             @click="addClassBt"
-          ></el-button>
+          />
         </li>
         <li style="padding-top: 50px; padding-left: 80px">
           注册时间: {{ this.data.createTime }}
         </li>
         <li style="padding-top: 50px; padding-left: 80px">
-          <el-button type="primary" icon="el-icon-edit" @click="fileDialogVisible = true"
-            >编辑头像</el-button
-          >
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            @click="fileDialogVisible = true"
+          >编辑头像</el-button>
         </li>
       </ul>
       <!-- 编辑个人信息 -->
@@ -64,9 +66,9 @@
           :on-change="handleFileChange"
           :file-list="fileList"
         >
-          <i class="el-icon-upload"></i>
+          <i class="el-icon-upload" />
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件，且不超过500kb</div>
+          <div slot="tip" class="el-upload__tip">只能上传xls/xlsx文件，且不超过500kb</div>
         </el-upload>
         <div slot="footer" class="dialog-footer">
           <el-button @click="fileDialogVisible = false">取 消</el-button>
@@ -79,7 +81,7 @@
           <el-col :span="12">
             <el-form :model="form">
               <el-form-item label="班级口令" :label-width="formLabelWidth">
-                <el-input v-model="form.code" autocomplete="off"></el-input>
+                <el-input v-model="form.code" autocomplete="off" />
               </el-form-item>
             </el-form>
           </el-col>
@@ -101,7 +103,7 @@
         "
         :src="this.data.avatar"
         alt=""
-      />
+      >
 
       <div style="margin-left: 53px; margin-top: 38px; font-size: 20px">头 像</div>
     </div>
@@ -109,84 +111,84 @@
 </template>
 
 <script>
-import { getInfo, userAddClass, uploadAvatar } from "@/api/user";
+import { getInfo, userAddClass, uploadAvatar } from '@/api/user'
 export default {
   data() {
     return {
-      imageUrl: "",
+      imageUrl: '',
       fileDialogVisible: false,
       fileList: [],
       data: {},
       form: {
-        code: "",
+        code: ''
       },
-      addClassDialogVisible: false,
-    };
+      addClassDialogVisible: false
+    }
   },
   created() {
     getInfo().then((res) => {
       if (res.code) {
-        this.data = res.data;
+        this.data = res.data
       }
-    });
+    })
   },
   methods: {
     handleFileChange(file, fileList) {
-      this.fileList = fileList; // 收集文件信息
+      this.fileList = fileList // 收集文件信息
     },
     // 移除文件处理方法
     handleRemove(file, fileList) {
       if (fileList.length == 0) {
-        this.hasFiles = false;
+        this.hasFiles = false
       }
     },
     // 上传文件逻辑
     importAvatar() {
       if (this.fileList.length > 0) {
-        const formData = new FormData(); // 创建FormData对象
-        formData.append("file", this.fileList[0].raw); // 添加文件到formData
+        const formData = new FormData() // 创建FormData对象
+        formData.append('file', this.fileList[0].raw) // 添加文件到formData
         uploadAvatar(formData)
           .then((response) => {
             getInfo().then((res) => {
               if (res.code) {
-                this.data = res.data;
+                this.data = res.data
               }
-            });
-            this.$message.success("文件上传成功！");
-            this.fileDialogVisible = false; // 关闭对话框
+            })
+            this.$message.success('文件上传成功！')
+            this.fileDialogVisible = false // 关闭对话框
             // 可以在这里处理成功后的逻辑，如刷新数据等
           })
           .catch((error) => {
-            console.error("文件上传失败：", error);
-            this.$message.error("文件上传失败！");
-          });
+            console.error('文件上传失败：', error)
+            this.$message.error('文件上传失败！')
+          })
       } else {
-        this.$message.warning("请选择文件后再上传！");
+        this.$message.warning('请选择文件后再上传！')
       }
     },
 
     addClassBt() {
-      this.addClassDialogVisible = true;
+      this.addClassDialogVisible = true
     },
     addClass() {
-      const params = { code: this.form.code };
+      const params = { code: this.form.code }
       userAddClass(params).then((res) => {
         if (res.code) {
-          this.addClassDialogVisible = false;
+          this.addClassDialogVisible = false
           this.$message({
-            type: "success",
-            message: "加入成功",
-          });
+            type: 'success',
+            message: '加入成功'
+          })
         } else {
           this.$message({
-            type: "error",
-            message: res.msg,
-          });
+            type: 'error',
+            message: res.msg
+          })
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style>

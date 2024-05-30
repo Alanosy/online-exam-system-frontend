@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: 魏进 3413105907@qq.com
- * @LastEditTime: 2024-05-31 00:37:25
+ * @LastEditTime: 2024-05-31 02:05:11
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,7 +11,7 @@
   <div class="app-container">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="试卷名称">
-        <el-input v-model="input" placeholder="试卷名称"></el-input>
+        <el-input v-model="input" placeholder="试卷名称" />
       </el-form-item>
       <el-form-item label="所属班级">
         <ClassSelect v-model="gradeId" />
@@ -54,8 +54,7 @@
             :disabled="row.maxScore == null"
             style="font-size: 14px"
             @click="updateRow(row)"
-            >查看详情</el-button
-          >
+          >查看详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,18 +86,18 @@ export default {
       examTitle: "",
       data: {},
       formInline: {
-        user: "",
-        region: "",
+        user: '',
+        region: ''
       },
-      input: "",
-      input1: "",
+      input: '',
+      input1: '',
 
       formInline: {
-        user: "",
-        region: "",
+        user: '',
+        region: ''
       },
       form: {
-        name: "",
+        name: ''
       },
       cancle() {},
       updateRow(row) {
@@ -107,24 +106,50 @@ export default {
         this.$router.push({ name: "UserScore"});
         
       },
-      diaTitle: "",
+      diaTitle: '',
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
         delivery: false,
         type: [],
-        resource: "",
-        desc: "",
+        resource: '',
+        desc: ''
       },
-      formLabelWidth: "120px",
-    };
+      formLabelWidth: '120px'
+    }
+  },
+  computed: {
+    tables() {
+      // 在你的数据表格中定义tabels
+      const input = this.input
+      const input1 = this.input1
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          // console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1
+          })
+        })
+      }
+      if (input1) {
+        return this.tableData.filter((data) => {
+          // console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input1) > -1
+          })
+        })
+      }
+
+      return this.tableData
+    }
   },
   created() {
-    this.getScorePage();
+    this.getScorePage()
   },
   methods: {
     // 分页查询
@@ -143,64 +168,38 @@ export default {
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑
-      this.pageSize = val;
-      this.getScorePage(this.pageNum, val);
+      this.pageSize = val
+      this.getScorePage(this.pageNum, val)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
-      this.pageNum = val;
-      this.getScorePage(val, this.pageSize);
+      this.pageNum = val
+      this.getScorePage(val, this.pageSize)
     },
     open() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true,
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
       })
         .then(() => {
           this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
+            type: 'success',
+            message: '删除成功!'
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     handleClick(row) {
       // console.log(row);
-    },
-  },
-  computed: {
-    tables() {
-      //在你的数据表格中定义tabels
-      const input = this.input;
-      const input1 = this.input1;
-      if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input) > -1;
-          });
-        });
-      }
-      if (input1) {
-        return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input1) > -1;
-          });
-        });
-      }
-
-      return this.tableData;
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style></style>

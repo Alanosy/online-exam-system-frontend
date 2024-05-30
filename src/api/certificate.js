@@ -10,8 +10,8 @@ export function certificatePaging(params) {
 }
 export function certificateDel(id) {
   return request({
-    url: 'certificate/delete/'+id,
-    method: 'delete',
+    url: 'certificate/delete/' + id,
+    method: 'delete'
 
   })
 }
@@ -23,9 +23,9 @@ export function certificateAdd(data) {
   })
 }
 
-export function certificateUpdate(id,data) {
+export function certificateUpdate(id, data) {
   return request({
-    url: 'certificate/'+id,
+    url: 'certificate/' + id,
     method: 'put',
     data
   })
@@ -34,7 +34,7 @@ export function certificateUpdate(id,data) {
 export function certificateMy() {
   return request({
     url: 'certificate/paging/my',
-    method: 'get',
+    method: 'get'
 
   })
 }

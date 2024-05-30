@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: 魏进 3413105907@qq.com
- * @LastEditTime: 2024-05-31 00:33:02
+ * @LastEditTime: 2024-05-31 02:12:19
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -58,83 +58,6 @@
       </el-table-column> -->
     </el-table>
 
-    <div class="pagination-container">
-      <el-pagination
-        :current-page="data.current"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="data.size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="data.total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
-    <el-dialog title="查看详情" :visible.sync="dialogFormVisible">
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="序号  " :label-width="formLabelWidth">
-              <el-input v-model="form.date" :disabled="true"> </el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="试卷名称" :label-width="formLabelWidth">
-              <el-input v-model="form.name" :disabled="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="考试班级" :label-width="formLabelWidth">
-              <el-input v-model="form.province" :disabled="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="最低分" :label-width="formLabelWidth">
-              <el-input v-model="form.city" :disabled="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="最高分" :label-width="formLabelWidth">
-              <el-input v-model="form.address" :disabled="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="评价分" :label-width="formLabelWidth">
-              <el-input v-model="form.zip" :disabled="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-    </el-dialog>
-    <!--新增弹窗-->
-
-    <el-dialog :title="diaTitle" :visible.sync="dialogTableVisible">
-      <el-row>
-        <el-form :model="form">
-          <el-form-item label="班级名称" :label-width="formLabelWidth">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-form>
-      </el-row>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 

@@ -12,7 +12,7 @@ import htmlToPdf from '@/utils/htmlToPdf'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
-import locale from 'element-ui/lib/locale/lang/zh-CN' 
+import locale from 'element-ui/lib/locale/lang/zh-CN'
 import '@/styles/index.scss' // global css
 import echarts from 'echarts'
 import App from './App'
@@ -28,34 +28,31 @@ import 'quill/dist/quill.core.css' // 引入样式
 import 'quill/dist/quill.snow.css' // snow theme
 import 'quill/dist/quill.bubble.css' // bubble theme
 
-
-
 // 定义白名单
 Vue.prototype.$echarts = echarts
-const whiteList = ['/login', '/register'];
+const whiteList = ['/login', '/register']
 
 router.beforeEach((to, from, next) => {
-    // 获取token，这里以从localStorage获取为例
-    const token = getToken('Authorization');
+  // 获取token，这里以从localStorage获取为例
+  const token = getToken('Authorization')
 
-    // 检查当前访问的路由是否在白名单内
-    if (whiteList.includes(to.path)) {
-        // 如果在白名单内，不需要token，直接允许访问
-        next();
+  // 检查当前访问的路由是否在白名单内
+  if (whiteList.includes(to.path)) {
+    // 如果在白名单内，不需要token，直接允许访问
+    next()
+  } else {
+    // 如果不在白名单内，则需要检查token
+    if (!token) {
+      // 如果没有token，则跳转到登录页面，并携带前往的完整路径以便登录后重定向
+      next({ path: '/login', query: { redirect: to.fullPath }})
     } else {
-        // 如果不在白名单内，则需要检查token
-        if (!token) {
-            // 如果没有token，则跳转到登录页面，并携带前往的完整路径以便登录后重定向
-            next({ path: '/login', query: { redirect: to.fullPath } });
-        } else {
-            // 如果有token，则允许访问
-            next();
-        }
+      // 如果有token，则允许访问
+      next()
     }
-});
+  }
+})
 
-axios.defaults.withCredentials=true
-
+axios.defaults.withCredentials = true
 
 /**
  * If you don't want to use mock-server
@@ -71,14 +68,13 @@ axios.defaults.withCredentials=true
 // }
 Vue.use(htmlToPdf)
 // 富文本
-Vue.use(VueQuillEditor, /* { default global options } */)
+Vue.use(VueQuillEditor /* { default global options } */)
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
-
 
 new Vue({
   el: '#app',
