@@ -53,8 +53,12 @@
     >
       <el-table-column fixed prop="id" label="序号" align="center" />
       <el-table-column prop="title" label="公告标题" align="center" />
-
-      <el-table-column prop="content" label="内容" align="center" />
+      <el-table-column prop="content" label="内容" align="center">
+        <template slot-scope="scope">
+          <!-- 使用v-html指令来渲染HTML内容，但需谨慎处理XSS风险 -->
+          <div v-html="scope.row.content"></div>
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button
