@@ -94,7 +94,7 @@ export default {
     };
   },
   created() {
-    this.receivedRow = this.$route.query.zhi;
+    this.receivedRow =localStorage.getItem("examInfo_examId");
     this.getExamDetils(localStorage.getItem("examInfo_examId"));
   },
   methods: {
@@ -104,7 +104,7 @@ export default {
       this.data = res.data;
     },
     startExam() {
-      examStart(this.receivedRow.id).then((res)=>{
+      examStart(this.receivedRow).then((res)=>{
         if(res.code){
           localStorage.setItem("examId", this.receivedRow.id);
           this.$router.push({ name: "start", query: { zhi: this.receivedRow } });
