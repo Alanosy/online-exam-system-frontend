@@ -7,7 +7,7 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div :class="{'has-logo':showLogo}">
+  <div :class="{ 'has-logo': showLogo }">
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
@@ -20,7 +20,12 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item v-for="(route,index) in routes" :key="index" :item="route" :base-path="route.path" />
+        <sidebar-item
+          v-for="(route, index) in routes"
+          :key="index"
+          :item="route"
+          :base-path="route.path"
+        />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -34,12 +39,30 @@ import variables from '@/styles/variables.scss'
 
 export default {
   components: { SidebarItem, Logo },
+
   computed: {
-    ...mapGetters([
-      'sidebar'
-    ]),
+    ...mapGetters(['sidebar']),
     routes() {
-      return this.$router.options.routes
+      console.log('this.$router.options.routes', this.$router.options.routes)
+      const menuList = this.$router.options.routes
+
+      const roleKey = localStorage.getItem('roles')
+
+      menuList.forEach((element) => {
+        if (element.meta && element.meta.roles) {
+          let isVisible = false
+          element.meta.roles.forEach((role) => {
+            if (role.startsWith(roleKey)) {
+              isVisible = true
+              // 一旦找到匹配项，可以提前结束循环，无需继续检查其他项
+              return
+            }
+          })
+          element.meta.visible = isVisible
+        }
+      })
+      console.log('menuList', menuList)
+      return menuList
     },
     activeMenu() {
       const route = this.$route

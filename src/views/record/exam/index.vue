@@ -17,7 +17,9 @@
       </el-table-column>
       <el-table-column prop="title" align="center" label="试卷名称" width="250" />
       <el-table-column prop="passedScore" align="center" label="及格分" />
+      <el-table-column prop="userScore" align="center" label="用户成绩" />
       <el-table-column prop="examDuration" align="center" label="考试时长" />
+      <el-table-column prop="userTime" align="center" label="用户用时" />
       <el-table-column align="center" label="操作">
         <template slot-scope="{ row }">
           <el-button
@@ -45,7 +47,7 @@
 </template>
 
 <script>
-import { recordExamPaging, recordExamDetail } from '@/api/record'
+import { recordExamPaging } from '@/api/record'
 export default {
   namespaced: true,
   data() {
@@ -71,20 +73,11 @@ export default {
       },
       diaTitle: '新增',
       dialogTableVisible: false,
-      dialogFormVisible: false,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      }
+      dialogFormVisible: false
     }
   },
   computed: {
+
     tables() {
       // 在你的数据表格中定义tabels
       const input = this.input
@@ -105,6 +98,7 @@ export default {
     this.getExamRecordPaging()
   },
   methods: {
+
     // 分页查询
     async getExamRecordPaging(pageNum, pageSize) {
       const params = { pageNum: pageNum, pageSize: pageSize }

@@ -63,17 +63,22 @@ export default {
       ) {
         const roleKey = localStorage.getItem('roles')
         let isVisible = false
-
-        element.children[0].meta.roles.forEach((role) => {
-          if (role.startsWith(roleKey)) {
-            isVisible = true
-            // 一旦找到匹配项，可以提前结束循环，无需继续检查其他项
-            return
-          }
-        })
-
+        element.children.forEach((item) => {
+          item.meta.roles.forEach((role) => {
+            if (role.startsWith(roleKey)) {
+              isVisible = true
+              // 一旦找到匹配项，可以提前结束循环，无需继续检查其他项
+              return
+            }
+          })
+        }
+        )
+        element.children.forEach((item) => {
+          item.meta.visible = isVisible
+        }
+        )
         // 循环结束后根据isVisible的值设置visiable
-        element.children[0].meta.visible = isVisible
+        // element.children[0].meta.visible = isVisible
       }
     })
   },

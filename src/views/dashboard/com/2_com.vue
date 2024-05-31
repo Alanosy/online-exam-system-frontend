@@ -25,7 +25,6 @@
               style="height: 36px; margin-top: 20px"
               @node-click="handleNodeClick"
             >
-
               <template slot-scope="{ node, data }">
                 <div @click="node.expand()" v-html="data.label" />
                 <!-- 确保data.label是已经处理过的安全HTML字符串 -->
@@ -79,6 +78,7 @@ export default {
   mounted() {
     this.initCharts()
   },
+
   methods: {
     getDailyFun() {
       getDaily().then((res) => {
@@ -91,7 +91,9 @@ export default {
 
           // 生成从今天往回15天的日期数组
           for (let i = 0; i <= 14; i++) {
-            const date = new Date(currentDate.getTime() - i * 24 * 60 * 60 * 1000)
+            const date = new Date(
+              currentDate.getTime() - i * 24 * 60 * 60 * 1000
+            )
             this.dateArray.push(date.toISOString().split('T')[0])
           }
           // 确保dateArray是倒序的
@@ -171,11 +173,14 @@ export default {
   margin-top: 10px;
   width: 450px;
   height: 300px;
-
   border: solid black 1px;
 }
 .i {
-  height: 290px;
+  margin-top: 10px;
+  height: 300px;
+  /* 添加滚动条样式 */
+  overflow-y: auto; /* 启用垂直滚动条 */
+  max-height: 300px; /* 指定最大高度，根据需要调整 */
 }
 
 .el-tree-node__content {

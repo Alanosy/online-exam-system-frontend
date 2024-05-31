@@ -222,6 +222,7 @@ export default {
   },
 
   computed: {
+
     editor() {
       return this.$refs.myQuillEditor.quill
     },
@@ -255,6 +256,7 @@ export default {
     this.getNoticePage()
   },
   methods: {
+
     onEditorBlur(quill) {
       console.log('editor blur!', quill)
     },

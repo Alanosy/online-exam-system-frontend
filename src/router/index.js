@@ -166,7 +166,7 @@ export const constantRoutes = [
     path: '/examrecord',
     component: Layout,
     name: 'Examrecord',
-    meta: { title: '考试记录', icon: 'el-icon-s-help', requireAuth: true },
+    meta: { title: '考试记录', icon: 'el-icon-s-help', visible: true, roles: ['admin', 'student'], requireAuth: true },
     children: [
       {
         path: '/examrecord1',
@@ -178,7 +178,7 @@ export const constantRoutes = [
         path: '/questrecord',
         name: 'Examrecord2',
         component: () => import('@/views/record/exercise/index.vue'),
-        meta: { title: '刷题记录', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'tree' }
+        meta: { title: '刷题记录', visible: true, roles: ['admin', 'student'], icon: 'tree' }
       }
     ]
   },
@@ -281,7 +281,7 @@ export const constantRoutes = [
       path: '/zhengshugl',
       name: 'Certificate',
       component: () => import('@/views/certificate/zhengshugl'),
-      meta: { title: '证书管理', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
+      meta: { title: '证书管理', visible: true, roles: ['admin'], icon: 'dashboard' }
     }]
   },
   {

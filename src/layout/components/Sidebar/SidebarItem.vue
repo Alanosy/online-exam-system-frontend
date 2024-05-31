@@ -24,28 +24,30 @@
       </app-link>
     </template>
 
-    <el-submenu
-      v-else
-      ref="subMenu"
-      :index="resolvePath(item.path)"
-      popper-append-to-body
-    >
-      <template slot="title">
-        <item
-          v-if="item.meta"
-          :icon="item.meta && item.meta.icon"
-          :title="item.meta.title"
+    <div v-else>
+      <el-submenu
+        v-if="item.meta && item.meta.visible"
+        ref="subMenu"
+        :index="resolvePath(item.path)"
+        popper-append-to-body
+      >
+        <template slot="title">
+          <item
+            v-if="item.meta && item.meta.visible"
+            :icon="item.meta && item.meta.icon"
+            :title="item.meta.title"
+          />
+        </template>
+        <sidebar-item
+          v-for="child in item.children"
+          :key="child.path"
+          :is-nest="true"
+          :item="child"
+          :base-path="resolvePath(child.path)"
+          class="nest-menu"
         />
-      </template>
-      <sidebar-item
-        v-for="child in item.children"
-        :key="child.path"
-        :is-nest="true"
-        :item="child"
-        :base-path="resolvePath(child.path)"
-        class="nest-menu"
-      />
-    </el-submenu>
+      </el-submenu>
+    </div>
   </div>
 </template>
 
@@ -82,7 +84,7 @@ export default {
     return {}
   },
   created() {
-    // console.log(this.item);
+    console.log(this.item)
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
