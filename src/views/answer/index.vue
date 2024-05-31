@@ -34,10 +34,9 @@
             type="text"
             size="small"
             style="font-size: 14px"
-            @click="screenInfo(row)"
             :disabled="row.numberOfApplicants <= row.correctedPaper"
-            >查看详情</el-button
-          >
+            @click="screenInfo(row)"
+          >查看详情</el-button>
         </template>
       </el-table-column>
     </el-table>

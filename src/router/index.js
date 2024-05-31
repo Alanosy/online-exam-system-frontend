@@ -311,9 +311,9 @@ export const constantRoutes = [
     children: [{
       path: 'userscore',
       name: 'UserScore',
-      hidden:true,
+      hidden: true,
       component: () => import('@/views/score/detail'),
-      meta: { title: '用户成绩',visible:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '用户成绩', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
     }]
   },
   {
@@ -323,7 +323,7 @@ export const constantRoutes = [
       path: 'dajuangl',
       name: 'Answermanage',
       component: () => import('@/views/answer/index'),
-      meta: { title: '阅卷管理',visible:true,roles:['teacher','admin'], icon: 'dashboard' }
+      meta: { title: '阅卷管理', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
     }]
   },
   {

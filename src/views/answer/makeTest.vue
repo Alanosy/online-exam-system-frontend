@@ -55,7 +55,7 @@
           <el-card class="qu_list">
             <div>
               <template v-for="(item, index) in waitQuList">
-                <div  :class="'index' + index">
+                <div :class="'index' + index">
                   <!-- 简答 -->
                   <el-row :gutter="24">
                     <el-col :span="20" style="text-align: left">

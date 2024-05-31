@@ -11,7 +11,7 @@
   <div class="app-container">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="试卷名称">
-        <el-input v-model="input" placeholder="试卷名称" />
+        <el-input v-model="examTitle" placeholder="试卷名称" />
       </el-form-item>
       <el-form-item label="所属班级">
         <ClassSelect v-model="gradeId" />
@@ -74,16 +74,16 @@
 </template>
 
 <script>
-import ClassSelect from "@/components/ClassSelect";
-import { getExamScore } from "@/api/score";
+import ClassSelect from '@/components/ClassSelect'
+import { getExamScore } from '@/api/score'
 export default {
   components: { ClassSelect },
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
-      gradeId: "",
-      examTitle: "",
+      gradeId: '',
+      examTitle: '',
       data: {},
       formInline: {
         user: '',
@@ -91,34 +91,18 @@ export default {
       },
       input: '',
       input1: '',
-
-      formInline: {
-        user: '',
-        region: ''
-      },
       form: {
         name: ''
       },
       cancle() {},
       updateRow(row) {
-        localStorage.setItem('examId',row.examId);
-        localStorage.setItem('gradeId',row.gradeId)
-        this.$router.push({ name: "UserScore"});
-        
+        localStorage.setItem('examId', row.examId)
+        localStorage.setItem('gradeId', row.gradeId)
+        this.$router.push({ name: 'UserScore' })
       },
       diaTitle: '',
       dialogTableVisible: false,
       dialogFormVisible: false,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
       formLabelWidth: '120px'
     }
   },
@@ -158,13 +142,13 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         gradeId: this.gradeId,
-        examTitle: this.examTitle,
-      };
-      const res = await getExamScore(params);
-      this.data = res.data;
+        examTitle: this.examTitle
+      }
+      const res = await getExamScore(params)
+      this.data = res.data
     },
     onSubmit() {
-      this.getScorePage();
+      this.getScorePage()
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑

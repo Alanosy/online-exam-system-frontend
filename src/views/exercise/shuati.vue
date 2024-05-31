@@ -201,11 +201,11 @@
 import { getQuestion, getQuestionDetail, submitAnswer } from '@/api/exercise'
 // import { quDetail } from "@/api/question";
 import { Loading } from 'element-ui'
-import ExamTimer from '@/components/ExamTimer'
+
 // import { examStart, examQuList } from "@/api/exam";
 export default {
   name: 'ExamProcess',
-  components: { ExamTimer },
+
   data() {
     return {
       showAnalysis: 0,
@@ -328,7 +328,7 @@ export default {
 
       this.getQuestionList()
 
-      setTimeout(() => this.getCurrentQuDetial(), 200);
+      setTimeout(() => this.getCurrentQuDetial(), 200)
     },
 
     getRightAnswer() {

@@ -1,8 +1,8 @@
 <!--
  * @Author: st 2946594574@qq.com
  * @Date: 2024-03-04 15:23:49
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-05-30 15:57:22
+ * @LastEditors: st 2946594574@qq.com
+ * @LastEditTime: 2024-05-20 09:51:24
  * @FilePath: \com-project\src\views\dashboard\com\2_com.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -15,32 +15,9 @@
           <div ref="charts" class="chart-div" />
         </el-card>
       </div>
-      <div
-        class="right"
-        :style="{'max-height': this.timeLineHeight + 'px' }"
-        style="overflow-y:scroll;"
-      >
+      <div class="right">
         <el-card class="box-card">
           最新公告
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div> <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div> <div>最新公告</div>
-          <div>最新公告</div>
-          <div>最新公告</div>
           <div class="i">
             <el-tree
               :data="data"
@@ -48,6 +25,7 @@
               style="height: 36px; margin-top: 20px"
               @node-click="handleNodeClick"
             >
+
               <template slot-scope="{ node, data }">
                 <div @click="node.expand()" v-html="data.label" />
                 <!-- 确保data.label是已经处理过的安全HTML字符串 -->
@@ -66,7 +44,6 @@ import { getDaily } from '@/api/stat'
 export default {
   data() {
     return {
-      timeLineHeight: '',
       pageNum: 1,
       pageSize: 10,
       data: {},
@@ -101,10 +78,6 @@ export default {
 
   mounted() {
     this.initCharts()
-    this.timeLineHeight = document.documentElement.clientHeight - 210
-    window.onresize = () => {
-      this.timeLineHeight = document.documentElement.clientHeight - 210
-    }
   },
   methods: {
     getDailyFun() {
@@ -177,7 +150,6 @@ export default {
       // console.log(data);
     }
   }
-
 }
 </script>
 <style>
@@ -190,22 +162,16 @@ export default {
   box-shadow: 3px 3px 3px 3px whitesmoke;
 }
 
-.right{
-   width: 500px;
-   height: 450px;
-}
-
 .box-card {
   margin-top: 50px;
   width: 500px;
   margin-left: 85px;
-    overflow-y: scroll;
-
 }
 .chart-div {
   margin-top: 10px;
   width: 450px;
   height: 300px;
+
   border: solid black 1px;
 }
 .i {
