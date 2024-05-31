@@ -19,7 +19,11 @@
       <el-table-column prop="passedScore" align="center" label="及格分" />
       <el-table-column prop="userScore" align="center" label="用户成绩" />
       <el-table-column prop="examDuration" align="center" label="考试时长" />
-      <el-table-column prop="userTime" align="center" label="用户用时" />
+      <el-table-column prop="userTime" align="center" label="用户用时">
+        <template slot-scope="scope">
+          <div>{{ (scope.row.userTime/60).toFixed(2) }}</div>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="{ row }">
           <el-button

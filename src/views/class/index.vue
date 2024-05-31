@@ -36,6 +36,7 @@
       </el-table-column>
       <el-table-column prop="gradeName" label="班级名称" align="center" />
       <el-table-column prop="code" label="班级口令" align="center" />
+      <el-table-column prop="userName" label="创建用户" align="center" />
       <el-table-column align="center" label="操作">
         <template slot-scope="{ row }">
           <el-button
