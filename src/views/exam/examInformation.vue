@@ -106,7 +106,7 @@ export default {
     startExam() {
       examStart(this.receivedRow).then((res) => {
         if (res.code) {
-          localStorage.setItem('examId', this.receivedRow.id)
+          localStorage.setItem('examId', this.receivedRow)
           this.$router.push({ name: 'start', query: { zhi: this.receivedRow }})
         } else {
           this.$message({
