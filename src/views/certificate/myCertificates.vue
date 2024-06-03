@@ -19,7 +19,6 @@
       </el-table-column>
       <el-table-column prop="certificateName" label="证书名称" align="center" />
       <el-table-column prop="certificationNuit" label="证书颁发单位" align="center" />
-      <el-table-column prop="certificationNuit" label="证书颁发单位" align="center" />
 
       <el-table-column prop="examName" label="考试名称" align="center" />
       <el-table-column prop="createTime" label="获奖时间" align="center" />
@@ -89,7 +88,7 @@
             <span class="con-name">{{ jwtInfo.realName }}</span>同学：<br>
           </p>
           <p class="con-text">
-            <span>在{{ currentdata.examName }}考试中荣获,荣誉称号，特发此状，以资鼓励。</span>
+            <span>在{{ currentdata.examName }}考试中荣获{{currentdata.certificateName}}证书，特发此状，以资鼓励！</span>
           </p>
           <p class="con-height">
             <span><center>{{ level }}</center></span>
@@ -97,7 +96,8 @@
           <!-- <p class="con-text">荣誉称号，特发此状，以资鼓励。</p> -->
           <div class="con-unit">
             <p class="time">证书编号：{{ currentdata.code }}</p>
-            <p class="time">{{ currentdata.createTime }}</p>
+            <p class="time">发证单位：{{ currentdata.certificationNuit }}</p>
+            <p class="time">发证时间：{{ currentdata.createTime }}</p>
           </div>
           <div v-show="isShow" class="chapter">
             <canvas id="chapterCanvas" width="150" height="150" />
@@ -264,12 +264,16 @@ export default {
   font-size: 2em;
 }
 .con-unit {
+  display:flex;
+  justify-content: right;
+  flex-direction: column;
+  padding-left: 100px;
   font-size: 18px;
   font-weight: 700;
   position: absolute;
   right: 130px;
   bottom: 100px;
-  text-align: center;
+  /* text-align: center; */
   letter-spacing: 3px;
 }
 .con-unit p {

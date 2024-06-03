@@ -302,10 +302,8 @@ export default {
         center: true
       }).then(() => {
         noticeDel(id).then((res) => {
-          if (this.tableData && Data.isData(this.myData)) {
+          if (res.code) {
             this.getNoticePage(this.pageNum, this.pageSize)
-            this.tableData.splice(index, 1)
-
             this.$message({
               type: 'success',
               message: '删除成功!'
