@@ -34,9 +34,11 @@
                 :min="0"
                 :max="scope.row.totalRadio"
                 :controls="false"
-                style="width: 100px"
+                style="width: 80px"
               />
-              / {{ scope.row.totalRadio }}
+              <template v-if="scope.row.totalRadio">
+                / {{ scope.row.totalRadio }}
+              </template>
             </template>
           </el-table-column>
 
@@ -46,7 +48,7 @@
                 v-model="scope.row.radioScore"
                 :min="0"
                 :controls="false"
-                style="width: 100%"
+                style="width: 80px"
               />
             </template>
           </el-table-column>
@@ -58,9 +60,11 @@
                 :min="0"
                 :max="scope.row.totalMulti"
                 :controls="false"
-                style="width: 100px"
+                style="width: 80px"
               />
-              / {{ scope.row.totalMulti }}
+              <template v-if="scope.row.totalMulti">
+                / {{ scope.row.totalMulti }}
+              </template>
             </template>
           </el-table-column>
 
@@ -70,7 +74,7 @@
                 v-model="scope.row.multiScore"
                 :min="0"
                 :controls="false"
-                style="width: 100%"
+                style="width: 80px"
               />
             </template>
           </el-table-column>
@@ -82,9 +86,11 @@
                 :min="0"
                 :max="scope.row.totalJudge"
                 :controls="false"
-                style="width: 100px"
+                style="width: 80px"
               />
-              / {{ scope.row.totalJudge }}
+              <template v-if="scope.row.totalJudge">
+                / {{ scope.row.totalJudge }}
+              </template>
             </template>
           </el-table-column>
 
@@ -94,7 +100,7 @@
                 v-model="scope.row.judgeScore"
                 :min="0"
                 :controls="false"
-                style="width: 100%"
+                style="width: 80px"
               />
             </template>
           </el-table-column>
@@ -103,11 +109,13 @@
               <el-input-number
                 v-model="scope.row.saqCount"
                 :min="0"
-                :max="scope.row.totalJudge"
+                :max="scope.row.totalSaq"
                 :controls="false"
-                style="width: 100px"
+                style="width: 80px"
               />
-              / {{ scope.row.totalJudge }}
+              <template v-if="scope.row.totalSaq">
+                / {{ scope.row.totalSaq }}
+              </template>
             </template>
           </el-table-column>
 
@@ -117,7 +125,7 @@
                 v-model="scope.row.saqScore"
                 :min="0"
                 :controls="false"
-                style="width: 100%"
+                style="width: 80px"
               />
             </template>
           </el-table-column>
@@ -559,15 +567,18 @@ onCertificateChange() {
     repoChange(e, row) {
       // 赋值ID
       row.id = e.id
-
+      console.log("-----");
+      console.log(e);
       if (e != null) {
-        row.totalRadio = e.radioCount
-        row.totalMulti = e.multiCount
-        row.totalJudge = e.judgeCount
+        row.totalRadio = e.radioNum
+        row.totalMulti = e.multiNum
+        row.totalJudge = e.judgeNum
+        row.totalSaq = e.saqNum
       } else {
         row.totalRadio = 0
         row.totalMulti = 0
         row.totalJudge = 0
+        row.totalSaq = 0
       }
     }
   }
