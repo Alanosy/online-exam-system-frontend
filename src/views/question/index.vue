@@ -59,7 +59,7 @@
         :auto-upload="false"
         :on-remove="handleRemove"
         :on-change="handleFileChange"
-        :file-list="fileList"
+        :file-list="form.fileList"
       >
         <i class="el-icon-upload" />
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -67,6 +67,7 @@
       </el-upload>
       <div slot="footer" class="dialog-footer">
         <el-button @click="fileDialogVisible = false">取 消</el-button>
+        <el-button type="success" plain @click="startDownload">下载模板</el-button>
         <el-button type="primary" @click="importQu">确 定</el-button>
       </div>
     </el-dialog>
@@ -189,8 +190,10 @@ export default {
           label: "简答题",
         },
       ],
-      selValue: "",
-      searchName: "",
+      length:'',
+      fileList:[],
+      selValue: '',
+      searchName: '',
       pageNum: 1,
       pageSize: 10,
       data: {},
@@ -262,7 +265,7 @@ export default {
       this.$router.push({ name: "news" });
     },
     importQu() {
-      if (this.fileList.length > 0 && this.selectedRepoSingle != "") {
+      if (this.fileList&&this.fileList.length > 0 && this.selectedRepoSingle != "") {
         const formData = new FormData(); // 创建FormData对象
         formData.append("file", this.fileList[0].raw); // 添加文件到formData
         importQue(this.selectedRepoSingle, formData)
@@ -344,8 +347,9 @@ export default {
         .then(() => {
           quDel(row.id).then((res) => {
             if (res.code) {
-              this.getQuPage(this.pageNum, this.pageSize);
-              this.tableData.splice(index, 1);
+              this.getQuPage(this.pageNum, this.pageSize)
+              // this.tableData.splice(index, 1)
+              this.getQuPage(1)
               this.$message({
                 type: "success",
                 message: "删除成功!",
@@ -387,11 +391,25 @@ export default {
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
-      this.pageNum = val;
-      this.getQuPage(val, this.pageSize);
+      this.pageNum = val
+      this.getQuPage(val, this.pageSize)
     },
-  },
-};
+     //下载模板
+   async startDownload() {
+      const a = document.createElement("a");
+      a.href = "./template/ImportQuestionTemplate.xlsx";
+      a.download = "导入试题模板.xlsx";
+      // 障眼法藏起来a标签
+      a.style.display = "none";
+      // 将a标签追加到文档对象中
+      document.body.appendChild(a);
+      // 模拟点击了<a>标签,会触发<a>标签的href的读取,浏览器就会自动下载了
+      a.click();
+      // 一次性的,用完就删除a标签
+      a.remove(); 
+  }
+  }
+}
 </script>
 
 <style></style>

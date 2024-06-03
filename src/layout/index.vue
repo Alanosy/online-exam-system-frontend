@@ -22,6 +22,11 @@ import ResizeMixin from './mixin/ResizeHandler'
 import routes from '@/router'
 export default {
   name: 'Layout',
+  data(){
+    return{
+
+    }
+  },
   components: {
     Navbar,
     Sidebar,

@@ -42,8 +42,7 @@
                 <el-table-column prop="zip" label="简答题数量" align="center" /> -->
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
-          <el-button
-            type="text"
+          <el-button type="success" plain
             size="small"
             @click="screenInfo(row.id, row.repoTitle)"
           >开始刷题</el-button>

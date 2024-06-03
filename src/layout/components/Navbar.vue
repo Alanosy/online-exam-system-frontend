@@ -30,6 +30,7 @@
         </el-dropdown>
       </div>
     </div>
+    
     <!-- tags -->
     <div
       style="
@@ -52,6 +53,7 @@
         >
           {{ item.title }}
         </el-tag>
+        
       </template>
     </div>
   </div>
@@ -71,6 +73,7 @@ export default {
   data() {
     return {
       user: {}
+      
     }
   },
   computed: {
@@ -78,8 +81,10 @@ export default {
   },
   created() {
     this.decode()
+    console.log(this.tags);
   },
   methods: {
+    
     decode() {
       const token = getToken()
       const user = parseJwt(token)
