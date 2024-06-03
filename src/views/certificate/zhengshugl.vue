@@ -11,10 +11,10 @@
   <div class="app-container">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="证书名称">
-        <el-input v-model="searchCertificateName" placeholder="证书名称"></el-input>
+        <el-input v-model="searchCertificateName" placeholder="证书名称" />
       </el-form-item>
       <el-form-item label="认证单位">
-        <el-input v-model="searchCertificationNuit" placeholder="认证单位"></el-input>
+        <el-input v-model="searchCertificationNuit" placeholder="认证单位" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="searchCertificate">查询</el-button>
@@ -36,7 +36,9 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column fixed prop="id" label="序号" align="center" />
+      <el-table-column fixed label="序号" align="center">
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
       <el-table-column prop="certificateName" label="证书名称" align="center" />
       <el-table-column prop="certificationNuit" label="认证单位" align="center" />
 
@@ -49,15 +51,13 @@
             size="small"
             style="font-size: 14px"
             @click="updateRow(row)"
-            >编辑</el-button
-          >
+          >编辑</el-button>
           <el-button
             type="text"
             size="small"
             style="color: red; font-size: 14px"
             @click="delCertificate(row.id)"
-            >删除</el-button
-          >
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -78,10 +78,10 @@
       <el-row>
         <el-form :model="form">
           <el-form-item label="证书名称" :label-width="formLabelWidth">
-            <el-input v-model="form.certificateName" autocomplete="off"></el-input>
+            <el-input v-model="form.certificateName" autocomplete="off" />
           </el-form-item>
           <el-form-item label="认证单位" :label-width="formLabelWidth">
-            <el-input v-model="form.certificationNuit" autocomplete="off"></el-input>
+            <el-input v-model="form.certificationNuit" autocomplete="off" />
           </el-form-item>
         </el-form>
       </el-row>
@@ -99,10 +99,10 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="证书名称" :label-width="formLabelWidth">
-              <el-input v-model="form.certificateName" autocomplete="off"></el-input>
+              <el-input v-model="form.certificateName" autocomplete="off" />
             </el-form-item>
             <el-form-item label="认证单位" :label-width="formLabelWidth">
-              <el-input v-model="form.certificationNuit" autocomplete="off"></el-input>
+              <el-input v-model="form.certificationNuit" autocomplete="off" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -120,49 +120,74 @@ import {
   certificatePaging,
   certificateDel,
   certificateAdd,
-  certificateUpdate,
-} from "@/api/certificate";
+  certificateUpdate
+} from '@/api/certificate'
 export default {
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
       data: {},
-      input: "",
-      input1: "",
+      input: '',
+      input1: '',
       currentPage1: 5,
       currentPage2: 5,
       currentPage3: 5,
       currentPage4: 4,
-      diaTitle: "",
-      searchCertificateName: "",
-      searchCertificationNuit: "",
+      diaTitle: '',
+      searchCertificateName: '',
+      searchCertificationNuit: '',
       formInline: {
-        user: "",
-        region: "",
+        user: '',
+        region: ''
       },
       cancle() {},
       updateRow(row) {
-        this.dialogFormVisible = true;
-        this.form = row;
+        this.dialogFormVisible = true
+        this.form = row
       },
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
         delivery: false,
         type: [],
-        resource: "",
-        desc: "",
+        resource: '',
+        desc: ''
       },
-      formLabelWidth: "120px",
-    };
+      formLabelWidth: '120px'
+    }
+  },
+  computed: {
+    tables() {
+      // 在你的数据表格中定义tabels
+      const input = this.input
+      const input1 = this.input1
+      if (input) {
+        return this.tableData.filter((data) => {
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1
+          })
+        })
+      }
+      if (input1) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          // console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input1) > -1
+          })
+        })
+      }
+
+      return this.tableData
+    }
   },
   created() {
-    this.getCertificatePage();
+    this.getCertificatePage()
   },
   methods: {
     // 分页查询
@@ -176,10 +201,10 @@ export default {
         pageNum: pageNum,
         pageSize: pageSize,
         certificateName: certificateName,
-        certificationUnit: searchCertificationNuit,
-      };
-      const res = await certificatePaging(params);
-      this.data = res.data;
+        certificationUnit: searchCertificationNuit
+      }
+      const res = await certificatePaging(params)
+      this.data = res.data
     },
     searchCertificate() {
       this.getCertificatePage(
@@ -187,120 +212,95 @@ export default {
         this.pageSize,
         this.searchCertificateName,
         this.searchCertificationNuit
-      );
+      )
     },
     updateCertificate() {
       const data = {
         certificateName: this.form.certificateName,
-        certificationNuit: this.form.certificationNuit,
-      };
+        certificationNuit: this.form.certificationNuit
+      }
       certificateUpdate(this.form.id, data).then((res) => {
         if (res.code) {
-          this.getCertificatePage(this.pageNum, this.pageSize);
-          this.dialogFormVisible = false;
+          this.getCertificatePage(this.pageNum, this.pageSize)
+          this.dialogFormVisible = false
           this.$message({
-            type: "success",
-            message: "编辑成功!",
-          });
+            type: 'success',
+            message: '编辑成功!'
+          })
         } else {
           this.$message({
-            type: "info",
-            message: res.msg,
-          });
+            type: 'info',
+            message: res.msg
+          })
         }
-      });
+      })
     },
     addCertificate() {
       const data = {
         certificateName: this.form.certificateName,
-        certificationNuit: this.form.certificationNuit,
-      };
+        certificationNuit: this.form.certificationNuit
+      }
       certificateAdd(data).then((res) => {
         if (res.code) {
-          this.getCertificatePage(this.pageNum, this.pageSize);
-          this.dialogTableVisible = false;
+          this.getCertificatePage(this.pageNum, this.pageSize)
+          this.dialogTableVisible = false
           this.$message({
-            type: "success",
-            message: "添加成功!",
-          });
+            type: 'success',
+            message: '添加成功!'
+          })
         } else {
           this.$message({
-            type: "info",
-            message: res.msg,
-          });
+            type: 'info',
+            message: res.msg
+          })
         }
-      });
+      })
     },
     delCertificate(id) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true,
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
       })
         .then(() => {
           certificateDel(id).then((res) => {
             if (res.code) {
-              this.getCertificatePage(this.pageNum, this.pageSize);
+              this.getCertificatePage(this.pageNum, this.pageSize)
               this.$message({
-                type: "success",
-                message: "删除成功!",
-              });
+                type: 'success',
+                message: '删除成功!'
+              })
             } else {
               this.$message({
-                type: "info",
-                message: res.msg,
-              });
+                type: 'info',
+                message: res.msg
+              })
             }
-          });
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
 
     handleSizeChange(val) {
       // 设置每页多少条逻辑
-      this.pageSize = val;
-      this.getCertificatePage(this.pageNum, val);
+      this.pageSize = val
+      this.getCertificatePage(this.pageNum, val)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
-      this.pageNum = val;
-      this.getCertificatePage(val, this.pageSize);
+      this.pageNum = val
+      this.getCertificatePage(val, this.pageSize)
     },
     handleClick(row) {
       // console.log(row);
-    },
-  },
-  computed: {
-    tables() {
-      //在你的数据表格中定义tabels
-      const input = this.input;
-      const input1 = this.input1;
-      if (input) {
-        return this.tableData.filter((data) => {
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input) > -1;
-          });
-        });
-      }
-      if (input1) {
-        // console.log("input输入的搜索内容：" + this.input)
-        return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input1) > -1;
-          });
-        });
-      }
-
-      return this.tableData;
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style></style>

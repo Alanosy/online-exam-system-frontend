@@ -2,51 +2,50 @@
   <div class="app-container">
 
     <el-form class="kj">
-    <div class="sg">
-      <el-form :model="addForm">
-        <el-form-item label="原密码" :label-width="formLabelWidth">
-          <el-input v-model="input1" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="新密码" :label-width="formLabelWidth">
-          <el-input type="password" v-model="input2" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码" :label-width="formLabelWidth">
-          <el-input type="password" v-model="input3" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div class="an">
-      <!-- <el-button>取消</el-button> -->
-      <el-button  type="primary" @click="updatePassword">确认</el-button>
-    </div>
-  </el-form>
-  
+      <div class="sg">
+        <el-form :model="addForm">
+          <el-form-item label="原密码" :label-width="formLabelWidth">
+            <el-input v-model="input1" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="新密码" :label-width="formLabelWidth">
+            <el-input v-model="input2" type="password" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="确认密码" :label-width="formLabelWidth">
+            <el-input v-model="input3" type="password" autocomplete="off" />
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="an">
+        <!-- <el-button>取消</el-button> -->
+        <el-button type="primary" @click="updatePassword">确认</el-button>
+      </div>
+    </el-form>
 
-</div>
+  </div>
 </template>
 
 <script>
-import {changePassword} from '@/api/user';
+import { changePassword } from '@/api/user'
 
 export default {
   data() {
     return {
-      input1: "",
-      input2: "",
-      input3: "",
-    };
+      input1: '',
+      input2: '',
+      input3: ''
+    }
   },
-  methods:{
-    updatePassword(){
-        const data = {originPassword:this.input1,newPassword:this.input2,checkedPassword:this.input3}
-        changePassword(data).then((res)=>{
-            if(res.code){
-                
-            }
-        })
+  methods: {
+    updatePassword() {
+      const data = { originPassword: this.input1, newPassword: this.input2, checkedPassword: this.input3 }
+      changePassword(data).then((res) => {
+        if (res.code) {
+
+        }
+      })
     }
   }
-};
+}
 </script>
 <style scoped>
 .kj {

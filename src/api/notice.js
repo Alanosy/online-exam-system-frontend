@@ -32,7 +32,6 @@ export function noticeUpdate(id, data) {
   })
 }
 
-
 export function noticeGetNew(params) {
   return request({
     url: 'notices/new',

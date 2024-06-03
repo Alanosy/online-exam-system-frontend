@@ -9,7 +9,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
-import { parseJwt }from '@/utils/jwtUtils'
+import { parseJwt } from '@/utils/jwtUtils'
 const getDefaultState = () => {
   return {
     token: getToken(),
@@ -35,9 +35,9 @@ const mutations = {
   }
 }
 const decode = () => {
-  const token = getToken();
-  const user = parseJwt(token);
-  this.user=JSON.parse(user.userInfo)
+  const token = getToken()
+  const user = parseJwt(token)
+  this.user = JSON.parse(user.userInfo)
 }
 
 const actions = {
@@ -47,17 +47,16 @@ const actions = {
       login(userInfo).then(response => {
         const { data } = response
         if (response.code === 1) {
-          const info = parseJwt(data);
+          const info = parseJwt(data)
           const roleId = JSON.parse(info.userInfo).roleId
-          if(roleId === 1){
-            window.localStorage.setItem('roles','student')
-          }else if(roleId === 2){
-
-            window.localStorage.setItem('roles','teacher')
-          }else if(roleId === 3){
-            window.localStorage.setItem('roles','admin')
+          if (roleId === 1) {
+            window.localStorage.setItem('roles', 'student')
+          } else if (roleId === 2) {
+            window.localStorage.setItem('roles', 'teacher')
+          } else if (roleId === 3) {
+            window.localStorage.setItem('roles', 'admin')
           }
-          
+
           commit('SET_TOKEN', data)
           setToken(data)
           resolve()

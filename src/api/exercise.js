@@ -16,21 +16,19 @@ export function exercisePaging(params) {
   })
 }
 
-export function getQuestion(params,repoId) {
+export function getQuestion(params, repoId) {
   return request({
-    url: 'exercises/'+repoId,
+    url: 'exercises/' + repoId,
     method: 'get',
     params
   })
-
 }
 
 export function getQuestionDetail(id) {
   return request({
     url: `exercises/question/${id}`,
-    method: 'get',
+    method: 'get'
   })
-
 }
 
 export function submitAnswer(data) {
@@ -39,9 +37,5 @@ export function submitAnswer(data) {
     method: 'post',
     data
   })
-
 }
-
-
-
 

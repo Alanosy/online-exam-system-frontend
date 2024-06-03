@@ -40,8 +40,8 @@ module.exports = {
     // 前端跨域
     proxy: {
       '/api': {
-       target: 'http://47.109.94.143:8080',
-       changeOrigin: true,
+        target: 'http://47.109.94.143:8080',
+        changeOrigin: true,
         pathRewrite: {
           '^/api': '/api'
         }

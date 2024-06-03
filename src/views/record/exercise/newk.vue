@@ -51,8 +51,8 @@
             <div>
               <template v-for="index in data">
                 <div
-                  :class="'index' + index"
                   v-if="index.quType === 1 || index.quType === 2 || index.quType === 3"
+                  :class="'index' + index"
                 >
                   <el-row :gutter="24">
                     <el-col :span="20" style="text-align: left">
@@ -68,6 +68,7 @@
                         <!-- ['A', 'B', 'C', 'D'] -->
                         <el-radio
                           v-for="(item, indexs) in index.option"
+                          :key="index"
                           :label="item.content"
                           border
                           class="qu_choose"
@@ -78,7 +79,7 @@
                               {{ numberToLetter(indexs) }}、{{ item.content }}.
                             </div>
                             <!-- 选项内容和图片 -->
-                            <div class="qu_choose_tag_content"></div>
+                            <div class="qu_choose_tag_content" />
                           </div>
                           <div class="qu_choose_answer">
                             <!-- <i class="el-icon-success" style="color: #1aac1a"> 答案 </i> -->
@@ -91,37 +92,25 @@
                         <el-card>
                           <div>
                             <span>考生答案：</span>
-                            <span
-                              :style="{
-                                color:
-                                  isRight === 1
-                                    ? 'green'
-                                    : isRight === 0
-                                    ? 'red'
-                                    : 'gray',
-                              }"
-                              >{{ numberToLetter(index.myOption) }}</span
-                            ><br />
+                            <span>{{ numberToLetter(index.myOption) }}</span><br>
                           </div>
                           <div style="margin-top: 8px">
                             <span>正确答案：</span>
-                            <span>{{ numberToLetter(index.rightOption) }}</span
-                            ><br />
+                            <span>{{ numberToLetter(index.rightOption) }}</span><br>
                           </div>
                           <div style="margin-top: 8px">
                             <span>试题解析：</span>
-                            <span>{{ index.analyse }}</span
-                            ><br />
+                            <span>{{ index.analyse }}</span><br>
                           </div>
                         </el-card>
                       </div>
                     </el-col>
                   </el-row>
-                  <el-divider></el-divider>
+                  <el-divider />
                 </div>
               </template>
               <template v-for="index in data">
-                <div :class="'index' + index" v-if="index.quType === 4">
+                <div v-if="index.quType === 4" :class="'index' + index">
                   <el-row :gutter="24">
                     <el-col :span="20" style="text-align: left">
                       <!-- 题目: 序号、类型、题干 -->
@@ -135,13 +124,12 @@
                       <el-radio-group class="qu_choose_group">
                         <!-- ['A', 'B', 'C', 'D'] -->
                         <el-input
+                          v-model="index.myOption"
                           style="margin-top: 10px"
                           type="textarea"
                           :autosize="{ minRows: 2, maxRows: 4 }"
                           placeholder="请输入内容"
-                          v-model="index.myOption"
-                        >
-                        </el-input>
+                        />
                       </el-radio-group>
 
                       <!-- 题目解析 -->
@@ -164,18 +152,17 @@
                           <div style="margin-top: 8px">
                             <span>正确答案：</span>
                             <span>{{ index.rightOption }}</span>
-                            <br />
+                            <br>
                           </div>
                           <div style="margin-top: 8px">
                             <span>试题解析：</span>
-                            <span>{{ index.analyse }}</span
-                            ><br />
+                            <span>{{ index.analyse }}</span><br>
                           </div>
                         </el-card>
                       </div>
                     </el-col>
                   </el-row>
-                  <el-divider></el-divider>
+                  <el-divider />
                 </div>
               </template>
             </div>
@@ -188,69 +175,69 @@
 </template>
 
 <script>
-import { recordExerciseDetail } from "@/api/record";
+import { recordExerciseDetail } from '@/api/record'
 export default {
-  name: "ExamProcess",
+  name: 'ExamProcess',
   data() {
     return {
-      input: "",
+      input: '',
       quIndex: -1,
       repoId: 0,
-      data: {},
-    };
+      data: {}
+    }
   },
   created() {
     // this.examId=this.$route.query.zhi.examId
-    this.repoId = localStorage.getItem("record_exercise_repoId");
-    this.ExerciseDetail();
+    this.repoId = localStorage.getItem('record_exercise_repoId')
+    this.ExerciseDetail()
   },
   methods: {
     numberToLetter(input) {
       const numberToCharMap = {
-        0: "A",
-        1: "B",
-        2: "C",
-        3: "D",
-        4: "E",
-        5: "F",
-      };
+        0: 'A',
+        1: 'B',
+        2: 'C',
+        3: 'D',
+        4: 'E',
+        5: 'F'
+      }
 
       // 辅助函数：将单个数字（字符串或数字类型）转换为字母
-      const singleNumberToLetter = (num) => numberToCharMap[parseInt(num, 10)] || "";
+      const singleNumberToLetter = (num) => numberToCharMap[parseInt(num, 10)] || ''
 
       // 辅助函数：处理逗号分隔的数字字符串
       const commaSeparatedNumbersToLetters = (str) => {
-        const numbers = str.split(",").map((item) => parseInt(item.trim(), 10));
-        return numbers.map((number) => numberToCharMap[number] || "").join(",");
-      };
+        const numbers = str.split(',').map((item) => parseInt(item.trim(), 10))
+        return numbers.map((number) => numberToCharMap[number] || '').join(',')
+      }
 
       // 判断输入类型并调用相应函数
       if (/^\d+$/.test(input)) {
         // 单个数字（字符串形式也可以匹配）
-        return singleNumberToLetter(input);
+        return singleNumberToLetter(input)
       } else if (/^\d+(,\d+)*$/.test(input)) {
         // 包含逗号分隔的数字字符串
-        return commaSeparatedNumbersToLetters(input);
+        return commaSeparatedNumbersToLetters(input)
       } else {
-        return ""; // 输入不符合预期，返回空字符串或根据需要处理
+        return '' // 输入不符合预期，返回空字符串或根据需要处理
       }
     },
     // 分页查询
     async ExerciseDetail() {
-      const params = { repoId: this.repoId };
-      const res = await recordExerciseDetail(params);
-      this.data = res.data;
+      const params = { repoId: this.repoId }
+      const res = await recordExerciseDetail(params)
+      this.data = res.data
     },
     // 点击答题卡题号, 右侧题目滑动
     handleTag(index) {
       // 高亮选中的题目index标签
-      this.quIndex = index;
+      this.quIndex = index
       // 题目滑动到锚定点
-      let page = document.querySelector(".index" + index);
-      page.scrollIntoView();
-    },
-  },
-};
+      const page = document.querySelector('.index' + index)
+      page.scrollIntoView()
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">

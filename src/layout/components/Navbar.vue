@@ -12,7 +12,7 @@
       <div class="right-menu">
         <el-dropdown class="avatar-container" trigger="click">
           <div class="avatar-wrapper">
-            <img :src="user.avatar" class="user-avatar" />
+            <img :src="user.avatar" class="user-avatar">
             <i class="el-icon-caret-bottom" />
           </div>
           <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -41,59 +41,60 @@
         align-items: center;
       "
     >
-      <el-tag
-        v-for="item in tags"
-        :key="item.title"
-        v-if="item.title"
-        closable
-        :class="{ active: item.checked }"
-        @click="$router.push(item.path)"
-        @close="$store.commit('menu/REMOVE_TAG', item)"
-      >
-        {{ item.title }}
-      </el-tag>
+      <template v-for="(item,index) in tags">
+        <el-tag
+          v-if="item.title"
+          :key="index"
+          closable
+          :class="{ active: item.checked }"
+          @click="$router.push(item.path)"
+          @close="$store.commit('menu/REMOVE_TAG', item)"
+        >
+          {{ item.title }}
+        </el-tag>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
-import Hamburger from "@/components/Hamburger";
-import { getToken } from "@/utils/auth";
-import { parseJwt } from "@/utils/jwtUtils";
+import { mapGetters } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from '@/components/Hamburger'
+import { getToken } from '@/utils/auth'
+import { parseJwt } from '@/utils/jwtUtils'
 export default {
-  data() {
-    return {
-      user: {},
-    };
-  },
   components: {
     Breadcrumb,
-    Hamburger,
+    Hamburger
+  },
+  data() {
+    return {
+      user: {}
+    }
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "tags"]),
+    ...mapGetters(['sidebar', 'avatar', 'tags'])
   },
   created() {
-    this.decode();
+    this.decode()
   },
   methods: {
     decode() {
-      const token = getToken();
-      const user = parseJwt(token);
-      this.user = JSON.parse(user.userInfo);
+      const token = getToken()
+      const user = parseJwt(token)
+      this.user = JSON.parse(user.userInfo)
     },
     toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
+      this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      this.$store.dispatch("logoutUser");
-      await this.$store.dispatch("user/logout");
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
-    },
-  },
-};
+      this.$store.dispatch('logoutUser')
+      await this.$store.dispatch('user/logout')
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

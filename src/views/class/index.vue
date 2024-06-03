@@ -4,15 +4,14 @@
 
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="班级">
-        <el-input v-model="formInline.searchTitle" placeholder="输入班级名称"></el-input>
+        <el-input v-model="formInline.searchTitle" placeholder="输入班级名称" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="searchExam">查询</el-button>
       </el-form-item>
       <el-form-item>
         <el-button :title="diaTitle" type="primary" @click="dialogTableVisible = true">
-          新增</el-button
-        >
+          新增</el-button>
       </el-form-item>
     </el-form>
 
@@ -30,10 +29,14 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column prop="id" label="序号" align="center"> </el-table-column>
-      <el-table-column prop="gradeName" label="班级名称" align="center">
+      <el-table-column label="序号" align="center">
+        <template slot-scope="scope">
+          {{ scope.$index + 1 }}
+        </template>
       </el-table-column>
-      <el-table-column prop="code" label="班级口令" align="center"> </el-table-column>
+      <el-table-column prop="gradeName" label="班级名称" align="center" />
+      <el-table-column prop="code" label="班级口令" align="center" />
+      <el-table-column prop="userName" label="创建用户" align="center" />
       <el-table-column align="center" label="操作">
         <template slot-scope="{ row }">
           <el-button
@@ -41,16 +44,14 @@
             size="small"
             style="font-size: 14px"
             @click="updateRow(row)"
-            >编辑</el-button
-          >
+          >编辑</el-button>
 
           <el-button
             type="text"
             size="small"
             style="color: red; font-size: 14px"
             @click="delClass(row)"
-            >删除</el-button
-          >
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -58,15 +59,14 @@
     <!-- 分页 -->
     <div class="pagination-container">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
         :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="data.size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="data.total"
-      >
-      </el-pagination>
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
     <!--新增弹窗-->
 
@@ -74,7 +74,7 @@
       <el-row>
         <el-form :model="addForm">
           <el-form-item label="班级名称" :label-width="formLabelWidth">
-            <el-input v-model="addForm.gradeName" autocomplete="off"></el-input>
+            <el-input v-model="addForm.gradeName" autocomplete="off" />
           </el-form-item>
         </el-form>
       </el-row>
@@ -92,7 +92,7 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="班级名称" :label-width="formLabelWidth">
-              <el-input v-model="form.gradeName" autocomplete="off"></el-input>
+              <el-input v-model="form.gradeName" autocomplete="off" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -106,131 +106,27 @@
 </template>
 
 <script>
-import { classPaging, classDel, classUpdate, classAdd } from "@/api/class_";
+import { classPaging, classDel, classUpdate, classAdd } from '@/api/class_'
 export default {
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
       data: {},
-      diaTitle: "新增",
+      diaTitle: '新增',
       dialogTableVisible: false,
       dialogFormVisible: false,
       addForm: {
-        gradeName: "",
+        gradeName: ''
       },
       formInline: {
-        searchTitle: "",
+        searchTitle: ''
       },
       form: {
-        gradeName: "",
+        gradeName: ''
       },
-      formLabelWidth: "110px",
-    };
-  },
-  created() {
-    this.getClassPage();
-  },
-  methods: {
-    // 分页查询
-    async getClassPage(pageNum, pageSize, title = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, gradeName: title };
-      const res = await classPaging(params);
-      this.data = res.data;
-    },
-    addClass() {
-      const data = { gradeName: this.addForm.gradeName };
-      classAdd(data).then((res) => {
-        if (res.code) {
-          this.getClassPage(this.pageNum, this.pageSize);
-          this.dialogTableVisible = false;
-          this.$message({
-            type: "success",
-            message: "新增成功!",
-          });
-        } else {
-          this.$message({
-            type: "info",
-            message: res.msg,
-          });
-        }
-      });
-    },
-    delClass(row) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true,
-      })
-        .then(() => {
-          classDel(row.id).then((res) => {
-            if (res.code) {
-              this.getClassPage(this.pageNum, this.pageSize);
-              this.tableData.splice(index, 1);
-              this.$message({
-                type: "success",
-                message: "删除成功!",
-              });
-            } else {
-              this.$message({
-                type: "info",
-                message: res.msg,
-              });
-            }
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
-    updateClass() {
-      classUpdate(this.form.id, { gradeName: this.form.gradeName })
-        .then((res) => {
-          if (res.code) {
-            this.getClassPage(this.pageNum, this.pageSize);
-            this.dialogFormVisible = false;
-            this.$message({
-              type: "success",
-              message: "编辑成功!",
-            });
-          } else {
-            this.$message({
-              type: "info",
-              message: res.msg,
-            });
-          }
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消编辑",
-          });
-        });
-    },
-    updateRow(row) {
-      this.dialogFormVisible = true;
-      this.form = row;
-    },
-    searchExam() {
-      this.getClassPage(this.pageNum, this.pageSize, this.formInline.searchTitle);
-    },
-    handleClick(row) {
-      console.log(row);
-    },
-    handleSizeChange(val) {
-      // 设置每页多少条逻辑
-      this.pageSize = val;
-      this.getClassPage(this.pageNum, val);
-    },
-    handleCurrentChange(val) {
-      // 设置当前页逻辑
-      this.pageNum = val;
-      this.getClassPage(val, this.pageSize);
-    },
+      formLabelWidth: '110px'
+    }
   },
 
   computed: {
@@ -259,7 +155,111 @@ export default {
     //   return this.tableData;
     // },
   },
-};
+  created() {
+    this.getClassPage()
+  },
+  methods: {
+    // 分页查询
+    async getClassPage(pageNum, pageSize, title = null) {
+      const params = { pageNum: pageNum, pageSize: pageSize, gradeName: title }
+      const res = await classPaging(params)
+      this.data = res.data
+    },
+    addClass() {
+      const data = { gradeName: this.addForm.gradeName }
+      classAdd(data).then((res) => {
+        if (res.code) {
+          this.getClassPage(this.pageNum, this.pageSize)
+          this.dialogTableVisible = false
+          this.$message({
+            type: 'success',
+            message: '新增成功!'
+          })
+        } else {
+          this.$message({
+            type: 'info',
+            message: res.msg
+          })
+        }
+      })
+    },
+    delClass(row) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      })
+        .then(() => {
+          classDel(row.id).then((res) => {
+            if (res.code) {
+              this.getClassPage(this.pageNum, this.pageSize)
+              this.tableData.splice(index, 1)
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+            } else {
+              this.$message({
+                type: 'info',
+                message: res.msg
+              })
+            }
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
+    updateClass() {
+      classUpdate(this.form.id, { gradeName: this.form.gradeName })
+        .then((res) => {
+          if (res.code) {
+            this.getClassPage(this.pageNum, this.pageSize)
+            this.dialogFormVisible = false
+            this.$message({
+              type: 'success',
+              message: '编辑成功!'
+            })
+          } else {
+            this.$message({
+              type: 'info',
+              message: res.msg
+            })
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消编辑'
+          })
+        })
+    },
+    updateRow(row) {
+      this.dialogFormVisible = true
+      this.form = row
+    },
+    searchExam() {
+      this.getClassPage(this.pageNum, this.pageSize, this.formInline.searchTitle)
+    },
+    handleClick(row) {
+      console.log(row)
+    },
+    handleSizeChange(val) {
+      // 设置每页多少条逻辑
+      this.pageSize = val
+      this.getClassPage(this.pageNum, val)
+    },
+    handleCurrentChange(val) {
+      // 设置当前页逻辑
+      this.pageNum = val
+      this.getClassPage(val, this.pageSize)
+    }
+  }
+}
 </script>
 
 <style>

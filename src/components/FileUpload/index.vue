@@ -64,7 +64,6 @@ export default {
 
     fillValue() {
       this.fileUrl = this.value
-      
     }
 
   }

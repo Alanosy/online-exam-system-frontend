@@ -11,7 +11,7 @@
   <div class="app-container">
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item label="题库名称：      ">
-        <el-input v-model="repoTitle"></el-input>
+        <el-input v-model="repoTitle" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="queryRepo()">查询</el-button>
@@ -32,7 +32,9 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column fixed prop="id" label="序号" align="center" />
+      <el-table-column fixed label="序号" align="center">
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
       <el-table-column prop="repoTitle" label="题库标题" align="center" />
       <el-table-column prop="totalCount" label="试题总数" align="center" />
       <el-table-column prop="exerciseCount" label="已练习题数" align="center" />
@@ -40,9 +42,11 @@
                 <el-table-column prop="zip" label="简答题数量" align="center" /> -->
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
-          <el-button type="text" size="small" @click="screenInfo(row.id, row.repoTitle)"
-            >开始刷题</el-button
-          >
+          <el-button
+            type="text"
+            size="small"
+            @click="screenInfo(row.id, row.repoTitle)"
+          >开始刷题</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -62,14 +66,14 @@
 </template>
 
 <script>
-import { exercisePaging } from "@/api/exercise";
+import { exercisePaging } from '@/api/exercise'
 export default {
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
       data: {},
-      repoTitle: "",
+      repoTitle: '',
 
       // formInline: {
       //     user: '',
@@ -87,58 +91,58 @@ export default {
       //   resource: '',
       //   desc: ''
       // },
-      formLabelWidth: "120px",
-    };
+      formLabelWidth: '120px'
+    }
   },
 
   created() {
-    this.getExercisePage();
+    this.getExercisePage()
   },
   methods: {
     queryRepo() {
-      this.getExercisePage(this.pageNum, this.pageSize, this.repoTitle);
+      this.getExercisePage(this.pageNum, this.pageSize, this.repoTitle)
     },
     // 分页查询
     async getExercisePage(pageNum, pageSize, title = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, title: title };
-      const res = await exercisePaging(params);
-      this.data = res.data;
+      const params = { pageNum: pageNum, pageSize: pageSize, title: title }
+      const res = await exercisePaging(params)
+      this.data = res.data
     },
     screenInfo(id, repoTitle) {
-      console.info("=====", id, repoTitle);
-      this.$router.push({ name: "shua", query: { repoId: id, repoTitle: repoTitle } });
+      console.info('=====', id, repoTitle)
+      this.$router.push({ name: 'shua', query: { repoId: id, repoTitle: repoTitle }})
     },
     handleSizeChange(val) {
-      this.getExercisePage(this.pageNum, val, this.title);
+      this.getExercisePage(this.pageNum, val, this.title)
     },
     handleCurrentChange(val) {
-      this.getExercisePage(val, this.pageSize, this.title);
+      this.getExercisePage(val, this.pageSize, this.title)
     },
     open() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true,
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
       })
         .then(() => {
           this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
+            type: 'success',
+            message: '删除成功!'
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     handleClick(row) {
-      console.log(row);
-    },
-  },
-};
+      console.log(row)
+    }
+  }
+}
 </script>
 
 <style></style>

@@ -2,19 +2,22 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: 魏进 3413105907@qq.com
- * @LastEditTime: 2024-05-30 15:44:08
+ * @LastEditTime: 2024-05-31 02:12:19
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 
 <template>
   <div class="app-container">
-    <el-form :inline="true" :model="formInline">
-      <el-form-item label="试卷名称：      ">
-        <el-input v-model="searchTitle" />
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="真实姓名">
+        <el-input v-model="realName" placeholder="真实姓名" />
       </el-form-item>
+      <!-- <el-form-item label="所属班级">
+        <el-input v-model="input1" placeholder="所属班级"></el-input>
+      </el-form-item> -->
       <el-form-item>
-        <el-button type="primary" @click="searchExamStu">查询</el-button>
+        <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
 
@@ -36,27 +39,24 @@
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" label="试卷名称" align="center" />
-      <el-table-column prop="examDuration" label="考试时间" align="center" />
-      <el-table-column prop="grossScore" label="总分" align="center" />
-      <el-table-column prop="passedScore" label="及格分" align="center" />
-      <el-table-column prop="radioCount" label="单选题数量" align="center" />
-      <el-table-column prop="multiCount" label="多选题数量" align="center" />
-      <el-table-column prop="judgeCount" label="判断题数量" align="center" />
-      <el-table-column prop="saqCount" label="简答题数量" align="center" />
-      <el-table-column prop="startTime" label="开始时间" align="center" />
-      <el-table-column prop="endTime" label="结束时间" align="center" />
-      <el-table-column prop="createTime" label="创建时间" align="center" />
+      <el-table-column prop="realName" label="真实姓名" align="center" />
+      <el-table-column prop="userScore" label="用户得分" align="center" />
+      <el-table-column prop="count" label="切屏次数" align="center" />
+      <el-table-column prop="userTime" label="用户用时" align="center" />
+      <el-table-column prop="limitTime" label="提交时间" align="center" />
+      <!--
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button
             type="text"
             size="small"
-            @click="screenInfo(row)"
-          >开始考试</el-button>
+            style="font-size: 14px"
+            @click="updateRow(row)"
+            >查看详情</el-button
+          >
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
-
     <div class="pagination-container">
       <el-pagination
         :current-page="data.current"
@@ -72,67 +72,100 @@
 </template>
 
 <script>
-import { getGradeExamList } from '@/api/exam'
+import { scorePaging } from '@/api/score'
 export default {
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
+      gradeId: '',
+      examId: '',
+      realName: '',
       data: {},
-      searchTitle: '',
       formInline: {
         user: '',
         region: ''
       },
-      formInline: {
-        user: '',
-        region: ''
+      input: '',
+      input1: '',
+
+      form: {
+        name: ''
       },
+      cancle() {},
+      updateRow(row) {
+        this.dialogFormVisible = true
+        this.form = row
+      },
+      diaTitle: '',
       dialogTableVisible: false,
       dialogFormVisible: false,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
+
       formLabelWidth: '120px'
     }
   },
+  computed: {
+    tables() {
+      // 在你的数据表格中定义tabels
+      const input = this.input
+      const input1 = this.input1
+      if (input) {
+        // console.log("input输入的搜索内容：" + this.input)
+        return this.tableData.filter((data) => {
+          // console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input) > -1
+          })
+        })
+      }
+      if (input1) {
+        return this.tableData.filter((data) => {
+          // console.log("object:" + Object.keys(data));
+          return Object.keys(data).some((key) => {
+            return String(data[key]).toLowerCase().indexOf(input1) > -1
+          })
+        })
+      }
+
+      return this.tableData
+    }
+  },
   created() {
-    this.getExamGradePage()
+    this.examId = localStorage.getItem('examId')
+    this.gradeId = localStorage.getItem('gradeId')
+    this.getScorePage()
+  },
+  beforeDestroy() {
+    localStorage.removeItem('examId')
+    localStorage.removeItem('gradeId')
   },
   methods: {
     // 分页查询
-    async getExamGradePage(pageNum, pageSize, searchTitle = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, title: searchTitle }
-      const res = await getGradeExamList(params)
+    async getScorePage() {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        examId: this.examId,
+        gradeId: this.gradeId,
+        realName: this.realName
+      }
+      const res = await scorePaging(params)
       this.data = res.data
     },
-
-    screenInfo(row) {
-      console.info('=====', row)
-      localStorage.setItem('examInfo_examId', row.id)
-      this.$router.push({ name: 'text', query: { zhi: row }})
-    },
-    searchExamStu() {
-      this.getExamGradePage(this.pageNum, this.pageSize, this.searchTitle)
+    onSubmit() {
+      this.getScorePage()
+      // console.log("submit!");
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
-      this.getExamGradePage(this.pageNum, val)
+      this.getScorePage(this.pageNum, val)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val
-      this.getExamGradePage(val, this.pageSize)
+      this.getScorePage(val, this.pageSize)
     },
-
     open() {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -159,5 +192,4 @@ export default {
   }
 }
 </script>
-
 <style></style>

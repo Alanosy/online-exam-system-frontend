@@ -14,7 +14,9 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column fixed prop="id" label="序号" align="center" />
+      <el-table-column fixed label="序号" align="center">
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+      </el-table-column>
       <el-table-column prop="certificateName" label="证书名称" align="center" />
       <el-table-column prop="certificationNuit" label="证书颁发单位" align="center" />
       <el-table-column prop="certificationNuit" label="证书颁发单位" align="center" />
@@ -28,8 +30,7 @@
             size="small"
             style="font-size: 14px"
             @click="preview(row)"
-            >预览证书</el-button
-          >
+          >预览证书</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -85,36 +86,32 @@
           <p class="tit"><center>荣誉证书</center></p>
           <p class="con">
             <span>恭喜</span>
-            <span class="con-name">{{ jwtInfo.realName }}</span
-            >同学：<br />
+            <span class="con-name">{{ jwtInfo.realName }}</span>同学：<br>
           </p>
           <p class="con-text">
-            <span>在{{ currentdata.examName }}考试中荣获</span>
+            <span>在{{ currentdata.examName }}考试中荣获,荣誉称号，特发此状，以资鼓励。</span>
           </p>
           <p class="con-height">
-            <span
-              ><center>{{ level }}</center></span
-            >
+            <span><center>{{ level }}</center></span>
           </p>
-          <p class="con-text">荣誉称号，特发此状，以资鼓励。</p>
+          <!-- <p class="con-text">荣誉称号，特发此状，以资鼓励。</p> -->
           <div class="con-unit">
             <p class="time">证书编号：{{ currentdata.code }}</p>
             <p class="time">{{ currentdata.createTime }}</p>
           </div>
-          <div class="chapter" v-show="isShow">
-            <canvas id="chapterCanvas" width="150" height="150"></canvas>
+          <div v-show="isShow" class="chapter">
+            <canvas id="chapterCanvas" width="150" height="150" />
           </div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-switch
-          inactive-color="#67c23a"
           v-model="downType"
+          inactive-color="#67c23a"
           active-text="图片下载"
           inactive-text="pdf下载"
           style="margin-right: 20px"
-        >
-        </el-switch>
+        />
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="getPdf('#pdfDom')">下载</el-button>
       </span>
@@ -123,73 +120,73 @@
 </template>
 
 <script>
-import { certificateMy } from "@/api/certificate";
-import { getTokenInfo } from "@/utils/jwtUtils";
+import { certificateMy } from '@/api/certificate'
+import { getTokenInfo } from '@/utils/jwtUtils'
 export default {
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
       data: {},
-      //从本地缓存中获得当前登录账号和等级
-      userName: localStorage.getItem("username"),
-      level: localStorage.getItem("level"),
-      //获取当前日期
-      start: "",
+      // 从本地缓存中获得当前登录账号和等级
+      userName: localStorage.getItem('username'),
+      level: localStorage.getItem('level'),
+      // 获取当前日期
+      start: '',
       dialogVisible: false,
-      pageData: null, //接收html格式代码
-      htmlTitle: "荣誉证书",
+      pageData: null, // 接收html格式代码
+      htmlTitle: '荣誉证书',
       isShow: true,
       isCanvas: false,
       downType: true, // false为 pdf , true为图片
       currentdata: {},
-      currentUser: "",
-      jwtInfo: {},
-    };
+      currentUser: '',
+      jwtInfo: {}
+    }
   },
   created() {
-    this.getCerPage();
+    this.getCerPage()
 
-    this.jwtInfo = getTokenInfo();
+    this.jwtInfo = getTokenInfo()
   },
   methods: {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
-      this.pageSize = val;
-      this.getCerPage(this.pageNum, val);
+      this.pageSize = val
+      this.getCerPage(this.pageNum, val)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
-      this.pageNum = val;
-      this.getCerPage(val, this.pageSize);
+      this.pageNum = val
+      this.getCerPage(val, this.pageSize)
     },
     // 分页查询
     async getCerPage(pageNum, pageSize) {
-      const params = { pageNum: pageNum, pageSize: pageSize };
-      const res = await certificateMy(params);
-      this.data = res.data;
+      const params = { pageNum: pageNum, pageSize: pageSize }
+      const res = await certificateMy(params)
+      this.data = res.data
     },
     handleClose() {
-      this.dialogVisible = false;
+      this.dialogVisible = false
     },
     preview(row) {
-      this.currentdata = row;
-      var vm = this;
-      //获取当前日期
-      var data = new Date(new Date().setHours(0, 0, 0, 0));
-      vm.start = data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate();
+      this.currentdata = row
+      var vm = this
+      // 获取当前日期
+      var data = new Date(new Date().setHours(0, 0, 0, 0))
+      vm.start = data.getFullYear() + '-' + (data.getMonth() + 1) + '-' + data.getDate()
 
-      this.dialogVisible = true;
+      this.dialogVisible = true
       this.$nextTick(() => {
         if (!this.isCanvas) {
           // 只绘画一次
-          this.isCanvas = true;
-          this.getChapter();
+          this.isCanvas = true
+          this.getChapter()
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style>

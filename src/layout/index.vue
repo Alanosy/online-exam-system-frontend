@@ -16,43 +16,43 @@
 </template>
 
 <script>
-import { options } from "runjs";
-import { Navbar, Sidebar, AppMain } from "./components";
-import ResizeMixin from "./mixin/ResizeHandler";
-import routes from "@/router";
+import { options } from 'runjs'
+import { Navbar, Sidebar, AppMain } from './components'
+import ResizeMixin from './mixin/ResizeHandler'
+import routes from '@/router'
 export default {
-  name: "Layout",
+  name: 'Layout',
   components: {
     Navbar,
     Sidebar,
-    AppMain,
+    AppMain
   },
   mixins: [ResizeMixin],
   computed: {
     sidebar() {
-      return this.$store.state.app.sidebar;
+      return this.$store.state.app.sidebar
     },
     device() {
-      return this.$store.state.app.device;
+      return this.$store.state.app.device
     },
     fixedHeader() {
-      return this.$store.state.settings.fixedHeader;
+      return this.$store.state.settings.fixedHeader
     },
     classObj() {
       return {
         hideSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
         withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === "mobile",
-      };
-    },
+        mobile: this.device === 'mobile'
+      }
+    }
   },
   created() {
-    let that = this;
+    const that = this
 
-    this.menuList = routes.options.routes;
+    this.menuList = routes.options.routes
 
-    this.roles = window.localStorage.getItem("roles");
+    this.roles = window.localStorage.getItem('roles')
 
     this.menuList.forEach((element) => {
       if (
@@ -61,28 +61,33 @@ export default {
         element.children[0].meta &&
         element.children[0].meta.roles
       ) {
-        const roleKey = localStorage.getItem("roles");
-        let isVisible = false;
-
-        element.children[0].meta.roles.forEach((role) => {
-          if (role.startsWith(roleKey)) {
-            isVisible = true;
-            // 一旦找到匹配项，可以提前结束循环，无需继续检查其他项
-            return;
-          }
-        });
-
+        const roleKey = localStorage.getItem('roles')
+        let isVisible = false
+        element.children.forEach((item) => {
+          item.meta.roles.forEach((role) => {
+            if (role.startsWith(roleKey)) {
+              isVisible = true
+              // 一旦找到匹配项，可以提前结束循环，无需继续检查其他项
+              return
+            }
+          })
+        }
+        )
+        element.children.forEach((item) => {
+          item.meta.visible = isVisible
+        }
+        )
         // 循环结束后根据isVisible的值设置visiable
-        element.children[0].meta.visible = isVisible;
+        // element.children[0].meta.visible = isVisible
       }
-    });
+    })
   },
   methods: {
     handleClickOutside() {
-      this.$store.dispatch("app/closeSideBar", { withoutAnimation: false });
-    },
-  },
-};
+      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -68,13 +68,12 @@ export default {
   methods: {
 
     fetchData(q) {
-      // , title: q, excludes: this.excludes 
-      fetchPaging({ pageNum: 1, pageSize: 1000}).then(res => {
+      // , title: q, excludes: this.excludes
+      fetchPaging({ pageNum: 1, pageSize: 1000 }).then(res => {
         this.dataList = res.data
       })
     },
     handlerChange(e) {
-    
       const obj = this.dataList.find((item) => {
         return item.id === e
       })
