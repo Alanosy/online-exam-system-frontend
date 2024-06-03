@@ -67,6 +67,7 @@
       </el-upload>
       <div slot="footer" class="dialog-footer">
         <el-button @click="fileDialogVisible = false">取 消</el-button>
+        <el-button type="success" plain @click="startDownload">下载模板</el-button>
         <el-button type="primary" @click="importQu">确 定</el-button>
       </div>
     </el-dialog>
@@ -386,7 +387,21 @@ export default {
       // 设置当前页逻辑
       this.pageNum = val
       this.getQuPage(val, this.pageSize)
-    }
+    },
+     //下载模板
+   async startDownload() {
+      const a = document.createElement("a");
+      a.href = "./template/ImportQuestionTemplate.xlsx";
+      a.download = "导入试题模板.xlsx";
+      // 障眼法藏起来a标签
+      a.style.display = "none";
+      // 将a标签追加到文档对象中
+      document.body.appendChild(a);
+      // 模拟点击了<a>标签,会触发<a>标签的href的读取,浏览器就会自动下载了
+      a.click();
+      // 一次性的,用完就删除a标签
+      a.remove(); 
+  }
   }
 }
 </script>
