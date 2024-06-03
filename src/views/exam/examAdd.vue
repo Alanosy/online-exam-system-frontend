@@ -258,6 +258,7 @@ import CertificateSelect from '@/components/CertificateSelect'
 import { saveData } from '@/api/exam'
 export default {
   name: 'ExamDetail',
+
   components: { RepoSelect, ClassSelect, CertificateSelect },
   data() {
     return {
