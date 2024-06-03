@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-05-30 16:01:06
+ * @LastEditTime: 2024-06-03 11:43:08
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -26,12 +26,7 @@
     </el-form>
 
     <!--弹窗 -->
-    <el-dialog
-      title="新增"
-      :visible.sync="dialogVisible"
-      width="30%"
-      :before-close="handleClose"
-    >
+    <el-dialog title="新增" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -39,18 +34,12 @@
     </el-dialog>
 
     <!-- table -->
-    <el-table
-      :data="data.records"
-      border
-      fit
-      highlight-current-row
-      :header-cell-style="{
-        background: '#f2f3f4',
-        color: '#555',
-        'font-weight': 'bold',
-        'line-height': '32px',
-      }"
-    >
+    <el-table :data="data.records" border fit highlight-current-row :header-cell-style="{
+      background: '#f2f3f4',
+      color: '#555',
+      'font-weight': 'bold',
+      'line-height': '32px',
+    }">
       <el-table-column fixed label="序号" align="center">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
@@ -62,32 +51,17 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
-          <el-button
-            type="text"
-            size="small"
-            style="font-size: 14px"
-            @click="updateRow(row)"
-          >编辑</el-button>
-          <el-button
-            type="text"
-            size="small"
-            style="color: red; font-size: 14px"
-            @click="delNotice(row.id)"
-          >删除</el-button>
+          <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
+          <el-button type="text" size="small" style="color: red; font-size: 14px"
+            @click="delNotice(row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <div class="pagination-container">
-      <el-pagination
-        :current-page="data.current"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="data.size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="data.total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="data.current" :page-sizes="[10, 20, 30, 40]" :page-size="data.size"
+        layout="total, sizes, prev, pager, next, jumper" :total="data.total" @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
     </div>
 
     <!--新增弹窗-->
@@ -99,20 +73,11 @@
             <el-form-item label="公告标题" :label-width="formLabelWidth">
               <el-input v-model="form.title" autocomplete="off" />
             </el-form-item>
-            <el-form-item
-              label="公告内容"
-              :label-width="formLabelWidth"
-            ><div>
-              <quill-editor
-                ref="myQuillEditor"
-                v-model="content"
-                :options="editorOption"
-                class="my-quill-editor"
-                @blur="onEditorBlur($event)"
-                @focus="onEditorFocus($event)"
-                @ready="onEditorReady($event)"
-              />
-            </div>
+            <el-form-item label="公告内容" :label-width="formLabelWidth">
+              <div>
+                <quill-editor ref="myQuillEditor" v-model="content" :options="editorOption" class="my-quill-editor"
+                  @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+              </div>
             </el-form-item>
           </el-form>
         </el-col>
@@ -131,22 +96,11 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="公告标题" :label-width="formLabelWidth">
-              <el-input
-                v-model="form.title"
-                :disabled="true"
-                autocomplete="off"
-              />
+              <el-input v-model="form.title" :disabled="true" autocomplete="off" />
             </el-form-item>
             <el-form-item label="公告内容" :label-width="formLabelWidth">
-              <quill-editor
-                ref="myQuillEditor"
-                v-model="form.content"
-                :options="editorOption"
-                class="my-quill-editor"
-                @blur="onEditorBlur($event)"
-                @focus="onEditorFocus($event)"
-                @ready="onEditorReady($event)"
-              />
+              <quill-editor ref="myQuillEditor" v-model="form.content" :options="editorOption" class="my-quill-editor"
+                @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -168,31 +122,43 @@ import { quillEditor } from 'vue-quill-editor'
 
 import { noticePaging, noticeAdd, noticeDel, noticeUpdate } from '@/api/notice'
 export default {
+
+
   components: {
     quillEditor
+
   },
+
   data() {
     return {
+      items: [],
       content: '',
-      editorOption: [
-        ['bold', 'italic', 'underline', 'strike'], // 字体
-        ['blockquote', 'code-block'],
+      editorOption: {
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'], // 字体
+            ['blockquote', 'code-block'],
 
-        [{ header: 1 }, { header: 2 }], // 样式标题
-        // eslint-disable-next-line standard/object-curly-even-spacing
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        // eslint-disable-next-line standard/object-curly-even-spacing
-        [{ script: 'sub' }, { script: 'super' }], // 下标、上标
-        // eslint-disable-next-line standard/object-curly-even-spacing
-        [{ indent: '-1' }, { indent: '+1' }], // 缩进
-        [{ direction: 'rtl' }],
-        [{ size: ['small', false, 'large', 'huge'] }], // 字体
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        [{ color: [] }, { background: [] }],
-        [{ font: [] }],
-        [{ align: [] }],
-        ['clean'] // 格式清除
-      ],
+            [{ header: 1 }, { header: 2 }], // 样式标题
+            // eslint-disable-next-line standard/object-curly-even-spacing
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            // eslint-disable-next-line standard/object-curly-even-spacing
+            [{ script: 'sub' }, { script: 'super' }], // 下标、上标
+            // eslint-disable-next-line standard/object-curly-even-spacing
+            [{ indent: '-1' }, { indent: '+1' }], // 缩进
+            [{ direction: 'rtl' }],
+            [{ size: ['small', false, 'large', 'huge'] }], // 字体
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            [{ color: [] }, { background: [] }],
+            [{ font: [] }],
+            [{ align: [] }],
+            ['clean'] // 格式清除
+          ]
+        }
+
+      },
+
+
       pageNum: 1,
       pageSize: 10,
       data: {},
@@ -302,23 +268,33 @@ export default {
         center: true
       }).then(() => {
         noticeDel(id).then((res) => {
-          if (this.tableData && Data.isData(this.myData)) {
+          if (res.code) {
             this.getNoticePage(this.pageNum, this.pageSize)
-            this.tableData.splice(index, 1)
-
+            // this.tableData.splice(index, 1)
+            this.getNoticePage(1)
             this.$message({
               type: 'success',
               message: '删除成功!'
             })
-          } else {
-            this.$message({
-              type: 'info',
-              message: res.msg
-            })
           }
         })
+
       })
+      .catch((error) => { // 明确捕获并检查reject的原因
+  if (error === 'cancel') {
+    // 特别处理取消的情况，避免将其视为错误
+    this.$message({
+      type: 'info',
+      message: '已取消操作',
+    });
+  } else {
+    // 如果是其他错误，可以在这里处理
+    console.error('发生了一个错误:', error);
+  }
+});
+
     },
+
 
     addNotice() {
       console.log(this.content)
@@ -360,7 +336,7 @@ export default {
         .then((_) => {
           done()
         })
-        .catch((_) => {})
+        .catch((_) => { })
     }
   }
 }

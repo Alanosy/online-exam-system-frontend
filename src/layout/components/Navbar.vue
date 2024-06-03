@@ -81,6 +81,7 @@ export default {
   },
   created() {
     this.decode()
+    console.log(this.tags);
   },
   methods: {
     
