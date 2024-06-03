@@ -19,6 +19,10 @@ const getDefaultState = () => {
 }
 
 const state = getDefaultState()
+const decode = () => {
+  const token = getToken()
+  const user = parseJwt(token)
+}
 
 const mutations = {
   RESET_STATE: (state) => {
@@ -33,11 +37,6 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   }
-}
-const decode = () => {
-  const token = getToken()
-  const user = parseJwt(token)
-  this.user = JSON.parse(user.userInfo)
 }
 
 const actions = {
@@ -97,6 +96,7 @@ const actions = {
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
+        sessionStorage.clear()
         resolve()
       }).catch(error => {
         reject(error)

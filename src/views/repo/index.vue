@@ -125,6 +125,7 @@ export default {
       addTitle: '',
       delVisible: false,
       searchTitle: '',
+      Obj:{},
       formInline: {
         user: '',
         region: ''

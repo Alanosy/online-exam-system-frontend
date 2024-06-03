@@ -68,7 +68,7 @@
                         <!-- ['A', 'B', 'C', 'D'] -->
                         <el-radio
                           v-for="(item, indexs) in index.option"
-                          :key="index"
+                          :key="indexs"
                           :label="item.content"
                           border
                           class="qu_choose"
@@ -183,7 +183,10 @@ export default {
       input: '',
       quIndex: -1,
       examId: 0,
-      data: null
+      data: null,
+      index: {
+      quType: 4 // 确保这里有一个值
+    }
     }
   },
   created() {
