@@ -53,12 +53,20 @@
 <script>
 import { answerUserPging } from '@/api/answer'
 export default {
+ 
+  
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
       data: {},
-      examId: ''
+      examId: '',
+      formInline: {}, // 初始化为你需要的值或者对象结构
+      myProperty: 'Initial Value', // Declare your property here
+      input:'',
+      onSubmit:'',
+      handleSizeChange:'',
+      handleCurrentChange:'',
     }
   },
   created() {
@@ -75,12 +83,14 @@ export default {
       answerUserPging(params).then((res) => {
         this.data = res.data
       })
+    
     },
     screenInfo(row) {
       console.info('=====', row)
       sessionStorage.setItem('answer_info', JSON.stringify(row))
       this.$router.push({ name: 'make' })
-    }
+    },
+    
   }
 }
 </script>

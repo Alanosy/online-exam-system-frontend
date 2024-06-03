@@ -59,7 +59,7 @@
         :auto-upload="false"
         :on-remove="handleRemove"
         :on-change="handleFileChange"
-        :file-list="fileList"
+        :file-list="form.fileList"
       >
         <i class="el-icon-upload" />
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -188,6 +188,8 @@ export default {
           label: '简答题'
         }
       ],
+      length:'',
+      fileList:[],
       selValue: '',
       searchName: '',
       pageNum: 1,
@@ -260,12 +262,15 @@ export default {
       localStorage.setItem('quId', row.id)
       this.$router.push({ name: 'news' })
     },
-    importQu() {
-      if (this.fileList.length > 0 && this.selectedRepoSingle != '') {
+  
+    importQu(event) {
+      if (this.fileList&&this.fileList.length > 0 && this.selectedRepoSingle != '') {
+       
         const formData = new FormData() // 创建FormData对象
         formData.append('file', this.fileList[0].raw) // 添加文件到formData
         importQue(this.selectedRepoSingle, formData)
           .then((response) => {
+           
             this.getQuPage(this.pageNum, this.pageSize)
             this.$message.success('文件上传成功！')
             this.fileDialogVisible = false // 关闭对话框
@@ -337,7 +342,8 @@ export default {
           quDel(row.id).then((res) => {
             if (res.code) {
               this.getQuPage(this.pageNum, this.pageSize)
-              this.tableData.splice(index, 1)
+              // this.tableData.splice(index, 1)
+              this.getQuPage(1)
               this.$message({
                 type: 'success',
                 message: '删除成功!'

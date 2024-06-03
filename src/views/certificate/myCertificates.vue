@@ -123,6 +123,7 @@
 import { certificateMy } from '@/api/certificate'
 import { getTokenInfo } from '@/utils/jwtUtils'
 export default {
+  
   data() {
     return {
       pageNum: 1,
@@ -184,6 +185,10 @@ export default {
           this.getChapter()
         }
       })
+    },
+    getChapter(){
+      
+  this.getChapter = this.getChapter.bind(this);
     }
   }
 }

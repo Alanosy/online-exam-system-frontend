@@ -28,7 +28,7 @@
           <el-divider />
           <p>
             共 <span style="color: #1890ff"> {{ waitQuList.length }} </span> 题, 共
-            <span style="color: #1890ff">{{
+            <span style="color: #1890ff" >{{
               waitQuList.length * waitQuList[0].totalScore
             }}</span>
             分
@@ -79,12 +79,11 @@
                               style="width: 100px; margin-left: 20px"
                             />
                             <span
-                              v-if="
-                                item.correctScore < 0 ||
-                                  item.correctScore > item.totalScore
-                              "
+                              v-if="item.correctScore < 0 ||
+                                  item.correctScore > item.totalScore "
                               style="color: #f00; margin-left: 10px"
                             >
+                            
                               评分只能在 0-{{ item.totalScore }}之间
                             </span>
                           </div>
@@ -122,8 +121,13 @@
 </template>
 
 <script>
+{{ computedStatus(userForm.agencyBaseVO.status) }}
 import { answerDetail, correct } from '@/api/answer'
 export default {
+  computedStatus(val) {
+    console.log('val', val)
+    return val === '' ? '' : this.optionsBasic.statusMap[val]
+},
   name: 'ExamProcess',
   data() {
     return {
@@ -131,7 +135,8 @@ export default {
       // 考试信息
       info: {},
       // 待批改试题
-      waitQuList: []
+      waitQuList: [],
+      scoreData: null,
     }
   },
   created() {
