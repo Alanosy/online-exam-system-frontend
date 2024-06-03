@@ -68,7 +68,7 @@
                         <!-- ['A', 'B', 'C', 'D'] -->
                         <el-radio
                           v-for="(item, indexs) in index.option"
-                          :key="index"
+                          :key="indexs"
                           :label="item.content"
                           border
                           class="qu_choose"
