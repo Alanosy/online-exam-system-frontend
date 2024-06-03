@@ -252,6 +252,7 @@
 </template>
 
 <script>
+// import { fetchDetail } from '@/api/exam'
 import RepoSelect from '@/components/RepoSelect'
 import ClassSelect from '@/components/ClassSelect'
 import CertificateSelect from '@/components/CertificateSelect'
@@ -362,13 +363,13 @@ export default {
   },
   created() {
     const id = this.$route.params.id
-    if (typeof id !== undefined) {
-      this.fetchData(id)
-    }
+    // if (typeof id !== undefined) {
+    //   this.fetchData(id)
+    // }
 
-    fetchTree({}).then((response) => {
-      this.treeData = response.data
-    })
+    // fetchTree({}).then((response) => {
+    //   this.treeData = response.data
+    // })
   },
   methods: {
     handleSave() {
@@ -471,17 +472,17 @@ export default {
       this.repoList.splice(index, 1)
     },
 
-    fetchData(id) {
-      fetchDetail(id).then((response) => {
-        this.postForm = response.data
+    // fetchData(id) {
+    //   fetchDetail(id).then((response) => {
+    //     this.postForm = response.data
 
-        if (this.postForm.startTime && this.postForm.endTime) {
-          this.dateValues[0] = this.postForm.startTime
-          this.dateValues[1] = this.postForm.endTime
-        }
-        this.repoList = this.postForm.repoList
-      })
-    },
+    //     if (this.postForm.startTime && this.postForm.endTime) {
+    //       this.dateValues[0] = this.postForm.startTime
+    //       this.dateValues[1] = this.postForm.endTime
+    //     }
+    //     this.repoList = this.postForm.repoList
+    //   })
+    // },
     formatDateToISOString(date) {
       // 确保输入是一个Date对象
       if (!(date instanceof Date)) {
@@ -549,7 +550,12 @@ export default {
       if (!value) return true
       return data.deptName.indexOf(value) !== -1
     },
+onCertificateChange() {
+      // 方法实现...
+    },
+    onClassChange(){
 
+    },
     repoChange(e, row) {
       // 赋值ID
       row.id = e.id
