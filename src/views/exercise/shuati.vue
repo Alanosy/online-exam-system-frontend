@@ -559,10 +559,10 @@ export default {
         }
         this.getCurrentQuDetial()
 
-        setTimeout(() => (this.nextText = '下一步'), 100)
+        setTimeout(() => (this.nextText = '下一题'), 100)
 
         // alert(this.nextTxt)
-      } else if (this.nextText == '下一步') {
+      } else if (this.nextText == '下一题') {
         this.rightQuAnswer = {}
         this.fillAnswer()
 

@@ -64,7 +64,7 @@
                       </div>
 
                       <!-- 选项 -->
-                      <el-radio-group class="qu_choose_group">
+                      <el-radio-group class="qu_choose_group" >
                         <!-- ['A', 'B', 'C', 'D'] -->
                         <el-radio
                           v-for="(item, indexs) in index.option"
@@ -72,6 +72,7 @@
                           :label="item.content"
                           border
                           class="qu_choose"
+                          :class="{'isRight': index.myOption == index.rightOption && item.isRight, 'incorrect': index.myOption != index.rightOption && !item.isRight && index.myOption!=null}"
                         >
                           <!-- 选项flex浮动 -->
                           <div class="qu_choose_tag">
@@ -128,7 +129,8 @@
                           style="margin-top: 10px"
                           type="textarea"
                           :autosize="{ minRows: 2, maxRows: 4 }"
-                          placeholder="请输入内容"
+                          placeholder=""
+                           :disabled="true"
                         />
                       </el-radio-group>
 
@@ -257,6 +259,12 @@ export default {
   margin-top: 10px;
   margin-left: 10px;
   line-height: 22px;
+}
+.isRight{
+  background-color: rgb(215, 245, 215);
+}
+.incorrect{
+  background-color: rgb(248, 197, 197);
 }
 .fk {
   width: 200px;

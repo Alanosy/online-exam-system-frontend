@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%; height: 100%; background-color: #f0f2f5; padding: 20px 0 0">
-    <!-- 开头 -->
+    <!-- Header区域 -->
     <el-row :gutter="24">
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
@@ -18,7 +18,7 @@
           </el-button>
         </el-card>
       </el-col>
-
+      <!-- 答题卡区域 -->
       <el-col :span="5" :xs="24" style="margin-bottom: 10px">
         <el-card class="content-h">
           <p class="card-title">答题卡</p>
@@ -100,13 +100,15 @@
           </div>
         </el-card>
       </el-col>
-
+      <!-- 单题区域 -->
       <el-col :span="19" :xs="24">
         <el-card class="qu-content content-h">
+          <!-- 题干 -->
           <p v-if="quData.content">{{ quData.sort + 1 }}.{{ quData.content }}</p>
           <p v-if="quData.image != null && quData.image != ''">
-            <el-image :src="quData.image" style="max-width: 100%" />
+            <el-image :src="quData.image" style="max-width: 200px" />
           </p>
+          <!-- 大选和多选选项区域 -->
           <div v-if="quData.quType === 1 || quData.quType === 3">
             <el-radio-group v-model="radioValue">
               <el-radio
@@ -115,12 +117,12 @@
                 :label="item.id"
               >{{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
-                  <el-image :src="item.image" style="max-width: 100%" />
+                  <el-image :src="item.image" style="max-width: 200px" />
                 </div>
               </el-radio>
             </el-radio-group>
           </div>
-
+          <!-- 多选题区域 -->
           <div v-if="quData.quType === 2">
             <el-checkbox-group v-model="multiValue">
               <el-checkbox
@@ -129,12 +131,12 @@
                 :label="item.id"
               >{{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
-                  <el-image :src="item.image" style="max-width: 100%" />
+                  <el-image :src="item.image" style="max-width: 200px" />
                 </div>
               </el-checkbox>
             </el-checkbox-group>
           </div>
-
+          <!-- 简答题区域 -->
           <div v-if="quData.quType === 4">
             <el-input
               v-model="saqTextarea"
@@ -157,6 +159,7 @@
                   <el-col>
                     <el-card class="qu_list">
                       <div>
+                        <!-- 客观题部分 -->
                         <template v-for="index in recordData">
                           <div
                             v-if="
@@ -169,12 +172,13 @@
                             <el-row :gutter="24">
                               <el-col :span="20" style="text-align: left">
                                 <!-- 题目: 序号、类型、题干 -->
+                                <!-- 题干区域 -->
                                 <div>
                                   <div class="qu_content">
                                     {{ index.title }}
                                   </div>
                                 </div>
-
+                                <!-- 选项区域 -->
                                 <el-radio-group class="qu_choose_group">
                                   <!-- ['A', 'B', 'C', 'D'] -->
                                   <el-radio
@@ -187,12 +191,11 @@
                                     {{ numberToLetter(indexs) }}、{{ item.content }}
 
                                     <div class="qu_choose_answer">
-                                      <!-- <i class="el-icon-success" style="color: #1aac1a"> 答案 </i> -->
                                     </div>
                                   </el-radio>
                                 </el-radio-group>
 
-                                <!-- 题目解析 -->
+                                <!-- 我的答案区域 -->
                                 <div class="qu_analysis">
                                   <el-card>
                                     <div>
@@ -206,7 +209,7 @@
                                                 ? 'red'
                                                 : 'gray',
                                         }"
-                                      >{{ numberToLetter2(index.myOption) }}</span><br>
+                                      >{{ numberToLetter(index.myOption) }}</span><br>
                                     </div>
                                   </el-card>
                                 </div>
@@ -215,20 +218,20 @@
                             <el-divider />
                           </div>
                         </template>
+                        <!-- 主观题部分 -->
                         <template v-for="index in recordData">
                           <div v-if="index.quType === 4" :class="'index' + index">
                             <el-row :gutter="24">
                               <el-col :span="20" style="text-align: left">
                                 <!-- 题目: 序号、类型、题干 -->
+                                <!-- 题干部分 -->
                                 <div>
-                                  <!-- <div class="qu_num">{{ index }}</div> -->
-                                  <!-- 【 单选题 】 -->
                                   <div class="qu_content">
                                     {{ index.title }}
                                   </div>
                                 </div>
 
-                                <!-- 选项 -->
+                                <!-- 简答题内容区域 -->
                                 <el-radio-group class="qu_choose_group">
                                   <!-- ['A', 'B', 'C', 'D'] -->
                                   <el-input
@@ -239,13 +242,6 @@
                                     placeholder="请输入内容"
                                   />
                                 </el-radio-group>
-
-                                <!-- 题目解析 -->
-                                <div class="qu_analysis">
-                                  <el-card>
-                                    <div />
-                                  </el-card>
-                                </div>
                               </el-col>
                             </el-row>
                             <el-divider />
@@ -295,14 +291,6 @@
       :close-on-click-modal="false"
     >
       {{ examMeg }}
-      <!-- <div class="dialogTipsbox" v-if="tips === 1">你还有试题未作答，确认要交卷？</div>
-      <div class="dialogTipsbox" v-if="tips === 2">
-        最多只能切屏{{ switchPage.switchPageTimes }}次，你还可切换{{
-          switchPage.remaTimes
-        }}次，
-        <br />
-        超过{{ switchPage.switchPageTimes }}次将强行交卷！
-      </div> -->
       <span slot="footer" class="dialog-footer">
         <el-button v-if="tips === 1" @click="tipsFlag = false">取 消</el-button>
         <el-button
@@ -410,7 +398,8 @@ export default {
         })
         .catch((_) => {})
     },
-    numberToLetter2(input) {
+    // 将0-5转换为A-F
+    numberToLetter(input) {
       const numberToCharMap = {
         0: 'A',
         1: 'B',
@@ -447,6 +436,7 @@ export default {
         this.recordData = res.data
       })
       this.examPreVisible = true
+      
     },
     // 切换页面检测
     pageHidden(e = null, isReduce = 0, router = false) {
@@ -478,7 +468,6 @@ export default {
         }
       })
     },
-
     destroyed() {
       window.removeEventListener('visibilitychange', this.pageHidden)
       window.removeEventListener('scroll', this.handleScroll)
@@ -490,25 +479,6 @@ export default {
         this.paperData = res.data
       })
     },
-    numberToLetter(sort) {
-      switch (sort) {
-        case 0:
-          return 'A'
-        case 1:
-          return 'B'
-        case 2:
-          return 'C'
-        case 3:
-          return 'D'
-        case 4:
-          return 'E'
-        case 5:
-          return 'F'
-        default:
-          return '' // 默认值，或者可以处理其他情况
-      }
-    },
-
     // 答题卡样式
     cardItemClass(checkout, quId) {
       if (sessionStorage.getItem('exam_' + quId) == 1 || checkout) {
@@ -560,9 +530,12 @@ export default {
      * 上一题
      */
     handPrevious() {
+
       const index = this.cardItem.sort - 1
       this.handSave(this.allItem[index])
     },
+    // 清空Session
+    // 使用函数清除以 "exam_" 开头的所有键值对
     clearSessionStorageByPrefix(prefix) {
       for (var key in sessionStorage) {
         if (sessionStorage.hasOwnProperty(key) && key.startsWith(prefix)) {
@@ -571,8 +544,8 @@ export default {
       }
     },
 
-    // 使用函数清除以 "exam_" 开头的所有键值对
 
+    // 交卷
     doHandler() {
       this.handleText = '正在交卷，请等待...'
       this.loading = true
@@ -641,11 +614,12 @@ export default {
         answers.push(this.radioValue)
       }
 
+      console.log("aaa", this.allItem[this.cardItem.sort].type == 4 ? this.saqTextarea : answers.join(','))
       const params = {
         examId: this.paperId,
         quId: this.cardItem.questionId,
-        answer: item.type == 4 ? this.saqTextarea : answers.join(',')
-        // answer: "",
+        answer: this.allItem[this.cardItem.sort].type  == 4 ? this.saqTextarea : answers.join(',')
+        
       }
       fillAnswer(params).then((res) => {
         if (res.code) {
@@ -690,12 +664,10 @@ export default {
 
         if (response.data.quType === 4 && response.data.answerList != null) {
           this.saqTextarea = response.data.answerList[0].content
-        } else if (
-          (response.data.quType === 1,
-          response.data.quType === 2,
-          response.data.quType === 3)
-        ) {
+        } else if (response.data.quType === 1 || response.data.quType === 2||response.data.quType === 3){
+
           this.quData.answerList.forEach((item) => {
+        
             if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checkout) {
               this.radioValue = item.id
             }
@@ -708,6 +680,7 @@ export default {
         // 关闭详情
         loading.close()
       })
+      loading.close()
     },
 
     // 试卷详情

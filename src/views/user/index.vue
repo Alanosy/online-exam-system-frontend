@@ -70,7 +70,7 @@
       >
         <i class="el-icon-upload" />
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb，</div>
       </el-upload>
 
       <div slot="footer" class="dialog-footer">
@@ -135,7 +135,7 @@
       >
         <i class="el-icon-upload" />
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div slot="tip" class="el-upload__tip">只能上传xls/xlsx文件，且不超过500kb</div>
+        <div slot="tip" class="el-upload__tip">只能上传xls/xlsx文件，且不超过500kb,大小为12kb</div>
       </el-upload>
       <div slot="footer" class="dialog-footer">
         <el-button @click="fileDialogVisible = false">取 消</el-button>
@@ -237,12 +237,17 @@ export default {
       }
       classAdd(data).then((res) => {
         if (res.code) {
+          this.addForm.userName=''
+          this.addForm.realName=''
+          this.addForm.region=''
           this.getUserPage(this.pageNum, this.pageSize)
           this.dialogTableVisible = false
           this.$message({
             type: 'success',
             message: '新增成功!'
           })
+          
+          
         } else {
           this.$message({
             type: 'info',

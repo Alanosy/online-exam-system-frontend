@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @LastEditTime: 2024-06-03 14:00:04
+ * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @LastEditTime: 2024-06-06 15:13:37
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -21,18 +21,12 @@
 
     <!-- table -->
 
-    <el-table
-      :data="data.records"
-      border
-      fit
-      highlight-current-row
-      :header-cell-style="{
-        background: '#f2f3f4',
-        color: '#555',
-        'font-weight': 'bold',
-        'line-height': '32px',
-      }"
-    >
+    <el-table :data="data.records" border fit highlight-current-row :header-cell-style="{
+      background: '#f2f3f4',
+      color: '#555',
+      'font-weight': 'bold',
+      'line-height': '32px',
+    }">
       <el-table-column fixed label="序号" align="center">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
@@ -40,32 +34,16 @@
       <el-table-column prop="createTime" label="创建时间" align="center" />
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
-          <el-button
-            type="text"
-            size="small"
-            style="font-size: 14px"
-            @click="updateRow(row)"
-          >编辑</el-button>
-          <el-button
-            type="text"
-            size="small"
-            style="color: red; font-size: 14px"
-            @click="delRepo(row)"
-          >删除</el-button>
+          <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
+          <el-button type="text" size="small" style="color: red; font-size: 14px" @click="delRepo(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <div class="pagination-container">
-      <el-pagination
-        :current-page="data.current"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="data.size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="data.total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="data.current" :page-sizes="[10, 20, 30, 40]" :page-size="data.size"
+        layout="total, sizes, prev, pager, next, jumper" :total="data.total" @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
     </div>
 
     <!--编辑弹窗-->
@@ -86,21 +64,12 @@
         <el-button type="primary" @click="updateRepo">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog
-      title="新增题库"
-      :visible.sync="addRepoDialogVisible"
-      width="30%"
-      :before-close="handleClose"
-    >
+    <el-dialog title="新增题库" :visible.sync="addRepoDialogVisible" width="30%" :before-close="handleClose">
       <el-row :gutter="20">
         <el-col>
           <el-form>
             <el-form-item label="题库名称:" :label-width="formLabelWidth">
-              <el-input
-                v-model="addTitle"
-                autocomplete="off"
-                style="width: 80%"
-              />
+              <el-input v-model="addTitle" autocomplete="off" style="width: 80%" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -117,21 +86,23 @@
 <script>
 import { repoPaging, repoDel, repoUpdate, repoAdd } from '@/api/repo'
 export default {
+
   data() {
     return {
+
       pageNum: 1,
       pageSize: 10,
       data: {},
       addTitle: '',
       delVisible: false,
       searchTitle: '',
-      Obj:{},
+      Obj: {},
       formInline: {
         user: '',
-        region: ''
+        region: '',
       },
-      cancle() {},
-      
+      cancle() { },
+
       diaTitle: '新增',
       form: {
         title: ''
@@ -167,14 +138,18 @@ export default {
       const res = await repoPaging(params)
       this.data = res.data
     },
+    searchRepo() {
+      this.getRepoPage(this.pageNum, this.pageSize, this.searchTitle)
+    },
     updateRow(row) {
-        this.dialogFormVisible = true
-        this.form = row
-      },
+      this.dialogFormVisible = true
+      this.form = row
+    },
     addRepo() {
       repoAdd({ title: this.addTitle })
         .then((res) => {
           if (res.code) {
+            this.addTitle=''
             this.addRepoDialogVisible = false
             this.getRepoPage(this.pageNum, this.pageSize)
             this.$message({
@@ -188,9 +163,9 @@ export default {
             })
           }
         })
-        .catch(() => {})
+        .catch(() => { })
     },
-    
+
     // 编辑题库
     updateRepo() {
       repoUpdate(this.form.id, { title: this.form.title })
@@ -253,7 +228,7 @@ export default {
         .then((_) => {
           done()
         })
-        .catch((_) => {})
+        .catch((_) => { })
     },
 
     searchRepo() {
