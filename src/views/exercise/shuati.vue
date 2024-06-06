@@ -164,7 +164,7 @@
             />
           </div>
 
-          <div v-if="showAnalysis">
+          <div v-if="rightQuAnswer.data != null">
             <p v-if="quDetail.quType != 4">
               回答：<span>{{ rightQuAnswer.msg }}</span>
             </p>
@@ -198,7 +198,7 @@
 </template>
 
 <script>
-import { getQuestion, getQuestionDetail, submitAnswer } from '@/api/exercise'
+import { getQuestion, getQuestionDetail, submitAnswer, getAnswerInfo } from '@/api/exercise'
 // import { quDetail } from "@/api/question";
 import { Loading } from 'element-ui'
 
@@ -219,7 +219,7 @@ export default {
       // 试题列表
       quList: [],
       preText: '上一题',
-      nextText: '下一题',
+      nextText: '下一步',
       rightQuAnswer: {},
       number: 0,
       receivedRow: null,
@@ -264,13 +264,46 @@ export default {
     this.repoId = this.$route.query.repoId
     this.repoTitle = this.$route.query.repoTitle
 
-    this.getQuestionList()
+    this.test()
     //   this.initCurrentIndex()
     //    setTimeout(()=> this.getCurrentQuDetial()
     //  ,100)
-    this.getCurrentQuDetial()
+ 
+    // setTimeout(()=>this.getCurrentQuDetial(),400)
+    
   },
   methods: {
+    async test(){
+      const res = await getQuestion(null, this.repoId)
+      this.quList = res.data
+
+      // 按顺序
+      // if (this.number == 0) {
+      this.paperData.radioList = []
+      this.paperData.multiList = []
+      this.paperData.judgeList = []
+      this.paperData.saqList = []
+      // }
+      // 按题型
+      if (this.number == 1) {
+        this.quList.forEach((item) => {
+          if (item.quType == 1) {
+            this.paperData.radioList.push(item)
+          } else if (item.quType == 2) {
+            this.paperData.multiList.push(item)
+          } else if (item.quType == 3) {
+            this.paperData.judgeList.push(item)
+          } else if (item.quType == 4) {
+            this.paperData.saqList.push(item)
+          }
+        })
+        this.quList = []
+        // 初始化试题Id
+        this.initQuId()
+        // alert(this.curQuId)
+      }
+      this.getCurrentQuDetial()
+    },
     // 获取试题Id列表
     async getQuestionList() {
       const res = await getQuestion(null, this.repoId)
@@ -301,6 +334,7 @@ export default {
         this.initQuId()
         // alert(this.curQuId)
       }
+      
     },
     numberToLetter(sort) {
       switch (sort) {
@@ -323,7 +357,7 @@ export default {
     change: function(index) {
       this.number = index // 重要处
       this.preText = '上一题'
-      this.nextText = '下一题'
+      this.nextText = '下一步'
       this.showAnalysis = 0
 
       this.getQuestionList()
@@ -433,7 +467,7 @@ export default {
 
       // this.fillAnswer();
       this.preText = '上一题'
-      this.nextText = '下一题'
+      this.nextText = '下一步'
       this.showAnalysis = 0
       this.radioValue = ''
       this.multiValue = []
@@ -592,30 +626,63 @@ export default {
     /**
      * 上一题
      */
-    handPrevious() {
+   async handPrevious() {
       const loading = Loading.service({
         text: '拼命加载中',
         background: 'rgba(0, 0, 0, 0.7)'
       })
 
-      if (this.preText == '上一题') {
-        this.fillAnswer()
-        this.showAnalysis = 1
-        setTimeout(() => (this.preText = '上一题'), 100)
-      }
+      // if (this.preText == '上一步') {
+      //   this.fillAnswer()
+      //   this.showAnalysis = 1
+      //   setTimeout(() => (this.preText = '上一题'), 100)
+      // }
 
-      if (this.preText == '上一题') {
+      // if (this.preText == '上一题') {
         this.radioValue = ''
         this.multiValue = []
         this.rightQuAnswer = {}
         if (this.currentQuIndex > 0) {
           this.currentQuIndex--
           this.showButton()
+          
           this.getCurrentQuDetial()
-          setTimeout(() => (this.preText = '上一题'), 100)
+          getAnswerInfo(this.quList[this.currentQuIndex].repoId,this.quList[this.currentQuIndex].quId).then(res=>{
+            console.log("-----------------");
+            console.log(res);
+            this.rightQuAnswer = res
+            console.log(res.data.quType);
+            if(res.data.quType == 1 || res.data.quType == 3 || res.data.quType == 4){
+              //单个答案回显
+              if(res.data.quType == 1 || res.data.quType == 3 ){
+                this.radioValue = parseInt(res.data.answerContent)
+              }else if(res.data.quType == 4){
+                this.radioValue = res.data.answerContent
+              }
+              
+              console.log(this.radioValue);
+           
+            }else if(res.data.quType == 2){
+              //多选题回显答案
+             const arr =  res.data.answerContent.split(',')
+             arr.forEach(element => {
+                for (let index = 0; index < res.data.options.length; index++) {
+                  const option = res.data.options[index];
+                  if(parseInt(element) == option.id){
+                    this.multiValue.push(option.id)
+                  }
+                  
+                }
+             });
+            }
+           
+          })
+         
+          
+          // setTimeout(() => (this.preText = '上一步'), 100)
         }
-        this.showAnalysis = 0
-      }
+        
+      // }
 
       loading.close()
     }
