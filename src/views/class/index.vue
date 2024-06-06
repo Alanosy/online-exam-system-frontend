@@ -169,12 +169,14 @@ export default {
       const data = { gradeName: this.addForm.gradeName }
       classAdd(data).then((res) => {
         if (res.code) {
+          this.addForm.gradeName=''
           this.getClassPage(this.pageNum, this.pageSize)
           this.dialogTableVisible = false
           this.$message({
             type: 'success',
             message: '新增成功!'
           })
+         
         } else {
           this.$message({
             type: 'info',

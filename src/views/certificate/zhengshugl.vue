@@ -1,8 +1,8 @@
 <!--
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
- * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-05-11 14:42:59
+ * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
+ * @LastEditTime: 2024-06-06 15:18:47
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -242,6 +242,8 @@ export default {
       }
       certificateAdd(data).then((res) => {
         if (res.code) {
+          this.form.certificateName=''
+          this.form.certificationNuit=''
           this.getCertificatePage(this.pageNum, this.pageSize)
           this.dialogTableVisible = false
           this.$message({
