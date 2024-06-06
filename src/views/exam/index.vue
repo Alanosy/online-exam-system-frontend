@@ -436,6 +436,7 @@ export default {
         this.recordData = res.data
       })
       this.examPreVisible = true
+      
     },
     // 切换页面检测
     pageHidden(e = null, isReduce = 0, router = false) {

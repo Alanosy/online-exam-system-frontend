@@ -218,8 +218,8 @@ export default {
       quDetail: {},
       // 试题列表
       quList: [],
-      preText: '上一步',
-      nextText: '下一步',
+      preText: '上一题',
+      nextText: '下一题',
       rightQuAnswer: {},
       number: 0,
       receivedRow: null,
@@ -322,8 +322,8 @@ export default {
     },
     change: function(index) {
       this.number = index // 重要处
-      this.preText = '上一步'
-      this.nextText = '下一步'
+      this.preText = '上一题'
+      this.nextText = '下一题'
       this.showAnalysis = 0
 
       this.getQuestionList()
@@ -432,8 +432,8 @@ export default {
       })
 
       // this.fillAnswer();
-      this.preText = '上一步'
-      this.nextText = '下一步'
+      this.preText = '上一题'
+      this.nextText = '下一题'
       this.showAnalysis = 0
       this.radioValue = ''
       this.multiValue = []
@@ -525,10 +525,10 @@ export default {
         }
         this.getCurrentQuDetial()
 
-        setTimeout(() => (this.nextText = '下一步'), 100)
+        setTimeout(() => (this.nextText = '下一题'), 100)
 
         // alert(this.nextTxt)
-      } else if (this.nextText == '下一步') {
+      } else if (this.nextText == '下一题') {
         this.rightQuAnswer = {}
         this.fillAnswer()
 
@@ -598,7 +598,7 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       })
 
-      if (this.preText == '上一步') {
+      if (this.preText == '上一题') {
         this.fillAnswer()
         this.showAnalysis = 1
         setTimeout(() => (this.preText = '上一题'), 100)
@@ -612,7 +612,7 @@ export default {
           this.currentQuIndex--
           this.showButton()
           this.getCurrentQuDetial()
-          setTimeout(() => (this.preText = '上一步'), 100)
+          setTimeout(() => (this.preText = '上一题'), 100)
         }
         this.showAnalysis = 0
       }
