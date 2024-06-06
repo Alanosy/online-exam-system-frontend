@@ -201,6 +201,7 @@ export default {
               })
               this.$router.push({ path: '/login' })
             } else {
+              this.getVerify()
               Message({
                 message: res2.msg,
                 type: 'error',

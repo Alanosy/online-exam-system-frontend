@@ -167,6 +167,9 @@ export default {
       const res = await repoPaging(params)
       this.data = res.data
     },
+    searchRepo() {
+      this.getRepoPage(this.pageNum, this.pageSize, this.searchTitle)
+    },
     updateRow(row) {
         this.dialogFormVisible = true
         this.form = row

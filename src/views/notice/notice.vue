@@ -44,11 +44,13 @@
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" label="公告标题" align="center" />
+      
       <el-table-column prop="content" label="内容" align="center">
         <template slot-scope="scope">
           <div v-html="scope.row.content" />
         </template>
       </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" align="center" />
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button type="text" size="small" style="font-size: 14px" @click="updateRow(row)">编辑</el-button>
