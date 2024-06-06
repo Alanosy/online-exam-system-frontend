@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: 魏进 3413105907@qq.com
- * @LastEditTime: 2024-05-31 02:12:19
+ * @LastEditTime: 2024-06-03 20:55:52
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -18,11 +18,11 @@
       </el-form-item> -->
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="getExportScores">导出</el-button>
       </el-form-item>
     </el-form>
 
     <!-- table -->
-
     <el-table
       :data="data.records"
       border
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { scorePaging } from '@/api/score'
+import { scorePaging, exportScores } from '@/api/score'
 export default {
   data() {
     return {
@@ -81,6 +81,8 @@ export default {
       gradeId: '',
       examId: '',
       realName: '',
+      examTitle: '',
+      gradeName: '',
       data: {},
       formInline: {
         user: '',
@@ -133,6 +135,8 @@ export default {
   created() {
     this.examId = localStorage.getItem('examId')
     this.gradeId = localStorage.getItem('gradeId')
+    this.examTitle = localStorage.getItem('examTitle')
+    this.gradeName = localStorage.getItem('gradeName')
     this.getScorePage()
   },
   beforeDestroy() {
@@ -152,6 +156,34 @@ export default {
       const res = await scorePaging(params)
       this.data = res.data
     },
+    getExportScores() {
+      exportScores(this.examId, this.gradeId).then(res => {
+        console.log(res) // 控制台输出：Blob {size: 30208, type: 'application/x-msdownload'}
+        var debug = res
+        if (debug) {
+          var elink = document.createElement('a')
+          var filename = 'downloaded-file.xlsx'
+          if (this.gradeName) {
+            filename = this.gradeName + '-' + this.examTitle + '.xlsx'
+          }
+          elink.download = filename
+          elink.style.display = 'none'
+          var blob = new Blob([debug], { type: 'application/x-msdownload' })
+          console.log(blob)
+          // const filename = decodeURIComponent(res.headers['Content-Disposition'])
+          // console.log(filename)
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          document.body.removeChild(elink)
+        } else {
+          this.$message.error('导出异常请联系管理员')
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+
     onSubmit() {
       this.getScorePage()
       // console.log("submit!");

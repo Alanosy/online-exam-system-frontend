@@ -67,7 +67,7 @@
     <el-dialog title="新增题库" :visible.sync="addRepoDialogVisible" width="30%" :before-close="handleClose">
       <el-row :gutter="20">
         <el-col>
-          <el-form :model="addTitle">
+          <el-form>
             <el-form-item label="题库名称:" :label-width="formLabelWidth">
               <el-input v-model="addTitle" autocomplete="off" style="width: 80%" />
             </el-form-item>
@@ -227,6 +227,7 @@ export default {
         })
         .catch((_) => { })
     },
+
     searchRepo() {
       this.getRepoPage(this.pageNum, this.pageSize, this.searchTitle)
     },

@@ -40,7 +40,16 @@ export default {
       const data = { originPassword: this.input1, newPassword: this.input2, checkedPassword: this.input3 }
       changePassword(data).then((res) => {
         if (res.code) {
-
+          this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
+          this.$router.push({ path: '/login', query: { zhi: 1 }})
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.msg
+          })
         }
       })
     }

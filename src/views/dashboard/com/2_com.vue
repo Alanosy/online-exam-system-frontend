@@ -49,7 +49,7 @@ export default {
       dateArray: [],
       formattedData: [],
       option: {
-        title: { text: '登录时长' },
+        // title: { text: '登录时长' },
         tooltip: {},
         xAxis: {
           data: [] // 初始化为空，稍后用dateArray填充

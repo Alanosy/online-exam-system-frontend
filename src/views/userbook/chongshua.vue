@@ -22,7 +22,7 @@
           <!-- 题干 -->
           <p v-if="quData.content">{{ quData.content }}</p>
           <p v-if="quData.image != null && quData.image != ''">
-            <el-image :src="quData.image" style="max-width: 100%" />
+            <el-image :src="quData.image" style="max-width: 200px" />
           </p>
           <div v-if="quData.quType === 1 || quData.quType === 3">
             <!-- 选项 -->
@@ -30,7 +30,7 @@
               <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id"
                 >{{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
-                  <el-image :src="item.image" style="max-width: 100%" />
+                  <el-image :src="item.image" style="max-width: 200px" />
                 </div>
               </el-radio>
             </el-radio-group>
@@ -40,7 +40,7 @@
               <span>我的答案:{{ myAnswers }}</span>
             </div> -->
             <div>
-              <span>正确答案:{{ numberToLetter(this.failQuData.rightAnswers) }}</span>
+              <span>正确答案:{{ numberToLetter(parseInt(this.failQuData.rightAnswers)) }}</span>
             </div>
             <div>
               <span>试题分析:{{ this.failQuData.analysis }}</span>
@@ -54,7 +54,7 @@
                 :label="item.id"
                 >{{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
-                  <el-image :src="item.image" style="max-width: 100%" />
+                  <el-image :src="item.image" style="max-width: 200px" />
                 </div>
               </el-checkbox>
             </el-checkbox-group>
@@ -169,11 +169,8 @@ export default {
   methods: {
     handHandExam() {
       const that = this;
-
       // 交卷保存答案
-
       const msg = "确认要交卷吗？";
-
       that
         .$confirm(msg, "提示", {
           confirmButtonText: "确定",

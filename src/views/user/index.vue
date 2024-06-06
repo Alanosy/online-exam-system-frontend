@@ -233,7 +233,7 @@ export default {
       const data = {
         userName: this.addForm.userName,
         realName: this.addForm.realName,
-        region: this.addForm.region
+        roleId: this.addForm.region
       }
       classAdd(data).then((res) => {
         if (res.code) {

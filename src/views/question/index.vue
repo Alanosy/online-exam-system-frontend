@@ -106,13 +106,15 @@
             size="small"
             style="font-size: 14px"
             @click="updateRow(row)"
-          >编辑</el-button>
+            >编辑</el-button
+          >
           <el-button
             type="text"
             size="small"
             style="color: red; font-size: 14px"
             @click="delQu(row)"
-          >删除</el-button>
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -159,8 +161,8 @@
 </template>
 
 <script>
-import { quPaging, quAdd, quDel, quUpdate, importQue } from '@/api/question'
-import RepoSelect from '@/components/RepoSelect'
+import { quPaging, quAdd, quDel, quUpdate, importQue } from "@/api/question";
+import RepoSelect from "@/components/RepoSelect";
 
 export default {
   components: { RepoSelect },
@@ -169,24 +171,24 @@ export default {
       options: [
         {
           value: null,
-          label: '全部类型'
+          label: "全部类型",
         },
         {
           value: 1,
-          label: '单选题'
+          label: "单选题",
         },
         {
           value: 2,
-          label: '多选题'
+          label: "多选题",
         },
         {
           value: 3,
-          label: '判断题'
+          label: "判断题",
         },
         {
           value: 4,
-          label: '简答题'
-        }
+          label: "简答题",
+        },
       ],
       length:'',
       fileList:[],
@@ -197,13 +199,13 @@ export default {
       data: {},
       fileDialogVisible: false,
 
-      selectedRepoSingle: '',
-      selectedRepoSingleSearch: '',
-      input: '',
-      input1: '',
+      selectedRepoSingle: "",
+      selectedRepoSingleSearch: "",
+      input: "",
+      input1: "",
       formInline: {
-        user: '',
-        region: ''
+        user: "",
+        region: "",
       },
       cancle() {},
 
@@ -212,17 +214,17 @@ export default {
       hasFiles: null,
       fileList: null,
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
         delivery: false,
         type: [],
-        resource: '',
-        desc: ''
+        resource: "",
+        desc: "",
       },
-      formLabelWidth: '110px'
-    }
+      formLabelWidth: "110px",
+    };
   },
   computed: {
     // tables() {
@@ -251,46 +253,50 @@ export default {
     // },
   },
   created() {
-    this.getQuPage()
+    this.getQuPage();
   },
   methods: {
     handleRepoChangeSingle(repo) {
-      console.log('单选题库变化:', repo)
+      console.log("单选题库变化:", repo);
       // 这里可以进一步处理repo对象，比如更新UI或发送网络请求等
     },
     updateRow(row) {
-      localStorage.setItem('quId', row.id)
-      this.$router.push({ name: 'news' })
+      localStorage.setItem("quId", row.id);
+      this.$router.push({ name: "news" });
     },
-  
-    importQu(event) {
-      if (this.fileList&&this.fileList.length > 0 && this.selectedRepoSingle != '') {
-       
-        const formData = new FormData() // 创建FormData对象
-        formData.append('file', this.fileList[0].raw) // 添加文件到formData
+    importQu() {
+      if (this.fileList&&this.fileList.length > 0 && this.selectedRepoSingle != "") {
+        const formData = new FormData(); // 创建FormData对象
+        formData.append("file", this.fileList[0].raw); // 添加文件到formData
         importQue(this.selectedRepoSingle, formData)
           .then((response) => {
-           
-            this.getQuPage(this.pageNum, this.pageSize)
-            this.$message.success('文件上传成功！')
-            this.fileDialogVisible = false // 关闭对话框
-            // 可以在这里处理成功后的逻辑，如刷新数据等
+            if (response.code) {
+              this.$message.success("导入成功！");
+              this.getQuPage(this.pageNum, this.pageSize);
+              this.fileDialogVisible = false; // 关闭对话框
+              // 可以在这里处理成功后的逻辑，如刷新数据等
+            } else {
+              this.$message({
+                type: "error",
+                message: response.msg,
+              });
+            }
           })
           .catch((error) => {
-            console.error('文件上传失败：', error)
-            this.$message.error('文件上传失败！')
-          })
+            console.error("文件上传失败：", error);
+            this.$message.error("文件上传失败！");
+          });
       } else {
-        this.$message.warning('请选择文件后再上传！')
+        this.$message.warning("请选择文件后再上传！");
       }
     },
     handleFileChange(file, fileList) {
-      this.fileList = fileList // 收集文件信息
+      this.fileList = fileList; // 收集文件信息
     },
     // 移除文件处理方法
     handleRemove(file, fileList) {
       if (fileList.length == 0) {
-        this.hasFiles = false
+        this.hasFiles = false;
       }
     },
     // 分页查询
@@ -300,43 +306,43 @@ export default {
         pageSize: pageSize,
         content: content,
         repoId: repoId,
-        type: type
-      }
-      const res = await quPaging(params)
-      this.data = res.data
+        type: type,
+      };
+      const res = await quPaging(params);
+      this.data = res.data;
     },
     // 编辑题库
     updateQu() {
       quUpdate(this.form.id, { title: this.form.title })
         .then((res) => {
           if (res.code) {
-            this.getQuPage(this.pageNum, this.pageSize)
-            this.dialogFormVisible = false
+            this.getQuPage(this.pageNum, this.pageSize);
+            this.dialogFormVisible = false;
             this.$message({
-              type: 'success',
-              message: '编辑成功!'
-            })
+              type: "success",
+              message: "编辑成功!",
+            });
           } else {
             this.$message({
-              type: 'info',
-              message: res.msg
-            })
+              type: "info",
+              message: res.msg,
+            });
           }
         })
         .catch(() => {
           this.$message({
-            type: 'info',
-            message: '取消编辑'
-          })
-        })
+            type: "info",
+            message: "取消编辑",
+          });
+        });
     },
     // 删除题库
     delQu(row) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        center: true
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true,
       })
         .then(() => {
           quDel(row.id).then((res) => {
@@ -345,23 +351,23 @@ export default {
               // this.tableData.splice(index, 1)
               this.getQuPage(1)
               this.$message({
-                type: 'success',
-                message: '删除成功!'
-              })
+                type: "success",
+                message: "删除成功!",
+              });
             } else {
               this.$message({
-                type: 'info',
-                message: res.msg
-              })
+                type: "info",
+                message: res.msg,
+              });
             }
-          })
+          });
         })
         .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
     searchQu() {
       this.getQuPage(
@@ -370,18 +376,18 @@ export default {
         this.searchName,
         this.selectedRepoSingleSearch,
         this.selValue
-      )
+      );
     },
 
     screenInfo(row, index, done) {
-      console.info('=====', row)
-      this.$router.push({ name: 'news', query: { zhi: row }})
+      console.info("=====", row);
+      this.$router.push({ name: "news", query: { zhi: row } });
     },
 
     handleSizeChange(val) {
       // 设置每页多少条逻辑
-      this.pageSize = val
-      this.getQuPage(this.pageNum, val)
+      this.pageSize = val;
+      this.getQuPage(this.pageNum, val);
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
