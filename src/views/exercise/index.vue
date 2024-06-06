@@ -2,7 +2,7 @@
  * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
  * @Date: 2024-04-01 11:00:21
  * @LastEditors: 魏进 3413105907@qq.com
- * @LastEditTime: 2024-05-16 14:39:25
+ * @LastEditTime: 2024-06-06 20:15:30
  * @FilePath: \com-project\src\views\notice\notice.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -37,12 +37,13 @@
       </el-table-column>
       <el-table-column prop="repoTitle" label="题库标题" align="center" />
       <el-table-column prop="totalCount" label="试题总数" align="center" />
-      <el-table-column prop="exerciseCount" label="已练习题数" align="center" />
+      <!-- <el-table-column prop="exerciseCount" label="已练习题数" align="center" /> -->
       <!-- <el-table-column prop="address" label="判断题数量" align="center" />
                 <el-table-column prop="zip" label="简答题数量" align="center" /> -->
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button type="success" plain
+          :disabled="row.totalCount == 0"
             size="small"
             @click="screenInfo(row.id, row.repoTitle)"
           >开始刷题</el-button>
