@@ -35,15 +35,15 @@
               </el-radio>
             </el-radio-group>
           </div>
-          <div v-if="(flag == true && quData.quType === 1) || quData.quType === 3">
+          <div v-if="flag == true && (quData.quType === 1 || quData.quType === 3)">
             <!-- <div>
               <span>我的答案:{{ myAnswers }}</span>
             </div> -->
             <div>
-              <span>正确答案:{{ numberToLetter(parseInt(this.failQuData.rightAnswers)) }}</span>
+              <span>正确答案:  {{ numberToLetter(parseInt(this.failQuData.rightAnswers)) }}</span>
             </div>
             <div>
-              <span>试题分析:{{ this.failQuData.analysis }}</span>
+              <span>试题分析:  {{ this.failQuData.analysis }}</span>
             </div>
           </div>
           <div v-if="quData.quType === 2">
@@ -65,10 +65,10 @@
               <span>我的答案:{{ myAnswers }}</span>
             </div> -->
             <div>
-              <span>正确答案:{{ this.failQuData.rightAnswers }}</span>
+              <span>正确答案:  {{ numberToLetter(this.failQuData.rightAnswers)}}</span>
             </div>
             <div>
-              <span>试题分析:{{ this.failQuData.analysis }}</span>
+              <span>试题分析:  {{ this.failQuData.analysis }}</span>
             </div>
           </div>
 
@@ -91,15 +91,15 @@
               </el-checkbox> -->
             <!-- </el-checkbox-group> -->
           </div>
-          <div v-if="flag == true && quData.quType === 4">
+          <div v-if="flag == true && quData.quType === 4" style="margin-top: 10px;">
             <!-- <div>
               <span>我的答案:{{ myAnswers }}</span>
             </div> -->
             <div>
-              <span>正确答案:{{ this.failQuData.rightAnswers }}</span>
+              <span>正确答案:  {{ this.failQuData.rightAnswers }}</span>
             </div>
             <div>
-              <span>试题分析:{{ this.failQuData.analysis }}</span>
+              <span>试题分析:  {{ this.failQuData.analysis }}</span>
             </div>
           </div>
           <div style="margin-top: 20px">
@@ -170,7 +170,7 @@ export default {
     handHandExam() {
       const that = this;
       // 交卷保存答案
-      const msg = "确认要交卷吗？";
+      const msg = "确认要提交吗？";
       that
         .$confirm(msg, "提示", {
           confirmButtonText: "确定",
@@ -203,22 +203,34 @@ export default {
         this.lastIndex = this.userBookList.length;
       });
     },
-    numberToLetter(sort) {
-      switch (sort) {
-        case 0:
-          return "A";
-        case 1:
-          return "B";
-        case 2:
-          return "C";
-        case 3:
-          return "D";
-        case 4:
-          return "E";
-        case 5:
-          return "F";
-        default:
-          return ""; // 默认值，或者可以处理其他情况
+    numberToLetter(input) {
+      const numberToCharMap = {
+        0: 'A',
+        1: 'B',
+        2: 'C',
+        3: 'D',
+        4: 'E',
+        5: 'F'
+      }
+
+      // 辅助函数：将单个数字（字符串或数字类型）转换为字母
+      const singleNumberToLetter = (num) => numberToCharMap[parseInt(num, 10)] || ''
+
+      // 辅助函数：处理逗号分隔的数字字符串
+      const commaSeparatedNumbersToLetters = (str) => {
+        const numbers = str.split(',').map((item) => parseInt(item.trim(), 10))
+        return numbers.map((number) => numberToCharMap[number] || '').join(',')
+      }
+
+      // 判断输入类型并调用相应函数
+      if (/^\d+$/.test(input)) {
+        // 单个数字（字符串形式也可以匹配）
+        return singleNumberToLetter(input)
+      } else if (/^\d+(,\d+)*$/.test(input)) {
+        // 包含逗号分隔的数字字符串
+        return commaSeparatedNumbersToLetters(input)
+      } else {
+        return '' // 输入不符合预期，返回空字符串或根据需要处理
       }
     },
     /**

@@ -25,7 +25,7 @@
         <li style="padding-top: 50px; padding-left: 80px">
           真实姓名:{{ this.data.realName }}
         </li>
-        <li style="padding-top: 50px; padding-left: 80px">
+        <li style="padding-top: 50px; padding-left: 80px" v-if="isAdmin">
           班级:{{ this.data.gradeName }}
           <el-button
             type="primary"
@@ -122,10 +122,13 @@ export default {
       form: {
         code: ''
       },
+      isAdmin: true,
       addClassDialogVisible: false
     }
   },
   created() {
+    this.isAdmin = localStorage.getItem('roles')!=="admin" 
+
     getInfo().then((res) => {
       if (res.code) {
         this.data = res.data

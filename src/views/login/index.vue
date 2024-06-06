@@ -187,6 +187,7 @@ export default {
                   this.loading = false
                 })
                 .catch((error) => {
+                  this.getVerify()
                   Message.error(error.msg)
                   this.loading = false
                 })
