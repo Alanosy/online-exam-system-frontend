@@ -26,7 +26,7 @@
           真实姓名:{{ this.data.realName }}
         </li>
         <li style="padding-top: 50px; padding-left: 80px" v-if="isAdmin">
-          班级:{{ this.data.gradeName }}
+          班级: {{ this.data.gradeName }}
           <el-button
             type="primary"
             icon="el-icon-plus"
@@ -40,11 +40,9 @@
           注册时间: {{ this.data.createTime }}
         </li>
         <li style="padding-top: 50px; padding-left: 80px">
-          <el-button
-            type="primary"
-            icon="el-icon-edit"
-            @click="fileDialogVisible = true"
-          >编辑头像</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="fileDialogVisible = true"
+            >编辑头像</el-button
+          >
         </li>
       </ul>
       <!-- 编辑个人信息 -->
@@ -52,7 +50,7 @@
         width="400px"
         :show-close="false"
         :close-on-click-modal="false"
-        title="上传文件"
+        title="上传头像"
         :visible.sync="fileDialogVisible"
       >
         <el-upload
@@ -61,6 +59,7 @@
           action="xxxxxx"
           multiple
           :limit="1"
+          accept="png, jpg, jpeg, bmp"
           :auto-upload="false"
           :on-remove="handleRemove"
           :on-change="handleFileChange"
@@ -68,7 +67,11 @@
         >
           <i class="el-icon-upload" />
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div slot="tip" class="el-upload__tip">只能上传xls/xlsx文件，且不超过500kb</div>
+          <div slot="tip" class="el-upload__tip">
+            只能上传"png", "jpg", "jpeg", "bmp"文件，且不超过2MB。注:右上角头像，重新登录更新
+           
+          </div>
+ 
         </el-upload>
         <div slot="footer" class="dialog-footer">
           <el-button @click="fileDialogVisible = false">取 消</el-button>
@@ -103,7 +106,7 @@
         "
         :src="this.data.avatar"
         alt=""
-      >
+      />
 
       <div style="margin-left: 53px; margin-top: 38px; font-size: 20px">头 像</div>
     </div>
@@ -112,6 +115,8 @@
 
 <script>
 import { getInfo, userAddClass, uploadAvatar } from '@/api/user'
+import {trackPresence} from '@/api/user'
+import {  getTokenInfo } from '@/utils/jwtUtils'
 export default {
   data() {
     return {
@@ -127,15 +132,22 @@ export default {
     }
   },
   created() {
-    this.isAdmin = localStorage.getItem('roles')!=="admin" 
+    if(localStorage.getItem('roles') == "admin" || localStorage.getItem('roles') == "teacher")
+    {
+      this.isAdmin = false
+    }
+    this.getInfoFun()
 
-    getInfo().then((res) => {
-      if (res.code) {
-        this.data = res.data
-      }
-    })
   },
   methods: {
+    async getInfoFun(){
+      const res = await getInfo()
+      if (res.code) {
+        this.data = res.data
+      }else{
+        this.$message.error('获取个人信息失败')
+      }
+    },
     handleFileChange(file, fileList) {
       this.fileList = fileList // 收集文件信息
     },
@@ -150,16 +162,22 @@ export default {
       if (this.fileList.length > 0) {
         const formData = new FormData() // 创建FormData对象
         formData.append('file', this.fileList[0].raw) // 添加文件到formData
-        uploadAvatar(formData)
-          .then((response) => {
-            getInfo().then((res) => {
-              if (res.code) {
-                this.data = res.data
-              }
-            })
+        uploadAvatar(formData).then((res) => {
+           if(res.code){
+              const userInfo = getTokenInfo()
+              trackPresence({ userId: userInfo.id }).then(response => {
+                if (response.code) {
+                  setToken(response.data)
+                }
+              })
+                .catch(error => {
+                  console.error('心跳发送失败:', error)
+                })
+            this.getInfoFun()
             this.$message.success('文件上传成功！')
             this.fileDialogVisible = false // 关闭对话框
             // 可以在这里处理成功后的逻辑，如刷新数据等
+           }
           })
           .catch((error) => {
             console.error('文件上传失败：', error)
@@ -178,6 +196,7 @@ export default {
       userAddClass(params).then((res) => {
         if (res.code) {
           this.addClassDialogVisible = false
+          this.getInfoFun()
           this.$message({
             type: 'success',
             message: '加入成功'

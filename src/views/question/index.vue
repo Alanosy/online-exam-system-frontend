@@ -85,7 +85,8 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column label="序号" align="center">
+      <el-table-column align="center" type="selection" width="55" />
+      <el-table-column label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="content" label="题干" align="center" />
@@ -190,10 +191,10 @@ export default {
           label: "简答题",
         },
       ],
-      length:'',
-      fileList:[],
-      selValue: '',
-      searchName: '',
+      length: "",
+      fileList: [],
+      selValue: "",
+      searchName: "",
       pageNum: 1,
       pageSize: 10,
       data: {},
@@ -265,7 +266,7 @@ export default {
       this.$router.push({ name: "news" });
     },
     importQu() {
-      if (this.fileList&&this.fileList.length > 0 && this.selectedRepoSingle != "") {
+      if (this.fileList && this.fileList.length > 0 && this.selectedRepoSingle != "") {
         const formData = new FormData(); // 创建FormData对象
         formData.append("file", this.fileList[0].raw); // 添加文件到formData
         importQue(this.selectedRepoSingle, formData)
@@ -316,7 +317,13 @@ export default {
       quUpdate(this.form.id, { title: this.form.title })
         .then((res) => {
           if (res.code) {
-            this.getQuPage(this.pageNum, this.pageSize);
+            this.getQuPage(
+                this.pageNum,
+                this.pageSize,
+                this.searchName,
+                this.selectedRepoSingleSearch,
+                this.selValue
+              );
             this.dialogFormVisible = false;
             this.$message({
               type: "success",
@@ -336,9 +343,9 @@ export default {
           });
         });
     },
-    // 删除题库
+    // 删除试题
     delQu(row) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该试题, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -347,9 +354,15 @@ export default {
         .then(() => {
           quDel(row.id).then((res) => {
             if (res.code) {
-              this.getQuPage(this.pageNum, this.pageSize)
+              this.getQuPage(
+                this.pageNum,
+                this.pageSize,
+                this.searchName,
+                this.selectedRepoSingleSearch,
+                this.selValue
+              );
               // this.tableData.splice(index, 1)
-              this.getQuPage(1)
+              // this.getQuPage(1);
               this.$message({
                 type: "success",
                 message: "删除成功!",
@@ -391,11 +404,11 @@ export default {
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
-      this.pageNum = val
-      this.getQuPage(val, this.pageSize)
+      this.pageNum = val;
+      this.getQuPage(val, this.pageSize);
     },
-     //下载模板
-   async startDownload() {
+    //下载模板
+    async startDownload() {
       const a = document.createElement("a");
       a.href = "./template/ImportQuestionTemplate.xlsx";
       a.download = "导入试题模板.xlsx";
@@ -406,10 +419,10 @@ export default {
       // 模拟点击了<a>标签,会触发<a>标签的href的读取,浏览器就会自动下载了
       a.click();
       // 一次性的,用完就删除a标签
-      a.remove(); 
-  }
-  }
-}
+      a.remove();
+    },
+  },
+};
 </script>
 
 <style></style>

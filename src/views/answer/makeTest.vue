@@ -121,13 +121,13 @@
 </template>
 
 <script>
-{{ computedStatus(userForm.agencyBaseVO.status) }}
+// {{ computedStatus(userForm.agencyBaseVO.status) }}
 import { answerDetail, correct } from '@/api/answer'
 export default {
-  computedStatus(val) {
-    console.log('val', val)
-    return val === '' ? '' : this.optionsBasic.statusMap[val]
-},
+//   computedStatus(val) {
+//     console.log('val', val)
+//     return val === '' ? '' : this.optionsBasic.statusMap[val]
+// },
   name: 'ExamProcess',
   data() {
     return {

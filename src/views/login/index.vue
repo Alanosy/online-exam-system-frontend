@@ -77,7 +77,7 @@
           style="margin-left: 20px; height: 47px"
           alt=""
           @click="getVerify"
-        >
+        />
       </div>
       <div
         style="
@@ -96,7 +96,8 @@
           type="primary"
           style="width: 100%"
           @click.native.prevent="handleLogin"
-        >login</el-button>
+          >login</el-button
+        >
       </el-form-item>
 
       <!-- <div style="margin-left: 10px" class="but">rigister</div> -->
@@ -107,105 +108,111 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-import { setToken } from '@/utils/auth'
-import axios from 'axios'
-import { verifyCode } from '@/api/user'
-import { Message } from 'element-ui'
-
+import { validUsername } from "@/utils/validate";
+import { setToken } from "@/utils/auth";
+import axios from "axios";
+import {getTokenInfo} from "@/utils/jwtUtils"
+import { verifyCode } from "@/api/user";
+import { Message } from "element-ui";
+import { Encrypt } from "@/utils/Secret";
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+        callback(new Error("请输入正确的用户名"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('密码不能少于6位'))
+        callback(new Error("密码不能少于6位"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: "admin",
+        password: "123456",
       },
-      code: '',
+      code: "",
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [{ required: true, trigger: "blur", validator: validateUsername }],
+        password: [{ required: true, trigger: "blur", validator: validatePassword }],
       },
       loading: false,
-      passwordType: 'password',
-      redirect: undefined
-    }
+      passwordType: "password",
+      redirect: undefined,
+    };
   },
   watch: {
     $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
+      handler: function (route) {
+        this.redirect = route.query && route.query.redirect;
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   created() {
     // this.getEmail()
   },
   methods: {
     getVerify() {
-      this.$refs.captchaImg.src = `/api/auths/captcha?${Math.random()}`
+      this.$refs.captchaImg.src = `/api/auths/captcha?${Math.random()}`;
       // obj.src = "/api/auths/captcha?" + Math.random();
     },
 
     showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
+      if (this.passwordType === "password") {
+        this.passwordType = "";
       } else {
-        this.passwordType = 'password'
+        this.passwordType = "password";
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+        this.$refs.password.focus();
+      });
     },
     handleLogin() {
       verifyCode(this.code).then((res) => {
         if (res.code) {
           this.$refs.loginForm.validate((valid) => {
             if (valid) {
-              this.loading = true
+              this.loading = true;
+              const loginData = {
+                username: this.loginForm.username,
+                password: Encrypt(this.loginForm.password),
+              };
               this.$store
-                .dispatch('user/login', this.loginForm)
+                .dispatch("user/login", loginData)
                 .then(() => {
-                  this.$store.commit('menu/CLOSE_SIDEBAR')
-                  this.$store.dispatch('loginUser', { id: '1' })
-                  this.$router.push({ path: 'index' })
-                  this.loading = false
+                  this.$store.commit("menu/CLOSE_SIDEBAR");
+                  const userInfo = getTokenInfo()
+                  this.$store.dispatch("loginUser", { id: userInfo.id});
+                  this.$router.push({ path: "index" });
+                  this.loading = false;
                 })
                 .catch((error) => {
-                  this.getVerify()
-                  Message.error(error.msg)
-                  this.loading = false
-                })
+                  this.getVerify();
+                  Message.error(error.msg);
+                  this.loading = false;
+                });
             } else {
-              return false
+              return false;
             }
-          })
+          });
         } else {
-          this.getVerify()
+          this.getVerify();
           this.$message({
-            type: 'info',
-            message: res.msg
-          })
+            type: "info",
+            message: res.msg,
+          });
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss">

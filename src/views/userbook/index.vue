@@ -21,6 +21,7 @@
         'line-height': '32px',
       }"
     >
+    <el-table-column  align="center" type="selection" width="55" />
       <el-table-column label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>

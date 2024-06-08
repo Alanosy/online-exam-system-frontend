@@ -72,7 +72,7 @@
                           :label="item.content"
                           border
                           class="qu_choose"
-                          :class="{'isRight': index.myOption == index.rightOption && item.isRight, 'incorrect': index.myOption != index.rightOption && !item.isRight && index.myOption!=null}"
+                           :class="{'isRight':index.myOption!=null&& isCheck(index.myOption ,item.sort)  && item.isRight , 'incorrect':index.myOption!=null && isCheck(index.myOption ,item.sort) && !item.isRight}"
                         >
                           <!-- 选项flex浮动 -->
                           <div class="qu_choose_tag">
@@ -197,6 +197,15 @@ export default {
     this.ExamDetail()
   },
   methods: {
+    isCheck(myOption, sort) {
+      const arr = myOption.split(",").map(Number); // 将字符串转换为数字数组
+      if (arr.includes(sort)) {
+        return true;
+        console.log(`${valueToCheck} 在数组中.`);
+      } else {
+        return false;
+      }
+    },
     numberToLetter(input) {
       const numberToCharMap = {
         0: 'A',

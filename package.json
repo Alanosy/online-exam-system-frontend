@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "0.18.1",
     "core-js": "^3.37.1",
+    "crypto-js": "^4.2.0",
     "echarts": "^4.9.0",
     "element-ui": "2.13.2",
     "html2canvas": "^1.4.1",

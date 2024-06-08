@@ -1,12 +1,3 @@
-<!--
- * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @Date: 2024-04-01 11:00:21
- * @LastEditors: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @LastEditTime: 2024-06-06 15:13:37
- * @FilePath: \com-project\src\views\notice\notice.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
-
 <template>
   <div class="app-container">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -27,7 +18,8 @@
       'font-weight': 'bold',
       'line-height': '32px',
     }">
-      <el-table-column fixed label="序号" align="center">
+    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column fixed label="序号" align="center" width="80" >
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" label="题库名称" align="center" />
@@ -64,6 +56,7 @@
         <el-button type="primary" @click="updateRepo">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 新增题库 -->
     <el-dialog title="新增题库" :visible.sync="addRepoDialogVisible" width="30%" :before-close="handleClose">
       <el-row :gutter="20">
         <el-col>
@@ -89,7 +82,6 @@ export default {
 
   data() {
     return {
-
       pageNum: 1,
       pageSize: 10,
       data: {},
@@ -193,7 +185,7 @@ export default {
     },
     // 删除题库
     delRepo(row) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该题库, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -224,11 +216,7 @@ export default {
         })
     },
     handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then((_) => {
-          done()
-        })
-        .catch((_) => { })
+      done()
     },
 
     searchRepo() {

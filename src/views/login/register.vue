@@ -141,7 +141,7 @@ import { setToken } from '@/utils/auth'
 import axios from 'axios'
 import { verifyCode, register } from '@/api/user'
 import { Message } from 'element-ui'
-
+import {Encrypt} from '@/utils/Secret'
 export default {
   name: 'Login',
   data() {
@@ -192,7 +192,13 @@ export default {
     registerFn() {
       verifyCode(this.code).then((res) => {
         if (res.code) {
-          register(this.registerForm).then((res2) => {
+          const registerData = {
+            userName: this.registerForm.userName,
+            realName: this.registerForm.realName,
+            password: Encrypt(this.registerForm.password),
+            checkedPassword: Encrypt(this.registerForm.checkedPassword)
+          }
+          register(registerData).then((res2) => {
             if (res2.code) {
               Message({
                 message: res2.msg,

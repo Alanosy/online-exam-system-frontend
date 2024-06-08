@@ -132,8 +132,10 @@ import RepoSelect from '@/components/RepoSelect'
 import FileUpload from '@/components/FileUpload'
 
 export default {
+
   name: 'QuDetail',
   components: { FileUpload, RepoSelect },
+  
   data() {
     return {
       quId: '',

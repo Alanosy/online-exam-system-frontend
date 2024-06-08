@@ -36,7 +36,7 @@
                 :controls="false"
                 style="width: 80px"
               />
-              <template v-if="scope.row.totalRadio">
+              <template v-if="scope.row.totalRadio!= undefined">
                 / {{ scope.row.totalRadio }}
               </template>
             </template>
@@ -62,7 +62,7 @@
                 :controls="false"
                 style="width: 80px"
               />
-              <template v-if="scope.row.totalMulti">
+              <template v-if="scope.row.totalMulti!= undefined">
                 / {{ scope.row.totalMulti }}
               </template>
             </template>
@@ -88,7 +88,7 @@
                 :controls="false"
                 style="width: 80px"
               />
-              <template v-if="scope.row.totalJudge">
+              <template v-if="scope.row.totalJudge!= undefined">
                 / {{ scope.row.totalJudge }}
               </template>
             </template>
@@ -113,7 +113,7 @@
                 :controls="false"
                 style="width: 80px"
               />
-              <template v-if="scope.row.totalSaq">
+              <template v-if="scope.row.totalSaq!= undefined">
                 / {{ scope.row.totalSaq }}
               </template>
             </template>

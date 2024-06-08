@@ -159,17 +159,19 @@ export default {
     }
   },
   methods: {
+    // .filter((item) => item.totalStudent > 0)
     processChartData(data) {
       this.chartData = data
-        .filter((item) => item.totalStudent > 0)
+        
         .map((item) => ({ name: item.gradeName, value: item.totalStudent }))
       this.chartDataTitle = this.chartData.map((item) => item.name)
 
       this.getPie()
     },
+    // .filter((item) => item.total > 0)
     processChartData2(data) {
       this.chartData2 = data
-        .filter((item) => item.total > 0)
+   
         .map((item) => ({ name: item.gradeName, value: item.total }))
       this.chartDataTitle2 = this.chartData.map((item) => item.name)
 
@@ -320,7 +322,7 @@ export default {
   padding-top: 10px;
   height: 100%;
   margin-top: 30px;
-  box-shadow: 3px 3px 3px 3px whitesmoke;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
 }
 .df {
   width: 100%;
@@ -357,6 +359,6 @@ export default {
   height: 100%;
   padding: 30px;
   margin-top: 50px;
-  box-shadow: 0 0 3px 3px whitesmoke;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
 }
 </style>

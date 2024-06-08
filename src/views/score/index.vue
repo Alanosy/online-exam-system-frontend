@@ -35,7 +35,8 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column fixed label="序号" align="center">
+    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column fixed label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="examTitle" label="考试名称" align="center" />
@@ -161,26 +162,6 @@ export default {
       // 设置当前页逻辑
       this.pageNum = val
       this.getScorePage(val, this.pageSize)
-    },
-    open() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        center: true
-      })
-        .then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
     },
     handleClick(row) {
       // console.log(row);

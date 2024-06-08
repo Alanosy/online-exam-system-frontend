@@ -26,7 +26,8 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column label="序号" align="center">
+      <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column label="序号" align="center" width="80px">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
         </template>
@@ -56,28 +57,6 @@
       </el-table-column>
     </el-table>
 
-    <!-- 导入弹窗 -->
-    <el-dialog
-      title="导入"
-      :visible.sync="dialogInportVisible"
-      style="width: 800px; margin: auto"
-    >
-      <el-upload
-        class="upload-demo"
-        drag
-        action="https://jsonplaceholder.typicode.com/posts/"
-        multiple
-      >
-        <i class="el-icon-upload" />
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb，</div>
-      </el-upload>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogInportVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addClass">确 定</el-button>
-      </div>
-    </el-dialog>
 
     <!-- 新增弹窗 -->
     <el-dialog :title="diaTitle" :visible.sync="dialogTableVisible">
@@ -178,7 +157,6 @@ export default {
       data: {},
       fileList: [],
       dialogTableVisible: false,
-      dialogInportVisible: false,
       fileDialogVisible: false,
       addForm: {
         userName: '',

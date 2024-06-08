@@ -15,8 +15,17 @@
       </el-form>
       <!-- table -->
       <div style="margin: auto; width: 90%" align="center">
-        <el-table :data="data.records" border>
-          <el-table-column fixed label="序号" align="center">
+        <el-table :data="data.records"     border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }">
+          <el-table-column  align="center" type="selection" width="55" />
+          <el-table-column fixed label="序号" align="center" width="80">
             <template slot-scope="scope">{{ scope.$index + 1 }}</template>
           </el-table-column>
           <el-table-column prop="userName" label="用户名字" align="center" />

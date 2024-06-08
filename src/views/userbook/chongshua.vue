@@ -187,9 +187,7 @@ export default {
           });
         });
     },
-    fullBookFun() {
-      fullBook().then((res) => {});
-    },
+
     getSingleQuFun(quId) {
       getSingleQu(quId).then((res) => {
         this.quData = res.data;
@@ -257,8 +255,7 @@ export default {
     },
     // 保存答案
     handSave(index) {
-      console.log("index:" + index);
-      console.log("this.lastIndex:" + this.lastIndex);
+ 
       if (index - 1 >= this.lastIndex) {
         this.handHandExam();
         //   this.$router.push({ name: 'Wrongbook' })
@@ -282,18 +279,18 @@ export default {
 
               if (res.data.correct) {
                 this.$message({
-                  type: "info",
+                  type: "success",
                   message: res.msg,
                 });
               } else {
                 this.$message({
-                  type: "success",
+                  type: "error",
                   message: res.msg,
                 });
               }
             } else {
               this.$message({
-                type: "success",
+                type: "error",
                 message: res.msg,
               });
             }

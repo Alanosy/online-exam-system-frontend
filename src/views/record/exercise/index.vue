@@ -21,10 +21,11 @@
         'line-height': '32px',
       }"
     >
+    <el-table-column  align="center" type="selection" width="55" />
       <el-table-column label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column prop="title" align="center" label="题库名称" width="250" />
+      <el-table-column prop="title" align="center" label="题库名称"  />
       <el-table-column prop="createTime" align="center" label="刷题时间" />
       <!-- <el-table-column prop="cjsj" align="center" label="已刷题数"> </el-table-column> -->
       <el-table-column align="center" label="操作">
