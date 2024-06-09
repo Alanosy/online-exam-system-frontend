@@ -178,6 +178,9 @@
                                   <div class="qu_content">
                                     {{ index.title }}
                                   </div>
+                                  <div v-if="index.image != null && index.image != ''" >
+                                      <el-image :src="index.image" style="height: 100px;" />
+                                  </div>
                                 </div>
                                 <!-- 选项区域 -->
                                 <el-radio-group class="qu_choose_group">
@@ -189,11 +192,19 @@
                                     border
                                     class="qu_choose"
                                     :class="{
-                                      current: index.myOption != null && isCheck(index.myOption, item.sort),
+                                      'current': index.myOption != null && isCheck(index.myOption, item.sort),
+                                      'imgC':item.image != null && item.image != '',
                                     }"
                                   >
-                                    {{ numberToLetter(indexs) }}、{{ item.content }}
-
+                                    
+                                    <div class="qu_choose_tag">
+                                        <div class="qu_choose_tag_type">
+                                          {{ numberToLetter(indexs) }}、{{ item.content }}
+                                        </div>
+                                        <div v-if="item.image != null && item.image != ''" >
+                                        <el-image :src="item.image" class="qu_choose_tag_img" />
+                                    </div>
+                                      </div>
                                     <!-- <div class="qu_choose_answer">
                                     </div> -->
                                   </el-radio>
@@ -990,5 +1001,8 @@ page {
 }
 .current {
   background: #f5f5f5;
+}
+.imgC{
+  height:150px
 }
 </style>

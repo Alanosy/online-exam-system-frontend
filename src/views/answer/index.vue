@@ -9,6 +9,18 @@
 
 <template>
   <div class="app-container">
+
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="考试名称">
+        <el-input v-model="searchTitle" placeholder="考试名称" />
+      </el-form-item>
+ 
+      <el-form-item>
+        <el-button type="primary" @click="searchExam">查询</el-button>
+      </el-form-item>
+    </el-form>
+
+
     <el-table
       :data="data.records"
       border
@@ -119,64 +131,27 @@ export default {
       },
       input: '',
       input1: '',
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
-
       formInline: {
         user: '',
         region: ''
       },
-      cancle() {},
-      // updateRow(row) {
-      //   this.dialogFormVisible = true;
-      //   this.form = row;
-      // },
       dialogTableVisible: false,
       dialogFormVisible: false,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
+      form: {},
+      searchTitle:"",
       formLabelWidth: '120px'
     }
   },
-  computed: {
-    tables() {
-      // 在你的数据表格中定义tabels
-      const input = this.input
-      const input1 = this.input1
-      if (input) {
-        return this.tableData.filter((data) => {
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input) > -1
-          })
-        })
-      }
-      if (input1) {
-        return this.tableData.filter((data) => {
-          return Object.keys(data).some((key) => {
-            return String(data[key]).toLowerCase().indexOf(input1) > -1
-          })
-        })
-      }
 
-      return this.tableData
-    }
-  },
   created() {
     this.getAnswerPage()
   },
   methods: {
-    getAnswerPage(pageNum, pageSize) {
-      const params = { pageNum: pageNum, pageSize: pageSize }
+    searchExam(){
+      this.getAnswerPage(this.pageNum, this.pageSize,this.searchTitle) 
+    },
+    getAnswerPage(pageNum, pageSize,examName) {
+      const params = { pageNum: pageNum, pageSize: pageSize,examName:examName }
       answerExamPging(params).then((res) => {
         this.data = res.data
       })

@@ -61,8 +61,14 @@
                         <!-- <div class="qu_num">{{ index }}</div> -->
                         <!-- 【 单选题 】 -->
                         <div class="qu_content">{{ index.title }}</div>
+                       
+                        <!-- <div v-if="item.image != null && item.image != ''" style="clear: both">
+                          <el-image :src="item.image" style="max-width: 200px" />
+                        </div> -->
                       </div>
-
+                      <div v-if="index.image != null && index.image != ''" >
+                            <el-image :src="index.image" style="height: 100px;" />
+                        </div>
                       <!-- 选项 -->
                       <el-radio-group class="qu_choose_group" >
                         <!-- ['A', 'B', 'C', 'D'] -->
@@ -72,7 +78,7 @@
                           :label="item.content"
                           border
                           class="qu_choose"
-                           :class="{'isRight':index.myOption!=null&& isCheck(index.myOption ,item.sort)  && item.isRight , 'incorrect':index.myOption!=null && isCheck(index.myOption ,item.sort) && !item.isRight}"
+                           :class="{'imgC':item.image != null && item.image != '','isRight':index.myOption!=null&& isCheck(index.myOption ,item.sort)  && item.isRight , 'incorrect':index.myOption!=null && isCheck(index.myOption ,item.sort) && !item.isRight}"
                         >
                           <!-- 选项flex浮动 -->
                           <div class="qu_choose_tag">
@@ -80,11 +86,15 @@
                               {{ numberToLetter(indexs) }}、{{ item.content }}.
                             </div>
                             <!-- 选项内容和图片 -->
-                            <div class="qu_choose_tag_content" />
+                              <div v-if="item.image != null && item.image != ''" style="clear: both">
+                                <el-image :src="item.image" style="max-width: 200px" />
+                              </div>
+                              <div v-if="item.image != null && item.image != ''" >
+                            <el-image :src="item.image" class="qu_choose_tag_img" />
+                        </div>
+                     
                           </div>
-                          <div class="qu_choose_answer">
-                            <!-- <i class="el-icon-success" style="color: #1aac1a"> 答案 </i> -->
-                          </div>
+                 
                         </el-radio>
                       </el-radio-group>
 
@@ -362,7 +372,9 @@ export default {
           padding: 0 10px 10px 10px;
         }
         .qu_choose_tag_img {
-          height: auto;
+          // max-height:90px;
+          // max-width:300px;
+          height: 100px;
           display: block;
           margin: 10px;
         }
@@ -398,5 +410,8 @@ export default {
       width: 80px;
     }
   }
+}
+.imgC{
+  height:150px
 }
 </style>

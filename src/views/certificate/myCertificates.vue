@@ -1,5 +1,15 @@
 <template>
   <div class="app-container">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="考试名称">
+        <el-input v-model="searchTitle" placeholder="考试名称" />
+      </el-form-item>
+ 
+      <el-form-item>
+        <el-button type="primary" @click="searchExam">查询</el-button>
+      </el-form-item>
+    </el-form>
+
     <!-- table -->
 
     <el-table
@@ -139,6 +149,7 @@ export default {
       pageData: null, // 接收html格式代码
       htmlTitle: '荣誉证书',
       isShow: true,
+      searchTitle: "",
       isCanvas: false,
       downType: true, // false为 pdf , true为图片
       currentdata: {},
@@ -152,6 +163,9 @@ export default {
     this.jwtInfo = getTokenInfo()
   },
   methods: {
+    searchExam(){
+      this.getCerPage(this.pageNum, this.pageSize,this.searchTitle)
+    },
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
@@ -163,8 +177,8 @@ export default {
       this.getCerPage(val, this.pageSize)
     },
     // 分页查询
-    async getCerPage(pageNum, pageSize) {
-      const params = { pageNum: pageNum, pageSize: pageSize }
+    async getCerPage(pageNum, pageSize,examName) {
+      const params = { pageNum: pageNum, pageSize: pageSize, examName : examName}
       const res = await certificateMy(params)
       this.data = res.data
     },

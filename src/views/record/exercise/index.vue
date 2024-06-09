@@ -2,13 +2,13 @@
   <div class="app-container">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="题库名称">
-        <el-input v-model="input" placeholder="请输入" />
+        <el-input v-model="searchTitle" placeholder="题库名称" />
       </el-form-item>
+ 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="searchExam">查询</el-button>
       </el-form-item>
     </el-form>
-
     <el-table
       :data="data.records"
       border
@@ -102,7 +102,7 @@ export default {
       pageSize: 10,
       data: {},
       input: '',
-
+      searchTitle:"",
       formInline: {
         user: '',
         region: ''
@@ -149,9 +149,12 @@ export default {
     this.getExerciseRecordPaging()
   },
   methods: {
+    searchExam(){
+      this.getExerciseRecordPaging(this.pageNum, this.pageSize,this.searchTitle)
+    },
     // 分页查询
-    async getExerciseRecordPaging(pageNum, pageSize) {
-      const params = { pageNum: pageNum, pageSize: pageSize }
+    async getExerciseRecordPaging(pageNum, pageSize,repoName) {
+      const params = { pageNum: pageNum, pageSize: pageSize ,repoName:repoName}
       const res = await recordExercisePaging(params)
       this.data = res.data
     },

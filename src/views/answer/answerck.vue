@@ -1,29 +1,27 @@
 <template>
-  <div style="margin-top: 30px">
-    <div style="padding-left: 53px">
+  <div  class="app-container">
+    
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="用户姓名" style="margin-left: 28px">
-          <el-input v-model="input" placeholder="输入姓名" />
+        <el-form-item label="用户姓名">
+          <el-input v-model="realName" placeholder="输入姓名" />
         </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
-            style="margin-left: 40px"
-            @click="onSubmit"
+            @click="searchFun"
           >查询</el-button>
         </el-form-item>
       </el-form>
       <!-- table -->
-      <div style="margin: auto; width: 90%" align="center">
         <el-table :data="data.records"     border
-      fit
-      highlight-current-row
-      :header-cell-style="{
-        background: '#f2f3f4',
-        color: '#555',
-        'font-weight': 'bold',
-        'line-height': '32px',
-      }">
+          fit
+          highlight-current-row
+          :header-cell-style="{
+            background: '#f2f3f4',
+            color: '#555',
+            'font-weight': 'bold',
+            'line-height': '32px',
+          }">
           <el-table-column  align="center" type="selection" width="55" />
           <el-table-column fixed label="序号" align="center" width="80">
             <template slot-scope="scope">{{ scope.$index + 1 }}</template>
@@ -42,9 +40,8 @@
             </template>
           </el-table-column>
         </el-table>
-      </div>
-      <div class="block">
-        <span class="demonstration" />
+  
+      <div class="pagination-container">
         <el-pagination
           :current-page="data.current"
           :page-sizes="[10, 20, 30, 40]"
@@ -55,7 +52,7 @@
           @current-change="handleCurrentChange"
         />
       </div>
-    </div>
+
   </div>
 </template>
 
@@ -70,10 +67,8 @@ export default {
       pageSize: 10,
       data: {},
       examId: '',
+      realName:"",
       formInline: {}, // 初始化为你需要的值或者对象结构
-      myProperty: 'Initial Value', // Declare your property here
-      input:'',
-      onSubmit:'',
       handleSizeChange:'',
       handleCurrentChange:'',
     }
@@ -83,12 +78,19 @@ export default {
     this.getAnswerUserPage(
       this.pageNum,
       this.pageSize,
-      localStorage.getItem('answer_examId')
+      this.examId
     )
   },
   methods: {
-    getAnswerUserPage(pageNum, pageSize, examId) {
-      const params = { pageNum: pageNum, pageSize: pageSize, examId: examId }
+    searchFun(){
+      this.getAnswerUserPage(
+      this.pageNum,
+      this.pageSize,
+      this.examId
+    )
+    },
+    getAnswerUserPage(pageNum, pageSize, examId,realName) {
+      const params = { pageNum: pageNum, pageSize: pageSize, examId: examId ,'realName' : this.realName}
       answerUserPging(params).then((res) => {
         this.data = res.data
       })

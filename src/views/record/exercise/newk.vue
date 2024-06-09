@@ -1,49 +1,5 @@
 <template>
   <el-container style="height: 100vh; border: 1px solid #eee">
-    <!-- <div class="left">
-      <div class="fk">
-        <div
-          style="
-            font-size: 25px;
-            font-weight: 500;
-            margin-left: 10px;
-            padding: 10px 0 0 0;
-          "
-        >
-          11
-        </div>
-        <div class="sj">
-          <div>
-            <span>得分</span>
-            <span>50</span>
-          </div>
-          <div>
-            <span>耗时</span>
-            <span>50</span>
-          </div>
-          <div>
-            <span>提交人</span>
-            <span>50</span>
-          </div>
-          <el-divider></el-divider>
-          <p>
-            共 <span style="color: #1890ff">5 </span> 题, 共
-            <span style="color: #1890ff">100</span> 分
-          </p>
-          <el-row>
-            <el-tag
-              v-for="index in 5"
-              :type="index === quIndex ? 'success' : ''"
-              @click="handleTag(index)"
-              class="type_tag"
-            >
-              {{ index }}
-            </el-tag>
-          </el-row>
-        </div>
-      </div>
-    </div> -->
-
     <el-container>
       <el-main class="right">
         <el-col>
@@ -62,7 +18,9 @@
                         <!-- 【 单选题 】 -->
                         <div class="qu_content">{{ index.title }}</div>
                       </div>
-
+                      <div v-if="index.image != null && index.image != ''" >
+                            <el-image :src="index.image" style="height: 100px;" />
+                        </div>
                       <!-- 选项 -->
                       <el-radio-group class="qu_choose_group">
                         <!-- ['A', 'B', 'C', 'D'] -->
@@ -71,19 +29,19 @@
                           :key="indexs"
                           :label="item.content"
                           border
+
                           class="qu_choose"
-                          :class="{'isRight':index.myOption!=null&& isCheck(index.myOption ,item.sort)  && item.isRight , 'incorrect':index.myOption!=null && isCheck(index.myOption ,item.sort) && !item.isRight}"
+                          :class="{'imgC':item.image != null && item.image != '','isRight':index.myOption!=null&& isCheck(index.myOption ,item.sort)  && item.isRight , 'incorrect':index.myOption!=null && isCheck(index.myOption ,item.sort) && !item.isRight}"
                         >
+                        
                           <!-- 选项flex浮动 -->
                           <div class="qu_choose_tag">
                             <div class="qu_choose_tag_type">
-                              {{ numberToLetter(indexs) }}、{{ item.content }}.
+                              {{ numberToLetter(indexs) }}、{{ item.content }}
                             </div>
-                            <!-- 选项内容和图片 -->
-                            <div class="qu_choose_tag_content" />
-                          </div>
-                          <div class="qu_choose_answer">
-                            <!-- <i class="el-icon-success" style="color: #1aac1a"> 答案 </i> -->
+                            <div v-if="item.image != null && item.image != ''" >
+                            <el-image :src="item.image" class="qu_choose_tag_img" />
+                        </div>
                           </div>
                         </el-radio>
                       </el-radio-group>
@@ -298,6 +256,7 @@ export default {
   margin-top: 10px;
 }
 
+
 // 试题内容样式
 .qu_list {
   height: 100%;
@@ -352,7 +311,9 @@ export default {
           padding: 0 10px 10px 10px;
         }
         .qu_choose_tag_img {
-          height: auto;
+          // max-height:90px;
+          // max-width:300px;
+          height: 100px;
           display: block;
           margin: 10px;
         }
@@ -394,5 +355,21 @@ export default {
 }
 .incorrect{
   background-color: rgb(248, 197, 197);
+}
+.imageWrapper {
+  // 确保图片独占一行，必要时可以添加margin或padding调整间距
+  width: 100%;
+  text-align: center; // 如果需要居中显示图片
+}
+
+.optionImage {
+  display: block; // 确保图片作为块级元素显示，独占一行
+  max-width: 100%; // 图片宽度不超过其容器宽度
+  height: auto; // 保持图片的宽高比
+  margin: 10px 0; // 上下外边距，确保与其他内容有足够的间隔
+}
+
+.imgC{
+  height:150px
 }
 </style>

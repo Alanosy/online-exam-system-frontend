@@ -5,15 +5,14 @@
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
           {{ repoTitle }} 题库
-          <!-- <el-button
+          <el-button
             :loading="loading"
             style="float: right; margin-top: -10px"
             type="primary"
-            icon="el-icon-plus"
-            @click="handHandExam()"
+            @click="exitFun()"
           >
-            {{ handleText }}
-          </el-button> -->
+            退出重刷
+          </el-button>
         </el-card>
       </el-col>
 
@@ -273,6 +272,27 @@ export default {
     
   },
   methods: {
+    exitFun(){
+      const that = this;
+      that
+        .$confirm("确定要退出刷题", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+        .then(() => {
+          this.handleText = "正在退出，请等待...";
+          this.loading = true;
+          this.$router.push({ name: "Questcenter", params: { id: this.paperId } });
+        })
+        .catch(() => {
+          that.$message({
+            type: "info",
+            message: "退出已取消，您可以继续联系！",
+          });
+        });
+      
+    },
     async test(){
       const res = await getQuestion(null, this.repoId)
       this.quList = res.data
@@ -559,10 +579,10 @@ export default {
         }
         this.getCurrentQuDetial()
 
-        setTimeout(() => (this.nextText = '下一题'), 100)
+        setTimeout(() => (this.nextText = '下一步'), 100)
 
         // alert(this.nextTxt)
-      } else if (this.nextText == '下一题') {
+      } else if (this.nextText == '下一步') {
         this.rightQuAnswer = {}
         this.fillAnswer()
 

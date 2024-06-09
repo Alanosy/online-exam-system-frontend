@@ -38,15 +38,15 @@
       </el-table-column>
       <el-table-column prop="title" label="试卷名称" align="center" />
       <el-table-column prop="examDuration" label="考试时间" align="center" />
-      <el-table-column prop="grossScore" label="总分" align="center" width="100" />
-      <el-table-column prop="passedScore" label="及格分" align="center"width="100"  />
-      <el-table-column prop="radioCount" label="单选题数量" align="center" width="100"  />
+      <el-table-column prop="grossScore" label="总分" align="center"  />
+      <el-table-column prop="passedScore" label="及格分" align="center" />
+      <!-- <el-table-column prop="radioCount" label="单选题数量" align="center" width="100"  />
       <el-table-column prop="multiCount" label="多选题数量" align="center" width="100" />
       <el-table-column prop="judgeCount" label="判断题数量" align="center" width="100" />
-      <el-table-column prop="saqCount" label="简答题数量" align="center" width="100" />
+      <el-table-column prop="saqCount" label="简答题数量" align="center" width="100" /> -->
       <el-table-column prop="startTime" label="开始时间" align="center" />
       <el-table-column prop="endTime" label="结束时间" align="center" />
-      <el-table-column prop="createTime" label="创建时间" align="center" />
+      <!-- <el-table-column prop="createTime" label="创建时间" align="center" /> -->
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
            <el-button type="success" plain

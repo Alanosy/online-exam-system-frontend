@@ -1,5 +1,14 @@
 <template>
   <div class="app-container">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form-item label="考试名称">
+        <el-input v-model="searchTitle" placeholder="考试名称" />
+      </el-form-item>
+ 
+      <el-form-item>
+        <el-button type="primary" @click="searchExam">查询</el-button>
+      </el-form-item>
+    </el-form>
     <el-table
       :data="data.records"
       border
@@ -61,7 +70,7 @@ export default {
       pageSize: 10,
       data: {},
       input: '',
-
+      searchTitle:"",
       formInline: {
         user: '',
         region: ''
@@ -103,10 +112,12 @@ export default {
     this.getExamRecordPaging()
   },
   methods: {
-
+    searchExam(){
+      this.getExamRecordPaging(this.pageNum, this.pageSize,this.searchTitle) 
+    },
     // 分页查询
-    async getExamRecordPaging(pageNum, pageSize) {
-      const params = { pageNum: pageNum, pageSize: pageSize }
+    async getExamRecordPaging(pageNum, pageSize,examName) {
+      const params = { pageNum: pageNum, pageSize: pageSize ,examName:examName}
       const res = await recordExamPaging(params)
       this.data = res.data
     },
