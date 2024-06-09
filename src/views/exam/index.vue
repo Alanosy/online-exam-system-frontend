@@ -197,14 +197,12 @@
                                     }"
                                   >
                                     
-                                    <div class="qu_choose_tag">
-                                        <div class="qu_choose_tag_type">
+
                                           {{ numberToLetter(indexs) }}、{{ item.content }}
-                                        </div>
+                                  
                                         <div v-if="item.image != null && item.image != ''" >
                                         <el-image :src="item.image" class="qu_choose_tag_img" />
-                                    </div>
-                                      </div>
+                                   </div>
                                     <!-- <div class="qu_choose_answer">
                                     </div> -->
                                   </el-radio>
@@ -961,11 +959,7 @@ page {
         .qu_choose_tag_content {
           padding: 0 10px 10px 10px;
         }
-        .qu_choose_tag_img {
-          height: auto;
-          display: block;
-          margin: 10px;
-        }
+       
 
         .qu_choose_tag_el_image {
           clear: both;
@@ -1005,4 +999,9 @@ page {
 .imgC{
   height:150px
 }
+.qu_choose_tag_img {
+          height: auto;
+          display: block;
+          margin: 10px;
+        }
 </style>
