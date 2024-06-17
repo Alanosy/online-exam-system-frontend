@@ -189,6 +189,7 @@ export default {
                 .then(() => {
                   this.$store.commit("menu/CLOSE_SIDEBAR");
                   const userInfo = getTokenInfo()
+                  console.log(userInfo)
                   this.$store.dispatch("loginUser", { id: userInfo.id});
                   this.$router.push({ path: "index" });
                   this.loading = false;

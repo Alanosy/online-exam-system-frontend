@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="考试名称">
-        <el-input v-model="searchTitle" placeholder="考试名称" />
+        <el-input v-model="formInline.searchTitle" placeholder="考试名称" />
       </el-form-item>
  
       <el-form-item>
@@ -149,7 +149,9 @@ export default {
       pageData: null, // 接收html格式代码
       htmlTitle: '荣誉证书',
       isShow: true,
-      searchTitle: "",
+      formInline:{
+        searchTitle: "1",
+      },
       isCanvas: false,
       downType: true, // false为 pdf , true为图片
       currentdata: {},
@@ -164,7 +166,7 @@ export default {
   },
   methods: {
     searchExam(){
-      this.getCerPage(this.pageNum, this.pageSize,this.searchTitle)
+      this.getCerPage(this.pageNum, this.pageSize,this.formInline.searchTitle)
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑

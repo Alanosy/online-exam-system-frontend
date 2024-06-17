@@ -31,10 +31,11 @@ export function certificateUpdate(id, data) {
   })
 }
 
-export function certificateMy() {
+export function certificateMy(params) {
   return request({
     url: 'certificate/paging/my',
-    method: 'get'
+    method: 'get',
+    params
 
   })
 }

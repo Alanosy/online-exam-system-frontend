@@ -172,7 +172,7 @@ export default {
       classAdd(data).then((res) => {
         if (res.code) {
           this.addForm.gradeName=''
-          this.getClassPage(this.pageNum, this.pageSize)
+          this.getClassPage(this.pageNum, this.pageSize, this.formInline.searchTitle)
           this.dialogTableVisible = false
           this.$message({
             type: 'success',
@@ -197,8 +197,7 @@ export default {
         .then(() => {
           classDel(row.id).then((res) => {
             if (res.code) {
-              this.getClassPage(this.pageNum, this.pageSize)
-              this.tableData.splice(index, 1)
+              this.getClassPage(this.pageNum, this.pageSize, this.formInline.searchTitle)
               this.$message({
                 type: 'success',
                 message: '删除成功!'
@@ -222,7 +221,7 @@ export default {
       classUpdate(this.form.id, { gradeName: this.form.gradeName })
         .then((res) => {
           if (res.code) {
-            this.getClassPage(this.pageNum, this.pageSize)
+            this.getClassPage(this.pageNum, this.pageSize, this.formInline.searchTitle)
             this.dialogFormVisible = false
             this.$message({
               type: 'success',

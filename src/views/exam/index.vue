@@ -305,7 +305,7 @@
       :close-on-click-modal="false"
     >
       {{ examMeg }}
-      <span slot="footer" class="dialog-footer">
+      <!-- <span slot="footer" class="dialog-footer">
         <el-button v-if="tips === 1" @click="tipsFlag = false">取 消</el-button>
         <el-button v-if="tips === 1" type="primary" @click="onConfirmTip"
           >确 定</el-button
@@ -313,7 +313,7 @@
         <el-button v-if="tips === 2" type="primary" @click="onConfirmTip"
           >我知道了</el-button
         >
-      </span>
+      </span> -->
     </el-dialog>
   </div>
 </template>

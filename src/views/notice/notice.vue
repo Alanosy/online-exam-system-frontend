@@ -62,6 +62,7 @@
           <div v-html="scope.row.content" />
         </template>
       </el-table-column> -->
+      <el-table-column prop="realName" label="创建人" align="center" />
       <el-table-column prop="createTime" label="创建时间" align="center" />
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
@@ -302,13 +303,13 @@ export default {
         this.form = row;
       },
     onEditorBlur(quill) {
-      console.log("editor blur!", quill);
+      // console.log("editor blur!", quill);
     },
     onEditorFocus(quill) {
-      console.log("editor focus!", quill);
+      // console.log("editor focus!", quill);
     },
     onEditorReady(quill) {
-      console.log("editor ready!", quill);
+      // console.log("editor ready!", quill);
     },
     // 分页查询
     async getNoticePage(pageNum, pageSize, title = null) {
