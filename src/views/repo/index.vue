@@ -23,6 +23,7 @@
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" label="题库名称" align="center" />
+      <el-table-column prop="realName" label="创建人" align="center" />
       <el-table-column prop="createTime" label="创建时间" align="center" />
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">

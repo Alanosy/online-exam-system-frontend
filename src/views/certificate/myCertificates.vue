@@ -150,7 +150,7 @@ export default {
       htmlTitle: '荣誉证书',
       isShow: true,
       formInline:{
-        searchTitle: "1",
+        searchTitle: "",
       },
       isCanvas: false,
       downType: true, // false为 pdf , true为图片

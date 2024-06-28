@@ -199,7 +199,7 @@
        
       </el-row>
       <div style="display: flex; justify-content: flex-end; with: 100%">
-        <el-button @click="showExamDialogVisible = false">关闭详情</el-button></el-button>
+        <el-button @click="showExamDialogVisible = false">关闭详情</el-button>
       </div>
     </el-dialog>
     <!-- 编辑对话框 -->
@@ -289,7 +289,8 @@ export default {
     return {
       pageNum: 1,
       pageSize: 10,
-      data: {},
+      data: {
+      },
       input: '',
       formInline: {
         user: '',

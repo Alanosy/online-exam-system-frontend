@@ -179,7 +179,7 @@
                                     {{ index.title }}
                                   </div>
                                   <div v-if="index.image != null && index.image != ''" >
-                                      <el-image :src="index.image" style="height: 100px;" />
+                                      <el-image :src="index.image" style="max-width: 200px;" />
                                   </div>
                                 </div>
                                 <!-- 选项区域 -->
@@ -201,7 +201,7 @@
                                           {{ numberToLetter(indexs) }}、{{ item.content }}
                                   
                                         <div v-if="item.image != null && item.image != ''" >
-                                        <el-image :src="item.image" class="qu_choose_tag_img" />
+                                        <el-image :src="item.image" style="max-width: 200px" class="qu_choose_tag_img" />
                                    </div>
                                     <!-- <div class="qu_choose_answer">
                                     </div> -->
@@ -450,6 +450,29 @@ export default {
     },
     handHandExamPre() {
       // 交卷保存答案
+      // fillAnswer(params).then((res) => {
+      //   if (res.code) {
+      //     sessionStorage.setItem("exam_" + this.cardItem.questionId, 1);
+      //     item.checkout=1
+      //   } else {
+      //     sessionStorage.setItem("exam_" + this.cardItem.questionId, 0);
+      //   }
+      //   this.saqTextarea = "";
+      //   // 必须选择一个值
+      //   if (answers.length > 0) {
+      //     // 加入已答列表
+      //     this.cardItem.answered = true;
+      //   }
+
+      //   // 最后一个动作，交卷
+      //   if (callback) {
+      //     callback();
+      //   }
+
+      //   // 查找详情
+      //   this.fetchQuData(item);
+      // });
+      // this.handSave(this.allItem[index]);
       this.handSave(this.cardItem);
       examCollect(this.examId).then((res) => {
         this.recordData = res.data;
@@ -522,6 +545,7 @@ export default {
           }
         });
       }
+      
       if (this.paperData.multiList) {
         this.paperData.multiList.forEach(function (item) {
           if (!item.checkout) {
@@ -664,10 +688,10 @@ export default {
         answers.push(this.radioValue);
       }
 
-      console.log(
-        "aaa",
-        this.allItem[this.cardItem.sort].type == 4 ? this.saqTextarea : answers.join(",")
-      );
+      // console.log(
+      //   "aaa",
+      //   this.allItem[this.cardItem.sort].type == 4 ? this.saqTextarea : answers.join(",")
+      // );
       const params = {
         examId: this.paperId,
         quId: this.cardItem.questionId,
@@ -679,6 +703,7 @@ export default {
       fillAnswer(params).then((res) => {
         if (res.code) {
           sessionStorage.setItem("exam_" + this.cardItem.questionId, 1);
+          item.checkout=1
         } else {
           sessionStorage.setItem("exam_" + this.cardItem.questionId, 0);
         }
