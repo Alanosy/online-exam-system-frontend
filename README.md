@@ -2,6 +2,18 @@ vue-admin-template
 
 # online-exam-system-frontend
 
+### 运行
+  
+  ```
+  npm install
+  ```
+  ```
+  npx eslint --init
+  ```
+  ```
+  npm run dev
+  ```
+
 #### 友情提示
 
 
