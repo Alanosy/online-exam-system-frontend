@@ -58,8 +58,9 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     meta: { requireAuth: true },
+    redirect: '/index', // 添加重定向规则
     children: [{
-      path: '/index',
+      path: 'index',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '主页', icon: 'dashboard', visible: true }

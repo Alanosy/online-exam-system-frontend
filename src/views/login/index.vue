@@ -8,14 +8,8 @@
 -->
 <template>
   <div class="login-container">
-    <el-form
-      ref="loginForm"
-      :model="loginForm"
-      :rules="loginRules"
-      class="login-form"
-      auto-complete="on"
-      label-position="left"
-    >
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on"
+      label-position="left">
       <div class="title-container">
         <h3 class="title">Login Form</h3>
       </div>
@@ -24,32 +18,16 @@
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
+        <el-input ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text"
+          tabindex="1" auto-complete="on" />
       </el-form-item>
 
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
+        <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType"
+          placeholder="Password" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
@@ -60,44 +38,24 @@
           <span class="svg-container">
             <svg-icon icon-class="user" />
           </span>
-          <el-input
-            ref="username"
-            v-model="code"
-            style="width: 300px"
-            placeholder="code"
-            name="code"
-            type="text"
-            tabindex="1"
-            auto-complete="on"
-          />
+          <el-input ref="username" v-model="code" style="width: 300px" placeholder="code" name="code" type="text"
+            tabindex="1" auto-complete="on" />
         </el-form-item>
-        <img
-          ref="captchaImg"
-          src="/api/auths/captcha"
-          style="margin-left: 20px; height: 47px"
-          alt=""
-          @click="getVerify"
-        />
+        <img ref="captchaImg" src="/api/auths/captcha" style="margin-left: 20px; height: 47px" alt=""
+          @click="getVerify" />
       </div>
-      <div
-        style="
+      <div style="
           display: flex;
           align-items: center;
           justify-content: flex-end;
           margin-bottom: 20px;
-        "
-      >
+        ">
         <router-link style="color: #66b1ff" to="/register"> 立即注册 </router-link>
       </div>
       <!-- <div style="display: flex"> -->
       <el-form-item>
-        <el-button
-          :loading="loading"
-          type="primary"
-          style="width: 100%"
-          @click.native.prevent="handleLogin"
-          >login</el-button
-        >
+        <el-button :loading="loading" type="primary" style="width: 100%"
+          @click.native.prevent="handleLogin">login</el-button>
       </el-form-item>
 
       <!-- <div style="margin-left: 10px" class="but">rigister</div> -->
@@ -111,7 +69,7 @@
 import { validUsername } from "@/utils/validate";
 import { setToken } from "@/utils/auth";
 import axios from "axios";
-import {getTokenInfo} from "@/utils/jwtUtils"
+import { getTokenInfo } from "@/utils/jwtUtils"
 import { verifyCode } from "@/api/user";
 import { Message } from "element-ui";
 import { Encrypt } from "@/utils/Secret";
@@ -144,19 +102,24 @@ export default {
       },
       loading: false,
       passwordType: "password",
-      redirect: undefined,
+      // redirect: undefined,
     };
   },
-  watch: {
-    $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect;
-      },
-      immediate: true,
-    },
-  },
+  // watch: {
+  //   $route: {
+  //     handler: function (route) {
+  //       this.redirect = route.query && route.query.redirect;
+  //     },
+  //     immediate: true,
+  //   },
+  // },
   created() {
     // this.getEmail()
+  },
+  computed: {
+    redirect() {
+      return this.$route.query.redirect || '/index'; // 如果没有 redirect 参数，默认跳转到首页
+    }
   },
   methods: {
     getVerify() {
@@ -190,8 +153,9 @@ export default {
                   this.$store.commit("menu/CLOSE_SIDEBAR");
                   const userInfo = getTokenInfo()
                   console.log(userInfo)
-                  this.$store.dispatch("loginUser", { id: userInfo.id});
-                  this.$router.push({ path: "index" });
+                  this.$store.dispatch("loginUser", { id: userInfo.id });
+                  // this.$router.push({ path: "index" });
+                  this.$router.push({ path: decodeURIComponent(this.redirect) }); // 解码并跳转到目标页面
                   this.loading = false;
                 })
                 .catch((error) => {
@@ -324,6 +288,7 @@ $light_gray: #eee;
     cursor: pointer;
     user-select: none;
   }
+
   .but {
     width: 220px;
     height: 39px;
