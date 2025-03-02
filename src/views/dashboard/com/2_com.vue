@@ -10,10 +10,12 @@
       <div class="right">
         <el-card class="box-card">
           最新公告
+          
           <div v-infinite-scroll="load" style="overflow: auto">
-            <el-collapse v-model="activeNames" @change="handleChange" accordion>
-              <div v-for="(item, index) in data.records">
-                <el-collapse-item :title="item.title" :name="index">
+    
+           <el-collapse v-model="activeNames"  accordion>
+             <div v-for="(item, index) in noticePage.records">
+                <el-collapse-item v-if="item!=null" :title="item.title" :name="index">
                   <div v-html="item.content"></div>
                   <div class="noticeContent">
                     <div>{{ item.realName }}</div>
@@ -21,7 +23,7 @@
                   </div>
                 </el-collapse-item>
               </div>
-            </el-collapse>
+            </el-collapse> 
           </div>
 
           <!-- <div>
@@ -41,7 +43,7 @@ export default {
     return {
       pageNum: 1,
       pageSize: 10,
-      data: {},
+      noticePage: {},
       dateArray: [],
       formattedData: [],
       option: {
@@ -119,9 +121,8 @@ export default {
     async getNotice(pageNum, pageSize) {
       const params = { pageNum: pageNum, pageSize: pageSize };
       const res = await noticeGetNew(params);
-      this.data = res.data;
+      this.noticePage = res.data;
       // this.transformData(res);
-      // console.log("this.data", this.data);
     },
     initCharts() {
       const myChart = this.$echarts.init(this.$refs.charts);
