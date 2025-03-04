@@ -79,6 +79,8 @@
 
 QQ群：1034380536
 
+邮箱：fignet@163.com
+
 ## 许可证
 
 [Apache License 2.0](https://github.com/macrozheng/mall/blob/master/LICENSE)
