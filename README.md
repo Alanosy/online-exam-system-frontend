@@ -83,12 +83,4 @@ QQ群：1034380536
 
 [Apache License 2.0](https://github.com/macrozheng/mall/blob/master/LICENSE)
 
-**Copyright (c) 2018-2024 macrozheng**
-
-![Star History Chart](https://api.star-history.com/svg?repos=Alanosy/online-exam-system-backend&type=Date
-
-> License
-
-[MIT](https://github.com/PanJiaChen/vue-admin-template/blob/master/LICENSE) license.
-
-Copyright (c) 2017-present PanJiaChen
+Copyright (c) 2018-2024 macrozheng
