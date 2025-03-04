@@ -10,6 +10,8 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import router from '@/router'
+
 
 // create an axios instance
 const service = axios.create({
@@ -82,13 +84,54 @@ service.interceptors.response.use(
     // }
   },
   error => {
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
-    return Promise.reject(error)
+    const { response } = error;
+    if (response) {
+      // 后端返回了错误响应
+      const { status, data } = response;
+      console.error(`Error: ${status}, Message: ${data.msg}`);
+      handleErrorResponse(status, data.msg); // 处理错误
+    } else {
+      // 网络错误或其他问题
+      console.error('Network Error');
+      handleErrorResponse(500, '网络连接失败，请稍后再试');
+    }
+    return Promise.reject(error);
   }
 )
+
+// 错误处理函数
+function handleErrorResponse(status, message) {
+  switch (status) {
+    case 401:
+      Message({
+        message: message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      // window.location.href = "https://www.example.com"
+      router.push({ path: "login" });
+      break;
+    case 403:
+      Message({
+        message: message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      break;
+    case 404:
+      Message({
+        message: message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      break;
+    default:
+      Message({
+        message: message || '发生未知错误',
+        type: 'error',
+        duration: 5 * 1000
+      })
+  }
+}
 
 export default service
