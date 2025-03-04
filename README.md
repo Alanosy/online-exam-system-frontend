@@ -1,136 +1,70 @@
-vue-admin-template
-
-# online-exam-system-frontend
-
-### 运行
-  
-  ```
-  npm install
-  ```
-  ```
-  npx eslint --init
-  ```
-  ```
-  npm run dev
-  ```
+# online-exam-system-frontend | 通用在线考试系统(前端)
 
 #### 友情提示
 
 
 1. **接口文档**：[在线接口文档](https://apifox.com/apidoc/shared-a61e857a-187a-4b5f-972e-f0f0f6b89a7f) 。
-2. **配套前端项目**：[后端项目地址](https://github.com/Alanosy/online-exam-system-backend)
+2. **体验地址**：[点击此处跳转体验网站](http://47.109.94.143/#/login) 。 账号:admin 密码:123456
+3. **配套后端项目**：[后端项目地址](https://github.com/Alanosy/online-exam-system-backend)
 
 #### 介绍
 
-**本项目致力于打造一款通用的校园在线考试系统，此项目为前端项目，还有配套后端，在上面有可以点击跳转过去**
+本项目致力于打造一款通用的在线考试系统，此项目为**后端项目**，**还有配套前端**，在上面有可以点击跳转过去。本项目主要优点是开发、部署简单快捷、界面设计友好、代码结构清晰。
 
-**由大学生开发，本项目还在初期开发中，欢迎小伙伴一起开发一起进步,具体可以参考下方参与贡献，有问题的话可以在issue中提问，会仔细回答各位**
-
-登录页面可以登录学生、教师和管理员三种角色，加入班级在点头像，查看个人信息中加入，班级口令登录教师看班级管理页面
+本项目还在初期开发中，欢迎小伙伴一起开发一起进步,具体可以参考下方参与贡献，有问题的话可以在issue中提问，会仔细回答各位
 
 **如果各位喜欢，麻烦各位大佬点点Star**
 
-#### 功能介绍
+##### 温馨提示
 
-* **用户管理**
-* **班级管理**
-* **试卷中心**
-* **刷题中心**
-* **考试记录**
-* **错题本**
-* **考试管理**
-* **题库管理**
-* **试题管理**
-* **证书管理**
-* **我的证书**
-* **成绩分析**
-* **阅卷管理**
-* **公告管理**
-* **切屏检测**
-* **证书生成**
+1. 登录页面可以登录三个角色，分别为学生、教师和管理员,不同账号显示不用用户界面，具体账号登录管理员查看用户管理
+2. **加入班级请点击头像打开个人信息中加入**，班级口令请看教师或管理端班级口令查找
 
-### 技术选型
+* #### 功能介绍
 
-#### 后端技术
+  本项目包含以下功能
 
+  用户管理、班级管理、试卷中心、刷题中心、考试记录、错题本、考试管理、题库管理、试题管理、证书管理、我的证书、成绩分析、阅卷管理、公告管理、切屏检测、证书生成
 
-| **技术**             | **说明**             | **官网**                                                                                         |
-| -------------------- | -------------------- | ------------------------------------------------------------------------------------------------ |
-| **SpringBoot**       | **Web应用开发框架**  | [https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)                 |
-| **SpringSecurity**   | **认证和授权框架**   | [https://spring.io/projects/spring-security](https://spring.io/projects/spring-security)         |
-| **MyBatisPlus**      | **ORM框架**          | [http://www.mybatis.org/mybatis-3/zh/index.html](http://www.mybatis.org/mybatis-3/zh/index.html) |
-| **MyBatisGenerator** | **数据层代码生成器** | [http://www.mybatis.org/generator/index.html](http://www.mybatis.org/generator/index.html)       |
-| **Redis**            | **内存数据存储**     | [https://redis.io/](https://redis.io/)                                                           |
-| **Druid**            | **数据库连接池**   | [https://github.com/alibaba/druid](https://github.com/alibaba/druid)                             |
-| **OSS**              | **对象存储**         | [https://github.com/aliyun/aliyun-oss-java-sdk](https://github.com/aliyun/aliyun-oss-java-sdk)   |
-| **MinIO**            | **对象存储**         | [https://github.com/minio/minio](https://github.com/minio/minio)                                 |
-| **JWT**              | **JWT登录支持**      | [https://github.com/jwtk/jjwt](https://github.com/jwtk/jjwt)                                     |
-| **Lombok**           | **Java语言增强库**   | [https://github.com/rzwitserloot/lombok](https://github.com/rzwitserloot/lombok)                 |
-| **Hutool**           | **Java工具类库**     | [https://github.com/looly/hutool](https://github.com/looly/hutool)                               |
+#### 项目展示
 
-### 开发工具
+<table>
+    <tr>
+        <td><img src="https://github.com/Alanosy/online-exam-system-backend/blob/master/img/管理端.png"/></td>
+        <td><img src="https://github.com/Alanosy/online-exam-system-backend/blob/master/img/教师端.png"/></td>
+      	<td><img src="https://github.com/Alanosy/online-exam-system-backend/blob/master/img/学生端.png"/></td>
+    </tr>
+</table>
 
+#### 安装
 
-| **工具**         | **说明**                | **官网**                                                                                                       |
-| ---------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------- |
-| **IDEA**         | **开发IDE**             | [https://www.jetbrains.com/idea/download](https://www.jetbrains.com/idea/download)                             |
-| **RedisDesktop** | **redis客户端连接工具** | [https://github.com/qishibo/AnotherRedisDesktopManager](https://github.com/qishibo/AnotherRedisDesktopManager) |
-| **SwitchHosts**  | **本地host管理**        | [https://oldj.github.io/SwitchHosts/](https://oldj.github.io/SwitchHosts/)                                     |
-| **Navicat**      | **数据库连接工具**      | [http://www.formysql.com/xiazai.html](http://www.formysql.com/xiazai.html)                                     |
-| **Xmind**        | **思维导图设计工具**    | [http://www.edrawsoft.cn/mindmaster](http://www.edrawsoft.cn/mindmaster)                                       |
-| **Draw**         | **流程图绘制工具**      | [https://draw.io](https://draw.io)                                                                             |
-| **Apifox**       | **API接口调试工具**     | [http://apifox.com](http://apifox.com)                                                                         |
-| **Typora**       | **Markdown编辑器**      | [https://typora.io/](https://typora.io/)                                                                       |
+1. 拉取项目
 
-### 开发环境
+   ``` bash
+   git clone https://github.com/Alanosy/online-exam-system-frontend.git
+   ```
+
+2. 导入依赖
+
+   ``` bash
+   npm install
+   ```
+
+3. 运行
+
+   ``` bash
+   npm run dev
+   ```
+
+#### 开发环境
 
 
-| **工具**  | **版本号** | **下载**                                                                                                                                                                     |
-| --------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **JDK**   | **17**     | [https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) |
-| **MySQL** | **5.7**    | [https://www.mysql.com/](https://www.mysql.com/)                                                                                                                             |
-| **Redis** | **7.0**    | [https://redis.io/download](https://redis.io/download)                                                                                                                       |
-| **Nginx** | **1.22**   | [http://nginx.org/en/download.html](http://nginx.org/en/download.html)                                                                                                       |
-
-#### 系统架构
-
-##### 功能结构图
-
-![image-20240722113039659](https://alantypora.oss-cn-chengdu.aliyuncs.com/image-20240722113039659.png)
-
-##### ER图
-
-![ER图](https://alantypora.oss-cn-chengdu.aliyuncs.com/ER%E5%9B%BE.png)
-
-#### 架构图
-
-![架构图](https://alantypora.oss-cn-chengdu.aliyuncs.com/%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
-
-#### 缓存
-
-![缓存作用模型.drawio](https://alantypora.oss-cn-chengdu.aliyuncs.com/%E7%BC%93%E5%AD%98%E4%BD%9C%E7%94%A8%E6%A8%A1%E5%9E%8B.drawio.png)
-
-![分页缓存.drawio](https://alantypora.oss-cn-chengdu.aliyuncs.com/%E5%8D%95%E6%9D%A1%E8%AE%B0%E5%BD%95%E7%BC%93%E5%AD%98.drawio.png)
-
-![redis分片集群.drawio](https://alantypora.oss-cn-chengdu.aliyuncs.com/redis%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4.drawio.png)
-
-#### 主从分离
-
-![主从分离.drawio](https://alantypora.oss-cn-chengdu.aliyuncs.com/%E4%B8%BB%E4%BB%8E%E5%88%86%E7%A6%BB.drawio.png)
-
-#### 连接池
-
-![连接池](https://alantypora.oss-cn-chengdu.aliyuncs.com/%E8%BF%9E%E6%8E%A5%E6%B1%A0.png)
-
-#### 技术栈
-
-![技术栈](https://alantypora.oss-cn-chengdu.aliyuncs.com/%E6%8A%80%E6%9C%AF%E6%A0%88.png)
-
-#### 项目展示![截屏2024-06-01 下午7.59.40](https://alantypora.oss-cn-chengdu.aliyuncs.com/%E6%88%AA%E5%B1%8F2024-06-01%20%E4%B8%8B%E5%8D%887.59.40.png)
-
-![截屏2024-06-01 下午7.59.28](https://alantypora.oss-cn-chengdu.aliyuncs.com/%E6%88%AA%E5%B1%8F2024-06-01%20%E4%B8%8B%E5%8D%887.59.28.png)
-
-![截屏2024-06-01 下午7.57.15](https://alantypora.oss-cn-chengdu.aliyuncs.com/%E6%88%AA%E5%B1%8F2024-06-01%20%E4%B8%8B%E5%8D%887.59.14.png)
+| **工具**  | **版本号** | **下载**                                                     |
+| --------- | ---------- | ------------------------------------------------------------ |
+| **JDK**   | **17**     | [https://www.oracle.com/java/technologies/downloads/#java17](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) |
+| **MySQL** | **5.7**    | https://dev.mysql.com/downloads/mysql/5.7.html               |
+| **Redis** | **7.0**    | [https://redis.io/download](https://redis.io/download)       |
+| **Nginx** | **1.22**   | [http://nginx.org/en/download.html](http://nginx.org/en/download.html) |
 
 #### 参与贡献
 
@@ -138,6 +72,12 @@ vue-admin-template
 2. **新建 Feat\_xxx 分支**
 3. **提交代码**
 4. **新建 Pull Request**
+
+#### 联系方式
+
+微信：fignet
+
+QQ群：1034380536
 
 ## 许可证
 
