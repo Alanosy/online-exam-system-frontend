@@ -44,11 +44,12 @@
         <img ref="captchaImg" src="/api/auths/captcha" style="margin-left: 20px; height: 47px" alt=""
           @click="getVerify" />
       </div>
-      <div style="
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          margin-bottom: 20px;
+      <div v-if="enableRegister"
+           style="
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 20px;
         ">
         <router-link style="color: #66b1ff" to="/register"> 立即注册 </router-link>
       </div>
@@ -96,6 +97,7 @@ export default {
         password: "",
       },
       code: "",
+      enableRegister: process.env.VUE_APP_ENABLE_REGISTER === 'true',
       loginRules: {
         username: [{ required: true, trigger: "blur", validator: validateUsername }],
         password: [{ required: true, trigger: "blur", validator: validatePassword }],
