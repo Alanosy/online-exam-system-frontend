@@ -179,7 +179,7 @@
           />
           <!-- <el-input-number v-model="postForm.maxCount"  /> -->
         </el-form-item>
-        <el-form-item label="考试时长(分钟)" prop="certificateId">
+        <el-form-item label="考试时长(分钟)" prop="examDuration">
           <el-input-number v-model="postForm.examDuration" />
         </el-form-item>
         <el-form-item label="考试时间范围" prop="start">
@@ -210,45 +210,19 @@
 
     <h3>权限配置</h3>
     <el-card style="margin-top: 20px">
-      <!-- <el-radio-group v-model="postForm.openType" style="margin-bottom: 20px">
-        <el-radio :label="1" border>完全公开</el-radio>
-        <el-radio :label="2" border>部门开放</el-radio>
-      </el-radio-group> -->
-
-      <!-- <el-alert
-        v-if="postForm.openType===1"
-        title="开放的，任何人都可以进行考试！"
-        type="warning"
-      />
-
-      <div v-if="postForm.openType===2">
-        <el-input
-          v-model="filterText"
-          placeholder="输入关键字进行过滤"
-        />
-
-        <el-tree
-
-          v-loading="treeLoading"
-          ref="tree"
-          :data="treeData"
-          :default-checked-keys="postForm.departIds"
-          :props="defaultProps"
-          :filter-node-method="filterNode"
-          empty-text=" "
-          default-expand-all
-          show-checkbox
-          node-key="id"
-          @check-change="handleCheckChange"
-        />
-
-      </div> -->
-
       <div style="display: flex">
-        <div style="align-items: center; display: flex">考试班级:</div>
         <div style="margin-left: 10px">
-          <ClassSelect v-model="postForm.classIds" is-multiple @change="onClassChange" />
-          <!-- <el-input v-model="input" placeholder="请输入内容"></el-input> -->
+            <el-form
+              ref="postForm"
+              :model="postForm"
+              :rules="rules"
+              label-position="left"
+              label-width="120px"
+            >
+              <el-form-item label="考试班级" prop="classIds">
+                <ClassSelect v-model="postForm.classIds" is-multiple @change="onClassChange" />
+              </el-form-item>
+            </el-form>
         </div>
       </div>
     </el-card>
@@ -304,12 +278,14 @@ export default {
         // 开放类型
         openType: 1,
         // 考试班级列表
-        departIds: []
+        departIds: [],
+        // 初始化班级列表
+        classIds: [],
       },
       rules: {
         title: [{ required: true, message: '考试名称不能为空！' }],
 
-        content: [{ required: true, message: '考试名称不能为空！' }],
+        content: [{ required: true, message: '考试描述不能为空！' }],
 
         open: [{ required: true, message: '考试权限不能为空！' }],
 
@@ -319,8 +295,10 @@ export default {
 
         examDuration: [{ required: true, message: '考试时间不能为空！' }],
 
-        ruleId: [{ required: true, message: '考试规则不能为空' }],
-        password: [{ required: true, message: '考试口令不能为空！' }]
+        start: [{ required: true, message: '考试时间范围不能为空！' }],
+
+        maxCount: [{ required: false, message: '最多切屏次数' }],
+        classIds: [{ required: true, message: '请选择考试班级！', type: 'array', min: 1 }]
       }
     }
   },
@@ -397,6 +375,17 @@ export default {
           return
         }
 
+        // 验证班级是否选择
+        if (!this.postForm.classIds || this.postForm.classIds.length === 0) {
+          this.$notify({
+            title: '提示信息',
+            message: '请选择考试班级！',
+            type: 'warning',
+            duration: 2000
+          })
+          return
+        }
+
         for (let i = 0; i < this.postForm.repoList.length; i++) {
           const repo = this.postForm.repoList[i]
           if (!repo.repoId) {
@@ -444,6 +433,19 @@ export default {
             this.$notify({
               title: '提示信息',
               message: '题库第：[' + (i + 1) + ']项存在无效的判断题配置！',
+              type: 'warning',
+              duration: 2000
+            })
+            return
+          }
+
+          if (
+            (repo.saqCount > 0 && repo.saqScore === 0) ||
+            (repo.saqCount === 0 && repo.saqScore > 0)
+          ) {
+            this.$notify({
+              title: '提示信息',
+              message: '题库第：[' + (i + 1) + ']项存在无效的简答题配置！',
               type: 'warning',
               duration: 2000
             })
@@ -516,6 +518,7 @@ export default {
       this.postForm.repoList = this.repoList
       const params = {
         title: this.postForm.title,
+        content: this.postForm.content, // 添加考试描述字段
         examDuration: this.postForm.examDuration,
         maxCount: this.postForm.maxCount,
         passedScore: this.postForm.passedScore,
