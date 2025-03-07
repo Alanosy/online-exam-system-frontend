@@ -132,17 +132,20 @@ export const constantRoutes = [
   },
   {
     path: '/startkaoshi',
-    name: 'start',
+    component: Layout,
     hidden: true,
-    component: () => import('@/views/exam/index.vue'),
-    meta: { title: '开始考试', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
-    // children: [{
-    //   path: '/start',
-    //   name: 'start',
-    //   hidden:true,
-    //   component: () => import('@/views/kaishiks/start'),
-    //   meta: { title: '开始考试', icon: 'dashboard' }
-    // }]
+    children: [{
+      path: '/startkaoshi',
+      name: 'start',
+      component: () => import('@/views/exam/index.vue'),
+      meta: {
+        title: '开始考试',
+        visible: true,
+        roles: ['teacher', 'admin', 'student'],
+        icon: 'dashboard',
+        requireAuth: true
+      }
+    }]
   },
   {
     path: '/questcenter',
@@ -154,13 +157,23 @@ export const constantRoutes = [
       meta: { title: '刷题中心', visible: true, roles: ['admin', 'student'], icon: 'dashboard' }
     }]
   },
+
   {
     path: '/shuati',
-    name: 'shua',
+    component: Layout,
     hidden: true,
-    component: () => import('@/views/exercise/shuati.vue'),
-    meta: { title: '开始刷题', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
-
+    children: [{
+      path: '/shuati',
+      name: 'shua',
+      component: () => import('@/views/exercise/shuati.vue'),
+      meta: {
+        title: '开始刷题',
+        visible: true,
+        roles: ['teacher', 'admin', 'student'],
+        icon: 'dashboard',
+        requireAuth: true
+      }
+    }]
   },
 
   {
