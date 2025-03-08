@@ -17,17 +17,17 @@
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">Rigister Form</h3>
+        <h3 class="title">注册</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="userName">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
           ref="username"
           v-model="registerForm.userName"
-          placeholder="Username"
+          placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -41,10 +41,10 @@
         <el-input
           ref="realName"
           v-model="registerForm.realName"
-          placeholder="realName"
+          placeholder="真实姓名"
           name="realName"
           type="text"
-          tabindex="1"
+          tabindex="2"
           auto-complete="on"
         />
       </el-form-item>
@@ -57,11 +57,10 @@
           ref="password"
           v-model="registerForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="密码"
           name="password"
-          tabindex="2"
+          tabindex="3"
           auto-complete="on"
-          @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
@@ -77,11 +76,10 @@
           ref="checkedPassword"
           v-model="registerForm.checkedPassword"
           :type="checkedPasswordType"
-          placeholder="checkedPassword"
+          placeholder="确认密码"
           name="checkedPassword"
-          tabindex="2"
+          tabindex="4"
           auto-complete="on"
-          @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd2">
           <svg-icon
@@ -91,19 +89,20 @@
       </el-form-item>
 
       <div style="display: flex">
-        <el-form-item prop="username">
+        <el-form-item prop="code">
           <span class="svg-container">
-            <svg-icon icon-class="user" />
+            <svg-icon icon-class="code" />
           </span>
           <el-input
-            ref="username"
-            v-model="code"
+            ref="code"
+            v-model="registerForm.code"
             style="width: 300px"
-            placeholder="code"
+            placeholder="验证码"
             name="code"
             type="text"
-            tabindex="1"
-            auto-complete="on"
+            tabindex="5"
+            auto-complete="off"
+            @keyup.enter.native="registerFn"
           />
         </el-form-item>
         <img
@@ -130,7 +129,7 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click="registerFn"
-      >rigister</el-button>
+      >注册</el-button>
     </el-form>
   </div>
 </template>
@@ -159,17 +158,41 @@ export default {
         callback()
       }
     }
+    const validateRealName = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入真实姓名'))
+      } else {
+        callback()
+      }
+    }
+    const validateCheckedPassword = (rule, value, callback) => {
+      if (value !== this.registerForm.password) {
+        callback(new Error('两次输入密码不一致'))
+      } else {
+        callback()
+      }
+    }
+    const validateCode = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入验证码'))
+      } else {
+        callback()
+      }
+    }
     return {
       registerForm: {
         userName: '',
         password: '',
         realName: '',
-        checkedPassword: ''
+        checkedPassword: '',
+        code: ''
       },
-      code: '',
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        realName: [{ required: true, trigger: 'blur', validator: validateRealName }],
+        checkedPassword: [{ required: true, trigger: 'blur', validator: validateCheckedPassword }],
+        code: [{ required: true, trigger: 'blur', validator: validateCode }]
       },
       loading: false,
       passwordType: 'password',
@@ -190,36 +213,61 @@ export default {
   },
   methods: {
     registerFn() {
-      verifyCode(this.code).then((res) => {
-        if (res.code) {
-          const registerData = {
-            userName: this.registerForm.userName,
-            realName: this.registerForm.realName,
-            password: Encrypt(this.registerForm.password),
-            checkedPassword: Encrypt(this.registerForm.checkedPassword)
-          }
-          register(registerData).then((res2) => {
-            if (res2.code) {
-              Message({
-                message: res2.msg,
-                type: 'success',
-                duration: 5 * 1000
+      this.$refs.registerForm.validate(valid => {
+        if (valid) {
+          verifyCode(this.registerForm.code).then((res) => {
+            if (res.code) {
+              const registerData = {
+                userName: this.registerForm.userName,
+                realName: this.registerForm.realName,
+                password: Encrypt(this.registerForm.password),
+                checkedPassword: Encrypt(this.registerForm.checkedPassword)
+              }
+              register(registerData).then((res2) => {
+                if (res2.code) {
+                  Message({
+                    message: res2.msg,
+                    type: 'success',
+                    duration: 5 * 1000
+                  })
+                  this.$router.push({ path: '/login' })
+                } else {
+                  this.getVerify()
+                  Message({
+                    message: res2.msg,
+                    type: 'error',
+                    duration: 5 * 1000
+                  })
+                }
+              }).catch(error => {
+                this.getVerify()
+                Message({
+                  message: '注册失败，请重试',
+                  type: 'error',
+                  duration: 5 * 1000
+                })
               })
-              this.$router.push({ path: '/login' })
             } else {
               this.getVerify()
               Message({
-                message: res2.msg,
+                message: res.msg || '验证码验证失败',
                 type: 'error',
                 duration: 5 * 1000
               })
             }
+          }).catch(error => {
+            this.getVerify()
+            Message({
+              message: '验证码验证失败',
+              type: 'error',
+              duration: 5 * 1000
+            })
           })
         } else {
-          this.getVerify()
-          this.$message({
-            type: 'info',
-            message: res.msg
+          Message({
+            message: '请填写完整的注册信息',
+            type: 'warning',
+            duration: 5 * 1000
           })
         }
       })
@@ -245,7 +293,7 @@ export default {
         this.checkedPasswordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
+        this.$refs.checkedPassword.focus()
       })
     }
   }

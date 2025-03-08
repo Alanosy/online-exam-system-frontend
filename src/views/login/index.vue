@@ -8,60 +8,93 @@
 -->
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on"
-      label-position="left">
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">登录</h3>
       </div>
 
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text"
-          tabindex="1" auto-complete="on" />
+        <el-input
+          ref="username"
+          v-model="loginForm.username"
+          placeholder="用户名"
+          name="username"
+          type="text"
+          tabindex="1"
+          auto-complete="on"
+        />
       </el-form-item>
 
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType"
-          placeholder="Password" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
+        <el-input
+          :key="passwordType"
+          ref="password"
+          v-model="loginForm.password"
+          :type="passwordType"
+          placeholder="密码"
+          name="password"
+          tabindex="2"
+          auto-complete="on"
+        />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
 
       <div style="display: flex">
-        <el-form-item prop="username">
+        <el-form-item prop="code">
           <span class="svg-container">
-            <svg-icon icon-class="user" />
+            <svg-icon icon-class="code" />
           </span>
-          <el-input ref="username" v-model="code" style="width: 300px" placeholder="code" name="code" type="text"
-            tabindex="1" auto-complete="on" />
+          <el-input
+            ref="codeInput"
+            v-model="loginForm.code"
+            style="width: 300px"
+            placeholder="验证码"
+            name="code"
+            type="text"
+            tabindex="3"
+            auto-complete="off"
+            @keyup.enter.native="handleLogin"
+          />
         </el-form-item>
-        <img ref="captchaImg" src="/api/auths/captcha" style="margin-left: 20px; height: 47px" alt=""
-          @click="getVerify" />
+        <img
+          ref="captchaImg"
+          src="/api/auths/captcha"
+          style="margin-left: 20px; height: 47px"
+          alt=""
+          @click="getVerify"
+        />
       </div>
-      <div v-if="enableRegister"
-           style="
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        ">
+      <div
+        v-if="enableRegister"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          margin-bottom: 20px;
+        "
+      >
         <router-link style="color: #66b1ff" to="/register"> 立即注册 </router-link>
       </div>
-      <!-- <div style="display: flex"> -->
       <el-form-item>
         <el-button :loading="loading" type="primary" style="width: 100%"
-          @click.native.prevent="handleLogin">login</el-button>
+          @click.native.prevent="handleLogin">登录</el-button>
       </el-form-item>
 
-      <!-- <div style="margin-left: 10px" class="but">rigister</div> -->
-
-      <!-- </div> -->
     </el-form>
   </div>
 </template>
@@ -95,12 +128,13 @@ export default {
       loginForm: {
         username: "",
         password: "",
+        code: "",
       },
-      code: "",
       enableRegister: process.env.VUE_APP_ENABLE_REGISTER === 'true',
       loginRules: {
         username: [{ required: true, trigger: "blur", validator: validateUsername }],
         password: [{ required: true, trigger: "blur", validator: validatePassword }],
+        code: [{ required: true, trigger: "blur", message: "请输入验证码" }]
       },
       loading: false,
       passwordType: "password",
@@ -140,7 +174,7 @@ export default {
       });
     },
     handleLogin() {
-      verifyCode(this.code).then((res) => {
+      verifyCode(this.loginForm.code).then((res) => {
         if (res.code) {
           this.$refs.loginForm.validate((valid) => {
             if (valid) {
@@ -198,27 +232,25 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
+    .el-input {
+      display: inline-block;
       height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
+      width: 85%;
+      input {
+        background: transparent;
+        border: 0px;
+        -webkit-appearance: none;
+        border-radius: 0px;
+        padding: 12px 5px 12px 15px;
+        color: $light_gray;
+        height: 47px;
+        caret-color: $cursor;
+        &:-webkit-autofill {
+          box-shadow: 0 0 0px 1000px $bg inset !important;
+          -webkit-text-fill-color: $cursor !important;
+        }
       }
     }
-  }
 
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -290,7 +322,6 @@ $light_gray: #eee;
     cursor: pointer;
     user-select: none;
   }
-
   .but {
     width: 220px;
     height: 39px;
