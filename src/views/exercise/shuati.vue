@@ -447,6 +447,12 @@ export default {
 
     // 点击弹框中“确定结束”按钮后的处理：关闭弹框并进行跳转或其他后续处理
     finishExam(){
+      // 删除当前标签页
+      this.$store.commit('menu/REMOVE_TAG', {
+        title: this.$route.meta.title,  // 从路由元数据中获取标题
+        path: this.$route.path,
+        name: this.$route.name          // 添加路由名称
+      });
       this.statisticsDialogVisible = false;
       this.$router.push({ name: "Questcenter", params: { id: this.paperId } });
     },
