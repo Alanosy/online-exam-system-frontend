@@ -204,6 +204,7 @@ export default {
             }
           });
         } else {
+          this.loginForm.code = "";  // 清空验证码输入框
           this.getVerify();
           this.$message({
             type: "info",
