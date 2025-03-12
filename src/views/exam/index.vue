@@ -144,6 +144,16 @@
             >
               下一题
             </el-button>
+            
+            <!-- 添加最后一题的提交按钮 -->
+            <el-button
+              v-if="!showNext && cardItem.sort === allItem.length - 1"
+              type="success"
+              icon="el-icon-check"
+              @click="submitLastAnswer()"
+            >
+              提交答案
+            </el-button>
           </div>
         </el-card>
       </el-col>
@@ -538,6 +548,87 @@ export default {
       updateListStatus(this.paperData.multiList);
       updateListStatus(this.paperData.judgeList);
       updateListStatus(this.paperData.saqList);
+    },
+
+    // 提交最后一题答案
+    submitLastAnswer() {
+      // 获取题目ID
+      const questionId = this.cardItem.questionId;
+      // 判断题目类型
+      const isSimpleAnswer = this.allItem[this.cardItem.sort]?.type === 4;
+
+      // 准备答案数据
+      let answerContent = "";
+      if (isSimpleAnswer) {
+        // 简答题答案
+        answerContent = this.saqTextarea;
+      } else {
+        // 单选、多选、判断题答案
+        const answers = [...this.multiValue];
+        if (this.radioValue !== "") {
+          answers.push(this.radioValue);
+        }
+        answerContent = answers.join(",");
+      }
+
+      // 检查是否有答案
+      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent !== "";
+      
+      if (hasAnswer) {
+        const params = {
+          examId: this.paperId,
+          quId: questionId,
+          answer: answerContent
+        };
+        
+        // 对于多选题，需要对答案进行排序
+        if (this.quData.quType === 2 && answerContent) {
+          // 将答案ID转为数组，排序后再转回字符串
+          const sortedAnswers = answerContent.split(',')
+            .map(id => parseInt(id))
+            .sort((a, b) => {
+              // 查找对应选项的sort值进行排序
+              const itemA = this.quData.answerList.find(item => item.id === a);
+              const itemB = this.quData.answerList.find(item => item.id === b);
+              return (itemA?.sort || 0) - (itemB?.sort || 0);
+            })
+            .join(',');
+
+          params.answer = sortedAnswers;
+        }
+        
+        fillAnswer(params).then((res) => {
+          if (res.code) {
+            // 标记为已答
+            sessionStorage.setItem("exam_" + questionId, "1");
+            
+            // 保存已提交的答案，用于后续比较
+            this.submittedAnswers[questionId] = answerContent;
+            
+            // 更新当前题目的状态
+            this.updateQuestionStatus(questionId, 1);
+            
+            this.$message({
+              message: "答案提交成功！",
+              type: "success",
+            });
+          } else {
+            // 标记为未答
+            sessionStorage.setItem("exam_" + questionId, "0");
+            this.updateQuestionStatus(questionId, 0);
+            
+            this.$message({
+              message: "答案提交失败，请重试！",
+              type: "error",
+            });
+          }
+        });
+      } else {
+        this.$message({
+          message: "请先填写答案再提交！",
+          type: "warning",
+        });
+      }
     },
 
     // 试卷详情
