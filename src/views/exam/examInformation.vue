@@ -106,6 +106,12 @@ export default {
     startExam() {
       examStart(this.receivedRow).then((res) => {
         if (res.code) {
+          // 删除当前标签页
+          this.$store.commit('menu/REMOVE_TAG', {
+            title: this.$route.meta.title,  // 从路由元数据中获取标题
+            path: this.$route.path,
+            name: this.$route.name          // 添加路由名称
+          });
           localStorage.setItem('examId', this.receivedRow)
           this.$router.push({ name: 'start', query: { zhi: this.receivedRow }})
         } else {

@@ -6,7 +6,6 @@
         <el-card style="margin-bottom: 10px">
           距离考试结束还有：
           <exam-timer v-model="paperData.leftSeconds" @timeout="doHandler()" />
-          <!-- handHandExam -->
           <el-button
             :loading="loading"
             style="float: right; margin-top: -10px"
@@ -18,6 +17,7 @@
           </el-button>
         </el-card>
       </el-col>
+
       <!-- 答题卡区域 -->
       <el-col :span="5" :xs="24" style="margin-bottom: 10px">
         <el-card class="content-h">
@@ -25,104 +25,72 @@
           <el-row :gutter="24" class="card-line" style="padding-left: 10px">
             <el-tag type="info">未作答</el-tag>
             <el-tag type="success">已作答</el-tag>
+            <el-tag type="warning">当前题目</el-tag>
           </el-row>
 
-          <div
-            v-if="
-              paperData.radioList !== null &&
-              paperData.radioList !== undefined &&
-              paperData.radioList.length > 0
-            "
-          >
-            <p class="card-title">单选题</p>
-            <el-row :gutter="24" class="card-line">
-              <el-tag
-                v-for="(item, index) in paperData.radioList"
-                :key="index"
-                :type="cardItemClass(item.checkout, item.questionId)"
-                @click="handSave(item)"
-              >
-                {{ item.sort + 1 }}</el-tag
-              >
-            </el-row>
-          </div>
+          <!-- 单选题答题卡 -->
+          <question-card-section
+            v-if="hasQuestions(paperData.radioList)"
+            title="单选题"
+            :questions="paperData.radioList"
+            :current-item="cardItem"
+            @select-question="handSave"
+          />
 
-          <div
-            v-if="
-              paperData.multiList !== null &&
-              paperData.multiList !== undefined &&
-              paperData.multiList.length > 0
-            "
-          >
-            <p class="card-title">多选题</p>
-            <el-row :gutter="24" class="card-line">
-              <el-tag
-                v-for="(item, index) in paperData.multiList"
-                :key="index"
-                :type="cardItemClass(item.checkout, item.questionId)"
-                @click="handSave(item)"
-                >{{ item.sort + 1 }}</el-tag
-              >
-            </el-row>
-          </div>
+          <!-- 多选题答题卡 -->
+          <question-card-section
+            v-if="hasQuestions(paperData.multiList)"
+            title="多选题"
+            :questions="paperData.multiList"
+            :current-item="cardItem"
+            @select-question="handSave"
+          />
 
-          <div
-            v-if="
-              paperData.judgeList !== null &&
-              paperData.judgeList !== undefined &&
-              paperData.judgeList.length > 0
-            "
-          >
-            <p class="card-title">判断题</p>
-            <el-row :gutter="24" class="card-line">
-              <el-tag
-                v-for="(item, index) in paperData.judgeList"
-                :key="index"
-                :type="cardItemClass(item.checkout, item.questionId)"
-                @click="handSave(item)"
-                >{{ item.sort + 1 }}</el-tag
-              >
-            </el-row>
-          </div>
-          <div
-            v-if="
-              paperData.saqList != null &&
-              paperData.saqList !== undefined &&
-              paperData.saqList.length > 0
-            "
-          >
-            <p class="card-title">简答题</p>
-            <el-row :gutter="24" class="card-line">
-              <el-tag
-                v-for="(item, index) in paperData.saqList"
-                :key="index"
-                :type="cardItemClass(item.checkout, item.questionId)"
-                @click="handSave(item)"
-                >{{ item.sort + 1 }}</el-tag
-              >
-            </el-row>
-          </div>
+          <!-- 判断题答题卡 -->
+          <question-card-section
+            v-if="hasQuestions(paperData.judgeList)"
+            title="判断题"
+            :questions="paperData.judgeList"
+            :current-item="cardItem"
+            @select-question="handSave"
+          />
+
+          <!-- 简答题答题卡 -->
+          <question-card-section
+            v-if="hasQuestions(paperData.saqList)"
+            title="简答题"
+            :questions="paperData.saqList"
+            :current-item="cardItem"
+            @select-question="handSave"
+          />
         </el-card>
       </el-col>
+
       <!-- 单题区域 -->
       <el-col :span="19" :xs="24">
         <el-card class="qu-content content-h">
           <!-- 题干 -->
           <p v-if="quData.content">{{ quData.sort + 1 }}.{{ quData.content }}</p>
-          <p v-if="quData.image != null && quData.image != ''">
+          <p v-if="quData.image">
             <el-image :src="quData.image" style="max-width: 200px" />
           </p>
-          <!-- 大选和多选选项区域 -->
+
+          <!-- 单选和判断题选项区域 -->
           <div v-if="quData.quType === 1 || quData.quType === 3">
             <el-radio-group v-model="radioValue">
-              <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id"
-                >{{ numberToLetter(item.sort) }}.{{ item.content }}
-                <div v-if="item.image != null && item.image != ''" style="clear: both">
+              <el-radio
+                v-for="item in quData.answerList"
+                :key="item.id"
+                :label="item.id"
+              >
+                {{ numberToLetter(item.sort) }}.{{ item.content }}
+                <div v-if="item.image" style="clear: both">
                   <el-image :src="item.image" style="max-width: 200px" />
                 </div>
               </el-radio>
             </el-radio-group>
           </div>
+
           <!-- 多选题区域 -->
           <div v-if="quData.quType === 2">
             <el-checkbox-group v-model="multiValue">
@@ -130,13 +98,15 @@
                 v-for="item in quData.answerList"
                 :key="item.id"
                 :label="item.id"
-                >{{ numberToLetter(item.sort) }}.{{ item.content }}
-                <div v-if="item.image != null && item.image != ''" style="clear: both">
+              >
+                {{ numberToLetter(item.sort) }}.{{ item.content }}
+                <div v-if="item.image" style="clear: both">
                   <el-image :src="item.image" style="max-width: 200px" />
                 </div>
               </el-checkbox>
             </el-checkbox-group>
           </div>
+
           <!-- 简答题区域 -->
           <div v-if="quData.quType === 4">
             <el-input
@@ -146,133 +116,16 @@
               placeholder="请输入内容"
             />
           </div>
-          <!-- 提交前汇总 -->
-          <el-dialog
-            top="2vh"
-            title="考前汇总"
+
+          <!-- 提交前汇总对话框 -->
+          <exam-summary-dialog
             :visible.sync="examPreVisible"
-            width="80%"
-            :before-close="handleClose"
-          >
-            <el-container style="height: 70vh; border: 1px solid #eee">
-              <el-container>
-                <el-main class="right">
-                  <el-col>
-                    <el-card class="qu_list">
-                      <div>
-                        <!-- 客观题部分 -->
-                        <template v-for="index in recordData">
-                          <div
-                            v-if="
-                              index.quType === 1 ||
-                              index.quType === 2 ||
-                              index.quType === 3
-                            "
-                            :class="'index' + index"
-                          >
-                            <el-row :gutter="24">
-                              <el-col :span="20" style="text-align: left">
-                                <!-- 题目: 序号、类型、题干 -->
-                                <!-- 题干区域 -->
-                                <div>
-                                  <div class="qu_content">
-                                    {{ index.title }}
-                                  </div>
-                                  <div v-if="index.image != null && index.image != ''" >
-                                      <el-image :src="index.image" style="max-width: 200px;" />
-                                  </div>
-                                </div>
-                                <!-- 选项区域 -->
-                                <el-radio-group class="qu_choose_group">
-                                  <!-- ['A', 'B', 'C', 'D'] -->
-                                  <el-radio
-                                    v-for="(item, indexs) in index.option"
-                                    :key="index"
-                                    :label="item.content"
-                                    border
-                                    class="qu_choose"
-                                    :class="{
-                                      'current': index.myOption != null && isCheck(index.myOption, item.sort),
-                                      'imgC':item.image != null && item.image != '',
-                                    }"
-                                  >
-                                    
+            :record-data="recordData"
+            @close="handleClose"
+            @confirm="doHandler"
+          />
 
-                                          {{ numberToLetter(indexs) }}、{{ item.content }}
-                                  
-                                        <div v-if="item.image != null && item.image != ''" >
-                                        <el-image :src="item.image" style="max-width: 200px" class="qu_choose_tag_img" />
-                                   </div>
-                                    <!-- <div class="qu_choose_answer">
-                                    </div> -->
-                                  </el-radio>
-                                </el-radio-group>
-
-                                <!-- 我的答案区域 -->
-                                <div class="qu_analysis">
-                                  <el-card>
-                                    <div>
-                                      <span>我的答案：</span>
-                                      <span
-                                        :style="{
-                                          color:
-                                            isRight === 1
-                                              ? 'green'
-                                              : isRight === 0
-                                              ? 'red'
-                                              : 'gray',
-                                        }"
-                                        >{{ numberToLetter(index.myOption) }}</span
-                                      ><br />
-                                    </div>
-                                  </el-card>
-                                </div>
-                              </el-col>
-                            </el-row>
-                            <el-divider />
-                          </div>
-                        </template>
-                        <!-- 主观题部分 -->
-                        <template v-for="index in recordData">
-                          <div v-if="index.quType === 4" :class="'index' + index">
-                            <el-row :gutter="24">
-                              <el-col :span="20" style="text-align: left">
-                                <!-- 题目: 序号、类型、题干 -->
-                                <!-- 题干部分 -->
-                                <div>
-                                  <div class="qu_content">
-                                    {{ index.title }}
-                                  </div>
-                                </div>
-
-                                <!-- 简答题内容区域 -->
-                                <el-radio-group class="qu_choose_group">
-                                  <!-- ['A', 'B', 'C', 'D'] -->
-                                  <el-input
-                                    v-model="index.myOption"
-                                    style="margin-top: 10px"
-                                    type="textarea"
-                                    :autosize="{ minRows: 2, maxRows: 4 }"
-                                    placeholder="请输入内容"
-                                  />
-                                </el-radio-group>
-                              </el-col>
-                            </el-row>
-                            <el-divider />
-                          </div>
-                        </template>
-                      </div>
-                      <el-divider />
-                    </el-card>
-                  </el-col>
-                </el-main>
-              </el-container>
-            </el-container>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="examPreVisible = false">取 消</el-button>
-              <el-button type="primary" @click="doHandler">确 定</el-button>
-            </span>
-          </el-dialog>
+          <!-- 导航按钮 -->
           <div style="margin-top: 20px">
             <el-button
               v-if="showPrevious"
@@ -295,6 +148,7 @@
         </el-card>
       </el-col>
     </el-row>
+
     <!-- 切屏弹窗 -->
     <el-dialog
       title="提示"
@@ -305,15 +159,6 @@
       :close-on-click-modal="false"
     >
       {{ examMeg }}
-      <!-- <span slot="footer" class="dialog-footer">
-        <el-button v-if="tips === 1" @click="tipsFlag = false">取 消</el-button>
-        <el-button v-if="tips === 1" type="primary" @click="onConfirmTip"
-          >确 定</el-button
-        >
-        <el-button v-if="tips === 2" type="primary" @click="onConfirmTip"
-          >我知道了</el-button
-        >
-      </span> -->
     </el-dialog>
   </div>
 </template>
@@ -331,10 +176,16 @@ import {
 } from "@/api/exam";
 import { Loading } from "element-ui";
 import ExamTimer from "@/components/ExamTimer";
+import QuestionCardSection from "./components/QuestionCardSection";
+import ExamSummaryDialog from "./components/ExamSummaryDialog";
 
 export default {
   name: "ExamProcess",
-  components: { ExamTimer },
+  components: {
+    ExamTimer,
+    QuestionCardSection,
+    ExamSummaryDialog
+  },
   data() {
     return {
       examId: "",
@@ -367,6 +218,7 @@ export default {
         radioList: [],
         multiList: [],
         judgeList: [],
+        saqList: [],
       },
       // 单选选定值
       radioValue: "",
@@ -375,50 +227,48 @@ export default {
       // 已答ID
       answeredIds: [],
       recordData: null,
+      //
+      submittedAnswers: {},
     };
   },
   created() {
     this.examId = localStorage.getItem("examId");
-    this.startExam(localStorage.getItem("examId"));
-    this.paperId = localStorage.getItem("examId");
-    this.fetchData(localStorage.getItem("examId"));
-    // if (typeof id !== 'undefined') {
-    //   this.paperId = id
-    //   this.fetchData(28)
-    // }
+    this.paperId = this.examId;
+    this.startExam(this.examId);
+    this.fetchData(this.examId);
   },
   mounted() {
-    // 监听滚动
-    window.addEventListener("scroll", this.handleScroll);
-    // 监听浏览器窗口变化
-    window.addEventListener("resize", this.getLfetDistance);
-    // 监听页面可见性
-    window.addEventListener("visibilitychange", this.pageHidden);
-    this.$nextTick(function () {
+    document.addEventListener("visibilitychange", this.pageHidden);
+    this.$nextTick(() => {
       const body = document.querySelector("body");
       body.style.overflow = "auto";
-      this.flexLeft = (body.offsetWidth - 1200) / 2;
     });
   },
+  beforeDestroy() {
+    document.removeEventListener("visibilitychange", this.pageHidden);
+    clearInterval(this.countdownTime);
+  },
   methods: {
-    isCheck(myOption, sort) {
-      const arr = myOption.split(",").map(Number); // 将字符串转换为数字数组
-      if (arr.includes(sort)) {
-        return true;
-        console.log(`${valueToCheck} 在数组中.`);
-      } else {
-        return false;
-      }
+    // 检查问题列表是否存在
+    hasQuestions(list) {
+      return list && list.length > 0;
     },
-    handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then((_) => {
-          done();
-        })
-        .catch((_) => {});
+
+    // 检查选项是否被选中
+    isCheck(myOption, sort) {
+      if (!myOption) return false;
+      const arr = myOption.split(",").map(Number);
+      return arr.includes(sort);
+    },
+
+    // 处理对话框关闭
+    handleClose() {
+      this.examPreVisible = false;
     },
     // 将0-5转换为A-F
     numberToLetter(input) {
+      if (input === null || input === undefined) return "";
+
       const numberToCharMap = {
         0: "A",
         1: "B",
@@ -428,145 +278,77 @@ export default {
         5: "F",
       };
 
-      // 辅助函数：将单个数字（字符串或数字类型）转换为字母
-      const singleNumberToLetter = (num) => numberToCharMap[parseInt(num, 10)] || "";
-
-      // 辅助函数：处理逗号分隔的数字字符串
-      const commaSeparatedNumbersToLetters = (str) => {
-        const numbers = str.split(",").map((item) => parseInt(item.trim(), 10));
-        return numbers.map((number) => numberToCharMap[number] || "").join(",");
-      };
-
-      // 判断输入类型并调用相应函数
-      if (/^\d+$/.test(input)) {
-        // 单个数字（字符串形式也可以匹配）
-        return singleNumberToLetter(input);
-      } else if (/^\d+(,\d+)*$/.test(input)) {
-        // 包含逗号分隔的数字字符串
-        return commaSeparatedNumbersToLetters(input);
-      } else {
-        return ""; // 输入不符合预期，返回空字符串或根据需要处理
+      // 处理单个数字
+      if (typeof input === 'number' || /^\d+$/.test(input)) {
+        return numberToCharMap[parseInt(input, 10)] || "";
       }
+
+      // 处理逗号分隔的数字
+      if (/^\d+(,\d+)*$/.test(input)) {
+        return input.split(",")
+          .map(num => numberToCharMap[parseInt(num.trim(), 10)] || "")
+          .join(",");
+      }
+
+      return "";
     },
+
+    // 交卷前预览
     handHandExamPre() {
-      // 交卷保存答案
-      // fillAnswer(params).then((res) => {
-      //   if (res.code) {
-      //     sessionStorage.setItem("exam_" + this.cardItem.questionId, 1);
-      //     item.checkout=1
-      //   } else {
-      //     sessionStorage.setItem("exam_" + this.cardItem.questionId, 0);
-      //   }
-      //   this.saqTextarea = "";
-      //   // 必须选择一个值
-      //   if (answers.length > 0) {
-      //     // 加入已答列表
-      //     this.cardItem.answered = true;
-      //   }
-
-      //   // 最后一个动作，交卷
-      //   if (callback) {
-      //     callback();
-      //   }
-
-      //   // 查找详情
-      //   this.fetchQuData(item);
-      // });
-      // this.handSave(this.allItem[index]);
       this.handSave(this.cardItem);
       examCollect(this.examId).then((res) => {
-        this.recordData = res.data;
+        // 按答题卡排序
+        this.recordData = this.allItem.map(item =>
+          res.data.find(d => d.id === item.questionId)
+        );
+
+        this.examPreVisible = true;
       });
-      this.examPreVisible = true;
     },
     // 切换页面检测
-    pageHidden(e = null, isReduce = 0, router = false) {
-      return new Promise((resolve, reject) => {
-        if (document.visibilityState === "hidden" || router) {
-          examCheat(this.examId).then((res) => {
-            // let data = res.data;
-            if (res.code) {
-              this.examMeg = res.msg;
-              this.tipsFlag = true;
-              if (res.data) {
-                setTimeout(() => {
-                  //
-                  getQuestionDetail(this.quList[this.currentQuIndex].quId).then((res) => {
-                    this.quDetail = res.data;
-                  });
-                }, 100);
-                this.$router.push({
-                  name: "Textcenter",
-                  params: { id: this.paperId },
-                });
-              }
-
-              resolve();
-            } else {
-              reject();
+    pageHidden(e = null) {
+      if (document.visibilityState === "hidden") {
+        examCheat(this.examId).then((res) => {
+          if (res.code) {
+            this.examMeg = res.msg;
+            this.tipsFlag = true;
+            if (res.data) {
+              this.$router.push({
+                name: "Textcenter",
+                params: { id: this.paperId },
+              });
             }
-          });
-        }
-      });
+          }
+        });
+      }
     },
-    destroyed() {
-      window.removeEventListener("visibilitychange", this.pageHidden);
-      window.removeEventListener("scroll", this.handleScroll);
-      window.removeEventListener("resize", this.getLfetDistance);
-      clearInterval(this.countdownTime); // 计时器
-    },
+
+    // 开始考试
     startExam(examId) {
       examQuList(examId).then((res) => {
         this.paperData = res.data;
       });
     },
-    // 答题卡样式
-    cardItemClass(checkout, quId) {
-      if (sessionStorage.getItem("exam_" + quId) == 1 || checkout) {
-        return "success";
-      }
-
-      if (sessionStorage.getItem("exam_" + quId == 0) || checkout) {
-        return "info";
-      }
-    },
-
     /**
      * 统计有多少题没答的
      * @returns {number}
      */
     countNotAnswered() {
       let notAnswered = 0;
+      const checkList = (list) => {
+        if (list) {
+          list.forEach(item => {
+            if (!item.checkout) {
+              notAnswered += 1;
+            }
+          });
+        }
+      };
 
-      if (this.paperData.radioList) {
-        this.paperData.radioList.forEach(function (item) {
-          if (!item.checkout) {
-            notAnswered += 1;
-          }
-        });
-      }
-      
-      if (this.paperData.multiList) {
-        this.paperData.multiList.forEach(function (item) {
-          if (!item.checkout) {
-            notAnswered += 1;
-          }
-        });
-      }
-      if (this.paperData.judgeList) {
-        this.paperData.judgeList.forEach(function (item) {
-          if (!item.checkout) {
-            notAnswered += 1;
-          }
-        });
-      }
-      if (this.paperData.saqList) {
-        this.paperData.saqList.forEach(function (item) {
-          if (!item.checkout) {
-            notAnswered += 1;
-          }
-        });
-      }
+      checkList(this.paperData.radioList);
+      checkList(this.paperData.multiList);
+      checkList(this.paperData.judgeList);
+      checkList(this.paperData.saqList);
 
       return notAnswered;
     },
@@ -576,7 +358,9 @@ export default {
      */
     handNext() {
       const index = this.cardItem.sort + 1;
-      this.handSave(this.allItem[index]);
+      if (index < this.allItem.length) {
+        this.handSave(this.allItem[index]);
+      }
     },
 
     /**
@@ -584,39 +368,39 @@ export default {
      */
     handPrevious() {
       const index = this.cardItem.sort - 1;
-      this.handSave(this.allItem[index]);
+      if (index >= 0) {
+        this.handSave(this.allItem[index]);
+      }
     },
     // 清空Session
     // 使用函数清除以 "exam_" 开头的所有键值对
     clearSessionStorageByPrefix(prefix) {
-      for (var key in sessionStorage) {
-        if (sessionStorage.hasOwnProperty(key) && key.startsWith(prefix)) {
-          sessionStorage.removeItem(key);
-        }
-      }
+      Object.keys(sessionStorage)
+        .filter(key => key.startsWith(prefix))
+        .forEach(key => sessionStorage.removeItem(key));
     },
 
     // 交卷
     doHandler() {
-      const that = this;
-      const notAnswered = that.countNotAnswered();
+      const notAnswered = this.countNotAnswered();
+      let msg = notAnswered > 0
+        ? `您还有${notAnswered}题未作答，确认要交卷吗?`
+        : "确认要交卷吗？";
 
-      let msg = "确认要交卷吗？";
-
-      if (notAnswered > 0) {
-        msg = "您还有" + notAnswered + "题未作答，确认要交卷吗?";
-      }
-
-      that
-        .$confirm(msg, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        })
+      this.$confirm(msg, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
         .then(() => {
           this.handleText = "正在交卷，请等待...";
           this.loading = true;
-
+          // 删除当前标签页
+          this.$store.commit('menu/REMOVE_TAG', {
+            title: this.$route.meta.title,  // 从路由元数据中获取标题
+            path: this.$route.path,
+            name: this.$route.name          // 添加路由名称
+          });
           handExam(this.examId).then(() => {
             this.$message({
               message: "试卷提交成功，即将进入试卷详情！",
@@ -627,101 +411,133 @@ export default {
           });
         })
         .catch(() => {
-          that.$message({
+          this.$message({
             type: "info",
             message: "交卷已取消，您可以继续作答！",
           });
         });
     },
 
-    // 交卷操作
-    handHandExam() {
-      const that = this;
-
-      // 交卷保存答案
-      this.handSave(this.cardItem, function () {
-        const notAnswered = that.countNotAnswered();
-
-        let msg = "确认要交卷吗？";
-
-        if (notAnswered > 0) {
-          msg = "您还有" + notAnswered + "题未作答，确认要交卷吗?";
-        }
-
-        that
-          .$confirm(msg, "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning",
-          })
-          .then(() => {
-            that.doHandler();
-          })
-          .catch(() => {
-            that.$message({
-              type: "info",
-              message: "交卷已取消，您可以继续作答！",
-            });
-          });
-      });
-    },
-
     // 保存答案
     handSave(item, callback) {
-      if (item.id === this.allItem[0].id) {
-        this.showPrevious = false;
-      } else {
-        this.showPrevious = true;
-      }
+      // 更新上一题/下一题按钮状态
+      this.showPrevious = item.sort > 0;
+      this.showNext = item.sort < this.allItem.length - 1;
 
-      // 最后一个索引
-      const last = this.allItem.length - 1;
+      // 保存当前题目的引用，以便在回调中更新其状态
+      const currentItem = this.cardItem;
 
-      if (item.id === this.allItem[last].id) {
-        this.showNext = false;
-      } else {
-        this.showNext = true;
-      }
+      // 获取题目ID
+      const questionId = this.cardItem.questionId;
+      // 判断题目类型
+      const isSimpleAnswer = this.allItem[this.cardItem.sort]?.type === 4;
 
-      const answers = this.multiValue;
-      if (this.radioValue !== "") {
-        answers.push(this.radioValue);
-      }
-
-      // console.log(
-      //   "aaa",
-      //   this.allItem[this.cardItem.sort].type == 4 ? this.saqTextarea : answers.join(",")
-      // );
-      const params = {
-        examId: this.paperId,
-        quId: this.cardItem.questionId,
-        answer:
-          this.allItem[this.cardItem.sort].type == 4
-            ? this.saqTextarea
-            : answers.join(","),
-      };
-      fillAnswer(params).then((res) => {
-        if (res.code) {
-          sessionStorage.setItem("exam_" + this.cardItem.questionId, 1);
-          item.checkout=1
-        } else {
-          sessionStorage.setItem("exam_" + this.cardItem.questionId, 0);
-        }
+      // 准备答案数据
+      let answerContent = "";
+      if (isSimpleAnswer) {
+        console.log('简答题');
+        console.log( this.saqTextarea);
+        // 简答题答案
+        answerContent = this.saqTextarea;
+        // 清空输入框
         this.saqTextarea = "";
-        // 必须选择一个值
-        if (answers.length > 0) {
-          // 加入已答列表
-          this.cardItem.answered = true;
+      } else {
+        console.log('单选、多选、判断题');
+        // 单选、多选、判断题答案
+        const answers = [...this.multiValue];
+        if (this.radioValue !== "") {
+          answers.push(this.radioValue);
         }
+        answerContent = answers.join(",");
+      }
 
-        // 最后一个动作，交卷
-        if (callback) {
-          callback();
-        }
+      // 检查是否有答案，如果没有答案且不是强制提交（如交卷前），则不提交
+      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent !== "";
+      console.log("hasAnswer:", hasAnswer);
+      // 检查是否已经提交过相同的答案
+      const previousAnswer = this.submittedAnswers[questionId];
+      const answerUnchanged = previousAnswer === answerContent;
+
+      // 如果答案已提交且未更改，且不是强制提交（callback不存在），则跳过提交
+      if (answerUnchanged && !callback && sessionStorage.getItem("exam_" + questionId) === "1") {
+        console.log('答案未更改，跳过提交');
+        // 直接加载下一题
+        this.fetchQuData(item);
+        return;
+      }
+
+      // 如果有答案或者是强制提交（callback存在），则提交答案
+      if (hasAnswer || callback) {
+        const params = {
+          examId: this.paperId,
+          quId: questionId,
+          answer: answerContent
+        };
+      // 对于多选题，需要对答案进行排序
+      if (this.quData.quType === 2 && answerContent) {
+        // 将答案ID转为数组，排序后再转回字符串
+        const sortedAnswers = answerContent.split(',')
+          .map(id => parseInt(id))
+          .sort((a, b) => {
+            // 查找对应选项的sort值进行排序
+            const itemA = this.quData.answerList.find(item => item.id === a);
+            const itemB = this.quData.answerList.find(item => item.id === b);
+            return (itemA?.sort || 0) - (itemB?.sort || 0);
+          })
+          .join(',');
+
+        params.answer = sortedAnswers;
+      }
+        fillAnswer(params).then((res) => {
+          if (res.code) {
+            // 标记为已答
+            sessionStorage.setItem("exam_" + currentItem.questionId, "1");
+
+            // 保存已提交的答案，用于后续比较
+            this.submittedAnswers[questionId] = answerContent;
+
+            // 更新当前题目的状态
+            this.updateQuestionStatus(currentItem.questionId, 1);
+          } else {
+            // 标记为未答
+            sessionStorage.setItem("exam_" + currentItem.questionId, "0");
+            this.updateQuestionStatus(currentItem.questionId, 0);
+          }
+
+          // 最后一个动作，交卷
+          if (callback) {
+            callback();
+          }
+          // 查找详情
+          this.fetchQuData(item);
+        });
+      } else {
+        // 确保不标记为已答题
+        sessionStorage.setItem("exam_" + currentItem.questionId, "0");
+        this.updateQuestionStatus(currentItem.questionId, 0);
 
         // 查找详情
         this.fetchQuData(item);
-      });
+      }
+
+    },
+
+    // 更新题目状态
+    updateQuestionStatus(questionId, status) {
+      // 在所有题型列表中查找并更新状态
+      const updateListStatus = (list) => {
+        if (list && list.length > 0) {
+          const question = list.find(q => q.questionId === questionId);
+          if (question) {
+            question.checkout = status;
+          }
+        }
+      };
+
+      updateListStatus(this.paperData.radioList);
+      updateListStatus(this.paperData.multiList);
+      updateListStatus(this.paperData.judgeList);
+      updateListStatus(this.paperData.saqList);
     },
 
     // 试卷详情
@@ -742,13 +558,21 @@ export default {
         this.radioValue = "";
         this.multiValue = [];
 
+        // 根据题目类型设置答案
         if (response.data.quType === 4 && response.data.answerList != null) {
+          // 简答题
           this.saqTextarea = response.data.answerList[0].content;
+
+          // 记录当前加载的答案
+          if (sessionStorage.getItem("exam_" + item.questionId) === "1") {
+            this.submittedAnswers[item.questionId] = this.saqTextarea;
+          }
         } else if (
           response.data.quType === 1 ||
           response.data.quType === 2 ||
           response.data.quType === 3
         ) {
+          // 单选、多选、判断题
           this.quData.answerList.forEach((item) => {
             if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checkout) {
               this.radioValue = item.id;
@@ -758,11 +582,13 @@ export default {
             }
           });
         }
-        // 填充该题目的答案
-        // 关闭详情
+
+        // 关闭加载提示
+        loading.close();
+      }).catch(() => {
+        // 出错时也要关闭加载提示
         loading.close();
       });
-      loading.close();
     },
 
     // 试卷详情
@@ -770,42 +596,55 @@ export default {
       examQuList(examId).then((response) => {
         // 试卷内容
         this.paperData = response.data;
+        this.allItem = [];
 
         // 获得第一题内容
-        if (this.paperData.radioList && this.paperData.radioList.length > 0) {
-          this.cardItem = this.paperData.radioList[0];
-        } else if (this.paperData.multiList && this.paperData.multiList.length > 0) {
-          this.cardItem = this.paperData.multiList[0];
-        } else if (this.paperData.judgeList && this.paperData.judgeList.length > 0) {
-          this.cardItem = this.paperData.judgeList[0];
-        } else if (this.paperData.saqList && this.paperData.saqList.length > 0) {
-          this.cardItem = this.paperData.saqList[0];
-        }
+        this.setFirstQuestion();
 
-        const that = this;
-        if (this.paperData.radioList && this.paperData.radioList.length > 0) {
-          this.paperData.radioList.forEach(function (item) {
-            that.allItem.push(item);
-          });
-        }
-        if (this.paperData.multiList && this.paperData.multiList.length > 0) {
-          this.paperData.multiList.forEach(function (item) {
-            that.allItem.push(item);
-          });
-        }
-        if (this.paperData.judgeList && this.paperData.judgeList.length > 0) {
-          this.paperData.judgeList.forEach(function (item) {
-            that.allItem.push(item);
-          });
-        }
-        if (this.paperData.saqList && this.paperData.saqList.length > 0) {
-          this.paperData.saqList.forEach(function (item) {
-            that.allItem.push(item);
-          });
-        }
+        // 合并所有题目到allItem数组
+        this.mergeAllQuestions();
+
         // 当前选定
         this.fetchQuData(this.cardItem);
       });
+    },
+
+    // 设置第一个题目
+    setFirstQuestion() {
+      if (this.paperData.radioList && this.paperData.radioList.length > 0) {
+        this.cardItem = this.paperData.radioList[0];
+      } else if (this.paperData.multiList && this.paperData.multiList.length > 0) {
+        this.cardItem = this.paperData.multiList[0];
+      } else if (this.paperData.judgeList && this.paperData.judgeList.length > 0) {
+        this.cardItem = this.paperData.judgeList[0];
+      } else if (this.paperData.saqList && this.paperData.saqList.length > 0) {
+        this.cardItem = this.paperData.saqList[0];
+      }
+    },
+
+    // 合并所有题目
+    mergeAllQuestions() {
+      const addQuestionsToAllItems = (questionList) => {
+        if (questionList && questionList.length > 0) {
+          questionList.forEach(item => this.allItem.push(item));
+        }
+      };
+
+      addQuestionsToAllItems(this.paperData.radioList);
+      addQuestionsToAllItems(this.paperData.multiList);
+      addQuestionsToAllItems(this.paperData.judgeList);
+      addQuestionsToAllItems(this.paperData.saqList);
+    },
+
+    // 处理滚动事件
+    handleScroll() {
+      // 实现滚动逻辑
+    },
+
+    // 获取左侧距离
+    getLfetDistance() {
+      const body = document.querySelector("body");
+      this.flexLeft = (body.offsetWidth - 1200) / 2;
     },
   },
 };
@@ -839,6 +678,8 @@ page {
 }
 .card-line {
   padding-left: 10px;
+  display: flex;
+  flex-wrap: wrap;
 }
 .card-line span {
   cursor: pointer;
@@ -984,7 +825,7 @@ page {
         .qu_choose_tag_content {
           padding: 0 10px 10px 10px;
         }
-       
+
 
         .qu_choose_tag_el_image {
           clear: both;
