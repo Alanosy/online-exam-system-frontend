@@ -121,10 +121,10 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-import { classCount, classExamCount, classAllCounts } from '@/api/stat'
+import echarts from "echarts";
+import { classCount, classExamCount, classAllCounts } from "@/api/stat";
 export default {
-  name: 'Index',
+  name: "Index",
   data() {
     return {
       chartData: [],
@@ -133,57 +133,71 @@ export default {
       chartDataTitle2: [],
       classCount: 0,
       quCount: 0,
-      examCount: 0
-    }
+      examCount: 0,
+    };
   },
-  mounted: function() {
-    this.$nextTick(function() {
-      this.getPie()
-      this.getPies()
-    })
+  mounted: function () {
+    this.$nextTick(function () {
+      this.getPie();
+      this.getPies();
+    });
   },
   async created() {
     try {
-      const res0 = await classAllCounts()
-      this.classCount = res0.data.classCount
-      this.quCount = res0.data.questionCount
-      this.examCount = res0.data.examCount
-      const res1 = await classCount()
-      this.processChartData(res1.data)
+      const res0 = await classAllCounts();
+      this.classCount = res0.data.classCount;
+      this.quCount = res0.data.questionCount;
+      this.examCount = res0.data.examCount;
+      const res1 = await classCount();
+      this.processChartData(res1.data);
 
-      const res2 = await classExamCount()
-      this.processChartData2(res2.data)
+      const res2 = await classExamCount();
+      this.processChartData2(res2.data);
     } catch (error) {
-      console.error('Failed to fetch class count:', error)
+      console.error("Failed to fetch class count:", error);
     }
   },
 
   methods: {
     processChartData(data) {
-      this.chartData = data
-        // .filter((item) => item.totalStudent > 0)
-        .map((item) => ({ name: item.gradeName, value: item.totalStudent }))
-      this.chartDataTitle = this.chartData.map((item) => item.name)
-
-      this.getPie()
+      // 新增逻辑：检查数据是否为空
+      if (data.length === 0) {
+        // 设置默认数据
+        this.chartData = [{ name: "暂无数据", value: 1 }];
+        this.chartDataTitle = ["暂无数据"];
+      } else {
+        // 原有的数据处理逻辑
+        this.chartData = data
+          // .filter((item) => item.totalStudent > 0)
+          .map((item) => ({ name: item.gradeName, value: item.totalStudent }));
+        this.chartDataTitle = this.chartData.map((item) => item.name);
+      }
+      this.getPie();
     },
     processChartData2(data) {
-      this.chartData2 = data
-        // .filter((item) => item.total > 0)
-        .map((item) => ({ name: item.gradeName, value: item.total }))
-      this.chartDataTitle2 = this.chartData.map((item) => item.name)
-
-      this.getPies()
+      // 新增逻辑：检查数据是否为空
+      if (data.length === 0) {
+        // 设置默认数据
+        this.chartData2 = [{ name: "暂无数据", value: 1 }];
+        this.chartDataTitle2 = ["暂无数据"];
+      } else {
+        // 原有的数据处理逻辑
+        this.chartData2 = data
+          // .filter((item) => item.total > 0)
+          .map((item) => ({ name: item.gradeName, value: item.total }));
+        this.chartDataTitle2 = this.chartData2.map((item) => item.name);
+      }
+      this.getPies();
     },
     getPie() {
       // 绘制图表
-      var myChart = echarts.init(document.getElementById('main'))
+      var myChart = echarts.init(document.getElementById("main"));
       // 指定图表的配置项和数据
       var option = {
         // 标题
         title: {
-          text: '班级人数分布',
-          x: 'center' // 标题位置
+          text: "班级人数分布",
+          x: "center", // 标题位置
           // textStyle: { //标题内容的样式
           //   color: '#000',
           //   fontStyle: 'normal',
@@ -194,61 +208,61 @@ export default {
         // stillShowZeroSum: true,
         // 鼠标划过时饼状图上显示的数据
         tooltip: {
-          trigger: 'item',
-          formatter: '{a}<br/>{b}:{c} ({d}%)'
+          trigger: "item",
+          formatter: "{a}<br/>{b}:{c} ({d}%)",
         },
         // 图例
         legend: {
           // 图例  标注各种颜色代表的模块
           // orient: 'vertical',//图例的显示方式  默认横向显示
           bottom: 10, // 控制图例出现的距离  默认左上角
-          left: 'center', // 控制图例的位置
+          left: "center", // 控制图例的位置
           // itemWidth: 16,//图例颜色块的宽度和高度
           // itemHeight: 12,
           textStyle: {
             // 图例中文字的样式
-            color: '#000',
-            fontSize: 16
+            color: "#000",
+            fontSize: 16,
           },
-          data: this.chartDataTitle
+          data: this.chartDataTitle,
           // ["一班", "二班", "三班", "四班"], //图例上显示的饼图各模块上的名字
         },
         // 饼图中各模块的颜色
-        color: ['#32dadd', '#b6a2de', '#5ab1ef', '#454599'],
+        color: ["#32dadd", "#b6a2de", "#5ab1ef", "#454599"],
         // 饼图数据
         series: {
           // name: 'bug分布',
-          type: 'pie', // echarts图的类型   pie代表饼图
-          radius: '60%', // 饼图中饼状部分的大小所占整个父元素的百分比
-          center: ['50%', '50%'], // 整个饼图在整个父元素中的位置
+          type: "pie", // echarts图的类型   pie代表饼图
+          radius: "60%", // 饼图中饼状部分的大小所占整个父元素的百分比
+          center: ["50%", "50%"], // 整个饼图在整个父元素中的位置
           // data:''               //饼图数据
           data: this.chartData,
           itemStyle: {
             normal: {
               label: {
-                show: true // 饼图上是否出现标注文字 标注各模块代表什么  默认是true
+                show: true, // 饼图上是否出现标注文字 标注各模块代表什么  默认是true
                 // position: 'inner',//控制饼图上标注文字相对于饼图的位置  默认位置在饼图外
               },
               labelLine: {
-                show: true // 官网demo里外部标注上的小细线的显示隐藏    默认显示
-              }
-            }
-          }
-        }
-      }
+                show: true, // 官网demo里外部标注上的小细线的显示隐藏    默认显示
+              },
+            },
+          },
+        },
+      };
       // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option)
+      myChart.setOption(option);
     },
 
     getPies() {
       // 绘制图表
-      var myCharts = echarts.init(document.getElementById('mainx'))
+      var myCharts = echarts.init(document.getElementById("mainx"));
       // 指定图表的配置项和数据
       var option = {
         // 标题
         title: {
-          text: '班级试卷分布',
-          x: 'center' // 标题位置
+          text: "班级试卷分布",
+          x: "center", // 标题位置
           // textStyle: { //标题内容的样式
           //   color: '#000',
           //   fontStyle: 'normal',
@@ -259,58 +273,58 @@ export default {
         // stillShowZeroSum: true,
         // 鼠标划过时饼状图上显示的数据
         tooltip: {
-          trigger: 'item',
-          formatter: '{a}<br/>{b}:{c} ({d}%)'
+          trigger: "item",
+          formatter: "{a}<br/>{b}:{c} ({d}%)",
         },
         // 图例
         legend: {
           // 图例  标注各种颜色代表的模块
           // orient: 'vertical',//图例的显示方式  默认横向显示
           bottom: 10, // 控制图例出现的距离  默认左上角
-          left: 'center', // 控制图例的位置
+          left: "center", // 控制图例的位置
           // itemWidth: 16,//图例颜色块的宽度和高度
           // itemHeight: 12,
           textStyle: {
             // 图例中文字的样式
-            color: '#000',
-            fontSize: 16
+            color: "#000",
+            fontSize: 16,
           },
-          data: this.chartDataTitle2
+          data: this.chartDataTitle2,
           // ["", "", "", ""], //图例上显示的饼图各模块上的名字
         },
         // 饼图中各模块的颜色
         color: [
-          'rgb(253, 133, 133)',
-          ' rgb(172, 10, 172)',
-          ' rgb(70, 35, 194)',
-          'rgb(44, 199, 23)'
+          "rgb(253, 133, 133)",
+          " rgb(172, 10, 172)",
+          " rgb(70, 35, 194)",
+          "rgb(44, 199, 23)",
         ],
         // 饼图数据
         series: {
           // name: 'bug分布',
-          type: 'pie', // echarts图的类型   pie代表饼图
-          radius: '60%', // 饼图中饼状部分的大小所占整个父元素的百分比
-          center: ['50%', '50%'], // 整个饼图在整个父元素中的位置
+          type: "pie", // echarts图的类型   pie代表饼图
+          radius: "60%", // 饼图中饼状部分的大小所占整个父元素的百分比
+          center: ["50%", "50%"], // 整个饼图在整个父元素中的位置
           // data:''               //饼图数据
           data: this.chartData2,
           itemStyle: {
             normal: {
               label: {
-                show: true // 饼图上是否出现标注文字 标注各模块代表什么  默认是true
+                show: true, // 饼图上是否出现标注文字 标注各模块代表什么  默认是true
                 // position: 'inner',//控制饼图上标注文字相对于饼图的位置  默认位置在饼图外
               },
               labelLine: {
-                show: true // 官网demo里外部标注上的小细线的显示隐藏    默认显示
-              }
-            }
-          }
-        }
-      }
+                show: true, // 官网demo里外部标注上的小细线的显示隐藏    默认显示
+              },
+            },
+          },
+        },
+      };
       // 使用刚指定的配置项和数据显示图表。
-      myCharts.setOption(option)
-    }
-  }
-}
+      myCharts.setOption(option);
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -322,7 +336,7 @@ export default {
   padding-top: 10px;
   height: 100%;
   margin-top: 30px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
 }
 .df {
   width: 100%;
@@ -346,7 +360,7 @@ export default {
 }
 .zy {
   width: 100%;
-  height: 60vh;;
+  height: 60vh;
 
   display: flex;
   margin: auto;
@@ -359,12 +373,11 @@ export default {
   height: 100%;
   padding: 30px;
   margin-top: 50px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
 
   /* box-shadow: 0 2px 12px rgba(0, 0, 0, .1), 
               0 -2px 12px rgba(0, 0, 0, .1), 
               2px 0 12px rgba(0, 0, 0, .1), 
              -2px 0 12px rgba(0, 0, 0, .1); */
-
 }
 </style>

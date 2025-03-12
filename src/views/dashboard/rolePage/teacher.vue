@@ -159,23 +159,34 @@ export default {
     }
   },
   methods: {
-    // .filter((item) => item.totalStudent > 0)
     processChartData(data) {
-      this.chartData = data
-        
-        .map((item) => ({ name: item.gradeName, value: item.totalStudent }))
-      this.chartDataTitle = this.chartData.map((item) => item.name)
-
-      this.getPie()
+        if (data.length === 0) {
+            // 当数据为空时设置默认值
+            this.chartData = [{ name: '暂无数据', value: 1 }];
+            this.chartDataTitle = ['暂无数据'];
+        } else {
+            this.chartData = data
+               // 可根据需要取消注释这行来过滤 totalStudent 小于等于 0 的数据
+               // .filter((item) => item.totalStudent > 0) 
+               .map((item) => ({ name: item.gradeName, value: item.totalStudent }));
+            this.chartDataTitle = this.chartData.map((item) => item.name);
+        }
+        this.getPie();
     },
-    // .filter((item) => item.total > 0)
     processChartData2(data) {
-      this.chartData2 = data
-   
-        .map((item) => ({ name: item.gradeName, value: item.total }))
-      this.chartDataTitle2 = this.chartData.map((item) => item.name)
-
-      this.getPies()
+        if (data.length === 0) {
+            // 当数据为空时设置默认值
+            this.chartData2 = [{ name: '暂无数据', value: 1 }];
+            this.chartDataTitle2 = ['暂无数据'];
+        } else {
+            this.chartData2 = data
+               // 可根据需要取消注释这行来过滤 total 小于等于 0 的数据
+               // .filter((item) => item.total > 0) 
+               .map((item) => ({ name: item.gradeName, value: item.total }));
+            // 修正这里，应该使用 this.chartData2 而不是 this.chartData
+            this.chartDataTitle2 = this.chartData2.map((item) => item.name);
+        }
+        this.getPies();
     },
     getPie() {
       // 绘制图表

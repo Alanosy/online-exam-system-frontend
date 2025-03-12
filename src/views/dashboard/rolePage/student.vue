@@ -10,12 +10,15 @@
       <div class="right">
         <el-card class="box-card">
           最新公告
-          
+
           <div v-infinite-scroll="load" style="overflow: auto">
-    
-           <el-collapse v-model="activeNames"  accordion>
-             <div v-for="(item, index) in noticePage.records">
-                <el-collapse-item v-if="item!=null" :title="item.title" :name="index">
+            <el-collapse v-model="activeNames" accordion>
+              <div v-for="(item, index) in noticePage.records">
+                <el-collapse-item
+                  v-if="item != null"
+                  :title="item.title"
+                  :name="index"
+                >
                   <div v-html="item.content"></div>
                   <div class="noticeContent">
                     <div>{{ item.realName }}</div>
@@ -23,7 +26,10 @@
                   </div>
                 </el-collapse-item>
               </div>
-            </el-collapse> 
+              <el-collapse-item v-if="noticePage.records.length === 0" title="暂无公告" name="default">
+                <div>目前没有最新公告，请稍后再查看。</div>
+              </el-collapse-item>
+            </el-collapse>
           </div>
 
           <!-- <div>
@@ -43,7 +49,7 @@ export default {
     return {
       pageNum: 1,
       pageSize: 10,
-      noticePage: {},
+      noticePage: { records: [] },
       dateArray: [],
       formattedData: [],
       option: {
@@ -90,7 +96,9 @@ export default {
 
           // 生成从今天往回15天的日期数组
           for (let i = 0; i <= 14; i++) {
-            const date = new Date(currentDate.getTime() - i * 24 * 60 * 60 * 1000);
+            const date = new Date(
+              currentDate.getTime() - i * 24 * 60 * 60 * 1000
+            );
             this.dateArray.push(date.toISOString().split("T")[0]);
           }
           // 确保dateArray是倒序的
@@ -121,7 +129,12 @@ export default {
     async getNotice(pageNum, pageSize) {
       const params = { pageNum: pageNum, pageSize: pageSize };
       const res = await noticeGetNew(params);
-      this.noticePage = res.data;
+      if (res && res.data) {
+        this.noticePage = res.data;
+      } else {
+        // 如果请求失败或没有数据，使用默认值
+        this.noticePage = { records: [] };
+      }
       // this.transformData(res);
     },
     initCharts() {

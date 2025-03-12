@@ -9,9 +9,9 @@
   </div>
 </template>
 <script>
-import comAdmin from './com/0_com.vue'
-import comTeacher from './com/1_com.vue'
-import comStudent from './com/2_com.vue'
+import comAdmin from './rolePage/admin.vue'
+import comTeacher from './rolePage/teacher.vue'
+import comStudent from './rolePage/student.vue'
 export default {
   components: {
     comAdmin,

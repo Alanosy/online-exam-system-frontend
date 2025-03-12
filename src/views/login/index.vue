@@ -196,8 +196,8 @@ export default {
                   const userInfo = getTokenInfo()
                   console.log(userInfo)
                   this.$store.dispatch("loginUser", { id: userInfo.id });
-                  // this.$router.push({ path: "index" });
-                  this.$router.push({ path: decodeURIComponent(this.redirect) }); // 解码并跳转到目标页面
+                  this.$router.push({ path: "index" });
+                  // this.$router.push({ path: decodeURIComponent(this.redirect) }); // 解码并跳转到目标页面
                   this.loading = false;
                 })
                 .catch((error) => {
