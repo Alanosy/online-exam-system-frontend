@@ -152,6 +152,12 @@ export default {
   created() {
     // this.getEmail()
   },
+  mounted() {
+    // 页面加载完成后自动聚焦到用户名输入框
+    this.$nextTick(() => {
+      this.$refs.username.focus();
+    });
+  },
   computed: {
     redirect() {
       return this.$route.query.redirect || '/index'; // 如果没有 redirect 参数，默认跳转到首页
