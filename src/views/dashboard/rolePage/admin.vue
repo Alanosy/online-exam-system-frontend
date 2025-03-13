@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
-    <div class="luan">
-      <div class="df">
-        <div class="x">
-          <div>
+    <!-- 数据卡片区域 -->
+    <div class="stats-container">
+      <div class="stats-row">
+        <!-- 班级总数卡片 -->
+        <div class="stat-card">
+          <div class="icon-container">
             <svg
-              id="mx_n_1715843542811"
-              t="1715843542810"
               class="icon"
               style="width: 100px; height: 60px; margin-top: 10px"
               viewBox="0 0 1088 1024"
@@ -33,16 +33,16 @@
               />
             </svg>
           </div>
-          <div>
-            <div class="zt">班级总数</div>
-            <div class="sz">{{ classCount }}</div>
+          <div class="stat-info">
+            <div class="stat-title">班级总数</div>
+            <div class="stat-value">{{ classCount }}</div>
           </div>
         </div>
 
-        <div class="x">
-          <div>
+        <!-- 试题总数卡片 -->
+        <div class="stat-card">
+          <div class="icon-container">
             <svg
-              t="1715843668109"
               class="icon"
               style="width: 100px; height: 60px; margin-top: 10px"
               viewBox="0 0 1024 1024"
@@ -59,16 +59,16 @@
               />
             </svg>
           </div>
-          <div>
-            <div class="zt">试题总数</div>
-            <div class="sz">{{ quCount }}</div>
+          <div class="stat-info">
+            <div class="stat-title">试题总数</div>
+            <div class="stat-value">{{ quCount }}</div>
           </div>
         </div>
 
-        <div class="x">
-          <div>
+        <!-- 试卷总数卡片 -->
+        <div class="stat-card">
+          <div class="icon-container">
             <svg
-              t="1715843718280"
               class="icon"
               style="width: 100px; height: 60px; margin-top: 10px"
               viewBox="0 0 1024 1024"
@@ -105,17 +105,29 @@
               />
             </svg>
           </div>
-          <div>
-            <div class="zt">试卷总数</div>
-            <div class="sz">{{ examCount }}</div>
+          <div class="stat-info">
+            <div class="stat-title">试卷总数</div>
+            <div class="stat-value">{{ examCount }}</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="zy">
-      <div id="main" class="zyk" />
-      <div id="mainx" class="zyk" />
+    <!-- 加载状态 -->
+    <div v-if="loading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">数据加载中...</div>
+    </div>
+
+    <!-- 错误提示 -->
+    <div v-if="error" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <!-- 图表区域 -->
+    <div v-else class="charts-container">
+      <div ref="classChart" class="chart-box" />
+      <div ref="examChart" class="chart-box" />
     </div>
   </div>
 </template>
@@ -124,56 +136,139 @@
 import echarts from "echarts";
 import { classCount, classExamCount, classAllCounts } from "@/api/stat";
 export default {
-  name: "Index",
+  name: "AdminDashboard",
   data() {
     return {
+      // 图表数据
       chartData: [],
       chartDataTitle: [],
       chartData2: [],
       chartDataTitle2: [],
+
+      // 统计数据
       classCount: 0,
       quCount: 0,
       examCount: 0,
+
+      // 状态控制
+      loading: true,
+      error: false,
+      errorMessage: "",
+
+      // 图表实例
+      classChartInstance: null,
+      examChartInstance: null
     };
   },
-  mounted: function () {
-    this.$nextTick(function () {
-      this.getPie();
-      this.getPies();
-    });
-  },
+
   async created() {
     try {
-      const res0 = await classAllCounts();
-      this.classCount = res0.data.classCount;
-      this.quCount = res0.data.questionCount;
-      this.examCount = res0.data.examCount;
-      const res1 = await classCount();
-      this.processChartData(res1.data);
-
-      const res2 = await classExamCount();
-      this.processChartData2(res2.data);
+      // 获取所有统计数据
+      await this.fetchAllData();
     } catch (error) {
-      console.error("Failed to fetch class count:", error);
+      this.handleError(error);
     }
   },
 
+  mounted() {
+    this.$nextTick(() => {
+      // 初始化图表
+      this.initCharts();
+
+      // 添加窗口大小变化监听
+      window.addEventListener('resize', this.handleResize);
+    });
+  },
+
+  beforeDestroy() {
+    // 销毁图表实例，避免内存泄漏
+    if (this.classChartInstance) {
+      this.classChartInstance.dispose();
+    }
+    if (this.examChartInstance) {
+      this.examChartInstance.dispose();
+    }
+
+    // 移除窗口大小变化监听
+    window.removeEventListener('resize', this.handleResize);
+  },
+
   methods: {
+    // 获取所有数据
+    async fetchAllData() {
+      this.loading = true;
+      try {
+        // 获取总数统计
+        const res0 = await classAllCounts();
+        this.classCount = res0.data.classCount;
+        this.quCount = res0.data.questionCount;
+        this.examCount = res0.data.examCount;
+
+        // 获取班级人数分布
+        const res1 = await classCount();
+        this.processChartData(res1.data);
+
+        // 获取班级试卷分布
+        const res2 = await classExamCount();
+        this.processChartData2(res2.data);
+
+        this.loading = false;
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+
+    // 处理错误
+    handleError(error) {
+      this.loading = false;
+      this.error = true;
+      this.errorMessage = `数据加载失败: ${error.message || '未知错误'}`;
+      console.error("数据加载失败:", error);
+    },
+
+    // 处理窗口大小变化
+    handleResize() {
+      if (this.classChartInstance) {
+        this.classChartInstance.resize();
+      }
+      if (this.examChartInstance) {
+        this.examChartInstance.resize();
+      }
+    },
+
+    // 初始化图表
+    initCharts() {
+      this.$nextTick(() => {
+        // 确保DOM已经渲染
+        this.classChartInstance = echarts.init(this.$refs.classChart);
+        this.examChartInstance = echarts.init(this.$refs.examChart);
+
+        // 设置图表配置
+        this.updateClassChart();
+        this.updateExamChart();
+      });
+    },
+
+    // 处理班级人数分布数据
     processChartData(data) {
-      // 新增逻辑：检查数据是否为空
       if (data.length === 0) {
-        // 设置默认数据
         this.chartData = [{ name: "暂无数据", value: 1 }];
         this.chartDataTitle = ["暂无数据"];
       } else {
-        // 原有的数据处理逻辑
-        this.chartData = data
-          // .filter((item) => item.totalStudent > 0)
-          .map((item) => ({ name: item.gradeName, value: item.totalStudent }));
+        this.chartData = data.map((item) => ({
+          name: item.gradeName,
+          value: item.totalStudent
+        }));
         this.chartDataTitle = this.chartData.map((item) => item.name);
       }
-      this.getPie();
+
+      // 如果图表已初始化，则更新图表
+      if (this.classChartInstance) {
+        this.updateClassChart();
+      }
     },
+
+    // 处理班级试卷分布数据
     processChartData2(data) {
       // 新增逻辑：检查数据是否为空
       if (data.length === 0) {
@@ -181,19 +276,24 @@ export default {
         this.chartData2 = [{ name: "暂无数据", value: 1 }];
         this.chartDataTitle2 = ["暂无数据"];
       } else {
-        // 原有的数据处理逻辑
-        this.chartData2 = data
-          // .filter((item) => item.total > 0)
-          .map((item) => ({ name: item.gradeName, value: item.total }));
+        this.chartData2 = data.map((item) => ({
+          name: item.gradeName,
+          value: item.total
+        }));
         this.chartDataTitle2 = this.chartData2.map((item) => item.name);
       }
-      this.getPies();
+
+      // 如果图表已初始化，则更新图表
+      if (this.examChartInstance) {
+        this.updateExamChart();
+      }
     },
-    getPie() {
-      // 绘制图表
-      var myChart = echarts.init(document.getElementById("main"));
-      // 指定图表的配置项和数据
-      var option = {
+
+    // 更新班级人数分布图表
+    updateClassChart() {
+      if (!this.classChartInstance) return;
+
+      const option = {
         // 标题
         title: {
           text: "班级人数分布",
@@ -229,9 +329,8 @@ export default {
         },
         // 饼图中各模块的颜色
         color: ["#32dadd", "#b6a2de", "#5ab1ef", "#454599"],
-        // 饼图数据
         series: {
-          // name: 'bug分布',
+          name: "班级人数",
           type: "pie", // echarts图的类型   pie代表饼图
           radius: "60%", // 饼图中饼状部分的大小所占整个父元素的百分比
           center: ["50%", "50%"], // 整个饼图在整个父元素中的位置
@@ -250,16 +349,15 @@ export default {
           },
         },
       };
-      // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
+
+      this.classChartInstance.setOption(option);
     },
 
-    getPies() {
-      // 绘制图表
-      var myCharts = echarts.init(document.getElementById("mainx"));
-      // 指定图表的配置项和数据
-      var option = {
-        // 标题
+    // 更新班级试卷分布图表
+    updateExamChart() {
+      if (!this.examChartInstance) return;
+
+      const option = {
         title: {
           text: "班级试卷分布",
           x: "center", // 标题位置
@@ -295,17 +393,16 @@ export default {
         // 饼图中各模块的颜色
         color: [
           "rgb(253, 133, 133)",
-          " rgb(172, 10, 172)",
-          " rgb(70, 35, 194)",
+          "rgb(172, 10, 172)",
+          "rgb(70, 35, 194)",
           "rgb(44, 199, 23)",
         ],
         // 饼图数据
         series: {
-          // name: 'bug分布',
-          type: "pie", // echarts图的类型   pie代表饼图
-          radius: "60%", // 饼图中饼状部分的大小所占整个父元素的百分比
-          center: ["50%", "50%"], // 整个饼图在整个父元素中的位置
-          // data:''               //饼图数据
+          name: "试卷数量",
+          type: "pie",
+          radius: "60%",
+          center: ["50%", "50%"],
           data: this.chartData2,
           itemStyle: {
             normal: {
@@ -320,64 +417,153 @@ export default {
           },
         },
       };
-      // 使用刚指定的配置项和数据显示图表。
-      myCharts.setOption(option);
+
+      this.examChartInstance.setOption(option);
     },
   },
 };
 </script>
 
 <style scoped>
-.luan {
+/* 统计卡片容器 */
+.stats-container {
   margin: auto;
   width: 100%;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 10px;
-  height: 100%;
+  padding: 20px;
   margin-top: 30px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  background-color: #fff;
 }
-.df {
+
+.stats-row {
   width: 100%;
-  height: 80px;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
-.x {
-  width: 60vh;
+
+/* 统计卡片 */
+.stat-card {
+  width: 30%;
+  min-width: 250px;
   height: 80px;
   display: flex;
   background-color: #fff;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
 }
-.zt {
-  font-size: 25px;
-  padding: 10px 0 10px 10px;
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
-.sz {
-  font-size: 15px;
-  padding: 0 0 0 50px;
+
+.icon-container {
+  display: flex;
+  align-items: center;
 }
-.zy {
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-title {
+  font-size: 22px;
+  font-weight: 500;
+  padding: 0 0 5px 10px;
+  color: #333;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 0 0 0 10px;
+  color: #409EFF;
+}
+
+/* 图表容器 */
+.charts-container {
   width: 100%;
   height: 60vh;
-
   display: flex;
   margin: auto;
-  /* margin-top: 20px; */
+  margin-top: 30px;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
-.zyk {
-  width: 49%;
+.chart-box {
+  width: 48%;
+  min-width: 300px;
   height: 100%;
-  padding: 30px;
-  margin-top: 50px;
+  padding: 20px;
+  margin-bottom: 20px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  background-color: #fff;
+  border-radius: 4px;
+}
 
-  /* box-shadow: 0 2px 12px rgba(0, 0, 0, .1), 
-              0 -2px 12px rgba(0, 0, 0, .1), 
-              2px 0 12px rgba(0, 0, 0, .1), 
-             -2px 0 12px rgba(0, 0, 0, .1); */
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  width: 100%;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #409EFF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #666;
+}
+
+/* 错误提示 */
+.error-message {
+  text-align: center;
+  color: #F56C6C;
+  font-size: 18px;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #FEF0F0;
+  border-radius: 4px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 响应式布局 */
+@media screen and (max-width: 768px) {
+  .stats-row {
+    flex-direction: column;
+  }
+
+  .stat-card {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .charts-container {
+    flex-direction: column;
+  }
+
+  .chart-box {
+    width: 100%;
+    height: 400px;
+  }
 }
 </style>
