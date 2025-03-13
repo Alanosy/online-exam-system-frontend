@@ -38,53 +38,26 @@
         layout="total, sizes, prev, pager, next, jumper" :total="data.total" @size-change="handleSizeChange"
         @current-change="handleCurrentChange" />
     </div>
-
-    <!--编辑弹窗-->
-
-    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="题库名称" :label-width="formLabelWidth">
-              <el-input v-model="form.title" autocomplete="off" />
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateRepo">确 定</el-button>
-      </div>
-    </el-dialog>
     <!-- 新增题库 -->
-    <el-dialog title="新增题库" :visible.sync="addRepoDialogVisible" width="30%" :before-close="handleClose">
-      <el-row :gutter="20">
-        <el-col>
-          <el-form>
-            <el-form-item label="题库名称:" :label-width="formLabelWidth">
-              <el-input v-model="addTitle" autocomplete="off" style="width: 80%" />
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="addRepoDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addRepo">确 定</el-button>
-      </span>
-    </el-dialog>
+    <RepoDialog title="新增题库" v-model="addRepoDialogVisible" :onConfirm="addRepo" />
+    <RepoDialog title="编辑题库" v-model="dialogFormVisible" :updateData="form" :onConfirm="updateRepo" />
+    
   </div>
 </template>
 
 <script>
 import { repoPaging, repoDel, repoUpdate, repoAdd } from '@/api/repo'
+import { ref, reactive, getCurrentInstance, nextTick } from "vue"
+import RepoDialog from "@/components/repo/repoDialog/index.vue"
 export default {
-
+  components: {
+    RepoDialog
+  },
   data() {
     return {
       pageNum: 1,
       pageSize: 10,
+      isExercise: true,
       data: {},
       addTitle: '',
       delVisible: false,
@@ -98,7 +71,8 @@ export default {
 
       diaTitle: '新增',
       form: {
-        title: ''
+        title: '',
+        isExercise: 0,
       },
       formLabelWidth: '120px',
       dialogVisible: false,
@@ -138,8 +112,13 @@ export default {
       this.dialogFormVisible = true
       this.form = row
     },
-    addRepo() {
-      repoAdd({ title: this.addTitle })
+    addRepo(repoForm) {
+      console.log('接收到的 repoForm 数据:', repoForm);
+      const data = {
+        "title": repoForm.repoTitle,
+        "isExercise": repoForm.isExercise?1:0,
+      }
+      repoAdd(data)
         .then((res) => {
           if (res.code) {
             this.addTitle=''
@@ -158,10 +137,13 @@ export default {
         })
         .catch(() => { })
     },
-
     // 编辑题库
-    updateRepo() {
-      repoUpdate(this.form.id, { title: this.form.title })
+    updateRepo(repoForm) {
+      const data = {
+        "title": repoForm.repoTitle,
+        "isExercise": repoForm.isExercise?1:0,
+      }
+      repoUpdate(this.form.id,data)
         .then((res) => {
           if (res.code) {
             this.getRepoPage(this.pageNum, this.pageSize)
