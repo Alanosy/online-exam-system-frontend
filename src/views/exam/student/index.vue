@@ -47,12 +47,15 @@
       <el-table-column prop="startTime" label="开始时间" align="center" />
       <el-table-column prop="endTime" label="结束时间" align="center" />
       <!-- <el-table-column prop="createTime" label="创建时间" align="center" /> -->
-      <el-table-column fixed="right" label="操作" align="center">
+      <el-table-column fixed="right" label="操作" align="center" width="120">
         <template slot-scope="{ row }">
-           <el-button type="success" plain
+          <el-button
+            :type="getExamStatus(row).type"
+            :disabled="getExamStatus(row).disabled"
+            plain
             size="small"
             @click="screenInfo(row)"
-          >开始考试</el-button>
+          >{{ getExamStatus(row).text }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -111,13 +114,38 @@ export default {
     async getExamGradePage(pageNum, pageSize, searchTitle = null) {
       const params = { pageNum: pageNum, pageSize: pageSize, title: searchTitle }
       const res = await getGradeExamList(params)
+      // 倒序显示
+      if (res.data && res.data.records) {
+        res.data.records = res.data.records.reverse()
+      }
       this.data = res.data
     },
 
-    screenInfo(row) {
-      console.info('=====', row)
-      localStorage.setItem('examInfo_examId', row.id)
-      this.$router.push({ name: 'text', query: { zhi: row }})
+    // 考试状态判断
+    getExamStatus(row) {
+      const now = new Date().getTime()
+      const endTime = new Date(row.endTime).getTime()
+      const startTime = new Date(row.startTime).getTime()
+
+      if (now > endTime) {
+        return {
+          text: '已结束',
+          type: 'info',
+          disabled: true
+        }
+      } else if (now < startTime) {
+        return {
+          text: '未开始',
+          type: 'warning',
+          disabled: true
+        }
+      } else {
+        return {
+          text: '开始考试',
+          type: 'success',
+          disabled: false
+        }
+      }
     },
     searchExamStu() {
       this.getExamGradePage(this.pageNum, this.pageSize, this.searchTitle)
@@ -134,9 +162,27 @@ export default {
     },
     handleClick(row) {
       // console.log(row);
-    }
+    },
+
+    screenInfo(row) {
+      const status = this.getExamStatus(row)
+      if (status.disabled) {
+        return
+      }
+      localStorage.setItem('examInfo_examId', row.id)
+      this.$router.push({ name: 'text', query: { zhi: row }})
+    },
   }
 }
 </script>
 
-<style></style>
+<style>
+.el-table .cell {
+  white-space: nowrap;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: right;
+}
+</style>
