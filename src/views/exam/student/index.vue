@@ -37,7 +37,7 @@
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" label="试卷名称" align="center" />
-      <el-table-column prop="examDuration" label="考试时间" align="center" />
+      <el-table-column prop="examDuration" label="考试时长（分钟）" align="center" />
       <el-table-column prop="grossScore" label="总分" align="center"  />
       <el-table-column prop="passedScore" label="及格分" align="center" />
       <!-- <el-table-column prop="radioCount" label="单选题数量" align="center" width="100"  />
