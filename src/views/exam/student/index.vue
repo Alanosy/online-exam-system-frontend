@@ -87,10 +87,6 @@ export default {
         user: '',
         region: ''
       },
-      formInline: {
-        user: '',
-        region: ''
-      },
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {
