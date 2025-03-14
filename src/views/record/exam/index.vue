@@ -9,6 +9,17 @@
         <el-button type="primary" @click="searchExam">查询</el-button>
       </el-form-item>
     </el-form>
+    <div class="sort-switch-container">
+      <span class="sort-label">完成时间：</span>
+      <el-switch
+        v-model="isASC"
+        active-text="升序"
+        inactive-text="降序"
+        active-color="#13ce66"
+        inactive-color="#409EFF"
+        @change="toggleSort"
+      ></el-switch>
+    </div>
     <el-table
       :data="data.records"
       border
@@ -85,6 +96,7 @@ export default {
       data: {},
       input: '',
       searchTitle:"",
+      isASC: false, // 默认为降序
       formInline: {
         user: '',
         region: ''
@@ -126,15 +138,21 @@ export default {
     this.getExamRecordPaging()
   },
   methods: {
+
     searchExam(){
       this.getExamRecordPaging(this.pageNum, this.pageSize,this.searchTitle)
     },
+
+    toggleSort() {
+    this.getExamRecordPaging(this.pageNum, this.pageSize, this.searchTitle)
+  },
     // 分页查询
     async getExamRecordPaging(pageNum, pageSize,examName) {
-      const params = { pageNum: pageNum, pageSize: pageSize ,examName:examName}
+      const params = { pageNum: pageNum, pageSize: pageSize ,examName:examName, isASC: this.isASC}
       const res = await recordExamPaging(params)
       this.data = res.data
     },
+
     screenInfo(row) {
       console.info('=====', row)
       localStorage.setItem('record_exam_examId', row.id)
@@ -162,4 +180,20 @@ export default {
   }
 }
 </script>
-<style scoped></style>
+<style scoped>
+.el-table .cell {
+  white-space: nowrap;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: right;
+}
+
+
+.sort-switch-container {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+</style>
