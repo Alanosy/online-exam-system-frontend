@@ -39,7 +39,7 @@
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">考试时长:</span>
-        <span style="margin-left: 5px; font-size: 14px">{{ data.examDuration }}</span>
+        <span style="margin-left: 5px; font-size: 14px">{{ data.examDuration.toString() + " 分钟" }}</span>
       </div>
       <div style="padding: 15px 0 0 50px; letter-spacing: 0.1em">
         <span style="font-size: 14px">试卷总分:</span>

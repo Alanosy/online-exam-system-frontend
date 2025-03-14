@@ -4,11 +4,22 @@
       <el-form-item label="考试名称">
         <el-input v-model="searchTitle" placeholder="考试名称" />
       </el-form-item>
- 
+
       <el-form-item>
         <el-button type="primary" @click="searchExam">查询</el-button>
       </el-form-item>
     </el-form>
+    <div class="sort-switch-container">
+      <span class="sort-label">完成时间：</span>
+      <el-switch
+        v-model="isASC"
+        active-text="升序"
+        inactive-text="降序"
+        active-color="#13ce66"
+        inactive-color="#409EFF"
+        @change="toggleSort"
+      ></el-switch>
+    </div>
     <el-table
       :data="data.records"
       border
@@ -27,11 +38,25 @@
       </el-table-column>
       <el-table-column prop="title" align="center" label="试卷名称" />
       <el-table-column prop="passedScore" align="center" label="及格分" />
-      <el-table-column prop="userScore" align="center" label="用户成绩" />
-      <el-table-column prop="examDuration" align="center" label="考试时长" />
+      <el-table-column prop="userScore" align="center" label="用户成绩">
+        <template slot-scope="scope">
+          <el-tooltip :content="scope.row.userScore >= scope.row.passedScore ? '及格' : '不及格'" placement="top">
+            <span :style="{
+              color: scope.row.userScore >= scope.row.passedScore ? '#67C23A' : '#F56C6C',
+              backgroundColor: scope.row.userScore >= scope.row.passedScore ? '#f0f9eb' : '#fef0f0',
+              padding: '6px 10px',
+              borderRadius: '4px',
+              display: 'inline-block'
+            }">
+              {{ scope.row.userScore }}
+            </span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column prop="examDuration" align="center" label="考试时长（分钟）" />
       <el-table-column prop="userTime" align="center" label="用户用时">
         <template slot-scope="scope">
-          <div>{{ (scope.row.userTime/60).toFixed(2) }}</div>
+          <div>{{ (Math.ceil(scope.row.userTime/60)).toString() + " 分钟"}}</div>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">
@@ -71,6 +96,7 @@ export default {
       data: {},
       input: '',
       searchTitle:"",
+      isASC: false, // 默认为降序
       formInline: {
         user: '',
         region: ''
@@ -112,15 +138,21 @@ export default {
     this.getExamRecordPaging()
   },
   methods: {
+
     searchExam(){
-      this.getExamRecordPaging(this.pageNum, this.pageSize,this.searchTitle) 
+      this.getExamRecordPaging(this.pageNum, this.pageSize,this.searchTitle)
     },
+
+    toggleSort() {
+    this.getExamRecordPaging(this.pageNum, this.pageSize, this.searchTitle)
+  },
     // 分页查询
     async getExamRecordPaging(pageNum, pageSize,examName) {
-      const params = { pageNum: pageNum, pageSize: pageSize ,examName:examName}
+      const params = { pageNum: pageNum, pageSize: pageSize ,examName:examName, isASC: this.isASC}
       const res = await recordExamPaging(params)
       this.data = res.data
     },
+
     screenInfo(row) {
       console.info('=====', row)
       localStorage.setItem('record_exam_examId', row.id)
@@ -148,4 +180,20 @@ export default {
   }
 }
 </script>
-<style scoped></style>
+<style scoped>
+.el-table .cell {
+  white-space: nowrap;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: right;
+}
+
+
+.sort-switch-container {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+</style>
