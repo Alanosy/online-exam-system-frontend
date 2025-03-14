@@ -39,10 +39,10 @@ export function submitAnswer(data) {
   })
 }
 
-export function getAnswerInfo(repoId,quId) {
+export function getAnswerInfo(repoId, quId) {
   return request({
     url: `exercises/answerInfo/${repoId}/${quId}`,
-    method: 'get',
+    method: 'get'
   })
 }
 

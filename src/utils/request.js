@@ -12,7 +12,6 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 import router from '@/router'
 
-
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -84,18 +83,18 @@ service.interceptors.response.use(
     // }
   },
   error => {
-    const { response } = error;
+    const { response } = error
     if (response) {
       // 后端返回了错误响应
-      const { status, data } = response;
-      console.error(`Error: ${status}, Message: ${data.msg}`);
-      handleErrorResponse(status, data.msg); // 处理错误
+      const { status, data } = response
+      console.error(`Error: ${status}, Message: ${data.msg}`)
+      handleErrorResponse(status, data.msg) // 处理错误
     } else {
       // 网络错误或其他问题
-      console.error('Network Error');
-      handleErrorResponse(500, '网络连接失败，请稍后再试');
+      console.error('Network Error')
+      handleErrorResponse(500, '网络连接失败，请稍后再试')
     }
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
 )
 
@@ -109,22 +108,22 @@ function handleErrorResponse(status, message) {
         duration: 5 * 1000
       })
       // window.location.href = "https://www.example.com"
-      router.push({ path: "login" });
-      break;
+      router.push({ path: 'login' })
+      break
     case 403:
       Message({
         message: message,
         type: 'error',
         duration: 5 * 1000
       })
-      break;
+      break
     case 404:
       Message({
         message: message,
         type: 'error',
         duration: 5 * 1000
       })
-      break;
+      break
     default:
       Message({
         message: message || '发生未知错误',

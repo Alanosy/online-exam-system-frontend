@@ -33,14 +33,14 @@ const mutations = {
   },
   // 删除标签
   REMOVE_TAG(state, tag) {
-    console.log(state.tags);
-    if (state.tags && state.tags.length == 1) {
-      return 
+    console.log(state.tags)
+    if (state.tags && state.tags.length === 1) {
+      return
     }
     state.tags.map((item, index) => {
       if (item.title === tag.title) {
         state.tags.splice(index, 1)
-        if (router.history.current.fullPath == tag.path) {
+        if (router.history.current.fullPath === tag.path) {
           router.push(state.tags[state.tags.length - 1].path)
         }
       }

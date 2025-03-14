@@ -1,16 +1,18 @@
+@use "variables.scss";
+
 #app {
 
   .main-container {
     min-height: 100%;
     transition: margin-left .28s;
-    margin-left: $sideBarWidth;
+    margin-left: variables.$sideBarWidth;
     position: relative;
   }
 
   .sidebar-container {
     transition: width 0.28s;
-    width: $sideBarWidth !important;
-    background-color: $menuBg;
+    width: variables.$sideBarWidth !important;
+    background-color: variables.$menuBg;
     height: 100%;
     position: fixed;
     font-size: 0px;
@@ -74,21 +76,21 @@
     .submenu-title-noDropdown,
     .el-submenu__title {
       &:hover {
-        background-color: $menuHover !important;
+        background-color: variables.$menuHover !important;
       }
     }
 
     .is-active>.el-submenu__title {
-      color: $subMenuActiveText !important;
+      color: variables.$subMenuActiveText !important;
     }
 
     & .nest-menu .el-submenu>.el-submenu__title,
     & .el-submenu .el-menu-item {
-      min-width: $sideBarWidth !important;
-      background-color: $subMenuBg !important;
+      min-width: variables.$sideBarWidth !important;
+      background-color: variables.$subMenuBg !important;
 
       &:hover {
-        background-color: $subMenuHover !important;
+        background-color: variables.$subMenuHover !important;
       }
     }
   }
@@ -155,7 +157,7 @@
   }
 
   .el-menu--collapse .el-menu .el-submenu {
-    min-width: $sideBarWidth !important;
+    min-width: variables.$sideBarWidth !important;
   }
 
   // mobile responsive
@@ -166,14 +168,14 @@
 
     .sidebar-container {
       transition: transform .28s;
-      width: $sideBarWidth !important;
+      width: variables.$sideBarWidth !important;
     }
 
     &.hideSidebar {
       .sidebar-container {
         pointer-events: none;
         transition-duration: 0.3s;
-        transform: translate3d(-$sideBarWidth, 0, 0);
+        transform: translate3d(-(variables.$sideBarWidth), 0, 0);
       }
     }
   }
@@ -203,7 +205,7 @@
   .el-menu-item {
     &:hover {
       // you can use $subMenuHover
-      background-color: $menuHover !important;
+      background-color: variables.$menuHover !important;
     }
   }
 

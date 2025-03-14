@@ -19,10 +19,10 @@ const getDefaultState = () => {
 }
 
 const state = getDefaultState()
-const decode = () => {
-  const token = getToken()
-  const user = parseJwt(token)
-}
+// const decode = () => {
+//   const token = getToken()
+//   const user = parseJwt(token)
+// }
 
 const mutations = {
   RESET_STATE: (state) => {

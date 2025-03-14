@@ -52,6 +52,7 @@ export function importQue(id, data) {
  * @param data
  */
 export function fetchDetail(id) {
+  // eslint-disable-next-line no-undef
   return post('/exam/api/qu/qu/detail', { id: id })
 }
 
@@ -60,5 +61,6 @@ export function fetchDetail(id) {
  * @param data
  */
 export function saveData(data) {
+  // eslint-disable-next-line no-undef
   return post('/exam/api/qu/qu/save', data)
 }

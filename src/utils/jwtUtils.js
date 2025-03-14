@@ -20,7 +20,7 @@ function decodeBase64Url(input) {
       base64 += '='
       break
     default:
-      throw 'Invalid base64 string'
+      throw new Error('Invalid base64 string')
   }
   return decodeURIComponent(atob(base64))
 }

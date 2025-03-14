@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+// eslint-disable-next-line no-unused-vars
 import getters from './getters'
 import app from './modules/app'
 import settings from './modules/settings'
@@ -70,6 +71,8 @@ const store = new Vuex.Store({
     user,
     menu
   },
+
+  // eslint-disable-next-line no-dupe-keys
   getters
 })
 
