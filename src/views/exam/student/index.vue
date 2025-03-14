@@ -17,6 +17,17 @@
         <el-button type="primary" @click="searchExamStu">查询</el-button>
       </el-form-item>
     </el-form>
+    <div class="sort-switch-container">
+      <span class="sort-label">创建时间：</span>
+      <el-switch
+        v-model="isASC"
+        active-text="升序"
+        inactive-text="降序"
+        active-color="#13ce66"
+        inactive-color="#409EFF"
+        @change="toggleSort"
+      ></el-switch>
+    </div>
 
     <!-- table -->
 
@@ -83,6 +94,7 @@ export default {
       pageSize: 10,
       data: {},
       searchTitle: '',
+      isASC: false, // 默认为降序
       formInline: {
         user: '',
         region: ''
@@ -108,13 +120,14 @@ export default {
   methods: {
     // 分页查询
     async getExamGradePage(pageNum, pageSize, searchTitle = null) {
-      const params = { pageNum: pageNum, pageSize: pageSize, title: searchTitle }
+      const params = { pageNum: pageNum, pageSize: pageSize, title: searchTitle, isASC: this.isASC }
       const res = await getGradeExamList(params)
-      // 倒序显示
-      if (res.data && res.data.records) {
-        res.data.records = res.data.records.reverse()
-      }
       this.data = res.data
+    },
+
+    // 切换排序方式
+    toggleSort() {
+      this.getExamGradePage(this.pageNum, this.pageSize, this.searchTitle)
     },
 
     // 考试状态判断
@@ -181,4 +194,22 @@ export default {
   margin-top: 20px;
   text-align: right;
 }
+
+.el-table .cell {
+  white-space: nowrap;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: right;
+}
+
+
+.sort-switch-container {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+
 </style>
