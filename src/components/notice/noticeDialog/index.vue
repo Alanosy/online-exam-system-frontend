@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="是否公开" >
         <el-switch
-            :disabled="!isEdit"
+            :disabled="!isEdit || roleEdit"
           v-model="noticeForm.isPublic"
           active-color="#13ce66"
           inactive-color="#ff4949"
@@ -48,6 +48,7 @@ import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 import ClassSelect from "@/components/ClassSelect";
+import { getRole } from "@/utils/jwtUtils";
 export default {
   components: {
     ClassSelect,
@@ -99,9 +100,16 @@ export default {
       this.$emit("input", val);
     },
   },
-
+  created() {
+    const role = getRole()
+    if(role === 3&&this.editType==1){
+      this.noticeForm.isPublic = true;
+      this.roleEdit = true;
+    }
+  },
   data() {
     return {
+      roleEdit: false,
       noticeForm: {
         title: "",
         isPublic: false,

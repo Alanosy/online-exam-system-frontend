@@ -15,8 +15,7 @@
               v-model="repoForm.isExercise"
               active-color="#13ce66"
               inactive-color="#ff4949"
-            >
-            </el-switch>
+            />
           </el-form-item>
         </el-form>
       </el-col>
@@ -34,60 +33,61 @@ export default {
   props: {
     title: {
       type: String,
-      default: "提示",
+      default: '提示'
     },
     value: {
       type: Boolean,
-      default: false,
+      default: false
     },
     updateData: {
       type: Object,
-      default: {},
+      // eslint-disable-next-line vue/require-valid-default-prop
+      default: {}
     },
     onConfirm: {
       type: Function,
-      default: () => {},
-    },
+      default: () => {}
+    }
   },
   data() {
     return {
       repoForm: {
-        repoTitle: "",
-        isExercise: false,
-      }, 
-      visible: this.value,
-    };
+        repoTitle: '',
+        isExercise: false
+      },
+      visible: this.value
+    }
   },
   watch: {
     value(val) {
-      this.visible = val;
+      this.visible = val
     },
     updateData(val) {
-        this.repoForm.repoTitle = val.title;
-        if(val.isExercise==1){
-            this.repoForm.isExercise = true;
-        }else{
-            this.repoForm.isExercise = false;
-        }
+      this.repoForm.repoTitle = val.title
+      if (val.isExercise === 1) {
+        this.repoForm.isExercise = true
+      } else {
+        this.repoForm.isExercise = false
+      }
     },
     visible(val) {
-      this.$emit("input", val);
-    },
+      this.$emit('input', val)
+    }
   },
-  
+
   methods: {
-   
+
     handleConfirm() {
       // 调用父组件传入的确认回调方法，并传递 repoForm 数据
-      this.onConfirm(this.repoForm);
+      this.onConfirm(this.repoForm)
       // 关闭对话框
-      this.visible = false;
+      this.visible = false
       this.repoForm = {
-        repoTitle: "",
-        isExercise: false,
-      };
-    },
-  },
-};
+        repoTitle: '',
+        isExercise: false
+      }
+    }
+  }
+}
 </script>
 <style></style>
