@@ -20,14 +20,23 @@
         </li>
         <li style="padding-top: 50px; padding-left: 80px" v-if="isAdmin">
           班级: {{ this.data.gradeName }}
+          <!-- icon="el-icon-plus"  circle-->
           <el-button
+            v-if="this.data.gradeName==null"
             type="primary"
-            icon="el-icon-plus"
-            circle
             size="mini"
             style="margin-left: 15px"
             @click="addClassBt"
-          />
+          >
+          加入班级</el-button>
+          <el-button
+            v-if="this.data.gradeName!=null"
+            type="danger"
+            size="mini"
+            style="margin-left: 15px"
+            @click="exitGrade"
+          >
+          退出班级</el-button>
         </li>
         <li style="padding-top: 50px; padding-left: 80px">
           注册时间: {{ this.data.createTime }}
@@ -107,7 +116,7 @@
 </template>
 
 <script>
-import { getInfo, userAddClass, uploadAvatar } from '@/api/user'
+import { exitUserGrade,getInfo, userAddClass, uploadAvatar } from '@/api/user'
 import {trackPresence} from '@/api/user'
 import {  getTokenInfo } from '@/utils/jwtUtils'
 export default {
@@ -133,6 +142,41 @@ export default {
 
   },
   methods: {
+    exitGrade() {
+      this.$confirm('退出班级, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        exitUserGrade().then((res) => {
+          if (res.code) {
+            this.getInfoFun()
+            this.$message({
+              type: 'success',
+              message: '退出成功!'
+            })
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.msg
+            })
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消退出'
+          });       
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消退出'
+        });       
+      });
+        
+      
+      
+    },
     async getInfoFun(){
       const res = await getInfo()
       if (res.code) {
@@ -156,22 +200,22 @@ export default {
         const formData = new FormData() // 创建FormData对象
         formData.append('file', this.fileList[0].raw) // 添加文件到formData
         uploadAvatar(formData).then((res) => {
-           if(res.code){
-              const userInfo = getTokenInfo()
-              trackPresence({ userId: userInfo.id }).then(response => {
-                if (response.code) {
-                  setToken(response.data)
-                }
+          if(res.code){
+            const userInfo = getTokenInfo()
+            trackPresence({ userId: userInfo.id }).then(response => {
+              if (response.code) {
+                setToken(response.data)
+              }
+            })
+              .catch(error => {
+                console.error('心跳发送失败:', error)
               })
-                .catch(error => {
-                  console.error('心跳发送失败:', error)
-                })
             this.getInfoFun()
             this.$message.success('文件上传成功！')
             this.fileDialogVisible = false // 关闭对话框
             // 可以在这里处理成功后的逻辑，如刷新数据等
-           }
-          })
+          }
+        })
           .catch((error) => {
             console.error('文件上传失败：', error)
             this.$message.error('文件上传失败！')

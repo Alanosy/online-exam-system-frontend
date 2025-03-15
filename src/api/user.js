@@ -107,3 +107,10 @@ export function uploadAvatar(data) {
     data
   })
 }
+// 学生退出班级
+export function exitUserGrade() {
+  return request({
+    url: 'grades/user/exit',
+    method: 'put'
+  })
+}

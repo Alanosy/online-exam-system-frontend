@@ -36,3 +36,10 @@ export function getTokenInfo() {
   const decodedToken = jwtDecode(token)
   return JSON.parse(decodedToken.userInfo) // 假设userInfo是直接在payload中的
 }
+
+export function getRole() {
+  const token = getToken()
+  const decodedToken = jwtDecode(token)
+  return JSON.parse(decodedToken.userInfo)['roleId'] // 假设userInfo是直接在payload中的
+}
+

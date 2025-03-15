@@ -45,3 +45,18 @@ export function userClassRemove(ids) {
     method: 'patch'
   })
 }
+// 老师加入班级
+export function teacherJoinClass(params) {
+  return request({
+    url: 'grades/teacher/join',
+    method: 'get',
+    params
+  })
+}
+// 老师退出班级
+export function teacherExitClass(gradeId) {
+  return request({
+    url: `grades/teacher/exit/${gradeId}`,
+    method: 'delete'
+  })
+}

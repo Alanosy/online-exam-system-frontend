@@ -7,7 +7,6 @@ import settings from './modules/settings'
 import user from './modules/user'
 import menu from './modules/menu'
 import { trackPresence } from '@/api/user'
-import { setToken } from '@/utils/auth'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -35,21 +34,11 @@ const store = new Vuex.Store({
     sendHeartbeat({ commit, state }) {
       // alert('发送心跳请求');
       // 发送心跳请求到后端
-
       trackPresence({ userId: state.userId }).then(response => {
-        if (response.code) {
-          setToken(response.data)
-        }
       })
         .catch(error => {
           console.error('心跳发送失败:', error)
         })
-      // this.$axios.post('/api/auths/track-presence', { userId: state.userId })
-      //   .then(response => {
-      //   })
-      //   .catch(error => {
-      //     console.error('心跳发送失败:', error);
-      //   });
     },
     loginUser({ commit }, userData) {
       // 登录逻辑，这里简化处理，实际应包含登录请求
