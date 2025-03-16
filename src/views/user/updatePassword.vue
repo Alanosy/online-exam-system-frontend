@@ -1,27 +1,31 @@
 <template>
-  <div class="app-container">
+<div class="item-contain">
 
-    <el-form class="kj">
-      <div class="sg">
-        <el-form :model="addForm">
-          <el-form-item label="原密码" :label-width="formLabelWidth">
-            <el-input v-model="input1" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="新密码" :label-width="formLabelWidth">
-            <el-input v-model="input2" type="password" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="确认密码" :label-width="formLabelWidth">
-            <el-input v-model="input3" type="password" autocomplete="off" />
-          </el-form-item>
-        </el-form>
-      </div>
-      <div class="an">
-        <!-- <el-button>取消</el-button> -->
-        <el-button type="primary" @click="updatePassword">确认</el-button>
-      </div>
-    </el-form>
+  <el-card class="box-card">
+    <div slot="header" class="clearfix">
+      <span>修改密码</span>
+    </div>
+    <div class="card-body">
+      <el-form :label-position="labelPosition" :model="updatePasswordForm" ref="updatePasswordForm" label-width="80px">
+            <el-form-item label="原密码" :label-width="formLabelWidth">
+              <el-input v-model="updatePasswordForm.originPassword" autocomplete="off" />
+            </el-form-item>
+            <el-form-item label="新密码" :label-width="formLabelWidth">
+              <el-input v-model="updatePasswordForm.newPassword" type="password" autocomplete="off" />
+            </el-form-item>
+            <el-form-item label="确认密码" :label-width="formLabelWidth">
+              <el-input v-model="updatePasswordForm.checkedPassword" type="password" autocomplete="off" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="updatePassword">确认</el-button>
+              <el-button @click="cancelFun">取消</el-button>
+            </el-form-item>
+          
+      </el-form>
+    </div>
+   </el-card>
+</div>
 
-  </div>
 </template>
 
 <script>
@@ -30,14 +34,23 @@ import { changePassword } from '@/api/user'
 export default {
   data() {
     return {
-      input1: '',
-      input2: '',
-      input3: ''
+      labelPosition: 'right',
+      updatePasswordForm:{
+        originPassword:'',
+        newPassword:'',
+        checkedPassword:''
+      },
+      formLabelWidth: '70px'
     }
   },
   methods: {
+    cancelFun(){
+      this.$router.push({ path: "index" });
+    },
     updatePassword() {
-      const data = { originPassword: this.input1, newPassword: this.input2, checkedPassword: this.input3 }
+      const data = { originPassword: this.updatePasswordForm.originPassword, 
+        newPassword: this.updatePasswordForm.newPassword, 
+        checkedPassword: this.updatePasswordForm.checkedPassword }
       changePassword(data).then((res) => {
         if (res.code) {
           this.$message({
@@ -57,28 +70,17 @@ export default {
 }
 </script>
 <style scoped>
-.kj {
-  width: 400px;
-  height: 450px;
-  margin: auto;
-  background-color: aliceblue;
-  margin-top: 20px;
-}
-.z {
-  height: 100px;
-  font-size: 20px;
-}
-.sg {
-  width: 90%;
-  height: 350px;
-  margin: auto;
-  padding: 50px 0 0 0;
-}
-.an {
+
+ /* 卡片样式 */
+.item-contain {
+  padding: 30px 100px 0;
   display: flex;
   justify-content: center;
-  margin: auto;
-  width: 150px;
-  height: 50px;
+  height: 60vh;
 }
+.box-card {
+  padding: 15px;
+  width: 70% !important;
+}
+
 </style>

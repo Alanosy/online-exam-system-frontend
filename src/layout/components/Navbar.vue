@@ -30,7 +30,6 @@
         </el-dropdown>
       </div>
     </div>
-    
     <!-- tags -->
     <div
       style="
@@ -53,7 +52,6 @@
         >
           {{ item.title }}
         </el-tag>
-        
       </template>
     </div>
   </div>

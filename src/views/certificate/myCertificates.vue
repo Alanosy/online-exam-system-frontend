@@ -57,33 +57,7 @@
       />
     </div>
 
-    <!-- 删除弹框 -->
-    <!-- <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-      <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="delVisible = false">取 消</el-button>
-        <el-button type="primary" @click="deleteRow">确 定</el-button>
-      </span>
-    </el-dialog> -->
-
-    <!--编辑弹窗-->
-
-    <!-- <el-dialog title="编辑" :visible.sync="dialogFormVisible">
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form :model="form">
-            <el-form-item label="题库名称" :label-width="formLabelWidth">
-              <el-input v-model="form.title" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateRepo">确 定</el-button>
-      </div>
-    </el-dialog> -->
+   
 
     <el-dialog
       title="证书预览和下载"

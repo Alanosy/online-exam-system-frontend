@@ -3,19 +3,16 @@
   <div>
     <div>
       <com-admin v-if="url == 0" />
-      <com-teacher v-else-if="url == 1" />
       <com-student v-else-if="url == 2" />
     </div>
   </div>
 </template>
 <script>
-import comAdmin from './rolePage/admin.vue'
-import comTeacher from './rolePage/teacher.vue'
+import comAdmin from './rolePage/adminAndTeacher.vue'
 import comStudent from './rolePage/student.vue'
 export default {
   components: {
     comAdmin,
-    comTeacher,
     comStudent
   },
   data() {
@@ -33,7 +30,7 @@ export default {
         break
       }
       case 'teacher': {
-        this.url = 1
+        this.url = 0
         break
       }
       case 'student': {

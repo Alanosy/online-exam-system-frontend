@@ -63,7 +63,7 @@ export const constantRoutes = [
       path: 'index',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '主页', icon: 'dashboard', visible: true }
+      meta: { title: '主页', icon: 'el-icon-data-line', visible: true }
     }]
   },
 
@@ -74,7 +74,7 @@ export const constantRoutes = [
       path: '/yonghu',
       name: 'Usermanager',
       component: () => import('@/views/user/index'),
-      meta: { title: '用户管理', icon: 'dashboard', visible: true, roles: ['teacher', 'admin'] }
+      meta: { title: '用户管理', icon: 'el-icon-user', visible: true, roles: ['teacher', 'admin'] }
     }]
   },
   {
@@ -106,7 +106,7 @@ export const constantRoutes = [
       path: '/classgl',
       name: 'Classmanager',
       component: () => import('@/views/class/index'),
-      meta: { title: '班级管理', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
+      meta: { title: '班级管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-takeaway-box' }
     }]
   },
   {
@@ -116,7 +116,7 @@ export const constantRoutes = [
       path: '/shijuanzx',
       name: 'Textcenter',
       component: () => import('@/views/exam/student/index'),
-      meta: { title: '试卷中心', visible: true, roles: ['student'], icon: 'dashboard' }
+      meta: { title: '试卷中心', visible: true, roles: ['student'], icon: 'el-icon-document-copy' }
     }]
   },
   {
@@ -152,7 +152,7 @@ export const constantRoutes = [
       name: 'Questcenter',
       component: () => import('@/views/exercise/index'),
       // 'admin',
-      meta: { title: '刷题中心', visible: true, roles: ['student'], icon: 'dashboard' }
+      meta: { title: '刷题中心', visible: true, roles: ['student'], icon: 'el-icon-tickets' }
     }]
   },
   {
@@ -169,7 +169,7 @@ export const constantRoutes = [
     component: Layout,
     name: 'Examrecord',
     // 'admin',
-    meta: { title: '考试记录', icon: 'el-icon-s-help', visible: true, roles: ['student'], requireAuth: true },
+    meta: { title: '考试记录', icon: 'el-icon-folder-opened', visible: true, roles: ['student'], requireAuth: true },
     children: [
       {
         path: '/examrecord1',
@@ -217,7 +217,7 @@ export const constantRoutes = [
       name: 'Wrongbook',
       component: () => import('@/views/userbook/index'),
       // 'admin',
-      meta: { title: '错题本', visible: true, roles: ['student'], icon: 'dashboard' }
+      meta: { title: '错题本', visible: true, roles: ['student'], icon: 'el-icon-notebook-1' }
     }]
   },
   {
@@ -236,7 +236,7 @@ export const constantRoutes = [
       name: 'Exammange',
       component: () => import('@/views/exam/teacher/index'),
       // , 'admin'
-      meta: { title: '考试管理', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
+      meta: { title: '考试管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-document' }
     }]
   },
   {
@@ -257,7 +257,7 @@ export const constantRoutes = [
       path: '/tikugl',
       name: 'Bankmanage',
       component: () => import('@/views/repo/index'),
-      meta: { title: '题库管理', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
+      meta: { title: '题库管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-folder-opened' }
     }]
   },
   {
@@ -267,7 +267,7 @@ export const constantRoutes = [
       path: '/shitigl',
       name: 'Questmanage',
       component: () => import('@/views/question/index'),
-      meta: { title: '试题管理', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
+      meta: { title: '试题管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-document-copy' }
     }]
   },
   {
@@ -288,7 +288,7 @@ export const constantRoutes = [
       path: '/zhengshugl',
       name: 'Certificate',
       component: () => import('@/views/certificate/zhengshugl'),
-      meta: { title: '证书管理', visible: true, roles: ['admin'], icon: 'dashboard' }
+      meta: { title: '证书管理', visible: true, roles: ['admin'], icon: 'el-icon-postcard' }
     }]
   },
   {
@@ -299,7 +299,7 @@ export const constantRoutes = [
       name: 'Myc',
       component: () => import('@/views/certificate/myCertificates'),
       // 'admin',
-      meta: { title: '我的证书', icon: 'dashboard', visible: true, roles: ['student'] }
+      meta: { title: '我的证书', icon: 'el-icon-postcard', visible: true, roles: ['student'] }
     }]
   },
 
@@ -311,7 +311,7 @@ export const constantRoutes = [
       name: 'Scoreana',
       component: () => import('@/views/score/index'),
       // , 'admin'
-      meta: { title: '成绩分析', visible: true, roles: ['teacher'], icon: 'dashboard' }
+      meta: { title: '成绩分析', visible: true, roles: ['teacher'], icon: 'el-icon-pie-chart' }
     }]
   },
   {
@@ -333,7 +333,7 @@ export const constantRoutes = [
       name: 'Answermanage',
       component: () => import('@/views/answer/index'),
       // , 'admin'
-      meta: { title: '阅卷管理', visible: true, roles: ['teacher'], icon: 'dashboard' }
+      meta: { title: '阅卷管理', visible: true, roles: ['teacher'], icon: 'el-icon-files' }
     }]
   },
   {
@@ -366,7 +366,7 @@ export const constantRoutes = [
       path: 'notice1',
       name: 'Notice',
       component: () => import('@/views/notice/notice'),
-      meta: { title: '公告管理', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
+      meta: { title: '公告管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-bell' }
     }]
   },
 

@@ -156,9 +156,9 @@
           <el-input v-model="postForm.title" />
         </el-form-item>
 
-        <el-form-item label="考试描述" prop="content">
+        <!-- <el-form-item label="考试描述" prop="content">
           <el-input v-model="postForm.content" type="textarea" />
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="总分数" prop="totalScore">
           <el-input-number :value="postForm.totalScore" disabled />
@@ -285,7 +285,7 @@ export default {
       rules: {
         title: [{ required: true, message: '考试名称不能为空！' }],
 
-        content: [{ required: true, message: '考试描述不能为空！' }],
+        // content: [{ required: true, message: '考试描述不能为空！' }],
 
         open: [{ required: true, message: '考试权限不能为空！' }],
 
@@ -518,7 +518,7 @@ export default {
       this.postForm.repoList = this.repoList
       const params = {
         title: this.postForm.title,
-        content: this.postForm.content, // 添加考试描述字段
+        // content: this.postForm.content, // 添加考试描述字段
         examDuration: this.postForm.examDuration,
         maxCount: this.postForm.maxCount,
         passedScore: this.postForm.passedScore,
