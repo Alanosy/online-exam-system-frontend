@@ -46,6 +46,8 @@
           v-if="item.title"
           :key="index"
           closable
+          disable-transitions
+          style="border: 1px solid #cacaca"
           :class="{ active: item.checked }"
           @click="$router.push(item.path)"
           @close="$store.commit('menu/REMOVE_TAG', item)"
