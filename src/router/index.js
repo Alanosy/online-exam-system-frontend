@@ -221,10 +221,10 @@ export const constantRoutes = [
     }]
   },
   {
-    path: '/chongshua',
-    name: 'Chongshua',
+    path: '/rebrush',
+    name: 'rebrush',
     hidden: true,
-    component: () => import('@/views/userbook/chongshua.vue'),
+    component: () => import('@/views/userbook/rebrush.vue'),
     meta: { title: '重刷', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
 
   },
@@ -285,9 +285,9 @@ export const constantRoutes = [
     path: '/certificate',
     component: Layout,
     children: [{
-      path: '/zhengshugl',
+      path: '/CertMgr',
       name: 'Certificate',
-      component: () => import('@/views/certificate/zhengshugl'),
+      component: () => import('@/views/certificate/CertMgr'),
       meta: { title: '证书管理', visible: true, roles: ['admin'], icon: 'el-icon-postcard' }
     }]
   },

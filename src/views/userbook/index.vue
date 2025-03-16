@@ -174,7 +174,7 @@ export default {
 
     screenInfo(row) {
       localStorage.setItem('userbook_examId', row.examId)
-      this.$router.push({ path: '/chongshua' })
+      this.$router.push({ path: '/rebrush' })
     }
   }
 }

@@ -4,7 +4,7 @@
       <div slot="header" class="clearfix">
         <span>个人信息</span>
         <el-button
-          v-if="this.data.gradeName == null"
+          v-if="this.data.gradeName == null && !isAdmin"
           style="float: right; padding: 3px 0; margin-right: 15px"
           type="text"
           size="mini"
@@ -43,8 +43,8 @@
             <span>班级:</span>
             <span> {{ this.data.gradeName?this.data.gradeName:"暂未加入班级" }} </span>
           </div>
-
-          <el-dialog
+        </div>
+        <el-dialog
             width="400px"
             :show-close="false"
             :close-on-click-modal="false"
@@ -77,6 +77,7 @@
               <el-button type="primary" @click="importAvatar">确 定</el-button>
             </div>
           </el-dialog>
+
           <el-dialog title="加入班级" :visible.sync="addClassDialogVisible">
             <el-row :gutter="20">
               <el-col :span="12">
@@ -94,7 +95,6 @@
               <el-button type="primary" @click="addClass">确 定</el-button>
             </div>
           </el-dialog>
-        </div>
         <div class="right">
           <img
             style="

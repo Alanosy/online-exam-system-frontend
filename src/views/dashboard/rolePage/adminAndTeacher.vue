@@ -371,6 +371,7 @@ export default {
 /* 统计卡片容器 */
 .stats-container {
   margin: auto;
+  border-radius: 16px;
   width: 100%;
   padding: 20px;
   margin-top: 30px;
@@ -394,11 +395,6 @@ export default {
   background-color: #fff;
   transition: all 0.3s ease;
 }
-
-/* .stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-} */
 
 .icon-container {
   display: flex;
@@ -424,6 +420,7 @@ export default {
   text-align: center;
   font-size: 24px;
   font-weight: bold;
+  margin-top: 4px;
   /* padding: 0 0 0 10px; */
   color: #409EFF;
 }
@@ -442,12 +439,12 @@ export default {
 .chart-box {
   width: 48%;
   min-width: 300px;
+  border-radius: 16px;
   height: 100%;
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
   background-color: #fff;
-  border-radius: 4px;
 }
 
 /* 加载状态 */

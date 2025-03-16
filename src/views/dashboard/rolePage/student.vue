@@ -1,42 +1,39 @@
 <template>
-  <div>
-    <div style="display: flex; justify-content: center; margin-top: 3em">
-      <div class="left">
-        <el-card class="box-card">
-          登录时长
-          <div ref="charts" class="chart-div" />
-        </el-card>
-      </div>
-      <div class="right">
-        <el-card class="box-card">
-          最新公告
-
-          <div v-infinite-scroll="load" style="overflow: auto">
-            <el-collapse v-model="activeNames" accordion>
-              <div v-for="(item, index) in noticePage.records">
-                <el-collapse-item
-                  v-if="item != null"
-                  :title="item.title"
-                  :name="index"
-                >
-                  <div v-html="item.content"></div>
-                  <div class="noticeContent">
-                    <div>{{ item.realName }}</div>
-                    <div>{{ item.createTime }}</div>
-                  </div>
-                </el-collapse-item>
-              </div>
-              <el-collapse-item v-if="noticePage.records.length === 0" title="暂无公告" name="default">
-                <div>目前没有最新公告，请稍后再查看。</div>
+  <div class="app-container">
+    <div class="left">
+      <el-card class="box-card">
+        <span>登录时长</span>
+        <div ref="charts" class="chart-div" />
+      </el-card>
+    </div>
+    <div class="right">
+      <el-card class="box-card">
+        <span>最新公告</span>
+        <div v-infinite-scroll="load" style="overflow: auto">
+          <el-collapse v-model="activeNames" accordion>
+            <div v-for="(item, index) in noticePage.records">
+              <el-collapse-item
+                v-if="item != null"
+                :title="item.title"
+                :name="index"
+              >
+                <div v-html="item.content"></div>
+                <div class="noticeContent">
+                  <div>{{ item.realName }}</div>
+                  <div>{{ item.createTime }}</div>
+                </div>
               </el-collapse-item>
-            </el-collapse>
-          </div>
-
-          <!-- <div>
-            <el-pagination small layout="prev, pager, next" :total="50"> </el-pagination>
-          </div> -->
-        </el-card>
-      </div>
+            </div>
+            <el-collapse-item
+              v-if="noticePage.records.length === 0"
+              title="暂无公告"
+              name="default"
+            >
+              <div>目前没有最新公告，请稍后再查看。</div>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+      </el-card>
     </div>
   </div>
 </template>
@@ -44,6 +41,8 @@
 <script>
 import { noticeGetNew } from "@/api/notice";
 import { getDaily } from "@/api/stat";
+import echarts from "echarts";
+
 export default {
   data() {
     return {
@@ -71,20 +70,25 @@ export default {
         children: "children",
         label: "label",
       },
+      myChart: null, // 用于存储 ECharts 实例
     };
   },
   created() {
     this.getDailyFun();
-
     this.getNotice(this.pageNum, this.pageSize);
   },
-
   mounted() {
     this.initCharts();
+    window.addEventListener("resize", this.resizeChart);
   },
-
+  beforeDestroy() {
+    window.removeEventListener("resize", this.resizeChart);
+    if (this.myChart) {
+      this.myChart.dispose(); // 销毁图表实例，避免内存泄漏
+    }
+  },
   methods: {
-    //   获取登录时长
+    // 获取登录时长
     getDailyFun() {
       getDaily().then((res) => {
         if (res.code === 1) {
@@ -124,7 +128,6 @@ export default {
         }
       });
     },
-
     // 分页查询
     async getNotice(pageNum, pageSize) {
       const params = { pageNum: pageNum, pageSize: pageSize };
@@ -138,9 +141,13 @@ export default {
       // this.transformData(res);
     },
     initCharts() {
-      const myChart = this.$echarts.init(this.$refs.charts);
-      // 绘制图表
-      myChart.setOption(this.option);
+      this.myChart = echarts.init(this.$refs.charts);
+      this.myChart.setOption(this.option);
+    },
+    resizeChart() {
+      if (this.myChart) {
+        this.myChart.resize();
+      }
     },
     handleNodeClick(data) {
       // console.log(data);
@@ -148,48 +155,28 @@ export default {
   },
 };
 </script>
-<style>
-.luang {
-  margin: auto;
-  width: 1100px;
-  height: 100vh;
-  /* 100px */
-  background-color: rgb(241, 218, 221);
-  margin-top: 30px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
-}
-
-.box-card {
-  margin-top: 50px;
-  width: 60vh;
-  height: 60vh;
-  margin-left: 85px;
-}
-.chart-div {
-  margin-top: 10px;
-  /* width: 450px;
-  height: 300px; */
-  width: 100%;
-  height: 50vh;
-  border: solid black 1px;
-}
-.i {
-  margin-top: 10px;
-  height: 60vh;
-  /* 添加滚动条样式 */
-  overflow-y: auto; /* 启用垂直滚动条 */
-  max-height: 300px; /* 指定最大高度，根据需要调整 */
-}
-
-.el-tree-node__content {
-  display: -webkit-box;
-  display: -ms-flexbox;
+<style scoped>
+/* 最外层容器 */
+.app-container {
+  height: calc(100vh - 111px);
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
+  transform: translateY(-20px);
+  justify-content: space-evenly;
   align-items: center;
-  height: 47px;
-  cursor: pointer;
+}
+.right,
+.left {
+  width: 45%;
+  height: 68%;
+}
+.box-card {
+  width: 100%;
+  height: 100%;
+  /* 登录时长图表 */
+ .chart-div {
+    height: 50vh;
+    width: 100%;
+  }
 }
 .noticeContent {
   display: flex;
