@@ -143,17 +143,39 @@ export default {
       try {
         // 获取总数统计
         const res0 = await classAllCounts();
-        this.classCount = res0.data.classCount;
-        this.quCount = res0.data.questionCount;
-        this.examCount = res0.data.examCount;
+        if (res0.data) {
+          this.classCount = res0.data.classCount;
+          this.quCount = res0.data.questionCount;
+          this.examCount = res0.data.examCount;
+        } else {
+          this.classCount = 0;
+          this.quCount = 0;
+          this.examCount = 0;
+        }
 
         // 获取班级人数分布
         const res1 = await classCount();
-        this.processChartData(res1.data);
+        if (res1.data) {
+          this.processChartData(res1.data);
+        } else {
+          this.chartData = [{ name: "暂无数据", value: 1 }];
+          this.chartDataTitle = ["暂无数据"];
+          if (this.classChartInstance) {
+            this.updateClassChart();
+          }
+        }
 
         // 获取班级试卷分布
         const res2 = await classExamCount();
-        this.processChartData2(res2.data);
+        if (res2.data) {
+          this.processChartData2(res2.data);
+        } else {
+          this.chartData2 = [{ name: "暂无数据", value: 1 }];
+          this.chartDataTitle2 = ["暂无数据"];
+          if (this.examChartInstance) {
+            this.updateExamChart();
+          }
+        }
 
         this.loading = false;
       } catch (error) {
