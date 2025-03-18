@@ -14,7 +14,7 @@
             <el-switch
               v-model="repoForm.isExercise"
               active-color="#13ce66"
-              inactive-color="#ff4949"
+              inactive-color="#cccccc"
             />
           </el-form-item>
         </el-form>
