@@ -47,7 +47,7 @@
 
 <script>
 import { repoPaging, repoDel, repoUpdate, repoAdd } from '@/api/repo'
-import { ref, reactive, getCurrentInstance, nextTick } from "vue"
+// import { ref, reactive, getCurrentInstance, nextTick } from "vue"
 import RepoDialog from "@/components/repo/repoDialog/index.vue"
 export default {
   components: {
