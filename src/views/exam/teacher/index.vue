@@ -1,12 +1,3 @@
-<!--
- * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @Date: 2024-04-01 11:00:21
- * @LastEditors: st 2946594574@qq.com
- * @LastEditTime: 2024-05-06 11:57:34
- * @FilePath: \com-project\src\views\notice\notice.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
-
 <template>
   <div class="app-container">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -58,9 +49,9 @@
       <el-table-column prop="multiCount" label="多选题数量" align="center" width="100px"/>
       <el-table-column prop="judgeCount" label="判断题数量" align="center" width="100px" />
       <el-table-column prop="saqCount" label="简答题数量" align="center" width="100px"/> -->
-      <el-table-column prop="startTime" label="开始时间" align="center" />
-      <el-table-column prop="endTime" label="结束时间" align="center" />
-      <el-table-column fixed="right" label="操作" align="center">
+      <el-table-column prop="startTime" label="开始时间" align="center" width="170px" />
+      <el-table-column prop="endTime" label="结束时间" align="center" width="170px" />
+      <el-table-column fixed="right" label="操作" align="center" width="170px">
         <template slot-scope="{ row }">
           <el-button
             type="text"
