@@ -35,7 +35,7 @@
         'line-height': '32px',
       }"
     >
-    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column fixed label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
@@ -113,9 +113,9 @@ export default {
       const input = this.input
       const input1 = this.input1
       if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
+        //  ("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
+          //  ("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1
           })
@@ -123,7 +123,7 @@ export default {
       }
       if (input1) {
         return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
+          //  ("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input1) > -1
           })
@@ -159,7 +159,7 @@ export default {
     },
     getExportScores() {
       exportScores(this.examId, this.gradeId).then(res => {
-        console.log(res) // 控制台输出：Blob {size: 30208, type: 'application/x-msdownload'}
+        (res) // 控制台输出：Blob {size: 30208, type: 'application/x-msdownload'}
         var debug = res
         if (debug) {
           var elink = document.createElement('a')
@@ -169,10 +169,9 @@ export default {
           }
           elink.download = filename
           elink.style.display = 'none'
-          var blob = new Blob([debug], { type: 'application/x-msdownload' })
-          console.log(blob)
+          var blob = new Blob([debug], { type: 'application/x-msdownload' })(blob)
           // const filename = decodeURIComponent(res.headers['Content-Disposition'])
-          // console.log(filename)
+          //  (filename)
           elink.href = URL.createObjectURL(blob)
           document.body.appendChild(elink)
           elink.click()
@@ -181,13 +180,13 @@ export default {
           this.$message.error('导出异常请联系管理员')
         }
       }).catch(err => {
-        console.log(err)
+        (err)
       })
     },
 
     onSubmit() {
       this.getScorePage()
-      // console.log("submit!");
+      //  ("submit!");
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑
@@ -201,7 +200,6 @@ export default {
     },
 
     handleClick(row) {
-      // console.log(row);
     }
   }
 }

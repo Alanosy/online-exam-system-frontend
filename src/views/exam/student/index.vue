@@ -17,7 +17,7 @@
         active-color="#13ce66"
         inactive-color="#409EFF"
         @change="toggleSort"
-      ></el-switch>
+      />
     </div>
 
     <!-- table -->
@@ -34,13 +34,13 @@
         'line-height': '32px',
       }"
     >
-    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column fixed label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" label="试卷名称" align="center" />
       <el-table-column prop="examDuration" label="考试时长（分钟）" align="center" />
-      <el-table-column prop="grossScore" label="总分" align="center"  />
+      <el-table-column prop="grossScore" label="总分" align="center" />
       <el-table-column prop="passedScore" label="及格分" align="center" />
       <!-- <el-table-column prop="radioCount" label="单选题数量" align="center" width="100"  />
       <el-table-column prop="multiCount" label="多选题数量" align="center" width="100" />
@@ -161,7 +161,6 @@ export default {
       this.getExamGradePage(val, this.pageSize)
     },
     handleClick(row) {
-      // console.log(row);
     },
 
     screenInfo(row) {
@@ -170,8 +169,8 @@ export default {
         return
       }
       localStorage.setItem('examInfo_examId', row.id)
-      this.$router.push({ name: 'text', query: { zhi: row }})
-    },
+      this.$router.push({ name: 'prepare-exam', query: { zhi: row }})
+    }
   }
 }
 </script>
@@ -195,12 +194,10 @@ export default {
   text-align: right;
 }
 
-
 .sort-switch-container {
   margin-bottom: 15px;
   display: flex;
   align-items: center;
 }
-
 
 </style>

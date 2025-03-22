@@ -6,6 +6,7 @@
           <el-card class="qu_list">
             <div>
               <template v-for="index in data">
+                <!-- eslint-disable-next-line vue/require-v-for-key -->
                 <div
                   v-if="index.quType === 1 || index.quType === 2 || index.quType === 3"
                   :class="'index' + index"
@@ -18,9 +19,9 @@
                         <!-- 【 单选题 】 -->
                         <div class="qu_content">{{ index.title }}</div>
                       </div>
-                      <div v-if="index.image != null && index.image != ''" >
-                            <el-image :src="index.image" style="height: 100px;" />
-                        </div>
+                      <div v-if="index.image != null && index.image != ''">
+                        <el-image :src="index.image" style="height: 100px;" />
+                      </div>
                       <!-- 选项 -->
                       <el-radio-group class="qu_choose_group">
                         <!-- ['A', 'B', 'C', 'D'] -->
@@ -31,17 +32,17 @@
                           border
 
                           class="qu_choose"
-                          :class="{'imgC':item.image != null && item.image != '','isRight':index.myOption!=null&& isCheck(index.myOption ,item.sort)  && item.isRight , 'incorrect':index.myOption!=null && isCheck(index.myOption ,item.sort) && !item.isRight}"
+                          :class="{'imgC':item.image != null && item.image != '','isRight':index.myOption!=null&& isCheck(index.myOption ,item.sort) && item.isRight , 'incorrect':index.myOption!=null && isCheck(index.myOption ,item.sort) && !item.isRight}"
                         >
-                        
+
                           <!-- 选项flex浮动 -->
                           <div class="qu_choose_tag">
                             <div class="qu_choose_tag_type">
                               {{ numberToLetter(indexs) }}、{{ item.content }}
                             </div>
-                            <div v-if="item.image != null && item.image != ''" >
-                            <el-image :src="item.image" class="qu_choose_tag_img" />
-                        </div>
+                            <div v-if="item.image != null && item.image != ''">
+                              <el-image :src="item.image" class="qu_choose_tag_img" />
+                            </div>
                           </div>
                         </el-radio>
                       </el-radio-group>
@@ -69,6 +70,7 @@
                 </div>
               </template>
               <template v-for="index in data">
+                <!-- eslint-disable-next-line vue/require-v-for-key -->
                 <div v-if="index.quType === 4" :class="'index' + index">
                   <el-row :gutter="24">
                     <el-col :span="20" style="text-align: left">
@@ -152,12 +154,11 @@ export default {
   },
   methods: {
     isCheck(myOption, sort) {
-      const arr = myOption.split(",").map(Number); // 将字符串转换为数字数组
+      const arr = myOption.split(',').map(Number) // 将字符串转换为数字数组
       if (arr.includes(sort)) {
-        return true;
-        console.log(`${valueToCheck} 在数组中.`);
+        return true
       } else {
-        return false;
+        return false
       }
     },
     numberToLetter(input) {
@@ -255,7 +256,6 @@ export default {
   margin-right: 5px;
   margin-top: 10px;
 }
-
 
 // 试题内容样式
 .qu_list {

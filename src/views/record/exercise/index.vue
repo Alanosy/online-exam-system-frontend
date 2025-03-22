@@ -4,7 +4,7 @@
       <el-form-item label="题库名称">
         <el-input v-model="searchTitle" placeholder="题库名称" />
       </el-form-item>
- 
+
       <el-form-item>
         <el-button type="primary" @click="searchExam">查询</el-button>
       </el-form-item>
@@ -21,11 +21,11 @@
         'line-height': '32px',
       }"
     >
-    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column prop="title" align="center" label="题库名称"  />
+      <el-table-column prop="title" align="center" label="题库名称" />
       <el-table-column prop="createTime" align="center" label="刷题时间" />
       <!-- <el-table-column prop="cjsj" align="center" label="已刷题数"> </el-table-column> -->
       <el-table-column align="center" label="操作">
@@ -102,7 +102,7 @@ export default {
       pageSize: 10,
       data: {},
       input: '',
-      searchTitle:"",
+      searchTitle: '',
       formInline: {
         user: '',
         region: ''
@@ -114,9 +114,8 @@ export default {
       },
       cancle() {},
       updateRow(row) {
-        // console.info("=====", row);
         localStorage.setItem('record_exercise_repoId', row.id)
-        this.$router.push({ name: 'Newk1', query: { zhi: row }})
+        this.$router.push({ name: 'exercise-record-detail', query: { zhi: row }})
         // this.dialogFormVisible = true;
         // this.form = row;
       },
@@ -133,9 +132,9 @@ export default {
       // 在你的数据表格中定义tabels
       const input = this.input
       if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
+        //  ("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
+          //  ("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1
           })
@@ -149,23 +148,23 @@ export default {
     this.getExerciseRecordPaging()
   },
   methods: {
-    searchExam(){
-      this.getExerciseRecordPaging(this.pageNum, this.pageSize,this.searchTitle)
+    searchExam() {
+      this.getExerciseRecordPaging(this.pageNum, this.pageSize, this.searchTitle)
     },
     // 分页查询
-    async getExerciseRecordPaging(pageNum, pageSize,repoName) {
-      const params = { pageNum: pageNum, pageSize: pageSize ,repoName:repoName}
+    async getExerciseRecordPaging(pageNum, pageSize, repoName) {
+      const params = { pageNum: pageNum, pageSize: pageSize, repoName: repoName }
       const res = await recordExercisePaging(params)
       this.data = res.data
     },
     onSubmit() {
-      // console.log("submit!");
+      //  ("submit!");
     },
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
+      //  (`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
+      //  (`当前页: ${val}`);
     },
     handleClose(done) {
       this.$confirm('确认关闭？')

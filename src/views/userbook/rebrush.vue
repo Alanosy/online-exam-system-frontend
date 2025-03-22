@@ -27,8 +27,11 @@
           <div v-if="quData.quType === 1 || quData.quType === 3">
             <!-- 选项 -->
             <el-radio-group v-model="radioValue">
-              <el-radio v-for="item in quData.answerList" :key="item.id" :label="item.id"
-                >{{ numberToLetter(item.sort) }}.{{ item.content }}
+              <el-radio
+                v-for="item in quData.answerList"
+                :key="item.id"
+                :label="item.id"
+              >{{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 200px" />
                 </div>
@@ -40,10 +43,10 @@
               <span>我的答案:{{ myAnswers }}</span>
             </div> -->
             <div>
-              <span>正确答案:  {{ numberToLetter(parseInt(this.failQuData.rightAnswers)) }}</span>
+              <span>正确答案:  {{ numberToLetter(parseInt(failQuData.rightAnswers)) }}</span>
             </div>
             <div>
-              <span>试题分析:  {{ this.failQuData.analysis }}</span>
+              <span>试题分析:  {{ failQuData.analysis }}</span>
             </div>
           </div>
           <div v-if="quData.quType === 2">
@@ -52,7 +55,7 @@
                 v-for="item in quData.answerList"
                 :key="item.id"
                 :label="item.id"
-                >{{ numberToLetter(item.sort) }}.{{ item.content }}
+              >{{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image != null && item.image != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 200px" />
                 </div>
@@ -65,10 +68,10 @@
               <span>我的答案:{{ myAnswers }}</span>
             </div> -->
             <div>
-              <span>正确答案:  {{ numberToLetter(this.failQuData.rightAnswers)}}</span>
+              <span>正确答案:  {{ numberToLetter(failQuData.rightAnswers) }}</span>
             </div>
             <div>
-              <span>试题分析:  {{ this.failQuData.analysis }}</span>
+              <span>试题分析:  {{ failQuData.analysis }}</span>
             </div>
           </div>
 
@@ -96,10 +99,10 @@
               <span>我的答案:{{ myAnswers }}</span>
             </div> -->
             <div>
-              <span>正确答案:  {{ this.failQuData.rightAnswers }}</span>
+              <span>正确答案:  {{ failQuData.rightAnswers }}</span>
             </div>
             <div>
-              <span>试题分析:  {{ this.failQuData.analysis }}</span>
+              <span>试题分析:  {{ failQuData.analysis }}</span>
             </div>
           </div>
           <div style="margin-top: 20px">
@@ -116,90 +119,90 @@
   </div>
 </template>
 <script>
-import { fullBook, getSingleQu, getUserBookList } from "@/api/userbook";
+import { fullBook, getSingleQu, getUserBookList } from '@/api/userbook'
 export default {
   data() {
     return {
-      repoId: "",
-      repoTitle: "",
+      repoId: '',
+      repoTitle: '',
       routeData: {},
       // 全屏/不全屏
       isFullscreen: false,
       showPrevious: false,
       showNext: true,
       loading: false,
-      handleText: "提交",
+      handleText: '提交',
       pageLoading: false,
       nextText: false,
       userBookList: [],
       index: 0,
       quDataLen: 0,
-      examId: "",
+      examId: '',
       failQuData: {},
       flag: false,
       // 当前题目内容
       quData: {
-        answerList: [],
+        answerList: []
       },
       // 试卷信息
-      radioValue: "",
+      radioValue: '',
       showAnswer: false,
       // 多选选定值
       multiValue: [],
       // 已答ID
       answeredIds: [],
-      saqTextarea: "",
-      myAnswers: "",
+      saqTextarea: '',
+      myAnswers: '',
       lastIndex: 0,
       paperData: {
         leftSeconds: 99999,
         radioList: [],
         multiList: [],
-        judgeList: [],
-      },
-    };
+        judgeList: []
+      }
+    }
   },
   created() {
-    this.routeData = this.$route.query.zhi;
-    this.examId = localStorage.getItem("userbook_examId");
-    this.getUserBookListFun();
+    this.routeData = this.$route.query.zhi
+    this.examId = localStorage.getItem('userbook_examId')
+    this.getUserBookListFun()
     // this.getSingleQuFun()
   },
 
   methods: {
     handHandExam() {
-      const that = this;
+      const that = this
       // 交卷保存答案
-      const msg = "确认要提交吗？";
+      const msg = '确认要提交吗？'
       that
-        .$confirm(msg, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+        .$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
         .then(() => {
-          this.$router.push({ name: "Wrongbook" });
+          this.$router.push({ name: 'wrong-book' })
         })
         .catch(() => {
           that.$message({
-            type: "info",
-            message: "交卷已取消，您可以继续作答！",
-          });
-        });
+            type: 'info',
+            message: '交卷已取消，您可以继续作答！'
+          })
+        })
     },
 
     getSingleQuFun(quId) {
       getSingleQu(quId).then((res) => {
-        this.quData = res.data;
-      });
+        this.quData = res.data
+      })
     },
     getUserBookListFun() {
       getUserBookList(this.examId).then((res) => {
-        this.userBookList = res.data;
-        this.quDataLen = res.data.length;
-        this.getSingleQuFun(res.data[this.index]["quId"]);
-        this.lastIndex = this.userBookList.length;
-      });
+        this.userBookList = res.data
+        this.quDataLen = res.data.length
+        this.getSingleQuFun(res.data[this.index]['quId'])
+        this.lastIndex = this.userBookList.length
+      })
     },
     numberToLetter(input) {
       const numberToCharMap = {
@@ -236,13 +239,13 @@ export default {
      */
     handNext() {
       if (!this.flag) {
-        this.index = this.index + 1;
-        this.handSave(this.index);
+        this.index = this.index + 1
+        this.handSave(this.index)
       } else {
         if (this.index >= this.lastIndex) {
-          this.handHandExam();
+          this.handHandExam()
         }
-        this.handSave(this.index);
+        this.handSave(this.index)
       }
     },
 
@@ -250,69 +253,67 @@ export default {
      * 上一题
      */
     handPrevious() {
-      this.index = this.index - 1;
-      this.handSave(this.index);
+      this.index = this.index - 1
+      this.handSave(this.index)
     },
     // 保存答案
     handSave(index) {
- 
       if (index - 1 >= this.lastIndex) {
-        this.handHandExam();
-        //   this.$router.push({ name: 'Wrongbook' })
+        this.handHandExam()
       } else {
-        const answers = this.multiValue;
-        if (this.radioValue !== "") {
-          answers.push(this.radioValue);
+        const answers = this.multiValue
+        if (this.radioValue !== '') {
+          answers.push(this.radioValue)
         }
 
         const params = {
           examId: this.examId,
-          quId: this.userBookList[index - 1]["quId"],
-          answer: this.quData.quType == 4 ? this.saqTextarea : answers.join(","),
-        };
+          quId: this.userBookList[index - 1]['quId'],
+          answer: this.quData.quType === 4 ? this.saqTextarea : answers.join(',')
+        }
 
         // this.myAnswers = params.answer;
         if (!this.flag) {
           fullBook(params).then((res) => {
             if (res.code) {
-              this.failQuData = res.data;
+              this.failQuData = res.data
 
               if (res.data.correct) {
                 this.$message({
-                  type: "success",
-                  message: res.msg,
-                });
+                  type: 'success',
+                  message: res.msg
+                })
               } else {
                 this.$message({
-                  type: "error",
-                  message: res.msg,
-                });
+                  type: 'error',
+                  message: res.msg
+                })
               }
             } else {
               this.$message({
-                type: "error",
-                message: res.msg,
-              });
+                type: 'error',
+                message: res.msg
+              })
             }
-          });
+          })
         }
 
-        if (this.flag == true) {
+        if (this.flag === true) {
           // 查找详情
-          this.fetchQuData(index);
-          this.flag = false;
+          this.fetchQuData(index)
+          this.flag = false
         } else {
-          this.flag = true;
+          this.flag = true
         }
       }
       // });
     },
     // 试卷详情
     fetchQuData(index) {
-      this.getSingleQuFun(this.userBookList[index]["quId"]);
-    },
-  },
-};
+      this.getSingleQuFun(this.userBookList[index]['quId'])
+    }
+  }
+}
 </script>
 <style scoped>
 page {

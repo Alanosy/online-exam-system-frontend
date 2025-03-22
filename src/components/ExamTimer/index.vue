@@ -9,6 +9,7 @@
 export default {
   name: 'ExamTimer',
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     value: Number
   },
 

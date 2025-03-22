@@ -26,7 +26,7 @@
         'line-height': '32px',
       }"
     >
-      <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column label="序号" align="center" width="80px">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
@@ -56,7 +56,6 @@
         </template>
       </el-table-column>
     </el-table>
-
 
     <!-- 新增弹窗 -->
     <el-dialog :title="diaTitle" :visible.sync="dialogTableVisible">
@@ -119,7 +118,7 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="fileDialogVisible = false">取 消</el-button>
         <el-button type="success" plain @click="startDownload">下载模板</el-button>
-         
+
         <el-button type="primary" @click="importUser">确 定</el-button>
       </div>
     </el-dialog>
@@ -147,7 +146,6 @@ export default {
   components: { ClassSelect },
   data() {
     return {
-      formLabelWidth: '',
       searchRealName: '',
       searchClassName: '',
       role: '',
@@ -166,6 +164,7 @@ export default {
       form: {
         gradeName: ''
       },
+      // eslint-disable-next-line no-dupe-keys
       formLabelWidth: '110px'
     }
   },
@@ -215,17 +214,15 @@ export default {
       }
       classAdd(data).then((res) => {
         if (res.code) {
-          this.addForm.userName=''
-          this.addForm.realName=''
-          this.addForm.region=''
+          this.addForm.userName = ''
+          this.addForm.realName = ''
+          this.addForm.region = ''
           this.getUserPage(this.pageNum, this.pageSize)
           this.dialogTableVisible = false
           this.$message({
             type: 'success',
             message: '新增成功!'
           })
-          
-          
         } else {
           this.$message({
             type: 'info',
@@ -264,7 +261,7 @@ export default {
     },
     // 移除文件处理方法
     handleRemove(file, fileList) {
-      if (fileList.length == 0) {
+      if (fileList.length === 0) {
         this.hasFiles = false
       }
     },
@@ -279,7 +276,6 @@ export default {
           userDel(row.id).then((res) => {
             if (res.code) {
               this.getUserPage(this.pageNum, this.pageSize)
-              this.tableData.splice(index, 1)
               this.$message({
                 type: 'success',
                 message: '删除成功!'
@@ -316,22 +312,22 @@ export default {
         }
       })
     },
-    //下载模板
-   async startDownload() {
-      const a = document.createElement("a");
-      a.href = "./template/ImportUserTemplate.xlsx";
-      a.download = "导入用户模板.xlsx";
+    // 下载模板
+    async startDownload() {
+      const a = document.createElement('a')
+      a.href = './template/ImportUserTemplate.xlsx'
+      a.download = '导入用户模板.xlsx'
       // 障眼法藏起来a标签
-      a.style.display = "none";
+      a.style.display = 'none'
       // 将a标签追加到文档对象中
-      document.body.appendChild(a);
+      document.body.appendChild(a)
       // 模拟点击了<a>标签,会触发<a>标签的href的读取,浏览器就会自动下载了
-      a.click();
+      a.click()
       // 一次性的,用完就删除a标签
-      a.remove(); 
+      a.remove()
+    }
   }
-  }
-  }
+}
 
 </script>
 <style>

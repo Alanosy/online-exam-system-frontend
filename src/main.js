@@ -28,10 +28,20 @@ import 'quill/dist/quill.core.css' // 引入样式
 import 'quill/dist/quill.snow.css' // snow theme
 import 'quill/dist/quill.bubble.css' // bubble theme
 
+// 如果是开发环境，关闭一些提示
+if (process.env.NODE_ENV === 'development') {
+  console.warn = function(message) {
+    if (!message.includes('DOMNodeInserted')) {
+      console.log(message)
+    }
+  }
+}
+
 // 定义白名单
 Vue.prototype.$echarts = echarts
 const whiteList = ['/login', '/register']
 
+// 判断是否有token，如果有token，则允许访问，否则跳转到登录页面
 router.beforeEach((to, from, next) => {
   // 获取token，这里以从localStorage获取为例
   const token = getToken('Authorization')

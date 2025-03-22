@@ -162,8 +162,9 @@
             </el-checkbox-group>
           </div>
           <div v-if="quDetail.quType === 4">
-            <el-input :disabled="isAnswered"
+            <el-input
               v-model="radioValue"
+              :disabled="isAnswered"
               type="textarea"
               resize="none"
               :clearable="true"
@@ -173,9 +174,9 @@
 
           <div v-if="rightQuAnswer.data != null">
             <p v-if="quDetail.quType != 4">
-              <span :class="{ 'bg-green': rightQuAnswer.msg === '回答正确',  'bg-red': rightQuAnswer.msg === '回答错误'  }">
-              {{ rightQuAnswer.msg }}
-            </span>
+              <span :class="{ 'bg-green': rightQuAnswer.msg === '回答正确', 'bg-red': rightQuAnswer.msg === '回答错误' }">
+                {{ rightQuAnswer.msg }}
+              </span>
             </p>
             <p v-if="rightQuAnswer.data">正确答案：{{ getRightAnswer() }}</p>
             <p>试题分析：{{ rightQuAnswer.data.analysis }}</p>
@@ -238,14 +239,13 @@
           status="success"
           stroke-width="16"
           style="margin-top: 20px;"
-        ></el-progress>
+        />
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="onDialogCancel">取消</el-button>
         <el-button type="primary" @click="finishExam">结束刷题</el-button>
       </span>
     </el-dialog>
-
 
   </div>
 </template>
@@ -372,7 +372,19 @@ export default {
       return rate + '%'
     }
 
-
+  },
+  watch: {
+    radioValue(newVal) {
+      if (newVal && (this.quDetail.quType === 1 || this.quDetail.quType === 3) && !this.isAnswered) {
+        this.isAnswered = true
+        this.$nextTick(() => {
+          this.fillAnswer()
+          this.showAnalysis = 1
+          this.nextText = '下一题'
+          this.showButton()
+        })
+      }
+    }
   },
   created() {
     this.repoId = this.$route.query.repoId
@@ -380,39 +392,39 @@ export default {
     this.test()
   },
   methods: {
-        // 根据答案返回class
-        getOptionClass(option) {
-        // 未提交答案不做样式处理
-        if (!this.rightQuAnswer.data) return '';
-        // 从返回的答案数据中查找对应选项
-        const answerOption = this.rightQuAnswer.data.options.find(o => o.id === option.id);
-        const isCorrect = answerOption ? answerOption.isRight : false;
-        let isChosen = false;
-        // 单选和判断题：用户选择存储在 radioValue 中
-        if (this.quDetail.quType === 1 || this.quDetail.quType === 3) {
-          isChosen = (this.radioValue === option.id);
-        } else if (this.quDetail.quType === 2) {
-          // 多选题：用户选择存储在 multiValue 数组中
-          isChosen = this.multiValue.includes(option.id);
-        }
-        // 正确选项始终显示绿色背景
-        if (isCorrect) {
-          return 'bg-green';
-        }
-        // 如果用户选中但该选项不正确，则显示红色背景
-        if (isChosen) {
-          return 'bg-red';
-        }
-        return '';
-      },
+    // 根据答案返回class
+    getOptionClass(option) {
+      // 未提交答案不做样式处理
+      if (!this.rightQuAnswer.data) return ''
+      // 从返回的答案数据中查找对应选项
+      const answerOption = this.rightQuAnswer.data.options.find(o => o.id === option.id)
+      const isCorrect = answerOption ? answerOption.isRight : false
+      let isChosen = false
+      // 单选和判断题：用户选择存储在 radioValue 中
+      if (this.quDetail.quType === 1 || this.quDetail.quType === 3) {
+        isChosen = (this.radioValue === option.id)
+      } else if (this.quDetail.quType === 2) {
+        // 多选题：用户选择存储在 multiValue 数组中
+        isChosen = this.multiValue.includes(option.id)
+      }
+      // 正确选项始终显示绿色背景
+      if (isCorrect) {
+        return 'bg-green'
+      }
+      // 如果用户选中但该选项不正确，则显示红色背景
+      if (isChosen) {
+        return 'bg-red'
+      }
+      return ''
+    },
 
     // 重置答题状态
     resetAnswerState() {
-      this.radioValue = '';
-      this.multiValue = [];
-      this.rightQuAnswer = {};
-      this.showAnalysis = 0;
-      this.isAnswered = false;
+      this.radioValue = ''
+      this.multiValue = []
+      this.rightQuAnswer = {}
+      this.showAnalysis = 0
+      this.isAnswered = false
     },
     // 处理题型切换逻辑
     handleQuestionTypeSwitch() {
@@ -421,46 +433,46 @@ export default {
         2: this.paperData.multiList,
         3: this.paperData.judgeList,
         4: this.paperData.saqList
-      }[this.curListIndex];
+      }[this.curListIndex]
 
       if (this.curTypeIndex < currentList.length - 1) {
-        this.curTypeIndex++;
-        this.curQuId = currentList[this.curTypeIndex].quId;
+        this.curTypeIndex++
+        this.curQuId = currentList[this.curTypeIndex].quId
       } else {
         const nextTypeMap = {
           1: { index: 2, list: this.paperData.multiList },
           2: { index: 3, list: this.paperData.judgeList },
           3: { index: 4, list: this.paperData.saqList },
           4: { index: 1, list: this.paperData.radioList }
-        };
-        const nextType = nextTypeMap[this.curListIndex];
-        this.curListIndex = nextType.index;
-        this.curTypeIndex = 0;
-        this.curQuId = nextType.list[0]?.quId || '';
+        }
+        const nextType = nextTypeMap[this.curListIndex]
+        this.curListIndex = nextType.index
+        this.curTypeIndex = 0
+        this.curQuId = nextType.list[0]?.quId || ''
       }
     },
 
     // 修改结束刷题逻辑：确认后显示答题统计弹框
-    exitFun(){
-        this.statisticsDialogVisible = true;
+    exitFun() {
+      this.statisticsDialogVisible = true
     },
 
     // 点击弹框中“确定结束”按钮后的处理：关闭弹框并进行跳转或其他后续处理
-    finishExam(){
+    finishExam() {
       // 删除当前标签页
       this.$store.commit('menu/REMOVE_TAG', {
-        title: this.$route.meta.title,  // 从路由元数据中获取标题
+        title: this.$route.meta.title, // 从路由元数据中获取标题
         path: this.$route.path,
-        name: this.$route.name          // 添加路由名称
-      });
-      this.statisticsDialogVisible = false;
-      this.$router.push({ name: "Questcenter", params: { id: this.paperId } });
+        name: this.$route.name // 添加路由名称
+      })
+      this.statisticsDialogVisible = false
+      this.$router.push({ name: 'exercise-center', params: { id: this.paperId }})
     },
     // 取消弹框，不结束刷题
-    onDialogCancel(){
-      this.statisticsDialogVisible = false;
+    onDialogCancel() {
+      this.statisticsDialogVisible = false
     },
-    async test(){
+    async test() {
       const res = await getQuestion(null, this.repoId)
       this.quList = res.data
 
@@ -470,15 +482,15 @@ export default {
       this.paperData.judgeList = []
       this.paperData.saqList = []
 
-      if (this.number == 1) {
+      if (this.number === 1) {
         this.quList.forEach((item) => {
-          if (item.quType == 1) {
+          if (item.quType === 1) {
             this.paperData.radioList.push(item)
-          } else if (item.quType == 2) {
+          } else if (item.quType === 2) {
             this.paperData.multiList.push(item)
-          } else if (item.quType == 3) {
+          } else if (item.quType === 3) {
             this.paperData.judgeList.push(item)
-          } else if (item.quType == 4) {
+          } else if (item.quType === 4) {
             this.paperData.saqList.push(item)
           }
         })
@@ -501,15 +513,15 @@ export default {
       this.paperData.saqList = []
       // }
       // 按题型
-      if (this.number == 1) {
+      if (this.number === 1) {
         this.quList.forEach((item) => {
-          if (item.quType == 1) {
+          if (item.quType === 1) {
             this.paperData.radioList.push(item)
-          } else if (item.quType == 2) {
+          } else if (item.quType === 2) {
             this.paperData.multiList.push(item)
-          } else if (item.quType == 3) {
+          } else if (item.quType === 3) {
             this.paperData.judgeList.push(item)
-          } else if (item.quType == 4) {
+          } else if (item.quType === 4) {
             this.paperData.saqList.push(item)
           }
         })
@@ -548,7 +560,8 @@ export default {
     },
 
     getRightAnswer() {
-      var arr = new Array()
+      // eslint-disable-next-line vue/no-template-shadow
+      const arr = []
       if (this.rightQuAnswer.data) {
         this.rightQuAnswer.data.options.forEach((option) => {
           if (option.isRight) {
@@ -558,7 +571,7 @@ export default {
       }
 
       let res = arr.join(',')
-      if (this.quDetail.quType == 4) {
+      if (this.quDetail.quType === 4) {
         res = this.rightQuAnswer.data.options[0].content
       }
 
@@ -567,33 +580,33 @@ export default {
     },
     // 按题型选择题号
     selectQuId(item, index) {
-      this.resetAnswerState();
+      this.resetAnswerState()
       this.curTypeIndex = index
       this.curQuId = item.quId
-      if (item.quType == 1) {
+      if (item.quType === 1) {
         this.curListIndex = 1
-      } else if (item.quType == 2) {
+      } else if (item.quType === 2) {
         this.curListIndex = 2
-      } else if (item.quType == 3) {
+      } else if (item.quType === 3) {
         this.curListIndex = 3
-      } else if (item.quType == 4) {
+      } else if (item.quType === 4) {
         this.curListIndex = 4
       }
       this.getCurrentQuDetial()
     },
     async getCurrentQuDetial() {
-      this.isAnswered = false;
+      this.isAnswered = false
       const loading = Loading.service({
         text: '拼命加载中',
         background: 'rgba(0, 0, 0, 0.7)'
       })
-      if (this.number == 0) {
+      if (this.number === 0) {
         setTimeout(() => {
           getQuestionDetail(this.quList[this.currentQuIndex].quId).then((res) => {
             this.quDetail = res.data
           })
         }, 100)
-      } else if (this.number == 1) {
+      } else if (this.number === 1) {
         getQuestionDetail(this.curQuId).then((res) => {
           this.quDetail = res.data
         })
@@ -628,7 +641,7 @@ export default {
             this.currentQuIndex++
             exercisedCount++
           }
-          if (exercisedCount == this.quList.length) {
+          if (exercisedCount === this.quList.length) {
             this.currentQuIndex = 0
           }
         })
@@ -647,7 +660,7 @@ export default {
       // this.fillAnswer();
       this.preText = '上一题'
       this.nextText = '提交答案'
-      this.resetAnswerState();
+      this.resetAnswerState()
       this.currentQuIndex = index
       this.showButton()
       this.getCurrentQuDetial()
@@ -656,13 +669,13 @@ export default {
 
     // 题干显示题型
     shouQuType(type) {
-      if (type == 1) {
+      if (type === 1) {
         return '(单选题)'
-      } else if (type == 2) {
+      } else if (type === 2) {
         return '(多选题)'
-      } else if (type == 3) {
+      } else if (type === 3) {
         return '(判断题)'
-      } else if (type == 4) {
+      } else if (type === 4) {
         return '(简答题)'
       }
     },
@@ -670,7 +683,7 @@ export default {
       const loading = Loading.service({
         text: '拼命加载中',
         background: 'rgba(0, 0, 0, 0.7)'
-      });
+      })
       try {
         if (this.nextText === '结束刷题') {
           this.exitFun()
@@ -678,33 +691,33 @@ export default {
           return
         }
         if (this.nextText === '下一题') {
-          this.resetAnswerState();
+          this.resetAnswerState()
           if (this.number === 0) {
             if (this.currentQuIndex < this.quList.length - 1) {
-              this.currentQuIndex++;
+              this.currentQuIndex++
             }
           } else if (this.number === 1) {
-            this.handleQuestionTypeSwitch();
+            this.handleQuestionTypeSwitch()
           }
-          await this.getCurrentQuDetial();
-          this.nextText = '提交答案';
+          await this.getCurrentQuDetial()
+          this.nextText = '提交答案'
         } else if (this.nextText === '提交答案') {
-          await this.fillAnswer();
-          this.isAnswered = true;
-          this.showAnalysis = 1;
+          await this.fillAnswer()
+          this.isAnswered = true
+          this.showAnalysis = 1
           if ((this.number === 0 && this.currentQuIndex === this.quList.length - 1) ||
               (this.number === 1 && this.isLastQuestion())) {
-            this.nextText = '结束刷题';
+            this.nextText = '结束刷题'
           } else {
-            this.nextText = '下一题';
+            this.nextText = '下一题'
           }
         }
-        this.showButton();
+        this.showButton()
       } catch (error) {
-        console.error('操作失败:', error);
-        this.$message.error('操作失败，请重试');
+        console.error('操作失败:', error)
+        this.$message.error('操作失败，请重试')
       } finally {
-        loading.close();
+        loading.close()
       }
     },
     async fillAnswer() {
@@ -733,16 +746,16 @@ export default {
     },
     async showButton() {
       if (this.currentQuIndex === 0) {
-        this.showPrevious = false;
+        this.showPrevious = false
       } else {
-        this.showPrevious = true;
+        this.showPrevious = true
       }
       if ((this.number === 0 && this.currentQuIndex === this.quList.length - 1) ||
           (this.number === 1 && this.isLastQuestion())) {
         if (this.isAnswered) {
-          this.nextText = '结束刷题';
+          this.nextText = '结束刷题'
         } else {
-          this.nextText = '提交答案';
+          this.nextText = '提交答案'
         }
       }
     },
@@ -757,31 +770,31 @@ export default {
         // this.nextText = '提交答案';
         this.showButton()
         this.getCurrentQuDetial()
-        getAnswerInfo(this.quList[this.currentQuIndex].repoId, this.quList[this.currentQuIndex].quId).then(res=>{
+        getAnswerInfo(this.quList[this.currentQuIndex].repoId, this.quList[this.currentQuIndex].quId).then(res => {
           this.rightQuAnswer = res
-          if(res.data.quType == 1 || res.data.quType == 3 || res.data.quType == 4){
-            if(res.data.quType == 1 || res.data.quType == 3 ){
+          if (res.data.quType === 1 || res.data.quType === 3 || res.data.quType === 4) {
+            if (res.data.quType === 1 || res.data.quType === 3) {
               this.radioValue = parseInt(res.data.answerContent)
-            } else if(res.data.quType == 4){
+            } else if (res.data.quType === 4) {
               this.radioValue = res.data.answerContent
             }
-          } else if(res.data.quType == 2){
+          } else if (res.data.quType === 2) {
             const arr = res.data.answerContent.split(',')
             arr.forEach(element => {
               for (let index = 0; index < res.data.options.length; index++) {
-                const option = res.data.options[index];
-                if(parseInt(element) == option.id){
+                const option = res.data.options[index]
+                if (parseInt(element) === option.id) {
                   this.multiValue.push(option.id)
                 }
               }
-            });
+            })
           }
         })
       }
       loading.close()
     },
     handleRadioClick(answer) {
-      this.radioValue = answer;
+      this.radioValue = answer
     },
     isLastQuestion() {
       if (this.number === 1) {
@@ -805,20 +818,7 @@ export default {
       if (this.paperData.multiList.length > 0) return 2
       return 1
     }
-  },
-  watch: {
-    radioValue(newVal) {
-      if (newVal && (this.quDetail.quType === 1 || this.quDetail.quType === 3) && !this.isAnswered) {
-        this.isAnswered = true;
-        this.$nextTick(() => {
-          this.fillAnswer();
-          this.showAnalysis = 1;
-          this.nextText = '下一题';
-          this.showButton();
-        })
-      }
-    }
-  },
+  }
 }
 </script>
 
@@ -912,7 +912,6 @@ page {
   line-height: 30px;
 }
 
-
  .bg-green {
     background-color: #dff0d8; /* 绿色背景 */
     color: #3c763d;
@@ -925,7 +924,6 @@ page {
     padding: 2px 4px;
     border-radius: 3px;
   }
-
 
   .statistics-container {
   text-align: center;

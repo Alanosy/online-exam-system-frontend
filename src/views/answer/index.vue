@@ -14,12 +14,11 @@
       <el-form-item label="考试名称">
         <el-input v-model="searchTitle" placeholder="考试名称" />
       </el-form-item>
- 
+
       <el-form-item>
         <el-button type="primary" @click="searchExam">查询</el-button>
       </el-form-item>
     </el-form>
-
 
     <el-table
       :data="data.records"
@@ -33,7 +32,7 @@
         'line-height': '32px',
       }"
     >
-    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column fixed label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
@@ -124,11 +123,6 @@ export default {
       pageNum: 1,
       pageSize: 10,
       data: {},
-
-      formInline: {
-        user: '',
-        region: ''
-      },
       input: '',
       input1: '',
       formInline: {
@@ -138,7 +132,7 @@ export default {
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {},
-      searchTitle:"",
+      searchTitle: '',
       formLabelWidth: '120px'
     }
   },
@@ -147,11 +141,11 @@ export default {
     this.getAnswerPage()
   },
   methods: {
-    searchExam(){
-      this.getAnswerPage(this.pageNum, this.pageSize,this.searchTitle) 
+    searchExam() {
+      this.getAnswerPage(this.pageNum, this.pageSize, this.searchTitle)
     },
-    getAnswerPage(pageNum, pageSize,examName) {
-      const params = { pageNum: pageNum, pageSize: pageSize,examName:examName }
+    getAnswerPage(pageNum, pageSize, examName) {
+      const params = { pageNum: pageNum, pageSize: pageSize, examName: examName }
       answerExamPging(params).then((res) => {
         this.data = res.data
       })
@@ -167,9 +161,8 @@ export default {
       this.getAnswerPage(val, this.pageSize)
     },
     screenInfo(row) {
-      console.info('=====', row)
       localStorage.setItem('answer_examId', row.examId)
-      this.$router.push({ name: 'Ansck', query: { zhi: row }})
+      this.$router.push({ name: 'answer-show', query: { zhi: row }})
     }
     // open(index) {
     //   this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {

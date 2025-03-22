@@ -37,9 +37,13 @@ import { getToken } from '@/utils/auth'
 export default {
   name: 'FileUploadLocal',
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     value: String,
+    // eslint-disable-next-line vue/require-default-prop
     accept: String,
+    // eslint-disable-next-line vue/require-default-prop
     tips: String,
+    // eslint-disable-next-line vue/require-default-prop
     listType: String,
     limit: {
       type: Number,

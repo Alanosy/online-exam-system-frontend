@@ -77,7 +77,7 @@
           style="margin-left: 20px; height: 47px"
           alt=""
           @click="getVerify"
-        />
+        >
       </div>
       <div
         v-if="enableRegister"
@@ -91,8 +91,12 @@
         <router-link style="color: #66b1ff" to="/register"> 立即注册 </router-link>
       </div>
       <el-form-item>
-        <el-button :loading="loading" type="primary" style="width: 100%"
-          @click.native.prevent="handleLogin">登录</el-button>
+        <el-button
+          :loading="loading"
+          type="primary"
+          style="width: 100%"
+          @click.native.prevent="handleLogin"
+        >登录</el-button>
       </el-form-item>
 
     </el-form>
@@ -100,46 +104,49 @@
 </template>
 
 <script>
-import { validUsername } from "@/utils/validate";
-import { setToken } from "@/utils/auth";
-import axios from "axios";
-import { getTokenInfo } from "@/utils/jwtUtils"
-import { verifyCode } from "@/api/user";
-import { Message } from "element-ui";
-import { Encrypt } from "@/utils/Secret";
+import { validUsername } from '@/utils/validate'
+import { getTokenInfo } from '@/utils/jwtUtils'
+import { verifyCode } from '@/api/user'
+import { Message } from 'element-ui'
+import { Encrypt } from '@/utils/Secret'
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error("请输入正确的用户名"));
+        callback(new Error('请输入正确的用户名'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("密码不能少于6位"));
+        callback(new Error('密码不能少于6位'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loginForm: {
-        username: "",
-        password: "",
-        code: "",
+        username: '',
+        password: '',
+        code: ''
       },
       enableRegister: process.env.VUE_APP_ENABLE_REGISTER === 'true',
       loginRules: {
-        username: [{ required: true, trigger: "blur", validator: validateUsername }],
-        password: [{ required: true, trigger: "blur", validator: validatePassword }],
-        code: [{ required: true, trigger: "blur", message: "请输入验证码" }]
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        code: [{ required: true, trigger: 'blur', message: '请输入验证码' }]
       },
       loading: false,
-      passwordType: "password",
+      passwordType: 'password'
       // redirect: undefined,
-    };
+    }
+  },
+  computed: {
+    redirect() {
+      return this.$route.query.redirect || '/index' // 如果没有 redirect 参数，默认跳转到首页
+    }
   },
   // watch: {
   //   $route: {
@@ -155,72 +162,66 @@ export default {
   mounted() {
     // 页面加载完成后自动聚焦到用户名输入框
     this.$nextTick(() => {
-      this.$refs.username.focus();
-    });
-  },
-  computed: {
-    redirect() {
-      return this.$route.query.redirect || '/index'; // 如果没有 redirect 参数，默认跳转到首页
-    }
+      this.$refs.username.focus()
+    })
   },
   methods: {
     getVerify() {
-      this.$refs.captchaImg.src = `/api/auths/captcha?${Math.random()}`;
+      this.$refs.captchaImg.src = `/api/auths/captcha?${Math.random()}`
       // obj.src = "/api/auths/captcha?" + Math.random();
     },
 
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     handleLogin() {
       verifyCode(this.loginForm.code).then((res) => {
         if (res.code) {
           this.$refs.loginForm.validate((valid) => {
             if (valid) {
-              this.loading = true;
+              this.loading = true
               const loginData = {
                 username: this.loginForm.username,
-                password: Encrypt(this.loginForm.password),
-              };
+                password: Encrypt(this.loginForm.password)
+              }
               this.$store
-                .dispatch("user/login", loginData)
+                .dispatch('user/login', loginData)
                 .then(() => {
-                  this.$store.commit("menu/CLOSE_SIDEBAR");
+                  this.$store.commit('menu/CLOSE_SIDEBAR')
                   const userInfo = getTokenInfo()
-                  console.log(userInfo)
-                  this.$store.dispatch("loginUser", { id: userInfo.id });
-                  this.$router.push({ path: "index" });
-                  // this.$router.push({ path: decodeURIComponent(this.redirect) }); // 解码并跳转到目标页面
-                  this.loading = false;
+                  this.$store.dispatch('loginUser', { id: userInfo.id })
+                  this.$router.push({ path: 'index' })
+
+                  this.loading = false
                 })
                 .catch((error) => {
-                  this.getVerify();
-                  Message.error(error.msg);
-                  this.loading = false;
-                });
+                  this.getVerify()
+                  Message.error(error.msg)
+                  this.loading = false
+                })
             } else {
-              return false;
+              return false
             }
-          });
+          })
         } else {
-          this.loginForm.code = "";  // 清空验证码输入框
-          this.getVerify();
+          this.loginForm.code = '' // 清空验证码输入框
+          this.getVerify()
           this.$message({
-            type: "info",
-            message: res.msg,
-          });
+            type: 'info',
+            message: res.msg
+          })
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss">

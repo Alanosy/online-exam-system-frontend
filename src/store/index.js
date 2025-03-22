@@ -45,7 +45,7 @@ const store = new Vuex.Store({
       // 假设登录成功后设置用户登录状态
       commit('setUserLoggedIn', true)
       // 设置用户ID到state，具体获取方式根据实际情况调整
-      commit('setUserId', userData.id)
+      // commit('setUserId', userData.id)
     },
     logoutUser({ commit }) {
       commit('setUserLoggedIn', false)

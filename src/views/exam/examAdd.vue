@@ -212,17 +212,17 @@
     <el-card style="margin-top: 20px">
       <div style="display: flex">
         <div style="margin-left: 10px">
-            <el-form
-              ref="postForm"
-              :model="postForm"
-              :rules="rules"
-              label-position="left"
-              label-width="120px"
-            >
-              <el-form-item label="考试班级" prop="classIds">
-                <ClassSelect v-model="postForm.classIds" is-multiple @change="onClassChange" />
-              </el-form-item>
-            </el-form>
+          <el-form
+            ref="postForm"
+            :model="postForm"
+            :rules="rules"
+            label-position="left"
+            label-width="120px"
+          >
+            <el-form-item label="考试班级" prop="classIds">
+              <ClassSelect v-model="postForm.classIds" is-multiple @change="onClassChange" />
+            </el-form-item>
+          </el-form>
         </div>
       </div>
     </el-card>
@@ -280,7 +280,7 @@ export default {
         // 考试班级列表
         departIds: [],
         // 初始化班级列表
-        classIds: [],
+        classIds: []
       },
       rules: {
         title: [{ required: true, message: '考试名称不能为空！' }],
@@ -346,16 +346,6 @@ export default {
       },
       deep: true
     }
-  },
-  created() {
-    const id = this.$route.params.id
-    // if (typeof id !== undefined) {
-    //   this.fetchData(id)
-    // }
-
-    // fetchTree({}).then((response) => {
-    //   this.treeData = response.data
-    // })
   },
   methods: {
     handleSave() {
@@ -481,18 +471,6 @@ export default {
     removeItem(index) {
       this.repoList.splice(index, 1)
     },
-
-    // fetchData(id) {
-    //   fetchDetail(id).then((response) => {
-    //     this.postForm = response.data
-
-    //     if (this.postForm.startTime && this.postForm.endTime) {
-    //       this.dateValues[0] = this.postForm.startTime
-    //       this.dateValues[1] = this.postForm.endTime
-    //     }
-    //     this.repoList = this.postForm.repoList
-    //   })
-    // },
     formatDateToISOString(date) {
       // 确保输入是一个Date对象
       if (!(date instanceof Date)) {
@@ -512,7 +490,7 @@ export default {
     submitForm() {
       // 校验和处理数据
       let cerTemp = ''
-      if (this.postForm.certificateId != null && this.postForm.certificateId != '') {
+      if (this.postForm.certificateId !== null && this.postForm.certificateId !== '') {
         cerTemp = this.postForm.certificateId.join(',')
       }
       this.postForm.repoList = this.repoList
@@ -545,7 +523,7 @@ export default {
             duration: 2000
           })
 
-          this.$router.push({ name: 'Exammange' })
+          this.$router.push({ name: 'exam-management' })
         } else {
           this.$notify({
             title: '失败',
@@ -561,17 +539,16 @@ export default {
       if (!value) return true
       return data.deptName.indexOf(value) !== -1
     },
-onCertificateChange() {
+    onCertificateChange() {
       // 方法实现...
     },
-    onClassChange(){
+    onClassChange() {
 
     },
     repoChange(e, row) {
       // 赋值ID
-      row.id = e.id
-      console.log("-----");
-      console.log(e);
+      row.id = e.id('-----');
+      (e)
       if (e != null) {
         row.totalRadio = e.radioNum
         row.totalMulti = e.multiNum

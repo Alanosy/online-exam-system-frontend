@@ -144,7 +144,7 @@
             >
               下一题
             </el-button>
-            
+
             <!-- 添加最后一题的提交按钮 -->
             <el-button
               v-if="!showNext && cardItem.sort === allItem.length - 1"
@@ -175,22 +175,20 @@
 
 <script>
 import {
-  paperDetail,
   quDetail,
   handExam,
   fillAnswer,
-  examStart,
   examCollect,
   examCheat,
-  examQuList,
-} from "@/api/exam";
-import { Loading } from "element-ui";
-import ExamTimer from "@/components/ExamTimer";
-import QuestionCardSection from "./components/QuestionCardSection";
-import ExamSummaryDialog from "./components/ExamSummaryDialog";
+  examQuList
+} from '@/api/exam'
+import { Loading } from 'element-ui'
+import ExamTimer from '@/components/ExamTimer'
+import QuestionCardSection from './components/QuestionCardSection'
+import ExamSummaryDialog from './components/ExamSummaryDialog'
 
 export default {
-  name: "ExamProcess",
+  name: 'ExamProcess',
   components: {
     ExamTimer,
     QuestionCardSection,
@@ -198,18 +196,18 @@ export default {
   },
   data() {
     return {
-      examId: "",
+      examId: '',
       receivedRow: null,
       // 全屏/不全屏
       isFullscreen: false,
       showPrevious: false,
       showNext: true,
       loading: false,
-      handleText: "交卷",
-      saqTextarea: "",
+      handleText: '交卷',
+      saqTextarea: '',
       pageLoading: false,
       // 试卷ID
-      paperId: "",
+      paperId: '',
       // 当前答题卡
       cardItem: {},
       allItem: [],
@@ -217,159 +215,159 @@ export default {
       examPreVisible: false,
       // 当前题目内容
       quData: {
-        answerList: [],
+        answerList: []
       },
       testData: {},
       pkExam: null,
-      examMeg: "",
+      examMeg: '',
       // 试卷信息
       paperData: {
         leftSeconds: 99999,
         radioList: [],
         multiList: [],
         judgeList: [],
-        saqList: [],
+        saqList: []
       },
       // 单选选定值
-      radioValue: "",
+      radioValue: '',
       // 多选选定值
       multiValue: [],
       // 已答ID
       answeredIds: [],
       recordData: null,
       //
-      submittedAnswers: {},
-    };
+      submittedAnswers: {}
+    }
   },
   created() {
-    this.examId = localStorage.getItem("examId");
-    this.paperId = this.examId;
-    this.startExam(this.examId);
-    this.fetchData(this.examId);
+    this.examId = localStorage.getItem('examId')
+    this.paperId = this.examId
+    this.startExam(this.examId)
+    this.fetchData(this.examId)
   },
   mounted() {
-    document.addEventListener("visibilitychange", this.pageHidden);
+    document.addEventListener('visibilitychange', this.pageHidden)
     this.$nextTick(() => {
-      const body = document.querySelector("body");
-      body.style.overflow = "auto";
-    });
+      const body = document.querySelector('body')
+      body.style.overflow = 'auto'
+    })
   },
   beforeDestroy() {
-    document.removeEventListener("visibilitychange", this.pageHidden);
-    clearInterval(this.countdownTime);
+    document.removeEventListener('visibilitychange', this.pageHidden)
+    clearInterval(this.countdownTime)
   },
   methods: {
     // 检查问题列表是否存在
     hasQuestions(list) {
-      return list && list.length > 0;
+      return list && list.length > 0
     },
 
     // 检查选项是否被选中
     isCheck(myOption, sort) {
-      if (!myOption) return false;
-      const arr = myOption.split(",").map(Number);
-      return arr.includes(sort);
+      if (!myOption) return false
+      const arr = myOption.split(',').map(Number)
+      return arr.includes(sort)
     },
 
     // 处理对话框关闭
     handleClose() {
-      this.examPreVisible = false;
+      this.examPreVisible = false
     },
     // 将0-5转换为A-F
     numberToLetter(input) {
-      if (input === null || input === undefined) return "";
+      if (input === null || input === undefined) return ''
 
       const numberToCharMap = {
-        0: "A",
-        1: "B",
-        2: "C",
-        3: "D",
-        4: "E",
-        5: "F",
-      };
+        0: 'A',
+        1: 'B',
+        2: 'C',
+        3: 'D',
+        4: 'E',
+        5: 'F'
+      }
 
       // 处理单个数字
       if (typeof input === 'number' || /^\d+$/.test(input)) {
-        return numberToCharMap[parseInt(input, 10)] || "";
+        return numberToCharMap[parseInt(input, 10)] || ''
       }
 
       // 处理逗号分隔的数字
       if (/^\d+(,\d+)*$/.test(input)) {
-        return input.split(",")
-          .map(num => numberToCharMap[parseInt(num.trim(), 10)] || "")
-          .join(",");
+        return input.split(',')
+          .map(num => numberToCharMap[parseInt(num.trim(), 10)] || '')
+          .join(',')
       }
 
-      return "";
+      return ''
     },
 
     // 交卷前预览
     handHandExamPre() {
-      this.handSave(this.cardItem);
+      this.handSave(this.cardItem)
       examCollect(this.examId).then((res) => {
         // 按答题卡排序
         this.recordData = this.allItem.map(item =>
           res.data.find(d => d.id === item.questionId)
-        );
+        )
 
-        this.examPreVisible = true;
-      });
+        this.examPreVisible = true
+      })
     },
     // 切换页面检测
     pageHidden(e = null) {
-      if (document.visibilityState === "hidden") {
+      if (document.visibilityState === 'hidden') {
         examCheat(this.examId).then((res) => {
           if (res.code) {
-            this.examMeg = res.msg;
-            this.tipsFlag = true;
+            this.examMeg = res.msg
+            this.tipsFlag = true
             if (res.data) {
               this.$router.push({
-                name: "Textcenter",
-                params: { id: this.paperId },
-              });
+                name: 'text-center',
+                params: { id: this.paperId }
+              })
             }
           }
-        });
+        })
       }
     },
 
     // 开始考试
     startExam(examId) {
       examQuList(examId).then((res) => {
-        this.paperData = res.data;
-      });
+        this.paperData = res.data
+      })
     },
     /**
      * 统计有多少题没答的
      * @returns {number}
      */
     countNotAnswered() {
-      let notAnswered = 0;
+      let notAnswered = 0
       const checkList = (list) => {
         if (list) {
           list.forEach(item => {
             if (!item.checkout) {
-              notAnswered += 1;
+              notAnswered += 1
             }
-          });
+          })
         }
-      };
+      }
 
-      checkList(this.paperData.radioList);
-      checkList(this.paperData.multiList);
-      checkList(this.paperData.judgeList);
-      checkList(this.paperData.saqList);
+      checkList(this.paperData.radioList)
+      checkList(this.paperData.multiList)
+      checkList(this.paperData.judgeList)
+      checkList(this.paperData.saqList)
 
-      return notAnswered;
+      return notAnswered
     },
 
     /**
      * 下一题
      */
     handNext() {
-      const index = this.cardItem.sort + 1;
+      const index = this.cardItem.sort + 1
       if (index < this.allItem.length) {
-        this.handSave(this.allItem[index]);
+        this.handSave(this.allItem[index])
       }
     },
 
@@ -377,9 +375,9 @@ export default {
      * 上一题
      */
     handPrevious() {
-      const index = this.cardItem.sort - 1;
+      const index = this.cardItem.sort - 1
       if (index >= 0) {
-        this.handSave(this.allItem[index]);
+        this.handSave(this.allItem[index])
       }
     },
     // 清空Session
@@ -387,93 +385,93 @@ export default {
     clearSessionStorageByPrefix(prefix) {
       Object.keys(sessionStorage)
         .filter(key => key.startsWith(prefix))
-        .forEach(key => sessionStorage.removeItem(key));
+        .forEach(key => sessionStorage.removeItem(key))
     },
 
     // 交卷
     doHandler() {
-      const notAnswered = this.countNotAnswered();
-      let msg = notAnswered > 0
+      const notAnswered = this.countNotAnswered()
+      const msg = notAnswered > 0
         ? `您还有${notAnswered}题未作答，确认要交卷吗?`
-        : "确认要交卷吗？";
+        : '确认要交卷吗？'
 
-      this.$confirm(msg, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm(msg, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          this.handleText = "正在交卷，请等待...";
-          this.loading = true;
+          this.handleText = '正在交卷，请等待...'
+          this.loading = true
           // 删除当前标签页
           this.$store.commit('menu/REMOVE_TAG', {
-            title: this.$route.meta.title,  // 从路由元数据中获取标题
+            title: this.$route.meta.title, // 从路由元数据中获取标题
             path: this.$route.path,
-            name: this.$route.name          // 添加路由名称
-          });
+            name: this.$route.name // 添加路由名称
+          })
           handExam(this.examId).then(() => {
             this.$message({
-              message: "试卷提交成功，即将进入试卷详情！",
-              type: "success",
-            });
-            this.clearSessionStorageByPrefix("exam_");
-            this.$router.push({ name: "Textcenter", params: { id: this.paperId } });
-          });
+              message: '试卷提交成功，即将进入试卷详情！',
+              type: 'success'
+            })
+            this.clearSessionStorageByPrefix('exam_')
+            this.$router.push({ name: 'text-center', params: { id: this.paperId }})
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "交卷已取消，您可以继续作答！",
-          });
-        });
+            type: 'info',
+            message: '交卷已取消，您可以继续作答！'
+          })
+        })
     },
 
     // 保存答案
     handSave(item, callback) {
       // 更新上一题/下一题按钮状态
-      this.showPrevious = item.sort > 0;
-      this.showNext = item.sort < this.allItem.length - 1;
+      this.showPrevious = item.sort > 0
+      this.showNext = item.sort < this.allItem.length - 1
 
       // 保存当前题目的引用，以便在回调中更新其状态
-      const currentItem = this.cardItem;
+      const currentItem = this.cardItem
 
       // 获取题目ID
-      const questionId = this.cardItem.questionId;
+      const questionId = this.cardItem.questionId
       // 判断题目类型
-      const isSimpleAnswer = this.allItem[this.cardItem.sort]?.type === 4;
+      const isSimpleAnswer = this.allItem[this.cardItem.sort]?.type === 4
 
       // 准备答案数据
-      let answerContent = "";
+      let answerContent = ''
       if (isSimpleAnswer) {
-        console.log('简答题');
-        console.log( this.saqTextarea);
+        ('简答题');
+        (this.saqTextarea)
         // 简答题答案
-        answerContent = this.saqTextarea;
+        answerContent = this.saqTextarea
         // 清空输入框
-        this.saqTextarea = "";
+        this.saqTextarea = ''
       } else {
-        console.log('单选、多选、判断题');
+        ('单选、多选、判断题')
         // 单选、多选、判断题答案
-        const answers = [...this.multiValue];
-        if (this.radioValue !== "") {
-          answers.push(this.radioValue);
+        const answers = [...this.multiValue]
+        if (this.radioValue !== '') {
+          answers.push(this.radioValue)
         }
-        answerContent = answers.join(",");
+        answerContent = answers.join(',')
       }
 
       // 检查是否有答案，如果没有答案且不是强制提交（如交卷前），则不提交
-      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent !== "";
-      console.log("hasAnswer:", hasAnswer);
+      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent !== '';
+      ('hasAnswer:', hasAnswer)
       // 检查是否已经提交过相同的答案
-      const previousAnswer = this.submittedAnswers[questionId];
-      const answerUnchanged = previousAnswer === answerContent;
+      const previousAnswer = this.submittedAnswers[questionId]
+      const answerUnchanged = previousAnswer === answerContent
 
       // 如果答案已提交且未更改，且不是强制提交（callback不存在），则跳过提交
-      if (answerUnchanged && !callback && sessionStorage.getItem("exam_" + questionId) === "1") {
-        console.log('答案未更改，跳过提交');
+      if (answerUnchanged && !callback && sessionStorage.getItem('exam_' + questionId) === '1') {
+        ('答案未更改，跳过提交')
         // 直接加载下一题
-        this.fetchQuData(item);
-        return;
+        this.fetchQuData(item)
+        return
       }
 
       // 如果有答案或者是强制提交（callback存在），则提交答案
@@ -482,54 +480,53 @@ export default {
           examId: this.paperId,
           quId: questionId,
           answer: answerContent
-        };
-      // 对于多选题，需要对答案进行排序
-      if (this.quData.quType === 2 && answerContent) {
+        }
+        // 对于多选题，需要对答案进行排序
+        if (this.quData.quType === 2 && answerContent) {
         // 将答案ID转为数组，排序后再转回字符串
-        const sortedAnswers = answerContent.split(',')
-          .map(id => parseInt(id))
-          .sort((a, b) => {
+          const sortedAnswers = answerContent.split(',')
+            .map(id => parseInt(id))
+            .sort((a, b) => {
             // 查找对应选项的sort值进行排序
-            const itemA = this.quData.answerList.find(item => item.id === a);
-            const itemB = this.quData.answerList.find(item => item.id === b);
-            return (itemA?.sort || 0) - (itemB?.sort || 0);
-          })
-          .join(',');
+              const itemA = this.quData.answerList.find(item => item.id === a)
+              const itemB = this.quData.answerList.find(item => item.id === b)
+              return (itemA?.sort || 0) - (itemB?.sort || 0)
+            })
+            .join(',')
 
-        params.answer = sortedAnswers;
-      }
+          params.answer = sortedAnswers
+        }
         fillAnswer(params).then((res) => {
           if (res.code) {
             // 标记为已答
-            sessionStorage.setItem("exam_" + currentItem.questionId, "1");
+            sessionStorage.setItem('exam_' + currentItem.questionId, '1')
 
             // 保存已提交的答案，用于后续比较
-            this.submittedAnswers[questionId] = answerContent;
+            this.submittedAnswers[questionId] = answerContent
 
             // 更新当前题目的状态
-            this.updateQuestionStatus(currentItem.questionId, 1);
+            this.updateQuestionStatus(currentItem.questionId, 1)
           } else {
             // 标记为未答
-            sessionStorage.setItem("exam_" + currentItem.questionId, "0");
-            this.updateQuestionStatus(currentItem.questionId, 0);
+            sessionStorage.setItem('exam_' + currentItem.questionId, '0')
+            this.updateQuestionStatus(currentItem.questionId, 0)
           }
 
           // 最后一个动作，交卷
           if (callback) {
-            callback();
+            callback()
           }
           // 查找详情
-          this.fetchQuData(item);
-        });
+          this.fetchQuData(item)
+        })
       } else {
         // 确保不标记为已答题
-        sessionStorage.setItem("exam_" + currentItem.questionId, "0");
-        this.updateQuestionStatus(currentItem.questionId, 0);
+        sessionStorage.setItem('exam_' + currentItem.questionId, '0')
+        this.updateQuestionStatus(currentItem.questionId, 0)
 
         // 查找详情
-        this.fetchQuData(item);
+        this.fetchQuData(item)
       }
-
     },
 
     // 更新题目状态
@@ -537,50 +534,50 @@ export default {
       // 在所有题型列表中查找并更新状态
       const updateListStatus = (list) => {
         if (list && list.length > 0) {
-          const question = list.find(q => q.questionId === questionId);
+          const question = list.find(q => q.questionId === questionId)
           if (question) {
-            question.checkout = status;
+            question.checkout = status
           }
         }
-      };
+      }
 
-      updateListStatus(this.paperData.radioList);
-      updateListStatus(this.paperData.multiList);
-      updateListStatus(this.paperData.judgeList);
-      updateListStatus(this.paperData.saqList);
+      updateListStatus(this.paperData.radioList)
+      updateListStatus(this.paperData.multiList)
+      updateListStatus(this.paperData.judgeList)
+      updateListStatus(this.paperData.saqList)
     },
 
     // 提交最后一题答案
     submitLastAnswer() {
       // 获取题目ID
-      const questionId = this.cardItem.questionId;
+      const questionId = this.cardItem.questionId
       // 判断题目类型
-      const isSimpleAnswer = this.allItem[this.cardItem.sort]?.type === 4;
+      const isSimpleAnswer = this.allItem[this.cardItem.sort]?.type === 4
 
       // 准备答案数据
-      let answerContent = "";
+      let answerContent = ''
       if (isSimpleAnswer) {
         // 简答题答案
-        answerContent = this.saqTextarea;
+        answerContent = this.saqTextarea
       } else {
         // 单选、多选、判断题答案
-        const answers = [...this.multiValue];
-        if (this.radioValue !== "") {
-          answers.push(this.radioValue);
+        const answers = [...this.multiValue]
+        if (this.radioValue !== '') {
+          answers.push(this.radioValue)
         }
-        answerContent = answers.join(",");
+        answerContent = answers.join(',')
       }
 
       // 检查是否有答案
-      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent !== "";
-      
+      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent !== ''
+
       if (hasAnswer) {
         const params = {
           examId: this.paperId,
           quId: questionId,
           answer: answerContent
-        };
-        
+        }
+
         // 对于多选题，需要对答案进行排序
         if (this.quData.quType === 2 && answerContent) {
           // 将答案ID转为数组，排序后再转回字符串
@@ -588,46 +585,46 @@ export default {
             .map(id => parseInt(id))
             .sort((a, b) => {
               // 查找对应选项的sort值进行排序
-              const itemA = this.quData.answerList.find(item => item.id === a);
-              const itemB = this.quData.answerList.find(item => item.id === b);
-              return (itemA?.sort || 0) - (itemB?.sort || 0);
+              const itemA = this.quData.answerList.find(item => item.id === a)
+              const itemB = this.quData.answerList.find(item => item.id === b)
+              return (itemA?.sort || 0) - (itemB?.sort || 0)
             })
-            .join(',');
+            .join(',')
 
-          params.answer = sortedAnswers;
+          params.answer = sortedAnswers
         }
-        
+
         fillAnswer(params).then((res) => {
           if (res.code) {
             // 标记为已答
-            sessionStorage.setItem("exam_" + questionId, "1");
-            
+            sessionStorage.setItem('exam_' + questionId, '1')
+
             // 保存已提交的答案，用于后续比较
-            this.submittedAnswers[questionId] = answerContent;
-            
+            this.submittedAnswers[questionId] = answerContent
+
             // 更新当前题目的状态
-            this.updateQuestionStatus(questionId, 1);
-            
+            this.updateQuestionStatus(questionId, 1)
+
             this.$message({
-              message: "答案提交成功！",
-              type: "success",
-            });
+              message: '答案提交成功！',
+              type: 'success'
+            })
           } else {
             // 标记为未答
-            sessionStorage.setItem("exam_" + questionId, "0");
-            this.updateQuestionStatus(questionId, 0);
-            
+            sessionStorage.setItem('exam_' + questionId, '0')
+            this.updateQuestionStatus(questionId, 0)
+
             this.$message({
-              message: "答案提交失败，请重试！",
-              type: "error",
-            });
+              message: '答案提交失败，请重试！',
+              type: 'error'
+            })
           }
-        });
+        })
       } else {
         this.$message({
-          message: "请先填写答案再提交！",
-          type: "warning",
-        });
+          message: '请先填写答案再提交！',
+          type: 'warning'
+        })
       }
     },
 
@@ -635,28 +632,28 @@ export default {
     fetchQuData(item) {
       // 打开
       const loading = Loading.service({
-        text: "拼命加载中",
-        background: "rgba(0, 0, 0, 0.7)",
-      });
+        text: '拼命加载中',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
 
       // 获得详情
-      this.cardItem = item;
-      const examId = localStorage.getItem("examId");
+      this.cardItem = item
+      const examId = localStorage.getItem('examId')
       // 查找下个详情
-      const params = { examId: examId, questionId: item.questionId };
+      const params = { examId: examId, questionId: item.questionId }
       quDetail(params).then((response) => {
-        this.quData = response.data;
-        this.radioValue = "";
-        this.multiValue = [];
+        this.quData = response.data
+        this.radioValue = ''
+        this.multiValue = []
 
         // 根据题目类型设置答案
         if (response.data.quType === 4 && response.data.answerList != null) {
           // 简答题
-          this.saqTextarea = response.data.answerList[0].content;
+          this.saqTextarea = response.data.answerList[0].content
 
           // 记录当前加载的答案
-          if (sessionStorage.getItem("exam_" + item.questionId) === "1") {
-            this.submittedAnswers[item.questionId] = this.saqTextarea;
+          if (sessionStorage.getItem('exam_' + item.questionId) === '1') {
+            this.submittedAnswers[item.questionId] = this.saqTextarea
           }
         } else if (
           response.data.quType === 1 ||
@@ -666,50 +663,50 @@ export default {
           // 单选、多选、判断题
           this.quData.answerList.forEach((item) => {
             if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checkout) {
-              this.radioValue = item.id;
+              this.radioValue = item.id
             }
             if (this.quData.quType === 2 && item.checkout) {
-              this.multiValue.push(item.id);
+              this.multiValue.push(item.id)
             }
-          });
+          })
         }
 
         // 关闭加载提示
-        loading.close();
+        loading.close()
       }).catch(() => {
         // 出错时也要关闭加载提示
-        loading.close();
-      });
+        loading.close()
+      })
     },
 
     // 试卷详情
     fetchData(examId) {
       examQuList(examId).then((response) => {
         // 试卷内容
-        this.paperData = response.data;
-        this.allItem = [];
+        this.paperData = response.data
+        this.allItem = []
 
         // 获得第一题内容
-        this.setFirstQuestion();
+        this.setFirstQuestion()
 
         // 合并所有题目到allItem数组
-        this.mergeAllQuestions();
+        this.mergeAllQuestions()
 
         // 当前选定
-        this.fetchQuData(this.cardItem);
-      });
+        this.fetchQuData(this.cardItem)
+      })
     },
 
     // 设置第一个题目
     setFirstQuestion() {
       if (this.paperData.radioList && this.paperData.radioList.length > 0) {
-        this.cardItem = this.paperData.radioList[0];
+        this.cardItem = this.paperData.radioList[0]
       } else if (this.paperData.multiList && this.paperData.multiList.length > 0) {
-        this.cardItem = this.paperData.multiList[0];
+        this.cardItem = this.paperData.multiList[0]
       } else if (this.paperData.judgeList && this.paperData.judgeList.length > 0) {
-        this.cardItem = this.paperData.judgeList[0];
+        this.cardItem = this.paperData.judgeList[0]
       } else if (this.paperData.saqList && this.paperData.saqList.length > 0) {
-        this.cardItem = this.paperData.saqList[0];
+        this.cardItem = this.paperData.saqList[0]
       }
     },
 
@@ -717,14 +714,14 @@ export default {
     mergeAllQuestions() {
       const addQuestionsToAllItems = (questionList) => {
         if (questionList && questionList.length > 0) {
-          questionList.forEach(item => this.allItem.push(item));
+          questionList.forEach(item => this.allItem.push(item))
         }
-      };
+      }
 
-      addQuestionsToAllItems(this.paperData.radioList);
-      addQuestionsToAllItems(this.paperData.multiList);
-      addQuestionsToAllItems(this.paperData.judgeList);
-      addQuestionsToAllItems(this.paperData.saqList);
+      addQuestionsToAllItems(this.paperData.radioList)
+      addQuestionsToAllItems(this.paperData.multiList)
+      addQuestionsToAllItems(this.paperData.judgeList)
+      addQuestionsToAllItems(this.paperData.saqList)
     },
 
     // 处理滚动事件
@@ -734,11 +731,11 @@ export default {
 
     // 获取左侧距离
     getLfetDistance() {
-      const body = document.querySelector("body");
-      this.flexLeft = (body.offsetWidth - 1200) / 2;
-    },
-  },
-};
+      const body = document.querySelector('body')
+      this.flexLeft = (body.offsetWidth - 1200) / 2
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -916,7 +913,6 @@ page {
         .qu_choose_tag_content {
           padding: 0 10px 10px 10px;
         }
-
 
         .qu_choose_tag_el_image {
           clear: both;

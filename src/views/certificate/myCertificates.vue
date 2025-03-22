@@ -4,7 +4,7 @@
       <el-form-item label="考试名称">
         <el-input v-model="formInline.searchTitle" placeholder="考试名称" />
       </el-form-item>
- 
+
       <el-form-item>
         <el-button type="primary" @click="searchExam">查询</el-button>
       </el-form-item>
@@ -24,7 +24,7 @@
         'line-height': '32px',
       }"
     >
-    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column fixed label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
@@ -57,8 +57,6 @@
       />
     </div>
 
-   
-
     <el-dialog
       title="证书预览和下载"
       :visible.sync="dialogVisible"
@@ -73,7 +71,7 @@
             <span class="con-name">{{ jwtInfo.realName }}</span>同学：<br>
           </p>
           <p class="con-text">
-            <span>在{{ currentdata.examName }}考试中荣获{{currentdata.certificateName}}证书，特发此状，以资鼓励！</span>
+            <span>在{{ currentdata.examName }}考试中荣获{{ currentdata.certificateName }}证书，特发此状，以资鼓励！</span>
           </p>
           <p class="con-height">
             <span><center>{{ level }}</center></span>
@@ -108,7 +106,7 @@
 import { certificateMy } from '@/api/certificate'
 import { getTokenInfo } from '@/utils/jwtUtils'
 export default {
-  
+
   data() {
     return {
       pageNum: 1,
@@ -123,8 +121,8 @@ export default {
       pageData: null, // 接收html格式代码
       htmlTitle: '荣誉证书',
       isShow: true,
-      formInline:{
-        searchTitle: "",
+      formInline: {
+        searchTitle: ''
       },
       isCanvas: false,
       downType: true, // false为 pdf , true为图片
@@ -139,8 +137,8 @@ export default {
     this.jwtInfo = getTokenInfo()
   },
   methods: {
-    searchExam(){
-      this.getCerPage(this.pageNum, this.pageSize,this.formInline.searchTitle)
+    searchExam() {
+      this.getCerPage(this.pageNum, this.pageSize, this.formInline.searchTitle)
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑
@@ -153,8 +151,8 @@ export default {
       this.getCerPage(val, this.pageSize)
     },
     // 分页查询
-    async getCerPage(pageNum, pageSize,examName) {
-      const params = { pageNum: pageNum, pageSize: pageSize, examName : examName}
+    async getCerPage(pageNum, pageSize, examName) {
+      const params = { pageNum: pageNum, pageSize: pageSize, examName: examName }
       const res = await certificateMy(params)
       this.data = res.data
     },
@@ -177,9 +175,8 @@ export default {
         }
       })
     },
-    getChapter(){
-      
-  this.getChapter = this.getChapter.bind(this);
+    getChapter() {
+      this.getChapter = this.getChapter.bind(this)
     }
   }
 }

@@ -33,7 +33,7 @@ const mutations = {
   },
   // 删除标签
   REMOVE_TAG(state, tag) {
-    console.log(state.tags)
+    (state.tags)
     if (state.tags && state.tags.length === 1) {
       return
     }

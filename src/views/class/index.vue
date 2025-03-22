@@ -45,7 +45,7 @@
       <el-table-column prop="userName" label="创建用户" align="center" />
       <el-table-column align="center" label="操作">
         <template slot-scope="{ row }">
-        <!-- 管理员按钮 -->
+          <!-- 管理员按钮 -->
           <el-button
             v-if="role==3"
             type="text"
@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import { teacherJoinClass,teacherExitClass, classPaging, classDel, classUpdate, classAdd } from '@/api/class_'
+import { teacherJoinClass, teacherExitClass, classPaging, classDel, classUpdate, classAdd } from '@/api/class_'
 import { getRole } from '@/utils/jwtUtils'
 export default {
   data() {
@@ -166,32 +166,6 @@ export default {
     }
   },
 
-  computed: {
-    // tables() {
-    //   //在你的数据表格中定义tabels
-    //   const input = this.input;
-    //   const input1 = this.input1;
-    //   if (input) {
-    //     // console.log("input输入的搜索内容：" + this.input)
-    //     return this.tableData.filter((data) => {
-    //       console.log("object:" + Object.keys(data));
-    //       return Object.keys(data).some((key) => {
-    //         return String(data[key]).toLowerCase().indexOf(input) > -1;
-    //       });
-    //     });
-    //   }
-    //   if (input1) {
-    //     // console.log("input输入的搜索内容：" + this.input)
-    //     return this.tableData.filter((data) => {
-    //       console.log("object:" + Object.keys(data));
-    //       return Object.keys(data).some((key) => {
-    //         return String(data[key]).toLowerCase().indexOf(input1) > -1;
-    //       });
-    //     });
-    //   }
-    //   return this.tableData;
-    // },
-  },
   created() {
     this.getClassPage()
     this.role = getRole()
@@ -319,7 +293,7 @@ export default {
       this.getClassPage(this.pageNum, this.pageSize, this.formInline.searchTitle)
     },
     handleClick(row) {
-      console.log(row)
+      (row)
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑

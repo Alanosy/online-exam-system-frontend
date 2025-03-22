@@ -28,7 +28,7 @@
         'line-height': '32px',
       }"
     >
-    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column fixed label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
@@ -167,9 +167,9 @@ export default {
         })
       }
       if (input1) {
-        // console.log("input输入的搜索内容：" + this.input)
+        //  ("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
+          //  ("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input1) > -1
           })
@@ -235,8 +235,8 @@ export default {
       }
       certificateAdd(data).then((res) => {
         if (res.code) {
-          this.form.certificateName=''
-          this.form.certificationNuit=''
+          this.form.certificateName = ''
+          this.form.certificationNuit = ''
           this.getCertificatePage(this.pageNum, this.pageSize)
           this.dialogTableVisible = false
           this.$message({
@@ -293,7 +293,6 @@ export default {
       this.getCertificatePage(val, this.pageSize)
     },
     handleClick(row) {
-      // console.log(row);
     }
   }
 }

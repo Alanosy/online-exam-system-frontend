@@ -7,7 +7,7 @@
     remote
     reserve-keyword
     clearable
-    :disabled="isEdit" 
+    :disabled="isEdit"
     automatic-dropdown
     placeholder="选择或搜索班级"
     class="class-selector"
@@ -32,11 +32,13 @@ export default {
       type: Boolean,
       default: false
     },
-    isEdit:{
-        type: Boolean,
-        default: false,
+    isEdit: {
+      type: Boolean,
+      default: false
     },
+    // eslint-disable-next-line vue/require-default-prop
     value: [String, Array],
+    // eslint-disable-next-line vue/require-default-prop
     excludes: Array // 如果有需要排除的班级ID，可以传入此参数
   },
   data() {
@@ -46,8 +48,8 @@ export default {
     }
   },
   watch: {
-    isEdit(val){
-        this.isEdit = val;
+    isEdit(val) {
+      this.isEdit = val
     },
     value: {
       handler(newValue) {

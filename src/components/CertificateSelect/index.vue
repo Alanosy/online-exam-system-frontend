@@ -31,7 +31,9 @@ export default {
       type: Boolean,
       default: false
     },
+    // eslint-disable-next-line vue/require-default-prop
     value: [String, Array], // 支持单选或多选
+    // eslint-disable-next-line vue/require-default-prop
     excludes: Array // 可选的排除项
   },
   data() {

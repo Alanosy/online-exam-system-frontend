@@ -18,7 +18,7 @@
         active-color="#13ce66"
         inactive-color="#409EFF"
         @change="toggleSort"
-      ></el-switch>
+      />
     </div>
     <el-table
       :data="data.records"
@@ -32,7 +32,7 @@
         'line-height': '32px',
       }"
     >
-    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
@@ -41,13 +41,15 @@
       <el-table-column prop="userScore" align="center" label="用户成绩">
         <template slot-scope="scope">
           <el-tooltip :content="scope.row.userScore >= scope.row.passedScore ? '及格' : '不及格'" placement="top">
-            <span :style="{
-              color: scope.row.userScore >= scope.row.passedScore ? '#67C23A' : '#F56C6C',
-              backgroundColor: scope.row.userScore >= scope.row.passedScore ? '#f0f9eb' : '#fef0f0',
-              padding: '6px 10px',
-              borderRadius: '4px',
-              display: 'inline-block'
-            }">
+            <span
+              :style="{
+                color: scope.row.userScore >= scope.row.passedScore ? '#67C23A' : '#F56C6C',
+                backgroundColor: scope.row.userScore >= scope.row.passedScore ? '#f0f9eb' : '#fef0f0',
+                padding: '6px 10px',
+                borderRadius: '4px',
+                display: 'inline-block'
+              }"
+            >
               {{ scope.row.userScore }}
             </span>
           </el-tooltip>
@@ -56,7 +58,7 @@
       <el-table-column prop="examDuration" align="center" label="考试时长（分钟）" />
       <el-table-column prop="userTime" align="center" label="用户用时">
         <template slot-scope="scope">
-          <div>{{ (Math.ceil(scope.row.userTime/60)).toString() + " 分钟"}}</div>
+          <div>{{ (Math.ceil(scope.row.userTime/60)).toString() + " 分钟" }}</div>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">
@@ -95,7 +97,7 @@ export default {
       pageSize: 10,
       data: {},
       input: '',
-      searchTitle:"",
+      searchTitle: '',
       isASC: false, // 默认为降序
       formInline: {
         user: '',
@@ -122,9 +124,9 @@ export default {
       // 在你的数据表格中定义tabels
       const input = this.input
       if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
+        //  ("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
+          //  ("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1
           })
@@ -139,24 +141,23 @@ export default {
   },
   methods: {
 
-    searchExam(){
-      this.getExamRecordPaging(this.pageNum, this.pageSize,this.searchTitle)
+    searchExam() {
+      this.getExamRecordPaging(this.pageNum, this.pageSize, this.searchTitle)
     },
 
     toggleSort() {
-    this.getExamRecordPaging(this.pageNum, this.pageSize, this.searchTitle)
-  },
+      this.getExamRecordPaging(this.pageNum, this.pageSize, this.searchTitle)
+    },
     // 分页查询
-    async getExamRecordPaging(pageNum, pageSize,examName) {
-      const params = { pageNum: pageNum, pageSize: pageSize ,examName:examName, isASC: this.isASC}
+    async getExamRecordPaging(pageNum, pageSize, examName) {
+      const params = { pageNum: pageNum, pageSize: pageSize, examName: examName, isASC: this.isASC }
       const res = await recordExamPaging(params)
       this.data = res.data
     },
 
     screenInfo(row) {
-      console.info('=====', row)
       localStorage.setItem('record_exam_examId', row.id)
-      this.$router.push({ name: 'Newk', query: { zhi: row }})
+      this.$router.push({ name: 'exam-record-detail', query: { zhi: row }})
     },
 
     handleSizeChange(val) {
@@ -189,7 +190,6 @@ export default {
   margin-top: 20px;
   text-align: right;
 }
-
 
 .sort-switch-container {
   margin-bottom: 15px;

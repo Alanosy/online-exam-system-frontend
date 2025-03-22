@@ -36,7 +36,6 @@ export default {
   computed: {
     ...mapGetters(['sidebar']),
     routes() {
-      console.log('this.$router.options.routes', this.$router.options.routes)
       const menuList = this.$router.options.routes
 
       const roleKey = localStorage.getItem('roles')
@@ -54,7 +53,6 @@ export default {
           element.meta.visible = isVisible
         }
       })
-      console.log('menuList', menuList)
       return menuList
     },
     activeMenu() {

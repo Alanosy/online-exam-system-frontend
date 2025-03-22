@@ -22,55 +22,60 @@
 </template>
 
 <script>
-import { fetchPaging } from "@/api/repo";
+import { fetchPaging } from '@/api/repo'
 
 export default {
-  name: "RepoSelect",
+  name: 'RepoSelect',
   props: {
     multi: {
       type: Boolean,
-      default: false,
+      default: false
     },
-    value: String | Array,
-    excludes: Array,
+    // eslint-disable-next-line vue/require-default-prop
+    value: {
+      type: [String, Array],
+      default: null
+    },
+    // eslint-disable-next-line vue/require-default-prop
+    excludes: Array
   },
   data() {
     return {
-      
+
       // 下拉选项值
       dataList: [],
-      currentValue: [],
-    };
+      currentValue: []
+    }
   },
 
   watch: {
     // 检测查询变化
     value: {
       handler() {
-        this.currentValue = this.value;
-      },
-    },
+        this.currentValue = this.value
+      }
+    }
   },
   created() {
-    this.currentValue = this.value;
-    this.fetchData();
+    this.currentValue = this.value
+    this.fetchData()
   },
   methods: {
 
     fetchData(q) {
       // , title: q, excludes: this.excludes
       fetchPaging({ pageNum: 1, pageSize: 1000 }).then((res) => {
-        this.dataList = res.data;
-      });
+        this.dataList = res.data
+      })
     },
     handlerChange(e) {
       const obj = this.dataList.find((item) => {
-        return item.id === e;
-      });
+        return item.id === e
+      })
 
-      this.$emit("change", obj);
-      this.$emit("input", e);
-    },
-  },
-};
+      this.$emit('change', obj)
+      this.$emit('input', e)
+    }
+  }
+}
 </script>

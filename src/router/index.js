@@ -1,9 +1,3 @@
-/*
- * @Author: 暮安 14122148+muanananan@user.noreply.gitee.com
- * @Date: 2024-04-15 08:52:51
- * @FilePath: \vue-admin-template\src\router\index.js
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -68,11 +62,11 @@ export const constantRoutes = [
   },
 
   {
-    path: '/usermanager',
+    path: '/user-management',
     component: Layout,
     children: [{
-      path: '/yonghu',
-      name: 'Usermanager',
+      path: '/user-management',
+      name: 'user-management',
       component: () => import('@/views/user/index'),
       meta: { title: '用户管理', icon: 'el-icon-user', visible: true, roles: ['teacher', 'admin'] }
     }]
@@ -89,98 +83,91 @@ export const constantRoutes = [
     }]
   },
   {
-    path: '/changemima',
+    path: '/change-password',
     component: Layout,
     children: [{
-      path: '/changemima',
-      name: 'changemima',
+      path: '/change-password',
+      name: 'change-password',
       hidden: true,
       component: () => import('@/views/user/updatePassword.vue'),
       meta: { title: '修改密码', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
     }]
   },
   {
-    path: '/classmanager',
+    path: '/class-management',
     component: Layout,
     children: [{
-      path: '/classgl',
-      name: 'Classmanager',
+      path: '/class-management',
+      name: 'class-management',
       component: () => import('@/views/class/index'),
       meta: { title: '班级管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-takeaway-box' }
     }]
   },
   {
-    path: '/textcenter',
+    path: '/text-center',
     component: Layout,
     children: [{
-      path: '/shijuanzx',
-      name: 'Textcenter',
+      path: '/text-center',
+      name: 'text-center',
       component: () => import('@/views/exam/student/index'),
       meta: { title: '试卷中心', visible: true, roles: ['student'], icon: 'el-icon-document-copy' }
     }]
   },
   {
-    path: '/zhunbeikaoshi',
+    path: '/prepare-exam',
     component: Layout,
     children: [{
-      path: '/text',
-      name: 'text',
+      path: '/prepare-exam',
+      name: 'prepare-exam',
       hidden: true,
       component: () => import('@/views/exam/examInformation.vue'),
       meta: { title: '准备考试', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
     }]
   },
   {
-    path: '/startkaoshi',
-    name: 'start',
+    path: '/start-exam',
+    name: 'start-exam',
     hidden: true,
     component: () => import('@/views/exam/index.vue'),
     meta: { title: '开始考试', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
-    // children: [{
-    //   path: '/start',
-    //   name: 'start',
-    //   hidden:true,
-    //   component: () => import('@/views/kaishiks/start'),
-    //   meta: { title: '开始考试', icon: 'dashboard' }
-    // }]
   },
   {
-    path: '/questcenter',
+    path: '/exercise-center',
     component: Layout,
     children: [{
-      path: '/shuatizx',
-      name: 'Questcenter',
+      path: '/exercise-center',
+      name: 'exercise-center',
       component: () => import('@/views/exercise/index'),
       // 'admin',
       meta: { title: '刷题中心', visible: true, roles: ['student'], icon: 'el-icon-tickets' }
     }]
   },
   {
-    path: '/shuati',
-    name: 'shua',
+    path: '/start-exercise',
+    name: 'start-exercise',
     hidden: true,
-    component: () => import('@/views/exercise/shuati.vue'),
+    component: () => import('@/views/exercise/exercise.vue'),
     meta: { title: '开始刷题', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
 
   },
 
   {
-    path: '/examrecord',
+    path: '/record',
     component: Layout,
-    name: 'Examrecord',
+    name: 'record',
     // 'admin',
     meta: { title: '考试记录', icon: 'el-icon-folder-opened', visible: true, roles: ['student'], requireAuth: true },
     children: [
       {
-        path: '/examrecord1',
-        name: 'Examrecord1',
+        path: '/exam-record',
+        name: 'exam-record',
         component: () => import('@/views/record/exam/index.vue'),
         // 'admin',
         meta: { title: '考试记录', visible: true, roles: ['student'], icon: 'table' }
       },
       {
-        path: '/questrecord',
-        name: 'Examrecord2',
+        path: '/exercise-record',
+        name: 'exercise-record',
         // 'admin',
         component: () => import('@/views/record/exercise/index.vue'),
         meta: { title: '刷题记录', visible: true, roles: ['student'], icon: 'tree' }
@@ -188,35 +175,34 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/exam',
+    path: '/exam-record-detail',
     component: Layout,
     children: [{
-      path: '/newk',
-      name: 'Newk',
+      path: '/exam-record-detail',
+      name: 'exam-record-detail',
       hidden: true,
       component: () => import('@/views/record/exam/newk'),
-      meta: { title: '试题查看', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
+      meta: { title: '考试记录查看', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
     }]
   },
   {
-    path: '/exam1',
+    path: '/exercise-record-detail',
     component: Layout,
     children: [{
-      path: '/newk1',
-      name: 'Newk1',
+      path: '/exercise-record-detail',
+      name: 'exercise-record-detail',
       hidden: true,
       component: () => import('@/views/record/exercise/newk'),
-      meta: { title: '刷题查看', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
+      meta: { title: '刷题记录查看', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
     }]
   },
   {
-    path: '/wrongbook',
+    path: '/wrong-book',
     component: Layout,
     children: [{
-      path: '/cuotiben',
-      name: 'Wrongbook',
+      path: '/wrong-book',
+      name: 'wrong-book',
       component: () => import('@/views/userbook/index'),
-      // 'admin',
       meta: { title: '错题本', visible: true, roles: ['student'], icon: 'el-icon-notebook-1' }
     }]
   },
@@ -229,53 +215,53 @@ export const constantRoutes = [
 
   },
   {
-    path: '/exammange',
+    path: '/exam-management',
     component: Layout,
     children: [{
-      path: '/kaoshigl',
-      name: 'Exammange',
+      path: '/exam-management',
+      name: 'exam-management',
       component: () => import('@/views/exam/teacher/index'),
       // , 'admin'
       meta: { title: '考试管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-document' }
     }]
   },
   {
-    path: '/kaoshiAdd',
+    path: '/exam-add',
     component: Layout,
     children: [{
-      path: '/ksAdd',
-      name: 'ksAdd',
+      path: '/exam-add',
+      name: 'exam-add',
       hidden: true,
       component: () => import('@/views/exam/examAdd'),
       meta: { title: '考试添加', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
     }]
   },
   {
-    path: '/bankmanage',
+    path: '/repo-management',
     component: Layout,
     children: [{
-      path: '/tikugl',
-      name: 'Bankmanage',
+      path: '/repo-management',
+      name: 'repo-management',
       component: () => import('@/views/repo/index'),
       meta: { title: '题库管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-folder-opened' }
     }]
   },
   {
-    path: '/questmanage',
+    path: '/questions-management',
     component: Layout,
     children: [{
-      path: '/shitigl',
-      name: 'Questmanage',
+      path: '/questions-management',
+      name: 'questions-management',
       component: () => import('@/views/question/index'),
       meta: { title: '试题管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-document-copy' }
     }]
   },
   {
-    path: '/shitiadd',
+    path: '/questions-add',
     component: Layout,
     children: [{
-      path: '/news',
-      name: 'news',
+      path: '/questions-add',
+      name: 'questions-add',
       hidden: true,
       component: () => import('@/views/question/add.vue'),
       meta: { title: '试题添加', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
@@ -285,8 +271,8 @@ export const constantRoutes = [
     path: '/certificate',
     component: Layout,
     children: [{
-      path: '/CertMgr',
-      name: 'Certificate',
+      path: '/certificate-management',
+      name: 'certificate-management',
       component: () => import('@/views/certificate/CertMgr'),
       meta: { title: '证书管理', visible: true, roles: ['admin'], icon: 'el-icon-postcard' }
     }]
@@ -295,8 +281,8 @@ export const constantRoutes = [
     path: '/mycertificate',
     component: Layout,
     children: [{
-      path: '/myCertificates',
-      name: 'Myc',
+      path: '/mycertificate',
+      name: 'mycertificate',
       component: () => import('@/views/certificate/myCertificates'),
       // 'admin',
       meta: { title: '我的证书', icon: 'el-icon-postcard', visible: true, roles: ['student'] }
@@ -304,11 +290,11 @@ export const constantRoutes = [
   },
 
   {
-    path: '/scoreana',
+    path: '/score-analysis',
     component: Layout,
     children: [{
-      path: 'chengjifx',
-      name: 'Scoreana',
+      path: 'score-analysis',
+      name: 'score-analysis',
       component: () => import('@/views/score/index'),
       // , 'admin'
       meta: { title: '成绩分析', visible: true, roles: ['teacher'], icon: 'el-icon-pie-chart' }
@@ -318,19 +304,19 @@ export const constantRoutes = [
     path: '/detail',
     component: Layout,
     children: [{
-      path: 'userscore',
-      name: 'UserScore',
+      path: '/user-score',
+      name: 'user-score',
       hidden: true,
       component: () => import('@/views/score/detail'),
       meta: { title: '用户成绩', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
     }]
   },
   {
-    path: '/answermanage',
+    path: '/answer-manage',
     component: Layout,
     children: [{
-      path: 'dajuangl',
-      name: 'Answermanage',
+      path: 'marking-management',
+      name: 'marking-management',
       component: () => import('@/views/answer/index'),
       // , 'admin'
       meta: { title: '阅卷管理', visible: true, roles: ['teacher'], icon: 'el-icon-files' }
@@ -340,8 +326,8 @@ export const constantRoutes = [
     path: '/answer',
     component: Layout,
     children: [{
-      path: '/answerck',
-      name: 'Ansck',
+      path: '/answer-show',
+      name: 'answer-show',
       hidden: true,
       component: () => import('@/views/answer/answerck'),
       meta: { title: '答卷查看', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
@@ -352,7 +338,7 @@ export const constantRoutes = [
     component: Layout,
     children: [{
       path: '/makeTest',
-      name: 'make',
+      name: 'makeTest',
       hidden: true,
       component: () => import('@/views/answer/makeTest'),
       meta: { title: '批改试卷', visible: true, roles: ['teacher', 'admin'], icon: 'dashboard' }
@@ -360,11 +346,11 @@ export const constantRoutes = [
   },
 
   {
-    path: '/notice',
+    path: '/notice-management',
     component: Layout,
     children: [{
-      path: 'notice1',
-      name: 'Notice',
+      path: '/notice-management',
+      name: 'notice-management',
       component: () => import('@/views/notice/notice'),
       meta: { title: '公告管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-bell' }
     }]

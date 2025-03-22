@@ -19,7 +19,7 @@
             <router-link to="/myself">
               <el-dropdown-item> 个人中心 </el-dropdown-item>
             </router-link>
-            <router-link to="/changemima">
+            <router-link to="/change-password">
               <el-dropdown-item> 修改密码</el-dropdown-item>
             </router-link>
 
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       user: {}
-      
+
     }
   },
   computed: {
@@ -81,10 +81,9 @@ export default {
   },
   created() {
     this.decode()
-    console.log(this.tags);
   },
   methods: {
-    
+
     decode() {
       const token = getToken()
       const user = parseJwt(token)
@@ -96,7 +95,6 @@ export default {
     async logout() {
       this.$store.dispatch('logoutUser')
       await this.$store.dispatch('user/logout')
-      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       this.$router.push(`/login`)
     }
   }

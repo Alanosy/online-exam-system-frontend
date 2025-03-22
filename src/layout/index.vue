@@ -16,23 +16,22 @@
 </template>
 
 <script>
-import { options } from 'runjs'
 import { Navbar, Sidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import routes from '@/router'
 export default {
   name: 'Layout',
-  data(){
-    return{
-
-    }
-  },
   components: {
     Navbar,
     Sidebar,
     AppMain
   },
   mixins: [ResizeMixin],
+  data() {
+    return {
+
+    }
+  },
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar
@@ -53,8 +52,6 @@ export default {
     }
   },
   created() {
-    const that = this
-
     this.menuList = routes.options.routes
 
     this.roles = window.localStorage.getItem('roles')
@@ -98,7 +95,6 @@ export default {
 <style lang="scss" scoped>
 @use "~@/styles/mixin.scss" as mixins;
 @use "~@/styles/variables.scss" as vars;
-
 
 .app-wrapper {
   @include mixins.clearfix;

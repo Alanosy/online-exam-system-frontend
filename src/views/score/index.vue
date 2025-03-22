@@ -35,7 +35,7 @@
         'line-height': '32px',
       }"
     >
-    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column fixed label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
@@ -101,7 +101,7 @@ export default {
         localStorage.setItem('gradeId', row.gradeId)
         localStorage.setItem('examTitle', row.examTitle)
         localStorage.setItem('gradeName', row.gradeName)
-        this.$router.push({ name: 'UserScore' })
+        this.$router.push({ name: 'user-score' })
       },
       diaTitle: '',
       dialogTableVisible: false,
@@ -115,9 +115,9 @@ export default {
       const input = this.input
       const input1 = this.input1
       if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
+        //  ("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
+          //  ("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1
           })
@@ -125,7 +125,7 @@ export default {
       }
       if (input1) {
         return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
+          //  ("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input1) > -1
           })
@@ -164,7 +164,6 @@ export default {
       this.getScorePage(val, this.pageSize)
     },
     handleClick(row) {
-      // console.log(row);
     }
   }
 }

@@ -136,11 +136,9 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import { setToken } from '@/utils/auth'
-import axios from 'axios'
 import { verifyCode, register } from '@/api/user'
 import { Message } from 'element-ui'
-import {Encrypt} from '@/utils/Secret'
+import { Encrypt } from '@/utils/Secret'
 export default {
   name: 'Login',
   data() {
@@ -239,7 +237,7 @@ export default {
                     duration: 5 * 1000
                   })
                 }
-              }).catch(error => {
+              }).catch(() => {
                 this.getVerify()
                 Message({
                   message: '注册失败，请重试',
@@ -255,7 +253,7 @@ export default {
                 duration: 5 * 1000
               })
             }
-          }).catch(error => {
+          }).catch(() => {
             this.getVerify()
             Message({
               message: '验证码验证失败',

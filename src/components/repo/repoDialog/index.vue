@@ -14,7 +14,7 @@
             <el-switch
               v-model="repoForm.isExercise"
               active-color="#13ce66"
-              inactive-color="#ff4949"
+              inactive-color="#cccccc"
             />
           </el-form-item>
         </el-form>
@@ -41,8 +41,12 @@ export default {
     },
     updateData: {
       type: Object,
-      // eslint-disable-next-line vue/require-valid-default-prop
-      default: {}
+      default() {
+        return {
+          title: '',
+          isExercise: 0
+        }
+      }
     },
     onConfirm: {
       type: Function,
@@ -64,11 +68,7 @@ export default {
     },
     updateData(val) {
       this.repoForm.repoTitle = val.title
-      if (val.isExercise === 1) {
-        this.repoForm.isExercise = true
-      } else {
-        this.repoForm.isExercise = false
-      }
+      this.repoForm.isExercise = val.isExercise === 1;
     },
     visible(val) {
       this.$emit('input', val)
@@ -76,7 +76,6 @@ export default {
   },
 
   methods: {
-
     handleConfirm() {
       // 调用父组件传入的确认回调方法，并传递 repoForm 数据
       this.onConfirm(this.repoForm)

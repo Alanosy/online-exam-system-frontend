@@ -134,66 +134,66 @@ export default {
   computed: {
     dialogVisible: {
       get() {
-        return this.visible;
+        return this.visible
       },
       set(val) {
-        this.$emit('update:visible', val);
+        this.$emit('update:visible', val)
       }
     }
   },
   methods: {
     // 检查选项是否被选中
     isCheck(myOption, sort) {
-      if (!myOption) return false;
-      const arr = myOption.split(",").map(Number);
-      return arr.includes(sort);
+      if (!myOption) return false
+      const arr = myOption.split(',').map(Number)
+      return arr.includes(sort)
     },
 
     // 处理对话框关闭
     handleClose(done) {
-      this.$emit('close');
-      done();
+      this.$emit('close')
+      done()
     },
 
     // 取消按钮
     onCancel() {
-      this.dialogVisible = false;
+      this.dialogVisible = false
     },
 
     // 确认按钮
     onConfirm() {
-      this.$emit('confirm');
-      this.dialogVisible = false;
+      this.$emit('confirm')
+      this.dialogVisible = false
     },
 
     // 获取答案颜色
     getAnswerColor(isRight) {
-      if (isRight === 1) return 'green';
-      if (isRight === 0) return 'red';
-      return 'gray';
+      if (isRight === 1) return 'green'
+      if (isRight === 0) return 'red'
+      return 'gray'
     },
 
     // 将数字转换为字母
     numberToLetter(input) {
-      if (input === null || input === undefined) return "";
+      if (input === null || input === undefined) return ''
 
       const numberToCharMap = {
-        0: "A", 1: "B", 2: "C", 3: "D", 4: "E", 5: "F"
-      };
+        0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F'
+      }
 
       // 处理单个数字
       if (typeof input === 'number' || /^\d+$/.test(input)) {
-        return numberToCharMap[parseInt(input, 10)] || "";
+        return numberToCharMap[parseInt(input, 10)] || ''
       }
 
       // 处理逗号分隔的数字
       if (/^\d+(,\d+)*$/.test(input)) {
-        return input.split(",")
-          .map(num => numberToCharMap[parseInt(num.trim(), 10)] || "")
-          .join(",");
+        return input.split(',')
+          .map(num => numberToCharMap[parseInt(num.trim(), 10)] || '')
+          .join(',')
       }
 
-      return "";
+      return ''
     }
   }
 }

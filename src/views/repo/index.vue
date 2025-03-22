@@ -12,14 +12,20 @@
 
     <!-- table -->
 
-    <el-table :data="data.records" border fit highlight-current-row :header-cell-style="{
-      background: '#f2f3f4',
-      color: '#555',
-      'font-weight': 'bold',
-      'line-height': '32px',
-    }">
-    <el-table-column  align="center" type="selection" width="55" />
-      <el-table-column fixed label="序号" align="center" width="80" >
+    <el-table
+      :data="data.records"
+      border
+      fit
+      highlight-current-row
+      :header-cell-style="{
+        background: '#f2f3f4',
+        color: '#555',
+        'font-weight': 'bold',
+        'line-height': '32px',
+      }"
+    >
+      <el-table-column align="center" type="selection" width="55" />
+      <el-table-column fixed label="序号" align="center" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" label="题库名称" align="center" />
@@ -34,21 +40,26 @@
     </el-table>
 
     <div class="pagination-container">
-      <el-pagination :current-page="data.current" :page-sizes="[10, 20, 30, 40]" :page-size="data.size"
-        layout="total, sizes, prev, pager, next, jumper" :total="data.total" @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="data.current"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="data.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="data.total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
     <!-- 新增题库 -->
-    <RepoDialog title="新增题库" v-model="addRepoDialogVisible" :onConfirm="addRepo" />
-    <RepoDialog title="编辑题库" v-model="dialogFormVisible" :updateData="form" :onConfirm="updateRepo" />
-    
+    <RepoDialog v-model="addRepoDialogVisible" title="新增题库" :on-confirm="addRepo" />
+    <RepoDialog v-model="dialogFormVisible" title="编辑题库" :update-data="form" :on-confirm="updateRepo" />
+
   </div>
 </template>
 
 <script>
 import { repoPaging, repoDel, repoUpdate, repoAdd } from '@/api/repo'
-import { ref, reactive, getCurrentInstance, nextTick } from "vue"
-import RepoDialog from "@/components/repo/repoDialog/index.vue"
+import RepoDialog from '@/components/repo/repoDialog/index.vue'
 export default {
   components: {
     RepoDialog
@@ -64,15 +75,14 @@ export default {
       searchTitle: '',
       Obj: {},
       formInline: {
-        user: '',
-        region: '',
+        searchTitle: ''
       },
       cancle() { },
 
       diaTitle: '新增',
       form: {
         title: '',
-        isExercise: 0,
+        isExercise: 0
       },
       formLabelWidth: '120px',
       dialogVisible: false,
@@ -113,15 +123,15 @@ export default {
       this.form = row
     },
     addRepo(repoForm) {
-      console.log('接收到的 repoForm 数据:', repoForm);
+      ('接收到的 repoForm 数据:', repoForm)
       const data = {
-        "title": repoForm.repoTitle,
-        "isExercise": repoForm.isExercise?1:0,
+        'title': repoForm.repoTitle,
+        'isExercise': repoForm.isExercise ? 1 : 0
       }
       repoAdd(data)
         .then((res) => {
           if (res.code) {
-            this.addTitle=''
+            this.addTitle = ''
             this.addRepoDialogVisible = false
             this.getRepoPage(this.pageNum, this.pageSize)
             this.$message({
@@ -140,10 +150,10 @@ export default {
     // 编辑题库
     updateRepo(repoForm) {
       const data = {
-        "title": repoForm.repoTitle,
-        "isExercise": repoForm.isExercise?1:0,
+        'title': repoForm.repoTitle,
+        'isExercise': repoForm.isExercise ? 1 : 0
       }
-      repoUpdate(this.form.id,data)
+      repoUpdate(this.form.id, data)
         .then((res) => {
           if (res.code) {
             this.getRepoPage(this.pageNum, this.pageSize)
@@ -178,7 +188,6 @@ export default {
           repoDel(row.id).then((res) => {
             if (res.code) {
               this.getRepoPage(this.pageNum, this.pageSize)
-              this.tableData.splice(index, 1)
               this.$message({
                 type: 'success',
                 message: '删除成功!'
@@ -200,10 +209,6 @@ export default {
     },
     handleClose(done) {
       done()
-    },
-
-    searchRepo() {
-      this.getRepoPage(this.pageNum, this.pageSize, this.searchTitle)
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑

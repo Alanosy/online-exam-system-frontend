@@ -36,15 +36,15 @@
         'line-height': '32px',
       }"
     >
-    <el-table-column  align="center" type="selection" width="55" />
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column fixed label="序号" align="center" width="80px">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column prop="title" label="试卷名称" align="center" />
       <el-table-column prop="examDuration" label="考试时间" align="center" />
-      <el-table-column prop="maxCount" label="最多切屏次数" align="center"  />
+      <el-table-column prop="maxCount" label="最多切屏次数" align="center" />
       <el-table-column prop="grossScore" label="总分" align="center" />
-      <el-table-column prop="passedScore" label="及格分" align="center"/>
+      <el-table-column prop="passedScore" label="及格分" align="center" />
       <!-- <el-table-column prop="radioCount" label="单选题数量" align="center" width="100px" />
       <el-table-column prop="multiCount" label="多选题数量" align="center" width="100px"/>
       <el-table-column prop="judgeCount" label="判断题数量" align="center" width="100px" />
@@ -92,14 +92,14 @@
         <el-col :span="12">
           <el-form :model="showExamData">
             <el-form-item label="考试标题  " :label-width="formLabelWidth">
-              <el-input v-model="showExamData.title" :disabled="true"/>
+              <el-input v-model="showExamData.title" :disabled="true" />
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="考试时长" :label-width="formLabelWidth">
-              <el-input v-model="showExamData.examDuration" :disabled="true"/>
+              <el-input v-model="showExamData.examDuration" :disabled="true" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -108,14 +108,14 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="最大切屏次数" :label-width="formLabelWidth">
-              <el-input v-model="showExamData.maxCount" :disabled="true"/>
+              <el-input v-model="showExamData.maxCount" :disabled="true" />
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="及格分" :label-width="formLabelWidth">
-              <el-input v-model="showExamData.passedScore" :disabled="true"/>
+              <el-input v-model="showExamData.passedScore" :disabled="true" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -131,18 +131,18 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="单选题数量" :label-width="formLabelWidth">
-              <el-input v-model="showExamData.radioCount" :disabled="true"/>
+              <el-input v-model="showExamData.radioCount" :disabled="true" />
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="单选题分数" :label-width="formLabelWidth">
-              <el-input v-model="showExamData.radioScore" :disabled="true"/>
+              <el-input v-model="showExamData.radioScore" :disabled="true" />
             </el-form-item>
           </el-form>
         </el-col>
-   
+
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="多选题数量" :label-width="formLabelWidth">
@@ -153,7 +153,7 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="多选题分数" :label-width="formLabelWidth">
-              <el-input v-model="showExamData.multiScore" :disabled="true"/>
+              <el-input v-model="showExamData.multiScore" :disabled="true" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -167,7 +167,7 @@
         <el-col :span="12">
           <el-form :model="form">
             <el-form-item label="判断题分数" :label-width="formLabelWidth">
-              <el-input v-model="showExamData.judgeScore" :disabled="true"/>
+              <el-input v-model="showExamData.judgeScore" :disabled="true" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -185,9 +185,7 @@
             </el-form-item>
           </el-form>
         </el-col>
-    
-    
-       
+
       </el-row>
       <div style="display: flex; justify-content: flex-end; with: 100%">
         <el-button @click="showExamDialogVisible = false">关闭详情</el-button>
@@ -263,7 +261,7 @@
             </el-form-item>
           </el-form>
         </el-col>
- 
+
       </el-row>
       <div style="display: flex; justify-content: flex-end; with: 100%">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -274,7 +272,7 @@
 </template>
 
 <script>
-import { examPaging, repoAdd, examUpdate, examDel } from '@/api/exam'
+import { examPaging, examUpdate, examDel } from '@/api/exam'
 export default {
   data() {
     return {
@@ -291,10 +289,10 @@ export default {
       },
       value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       dialogVisible: false,
-      showExamDialogVisible:false,
+      showExamDialogVisible: false,
       dialogTableVisible: false,
       dialogFormVisible: false,
-      showExamData:{},
+      showExamData: {},
       form: {
         name: ''
       },
@@ -304,7 +302,6 @@ export default {
         this.form = row
       },
       diaTitle: '新增',
-      form: {},
       formLabelWidth: '110px'
     }
   },
@@ -313,9 +310,9 @@ export default {
       // 在你的数据表格中定义tabels
       const input = this.input
       if (input) {
-        // console.log("input输入的搜索内容：" + this.input)
+        //  ("input输入的搜索内容：" + this.input)
         return this.tableData.filter((data) => {
-          // console.log("object:" + Object.keys(data));
+          //  ("object:" + Object.keys(data));
           return Object.keys(data).some((key) => {
             return String(data[key]).toLowerCase().indexOf(input) > -1
           })
@@ -339,7 +336,6 @@ export default {
           examDel(row.id).then((res) => {
             if (res.code) {
               this.getExamPage(this.pageNum, this.pageSize)
-              this.tableData.splice(index, 1)
               this.$message({
                 type: 'success',
                 message: '删除成功!'
@@ -359,10 +355,9 @@ export default {
           })
         })
     },
-    showExam(row){
+    showExam(row) {
       this.showExamData = row
       this.showExamDialogVisible = true
-
     },
     updateExam() {
       const data = {
@@ -409,8 +404,7 @@ export default {
     },
 
     screenInfo(row) {
-      console.info('=====', row)
-      this.$router.push({ name: 'ksAdd', query: { zhi: row }})
+      this.$router.push({ name: 'exam-add', query: { zhi: row }})
     },
     handleSizeChange(val) {
       // 设置每页多少条逻辑

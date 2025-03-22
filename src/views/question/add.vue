@@ -135,7 +135,7 @@ export default {
 
   name: 'QuDetail',
   components: { FileUpload, RepoSelect },
-  
+
   data() {
     return {
       quId: '',
@@ -247,7 +247,7 @@ export default {
       })
     },
     submitForm() {
-      console.log(JSON.stringify(this.postForm))
+      (JSON.stringify(this.postForm))
 
       let rightCount = 0
 
@@ -306,9 +306,6 @@ export default {
 
         if (this.quId) {
           // 修改试题
-          console.log('--------------')
-          console.log(this.postForm)
-          console.log('----------------')
           quUpdate(this.quId, this.postForm).then(res => {
             if (res.code) {
               this.$notify({
@@ -317,7 +314,7 @@ export default {
                 type: 'success',
                 duration: 2000
               })
-              this.$router.push({ name: 'Questmanage' })
+              this.$router.push({ name: 'questions-management' })
             } else {
               this.$notify({
                 title: '失败',
@@ -339,7 +336,7 @@ export default {
                 duration: 2000
               })
 
-              this.$router.push({ name: 'Questmanage' })
+              this.$router.push({ name: 'questions-management' })
             } else {
               this.$notify({
                 title: '失败',
@@ -353,7 +350,7 @@ export default {
       })
     },
     onCancel() {
-      this.$router.push({ name: 'Questmanage' })
+      this.$router.push({ name: 'questions-management' })
     }
   }
 }

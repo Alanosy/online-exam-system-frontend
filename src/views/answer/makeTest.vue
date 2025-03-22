@@ -28,7 +28,7 @@
           <el-divider />
           <p>
             共 <span style="color: #1890ff"> {{ waitQuList.length }} </span> 题, 共
-            <span style="color: #1890ff" >{{
+            <span style="color: #1890ff">{{
               waitQuList.length * waitQuList[0].totalScore
             }}</span>
             分
@@ -55,6 +55,7 @@
           <el-card class="qu_list">
             <div>
               <template v-for="(item, index) in waitQuList">
+                <!-- eslint-disable-next-line vue/require-v-for-key -->
                 <div :class="'index' + index">
                   <!-- 简答 -->
                   <el-row :gutter="24">
@@ -80,10 +81,10 @@
                             />
                             <span
                               v-if="item.correctScore < 0 ||
-                                  item.correctScore > item.totalScore "
+                                item.correctScore > item.totalScore "
                               style="color: #f00; margin-left: 10px"
                             >
-                            
+
                               评分只能在 0-{{ item.totalScore }}之间
                             </span>
                           </div>
@@ -125,7 +126,7 @@
 import { answerDetail, correct } from '@/api/answer'
 export default {
 //   computedStatus(val) {
-//     console.log('val', val)
+//      ('val', val)
 //     return val === '' ? '' : this.optionsBasic.statusMap[val]
 // },
   name: 'ExamProcess',
@@ -136,7 +137,7 @@ export default {
       info: {},
       // 待批改试题
       waitQuList: [],
-      scoreData: null,
+      scoreData: null
     }
   },
   created() {
@@ -197,7 +198,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-          this.$router.push({ name: 'Ansck' })
+          this.$router.push({ name: 'answer-show' })
         } else {
           this.$notify({
             title: '失败',
