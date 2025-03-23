@@ -490,7 +490,8 @@ export default {
     submitForm() {
       // 校验和处理数据
       let cerTemp = ''
-      if (this.postForm.certificateId !== null && this.postForm.certificateId !== '') {
+      if (this.postForm.certificateId != null && this.postForm.certificateId != '') {
+        console.log(this.postForm.certificateId)
         cerTemp = this.postForm.certificateId.join(',')
       }
       this.postForm.repoList = this.repoList
@@ -537,7 +538,7 @@ export default {
 
     filterNode(value, data) {
       if (!value) return true
-      return data.deptName.indexOf(value) !== -1
+      return data.deptName.indexOf(value) != -1
     },
     onCertificateChange() {
       // 方法实现...
@@ -547,8 +548,7 @@ export default {
     },
     repoChange(e, row) {
       // 赋值ID
-      row.id = e.id('-----');
-      (e)
+      row.id = e.id
       if (e != null) {
         row.totalRadio = e.radioNum
         row.totalMulti = e.multiNum

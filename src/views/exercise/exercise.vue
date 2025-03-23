@@ -73,7 +73,7 @@
             </div>
 
             <div
-              v-if="paperData.multiList !== undefined && paperData.multiList.length > 0"
+              v-if="paperData.multiList  != undefined && paperData.multiList.length > 0"
             >
               <p class="card-title">多选题</p>
               <el-row :gutter="24" class="card-line">
@@ -87,7 +87,7 @@
             </div>
 
             <div
-              v-if="paperData.judgeList !== undefined && paperData.judgeList.length > 0"
+              v-if="paperData.judgeList  != undefined && paperData.judgeList.length > 0"
             >
               <p class="card-title">判断题</p>
               <el-row :gutter="24" class="card-line">
@@ -99,7 +99,7 @@
                 >{{ index + 1 }}</el-tag>
               </el-row>
             </div>
-            <div v-if="paperData.saqList !== undefined && paperData.saqList.length > 0">
+            <div v-if="paperData.saqList  != undefined && paperData.saqList.length > 0">
               <p class="card-title">简答题</p>
               <el-row :gutter="24" class="card-line">
                 <el-tag
@@ -137,7 +137,7 @@
                 <span :class="getOptionClass(item)">
                   {{ numberToLetter(item.sort + 1) }}.{{ item.content }}
                 </span>
-                <div v-if="item.image && item.image !== ''" style="clear: both">
+                <div v-if="item.image && item.image  != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100px" />
                 </div>
               </el-radio>
@@ -155,7 +155,7 @@
                 <span :class="getOptionClass(item)">
                   {{ numberToLetter(item.sort + 1) }}.{{ item.content }}
                 </span>
-                <div v-if="item.image && item.image !== ''" style="clear: both">
+                <div v-if="item.image && item.image  != ''" style="clear: both">
                   <el-image :src="item.image" style="max-width: 100px" />
                 </div>
               </el-checkbox>

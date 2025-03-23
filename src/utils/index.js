@@ -107,7 +107,7 @@ export function param2Obj(url) {
   const searchArr = search.split('&')
   searchArr.forEach(v => {
     const index = v.indexOf('=')
-    if (index !== -1) {
+    if (index  != -1) {
       const name = v.substring(0, index)
       const val = v.substring(index + 1, v.length)
       obj[name] = val

@@ -262,7 +262,7 @@ export default {
       this.$router.push({ name: 'questions-add' })
     },
     importQu() {
-      if (this.fileList && this.fileList.length > 0 && this.selectedRepoSingle !== '') {
+      if (this.fileList && this.fileList.length > 0 && this.selectedRepoSingle  != '') {
         const formData = new FormData() // 创建FormData对象
         formData.append('file', this.fileList[0].raw) // 添加文件到formData
         importQue(this.selectedRepoSingle, formData)

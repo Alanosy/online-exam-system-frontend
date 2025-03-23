@@ -262,7 +262,7 @@ export default {
         this.handHandExam()
       } else {
         const answers = this.multiValue
-        if (this.radioValue !== '') {
+        if (this.radioValue  != '') {
           answers.push(this.radioValue)
         }
 

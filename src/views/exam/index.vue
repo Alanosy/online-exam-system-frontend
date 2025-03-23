@@ -453,14 +453,14 @@ export default {
         ('单选、多选、判断题')
         // 单选、多选、判断题答案
         const answers = [...this.multiValue]
-        if (this.radioValue !== '') {
+        if (this.radioValue  != '') {
           answers.push(this.radioValue)
         }
         answerContent = answers.join(',')
       }
 
       // 检查是否有答案，如果没有答案且不是强制提交（如交卷前），则不提交
-      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent !== '';
+      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent  != '';
       ('hasAnswer:', hasAnswer)
       // 检查是否已经提交过相同的答案
       const previousAnswer = this.submittedAnswers[questionId]
@@ -562,14 +562,14 @@ export default {
       } else {
         // 单选、多选、判断题答案
         const answers = [...this.multiValue]
-        if (this.radioValue !== '') {
+        if (this.radioValue  != '') {
           answers.push(this.radioValue)
         }
         answerContent = answers.join(',')
       }
 
       // 检查是否有答案
-      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent !== ''
+      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent  != ''
 
       if (hasAnswer) {
         const params = {

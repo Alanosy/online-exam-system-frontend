@@ -38,7 +38,7 @@ instance.interceptors.response.use(
     }
 
     // 0为正确响应码
-    if (res.code !== 0) {
+    if (res.code  != 0) {
       Message({
         message: res.msg || 'Error',
         type: 'error',

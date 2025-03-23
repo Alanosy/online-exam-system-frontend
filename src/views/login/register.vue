@@ -164,7 +164,7 @@ export default {
       }
     }
     const validateCheckedPassword = (rule, value, callback) => {
-      if (value !== this.registerForm.password) {
+      if (value  != this.registerForm.password) {
         callback(new Error('两次输入密码不一致'))
       } else {
         callback()
