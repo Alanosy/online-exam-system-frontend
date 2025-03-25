@@ -199,16 +199,6 @@ export default {
         uploadAvatar(formData)
           .then((res) => {
             if (res.code) {
-              const userInfo = getTokenInfo()
-              trackPresence({ userId: userInfo.id })
-                .then((response) => {
-                  if (response.code) {
-                    setToken(response.data)
-                  }
-                })
-                .catch((error) => {
-                  console.error('心跳发送失败:', error)
-                })
               this.getInfoFun()
               this.$message.success('文件上传成功！')
               this.fileDialogVisible = false // 关闭对话框
