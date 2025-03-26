@@ -55,6 +55,7 @@
             <el-input v-model="addForm.realName" autocomplete="off" />
           </el-form-item>
         </el-col>
+      </el-row>
       <el-row>
         <el-col :span="11">
           <el-form-item label="身份选择" :label-width="formLabelWidth" v-if="role == 'admin'" >
