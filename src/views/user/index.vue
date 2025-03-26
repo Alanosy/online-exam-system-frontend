@@ -28,7 +28,13 @@
       </el-table-column>
       <el-table-column prop="userName" label="用户名" align="center" />
       <el-table-column prop="realName" label="真实姓名" align="center" />
-      <el-table-column prop="roleName" label="角色名称" align="center" />
+      <el-table-column prop="roleId" label="角色名称" align="center" >
+      <template slot-scope="{ row }">
+        <span v-if="row.roleId == 1">学生</span>
+        <span v-if="row.roleId == 2">教师</span>
+        <span v-if="row.roleId == 3">管理员</span>
+      </template>
+      </el-table-column>
       <el-table-column prop="gradeName" label="班级" align="center" />
       <el-table-column prop="createTime" label="注册时间" align="center" />
       <el-table-column align="center" label="操作">
