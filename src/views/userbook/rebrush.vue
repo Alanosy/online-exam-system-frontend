@@ -20,7 +20,10 @@
       <el-col :span="24">
         <el-card class="qu-content content-h">
           <!-- 题干 -->
-          <p v-if="quData.content">{{ quData.content }}</p>
+          <p v-if="quData.content">
+            <span>({{ getQuestionType(quData.quType) }}) {{ index + 1 }}.</span>
+            {{ quData.content }}
+          </p>
           <p v-if="quData.image != null && quData.image != ''">
             <el-image :src="quData.image" style="max-width: 200px" />
           </p>
@@ -233,6 +236,16 @@ export default {
       } else {
         return '' // 输入不符合预期，返回空字符串或根据需要处理
       }
+    },
+    // 获取题目类型
+    getQuestionType(type) {
+      const typeMap = {
+        1: '单选题',
+        2: '多选题',
+        3: '判断题',
+        4: '简答题'
+      }
+      return typeMap[type] || '未知类型'
     },
     /**
      * 下一题

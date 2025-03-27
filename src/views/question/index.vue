@@ -59,7 +59,7 @@
         :auto-upload="false"
         :on-remove="handleRemove"
         :on-change="handleFileChange"
-        :file-list="form.fileList"
+        :file-list="fileList"
       >
         <i class="el-icon-upload" />
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -272,16 +272,23 @@ export default {
               this.getQuPage(this.pageNum, this.pageSize)
               this.fileDialogVisible = false // 关闭对话框
               // 可以在这里处理成功后的逻辑，如刷新数据等
+              // 清空题库选择和文件列表
+              this.selectedRepoSingle = ''
+              this.fileList = []
             } else {
               this.$message({
                 type: 'error',
                 message: response.msg
               })
+              // 只清空文件列表
+              this.fileList = []
             }
           })
           .catch((error) => {
             console.error('文件上传失败：', error)
             this.$message.error('文件上传失败！')
+            // 只清空文件列表
+            this.fileList = []
           })
       } else {
         this.$message.warning('请选择文件后再上传！')
