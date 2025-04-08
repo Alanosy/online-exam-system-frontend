@@ -131,6 +131,10 @@
         @click="registerFn"
       >注册</el-button>
     </el-form>
+        <!-- 添加备案信息 -->
+    <div v-if="icpNumber" class="icp-info">
+      <a :href="icpLink" target="_blank">{{ icpNumber }}</a>
+    </div>
   </div>
 </template>
 
@@ -140,7 +144,7 @@ import { verifyCode, register } from '@/api/user'
 import { Message } from 'element-ui'
 import { Encrypt } from '@/utils/Secret'
 export default {
-  name: 'Login',
+  name: 'Register',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -178,6 +182,8 @@ export default {
       }
     }
     return {
+      icpNumber: process.env.VUE_APP_ICP_NUMBER,
+      icpLink: process.env.VUE_APP_ICP_LINK,
       registerForm: {
         userName: '',
         password: '',
@@ -347,7 +353,7 @@ $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
 
-.login-container {
+.register-container {
   min-height: 100%;
   width: 100%;
   background-color: $bg;
@@ -418,6 +424,23 @@ $light_gray: #eee;
     text-align: center;
     font-family: sans-serif;
     padding-top: 10px;
+  }
+  .icp-info {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    
+    a {
+      color: #889aa4;
+      font-size: 12px;
+      text-decoration: none;
+      
+      &:hover {
+        color: #eee;
+        text-decoration: underline;
+      }
+    }
   }
 }
 </style>
