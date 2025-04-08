@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '校园在线考试系统',
+  title: process.env.VUE_APP_TITLE || '校园在线考试系统',
 
   /**
    * @type {boolean} true | false
