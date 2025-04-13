@@ -89,8 +89,13 @@
                             </span>
                           </div>
                           <div style="margin-top: 18px">
-                            <span> 参考答案</span>
+                            <span>参考答案:</span>
+                            <br/>
                             <span>{{ item.refAnswer }}</span>
+                            <br/><br/>
+                            <span>AI评分</span>
+                            <br/>
+                            <span>{{ item.aiReason }}</span>
                           </div>
                         </el-card>
                       </div>
