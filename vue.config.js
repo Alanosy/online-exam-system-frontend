@@ -6,7 +6,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || '校园在线考试系统' // page title
+const name = process.env.VUE_APP_TITLE || defaultSettings.title || '校园在线考试系统' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
