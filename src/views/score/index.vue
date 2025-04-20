@@ -1,12 +1,3 @@
-<!--
- * @Author: yangiiiiii 14122140+yangiiiiiii@user.noreply.gitee.com
- * @Date: 2024-04-01 11:00:21
- * @LastEditors: 魏进 3413105907@qq.com
- * @LastEditTime: 2024-06-03 21:05:39
- * @FilePath: \com-project\src\views\notice\notice.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
-
 <template>
   <div class="app-container">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
