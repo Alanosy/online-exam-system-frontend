@@ -100,6 +100,10 @@
       </el-form-item>
 
     </el-form>
+        <!-- 添加备案信息 -->
+        <div v-if="icpNumber" class="icp-info">
+      <a :href="icpLink" target="_blank">{{ icpNumber }}</a>
+    </div>
   </div>
 </template>
 
@@ -133,6 +137,8 @@ export default {
         code: ''
       },
       enableRegister: process.env.VUE_APP_ENABLE_REGISTER === 'true',
+      icpNumber: process.env.VUE_APP_ICP_NUMBER,
+      icpLink: process.env.VUE_APP_ICP_LINK,
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
@@ -344,6 +350,23 @@ $light_gray: #eee;
     text-align: center;
     font-family: sans-serif;
     padding-top: 10px;
+  }
+  .icp-info {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    
+    a {
+      color: $dark_gray;
+      font-size: 12px;
+      text-decoration: none;
+      
+      &:hover {
+        color: $light_gray;
+        text-decoration: underline;
+      }
+    }
   }
 }
 </style>
