@@ -40,6 +40,11 @@
       </el-table-column>
       <el-table-column prop="title" label="题库名称" align="center" />
       <el-table-column prop="categoryName" label="题库分类" align="center" />
+      <el-table-column label="题目数量" align="center">
+        <template slot-scope="{ row }">
+          <span :style="{ color: row.questionCount === 0 ? '#F56C6C' : '' }">{{ row.questionCount }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="realName" label="创建人" align="center" />
       <el-table-column prop="createTime" label="创建时间" align="center" />
 
