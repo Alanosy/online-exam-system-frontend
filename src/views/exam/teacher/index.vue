@@ -356,8 +356,8 @@ export default {
         })
     },
     showExam(row) {
-      this.showExamData = row
-      this.showExamDialogVisible = true
+      localStorage.setItem("exam-details-examId", row.id)
+      this.$router.push({name: 'exam-details'})
     },
     updateExam() {
       const data = {

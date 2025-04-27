@@ -125,6 +125,17 @@ export const constantRoutes = [
   }],
 },
 {
+  path: '/exam-details',
+  component: Layout,
+  children: [{
+    path: 'exam-details',
+    hidden: true,
+    name: 'exam-details',
+    component: () => import('@/views/exam/details.vue'),
+    meta: { title: '考试详情', visible: true, roles:['teacher', 'admin'], icon: 'el-icon-takeaway-box' },
+}],
+},
+{
   path: "/discussion-block",
   component: Layout,
   children: [

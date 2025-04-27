@@ -1,49 +1,5 @@
 <template>
   <el-container style="height: 100vh; border: 1px solid #eee">
-    <!-- <div class="left">
-      <div class="fk">
-        <div
-          style="
-            font-size: 25px;
-            font-weight: 500;
-            margin-left: 10px;
-            padding: 10px 0 0 0;
-          "
-        >
-          11
-        </div>
-        <div class="sj">
-          <div>
-            <span>得分</span>
-            <span>50</span>
-          </div>
-          <div>
-            <span>耗时</span>
-            <span>50</span>
-          </div>
-          <div>
-            <span>提交人</span>
-            <span>50</span>
-          </div>
-          <el-divider></el-divider>
-          <p>
-            共 <span style="color: #1890ff">5 </span> 题, 共
-            <span style="color: #1890ff">100</span> 分
-          </p>
-          <el-row>
-            <el-tag
-              v-for="index in 5"
-              :type="index === quIndex ? 'success' : ''"
-              @click="handleTag(index)"
-              class="type_tag"
-            >
-              {{ index }}
-            </el-tag>
-          </el-row>
-        </div>
-      </div>
-    </div> -->
-
     <el-container>
       <el-main class="right">
         <el-col>
@@ -53,7 +9,11 @@
               <template v-for="(index,indexx) in data">
                 <!-- eslint-disable-next-line vue/require-v-for-key -->
                 <div
-                  v-if="index.quType === 1 || index.quType === 2 || index.quType === 3"
+                  v-if="
+                    index.quType === 1 ||
+                    index.quType === 2 ||
+                    index.quType === 3
+                  "
                   :class="'index' + index"
                 >
                   <el-row :gutter="24">
@@ -64,12 +24,10 @@
                         <!-- 【 单选题 】 -->
                         <div class="qu_content">{{indexx+1}}、{{ index.title }}</div>
 
-                        <!-- <div v-if="item.image != null && item.image != ''" style="clear: both">
-                          <el-image :src="item.image" style="max-width: 200px" />
-                        </div> -->
+        
                       </div>
                       <div v-if="index.image != null && index.image != ''">
-                        <el-image :src="index.image" style="height: 100px;" />
+                        <el-image :src="index.image" style="height: 100px" />
                       </div>
                       <!-- 选项 -->
                       <el-radio-group class="qu_choose_group">
@@ -80,7 +38,15 @@
                           :label="item.content"
                           border
                           class="qu_choose"
-                          :class="{'imgC':item.image != null && item.image != '','isRight':index.myOption!=null&& isCheck(index.myOption ,item.sort) && item.isRight , 'incorrect':index.myOption!=null && isCheck(index.myOption ,item.sort) && !item.isRight}"
+                          :class="{
+                            imgC: item.image != null && item.image != '',
+                            isRight:
+                              item.isRight,
+                            incorrect:
+                              index.myOption != null &&
+                              isCheck(index.myOption, item.sort) &&
+                              !item.isRight,
+                          }"
                         >
                           <!-- 选项flex浮动 -->
                           <div class="qu_choose_tag">
@@ -88,32 +54,38 @@
                               {{ numberToLetter(indexs) }}、{{ item.content }}.
                             </div>
                             <!-- 选项内容和图片 -->
-                            <div v-if="item.image != null && item.image != ''" style="clear: both">
-                              <el-image :src="item.image" style="max-width: 200px" />
+                            <div
+                              v-if="item.image != null && item.image != ''"
+                              style="clear: both"
+                            >
+                              <el-image
+                                :src="item.image"
+                                style="max-width: 200px"
+                              />
                             </div>
                             <div v-if="item.image != null && item.image != ''">
-                              <el-image :src="item.image" class="qu_choose_tag_img" />
+                              <el-image
+                                :src="item.image"
+                                class="qu_choose_tag_img"
+                              />
                             </div>
-
                           </div>
-
                         </el-radio>
                       </el-radio-group>
 
                       <!-- 题目解析 -->
                       <div class="qu_analysis">
                         <el-card>
-                          <div>
-                            <span>考生答案：</span>
-                            <span>{{ numberToLetter(index.myOption) }}</span><br>
-                          </div>
+                  
                           <div style="margin-top: 8px">
                             <span>正确答案：</span>
-                            <span>{{ numberToLetter(index.rightOption) }}</span><br>
+                            <span>{{ numberToLetter(index.rightOption) }}</span
+                            ><br />
                           </div>
                           <div style="margin-top: 8px">
                             <span>试题解析：</span>
-                            <span>{{ index.analyse }}</span><br>
+                            <span>{{ index.analyse }}</span
+                            ><br />
                           </div>
                         </el-card>
                       </div>
@@ -153,26 +125,27 @@
                         <el-card>
                           <div>
                             <!-- <span>考生答案：</span>
-                            <span
-                              :style="{
-                                color:
-                                  isRight === 1
-                                    ? 'green'
-                                    : isRight === 0
-                                    ? 'red'
-                                    : 'gray',
-                              }"
-                              >{{}}</span
-                            ><br /> -->
+                              <span
+                                :style="{
+                                  color:
+                                    isRight === 1
+                                      ? 'green'
+                                      : isRight === 0
+                                      ? 'red'
+                                      : 'gray',
+                                }"
+                                >{{}}</span
+                              ><br /> -->
                           </div>
                           <div style="margin-top: 8px">
                             <span>正确答案：</span>
                             <span>{{ index.rightOption }}</span>
-                            <br>
+                            <br />
                           </div>
                           <div style="margin-top: 8px">
                             <span>试题解析：</span>
-                            <span>{{ index.analyse }}</span><br>
+                            <span>{{ index.analyse }}</span
+                            ><br />
                           </div>
                         </el-card>
                       </div>
@@ -191,85 +164,83 @@
 </template>
 
 <script>
-import { recordExamDetail } from '@/api/record'
+import { recordExamDetail } from "@/api/record";
+import {details} from "@/api/exam"
 export default {
-  name: 'ExamProcess',
+  name: "ExamProcess",
   data() {
     return {
-      input: '',
+      input: "",
       quIndex: -1,
       examId: 0,
       data: null,
       userId: null,
       index: {
-        quType: 4 // 确保这里有一个值
-      }
-    }
+        quType: 4, // 确保这里有一个值
+      },
+      examId:"",
+    };
   },
   created() {
-    console.log("this.$route.params",this.$route)
-    if(this.$route.query.data.type===1){
-      this.userId = this.$route.query.data.userId;
-    }
-    // this.examId=this.$route.query.zhi.examId
-    this.examId = localStorage.getItem('record_exam_examId')
-    this.ExamDetail()
+    console.log("this.$route.query", this.$route.query.examId);
+    this.examId = localStorage.getItem("exam-details-examId")
+    this.ExamDetail();
   },
   methods: {
     isCheck(myOption, sort) {
-      const arr = myOption.split(',').map(Number) // 将字符串转换为数字数组
+      const arr = myOption.split(",").map(Number); // 将字符串转换为数字数组
       if (arr.includes(sort)) {
-        return true
+        return true;
       } else {
-        return false
+        return false;
       }
     },
     numberToLetter(input) {
       const numberToCharMap = {
-        0: 'A',
-        1: 'B',
-        2: 'C',
-        3: 'D',
-        4: 'E',
-        5: 'F'
-      }
+        0: "A",
+        1: "B",
+        2: "C",
+        3: "D",
+        4: "E",
+        5: "F",
+      };
 
       // 辅助函数：将单个数字（字符串或数字类型）转换为字母
-      const singleNumberToLetter = (num) => numberToCharMap[parseInt(num, 10)] || ''
+      const singleNumberToLetter = (num) =>
+        numberToCharMap[parseInt(num, 10)] || "";
 
       // 辅助函数：处理逗号分隔的数字字符串
       const commaSeparatedNumbersToLetters = (str) => {
-        const numbers = str.split(',').map((item) => parseInt(item.trim(), 10))
-        return numbers.map((number) => numberToCharMap[number] || '').join(',')
-      }
+        const numbers = str.split(",").map((item) => parseInt(item.trim(), 10));
+        return numbers.map((number) => numberToCharMap[number] || "").join(",");
+      };
 
       // 判断输入类型并调用相应函数
       if (/^\d+$/.test(input)) {
         // 单个数字（字符串形式也可以匹配）
-        return singleNumberToLetter(input)
+        return singleNumberToLetter(input);
       } else if (/^\d+(,\d+)*$/.test(input)) {
         // 包含逗号分隔的数字字符串
-        return commaSeparatedNumbersToLetters(input)
+        return commaSeparatedNumbersToLetters(input);
       } else {
-        return '' // 输入不符合预期，返回空字符串或根据需要处理
+        return ""; // 输入不符合预期，返回空字符串或根据需要处理
       }
     },
     // 分页查询
     async ExamDetail() {
-      const params = { examId: this.examId,userId:this.userId }
-      const res = await recordExamDetail(params)
-      this.data = res.data
+      const res = await details(this.examId);
+      this.data = res.data;
     },
     // 点击答题卡题号, 右侧题目滑动
     handleTag(index) {
       // 高亮选中的题目index标签
-      this.quIndex = index
+      this.quIndex = index;
       // 题目滑动到锚定点
-      const page = document.querySelector('.index' + index)
-      page.scrollIntoView()
-    }
-  }
-}
+      const page = document.querySelector(".index" + index);
+      page.scrollIntoView();
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -287,10 +258,10 @@ export default {
   margin-left: 10px;
   line-height: 22px;
 }
-.isRight{
+.isRight {
   background-color: rgb(215, 245, 215);
 }
-.incorrect{
+.incorrect {
   background-color: rgb(248, 197, 197);
 }
 .fk {
@@ -419,7 +390,7 @@ export default {
     }
   }
 }
-.imgC{
-  height:150px
+.imgC {
+  height: 150px;
 }
 </style>

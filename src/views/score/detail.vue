@@ -86,13 +86,6 @@ export default {
       form: {
         name: ''
       },
-      cancle() {},
-      updateRow(row) {
-        row.type= 1;
-        console.log(row)
-        localStorage.setItem('record_exam_examId', row.examId)
-        this.$router.push({ name: 'exam-record-detail', query: { data: row }})
-      },
       diaTitle: '',
       dialogTableVisible: false,
       dialogFormVisible: false,
@@ -138,6 +131,12 @@ export default {
     localStorage.removeItem('gradeId')
   },
   methods: {
+    updateRow(row) {
+        row.type= 1;
+        console.log(row)
+        localStorage.setItem('record_exam_examId', row.examId)
+        this.$router.push({ name: 'exam-record-detail', query: { data: row }})
+      },
     // 分页查询
     async getScorePage() {
       const params = {

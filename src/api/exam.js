@@ -104,3 +104,11 @@ export function examCollect(examId) {
     method: 'get'
   })
 }
+
+
+export function details(examId) {
+  return request({
+    url: `exams//details//${examId}`,
+    method: 'get'
+  })
+}

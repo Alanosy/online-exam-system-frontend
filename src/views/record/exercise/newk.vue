@@ -5,7 +5,7 @@
         <el-col>
           <el-card class="qu_list">
             <div>
-              <template v-for="index in data">
+              <template v-for="(index,indexx) in data">
                 <!-- eslint-disable-next-line vue/require-v-for-key -->
                 <div
                   v-if="index.quType === 1 || index.quType === 2 || index.quType === 3"
@@ -17,7 +17,7 @@
                       <div>
                         <!-- <div class="qu_num">{{ index }}</div> -->
                         <!-- 【 单选题 】 -->
-                        <div class="qu_content">{{ index.title }}</div>
+                        <div class="qu_content">{{indexx+1}}、{{ index.title }}</div>
                       </div>
                       <div v-if="index.image != null && index.image != ''">
                         <el-image :src="index.image" style="height: 100px;" />
