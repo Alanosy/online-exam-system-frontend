@@ -36,7 +36,7 @@
       <el-table-column prop="count" label="切屏次数" align="center" />
       <el-table-column prop="userTime" label="用户用时" align="center" />
       <el-table-column prop="limitTime" label="提交时间" align="center" />
-      <!--
+      
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button
@@ -47,7 +47,7 @@
             >查看详情</el-button
           >
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
     <div class="pagination-container">
       <el-pagination
@@ -88,8 +88,10 @@ export default {
       },
       cancle() {},
       updateRow(row) {
-        this.dialogFormVisible = true
-        this.form = row
+        row.type= 1;
+        console.log(row)
+        localStorage.setItem('record_exam_examId', row.examId)
+        this.$router.push({ name: 'exam-record-detail', query: { data: row }})
       },
       diaTitle: '',
       dialogTableVisible: false,

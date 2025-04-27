@@ -104,6 +104,57 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/discussion-management',
+    component: Layout,
+    children: [{
+      path: 'discussion-management',
+      name: 'discussion-management',
+      component: () => import('@/views/discuss/index.vue'),
+      meta: { title: '讨论管理', visible: true, roles: ['teacher', 'student'], icon: 'el-icon-chat-dot-square' },
+  }],
+  },
+  {
+    path: '/discussion-detail',
+    component: Layout,
+    children: [{
+      path: 'discussion-detail',
+      hidden: true,
+      name: 'discussion-detail',
+      component: () => import('@/views/discuss/detail.vue'),
+      meta: { title: '讨论详情', visible: true, roles:['teacher', 'student'], icon: 'el-icon-takeaway-box' },
+  }],
+},
+{
+  path: "/discussion-block",
+  component: Layout,
+  children: [
+    {
+      path: "/discussion-block",
+      name: "discussion-block",
+      hidden: true,
+      component: () =>
+        import("@/views/discuss/block.vue"),
+      meta: {
+        title: "投屏模式",
+        visible: false,
+        roles: ["teacher", "admin"],
+      },
+    },
+  ],
+},
+{
+  path: '/prepare-exam',
+  component: Layout,
+  children: [{
+    path: '/prepare-exam',
+    name: 'prepare-exam',
+    hidden: true,
+
+    component: () => import('@/views/exam/examInformation.vue'),
+    meta: { title: '准备考试', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
+  }]
+},
+  {
     path: '/text-center',
     component: Layout,
     children: [{
@@ -111,17 +162,6 @@ export const constantRoutes = [
       name: 'text-center',
       component: () => import('@/views/exam/student/index'),
       meta: { title: '试卷中心', visible: true, roles: ['student'], icon: 'el-icon-document-copy' }
-    }]
-  },
-  {
-    path: '/prepare-exam',
-    component: Layout,
-    children: [{
-      path: '/prepare-exam',
-      name: 'prepare-exam',
-      hidden: true,
-      component: () => import('@/views/exam/examInformation.vue'),
-      meta: { title: '准备考试', visible: true, roles: ['teacher', 'admin', 'student'], icon: 'dashboard' }
     }]
   },
   {
@@ -354,6 +394,23 @@ export const constantRoutes = [
       component: () => import('@/views/notice/notice'),
       meta: { title: '公告管理', visible: true, roles: ['teacher', 'admin'], icon: 'el-icon-bell' }
     }]
+  },
+  {
+    path: "/login-log",
+    component: Layout,
+    children: [
+      {
+        path: "/login-log",
+        name: "login-log",
+        component: () => import("@/views/log/index"),
+        meta: {
+          title: "登录日志",
+          visible: false,
+          roles: ["teacher", "admin", "student"],
+          icon: "el-icon-receiving",
+        },
+      },
+    ],
   },
 
   { path: '*', redirect: '/404', hidden: true }

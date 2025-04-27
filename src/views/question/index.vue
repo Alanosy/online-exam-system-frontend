@@ -6,7 +6,7 @@
       <el-form-item label="试题名称">
         <el-input v-model="searchName" placeholder="输入试题名称" />
       </el-form-item>
-      <el-form-item label="所属题库">
+      <el-form-item label="所目题库">
         <repo-select
           v-model="selectedRepoSingleSearch"
           @change="handleRepoChangeSingle"

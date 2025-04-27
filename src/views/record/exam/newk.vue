@@ -200,12 +200,17 @@ export default {
       quIndex: -1,
       examId: 0,
       data: null,
+      userId: null,
       index: {
         quType: 4 // 确保这里有一个值
       }
     }
   },
   created() {
+    console.log("this.$route.params",this.$route)
+    if(this.$route.query.data.type===1){
+      this.userId = this.$route.query.data.userId;
+    }
     // this.examId=this.$route.query.zhi.examId
     this.examId = localStorage.getItem('record_exam_examId')
     this.ExamDetail()
@@ -251,7 +256,7 @@ export default {
     },
     // 分页查询
     async ExamDetail() {
-      const params = { examId: this.examId }
+      const params = { examId: this.examId,userId:this.userId }
       const res = await recordExamDetail(params)
       this.data = res.data
     },
