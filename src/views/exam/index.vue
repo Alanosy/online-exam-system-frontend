@@ -5,7 +5,7 @@
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
           距离考试结束还有：
-          <exam-timer v-model="paperData.leftSeconds" @timeout="doHandler()" />
+          <exam-timer v-model="paperData.leftSeconds" @timeout="doHandler(true)" />
           <el-button
             :loading="loading"
             style="float: right; margin-top: -10px"
@@ -389,41 +389,61 @@ export default {
     },
 
     // 交卷
-    doHandler() {
-      const notAnswered = this.countNotAnswered()
-      const msg = notAnswered > 0
-        ? `您还有${notAnswered}题未作答，确认要交卷吗?`
-        : '确认要交卷吗？'
-
-      this.$confirm(msg, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.handleText = '正在交卷，请等待...'
-          this.loading = true
-          // 删除当前标签页
-          this.$store.commit('menu/REMOVE_TAG', {
-            title: this.$route.meta.title, // 从路由元数据中获取标题
-            path: this.$route.path,
-            name: this.$route.name // 添加路由名称
-          })
-          handExam(this.examId).then(() => {
-            this.$message({
-              message: '试卷提交成功，即将进入试卷详情！',
-              type: 'success'
-            })
-            this.clearSessionStorageByPrefix('exam_')
-            this.$router.push({ name: 'text-center', params: { id: this.paperId }})
-          })
+    doHandler(isAutomatic = false) {
+      const performSubmit = () => {
+        this.handleText = isAutomatic ? '时间到，正在自动交卷...' : '正在交卷，请等待...'
+        this.loading = true
+        // 删除当前标签页
+        this.$store.commit('menu/REMOVE_TAG', {
+          title: this.$route.meta.title,
+          path: this.$route.path,
+          name: this.$route.name
         })
-        .catch(() => {
+        handExam(this.examId).then(() => {
           this.$message({
-            type: 'info',
-            message: '交卷已取消，您可以继续作答！'
+            message: isAutomatic ? '考试时间到，试卷已自动提交！' : '试卷提交成功！',
+            type: 'success'
           })
+          this.clearSessionStorageByPrefix('exam_')
+          this.$router.push({ name: 'text-center', params: { id: this.paperId }})
+        }).catch((error) => {
+          this.loading = false
+          this.handleText = '交卷'
+          this.$message({
+            type: 'error',
+            message: (isAutomatic ? '自动' : '') + '交卷失败，请联系管理员！'
+          })
+          console.error((isAutomatic ? '自动' : '') + '交卷失败:', error);
         })
+      }
+
+      if (isAutomatic) {
+        // 如果是自动触发（时间到），直接执行提交
+        performSubmit()
+      } else {
+        // 如果是手动触发（点击按钮或确认预览），显示确认框
+        const notAnswered = this.countNotAnswered()
+        const msg = notAnswered > 0
+          ? `您还有 ${notAnswered} 题未作答，确认要交卷吗?`
+          : '确认要交卷吗？'
+
+        this.$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .then(() => {
+            // 用户在确认框中点击“确定”后执行提交
+            performSubmit()
+          })
+          .catch(() => {
+            // 用户点击“取消”
+            this.$message({
+              type: 'info',
+              message: '交卷已取消，您可以继续作答！'
+            })
+          })
+      }
     },
 
     // 保存答案
@@ -436,97 +456,130 @@ export default {
       const currentItem = this.cardItem
 
       // 获取题目ID
-      const questionId = this.cardItem.questionId
+      const questionId = currentItem.questionId
       // 判断题目类型
-      const isSimpleAnswer = this.allItem[this.cardItem.sort]?.type === 4
+      const currentQuType = this.quData.quType
 
       // 准备答案数据
       let answerContent = ''
-      if (isSimpleAnswer) {
+      if (currentQuType === 4) {
         ('简答题');
-        (this.saqTextarea)
         // 简答题答案
-        answerContent = this.saqTextarea
-        // 清空输入框
-        this.saqTextarea = ''
+        answerContent = this.saqTextarea.trim() // 去除首尾空格
       } else {
         ('单选、多选、判断题')
         // 单选、多选、判断题答案
-        const answers = [...this.multiValue]
-        if (this.radioValue  != '') {
-          answers.push(this.radioValue)
+        const answers = [] // 使用空数组初始化
+        if (currentQuType === 2) { // 多选
+          answers.push(...this.multiValue)
+        } else if (currentQuType === 1 || currentQuType === 3) { // 单选或判断
+          // 确保 radioValue 不是空字符串、null 或 undefined
+          if (this.radioValue !== '' && this.radioValue !== null && this.radioValue !== undefined) {
+            answers.push(this.radioValue)
+          }
         }
         answerContent = answers.join(',')
       }
 
-      // 检查是否有答案，如果没有答案且不是强制提交（如交卷前），则不提交
-      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent  != '';
-      ('hasAnswer:', hasAnswer)
-      // 检查是否已经提交过相同的答案
-      const previousAnswer = this.submittedAnswers[questionId]
-      const answerUnchanged = previousAnswer === answerContent
+      const hasAnswer = !!answerContent // 检查是否有实际答案内容
+      // 获取上次成功保存的答案
+      const lastSavedAnswer = this.submittedAnswers[questionId]
+      // 决定是否需要调用API保存
+      // 条件：1. 有答案内容 且 (上次未保存过 或 当前答案与上次保存的不同)
+      //       2. 或者是一个强制保存的回调 (如交卷前预览)
+      const shouldCallApi = (hasAnswer && (lastSavedAnswer === undefined || answerContent !== lastSavedAnswer)) || callback
 
       // 如果答案已提交且未更改，且不是强制提交（callback不存在），则跳过提交
-      if (answerUnchanged && !callback && sessionStorage.getItem('exam_' + questionId) === '1') {
-        ('答案未更改，跳过提交')
-        // 直接加载下一题
-        this.fetchQuData(item)
-        return
+      // --- 不需要调用 API 的情况 ---
+      if (!shouldCallApi) {
+        console.log(`Question ${questionId}: No change or no answer, skipping API call.`)
+        // 如果用户清空了答案 (从有答案变为空)
+        if (!hasAnswer && lastSavedAnswer !== undefined) {
+           console.log(`Question ${questionId}: Answer cleared by user.`)
+           this.updateQuestionStatus(questionId, 0) // 更新UI为未作答
+           delete this.submittedAnswers[questionId] // 从已提交记录中移除
+           sessionStorage.removeItem('exam_' + questionId) // 清理sessionStorage标记
+        }
+        // 无论是否需要API调用，如果不是强制回调，都需要加载下一题
+        if (!callback) {
+           this.fetchQuData(item) // 加载目标题目数据
+        } else {
+           // 如果是强制回调（预览），直接执行回调
+           callback()
+        }
+        return // 结束 handSave
       }
 
-      // 如果有答案或者是强制提交（callback存在），则提交答案
-      if (hasAnswer || callback) {
-        const params = {
-          examId: this.paperId,
-          quId: questionId,
-          answer: answerContent
-        }
-        // 对于多选题，需要对答案进行排序
-        if (this.quData.quType === 2 && answerContent) {
-        // 将答案ID转为数组，排序后再转回字符串
-          const sortedAnswers = answerContent.split(',')
-            .map(id => parseInt(id))
-            .sort((a, b) => {
-            // 查找对应选项的sort值进行排序
-              const itemA = this.quData.answerList.find(item => item.id === a)
-              const itemB = this.quData.answerList.find(item => item.id === b)
-              return (itemA?.sort || 0) - (itemB?.sort || 0)
-            })
-            .join(',')
+      // --- 需要调用 API 的情况 ---
+      console.log(`Question ${questionId}: Answer changed or forced save, calling API.`)
+      const params = {
+        examId: this.paperId,
+        quId: questionId,
+        answer: answerContent
+      }
 
-          params.answer = sortedAnswers
-        }
-        fillAnswer(params).then((res) => {
-          if (res.code) {
-            // 标记为已答
-            sessionStorage.setItem('exam_' + currentItem.questionId, '1')
+       // 对多选题答案进行排序 (如果需要)
+       if (currentQuType === 2 && hasAnswer) {
+        const sortedAnswers = answerContent.split(',')
+          .map(id => parseInt(id))
+          .sort((a, b) => {
+            const itemA = this.quData.answerList.find(opt => opt.id === a)
+            const itemB = this.quData.answerList.find(opt => opt.id === b)
+            // 按选项的 sort 字段排序
+            return (itemA?.sort ?? 0) - (itemB?.sort ?? 0)
+          })
+          .join(',')
+        params.answer = sortedAnswers
+      }
+      // 添加 loading 状态提示用户正在保存
+      const saveLoading = Loading.service({
+          target: this.$el.querySelector('.qu-content'), // 只覆盖题目区域
+          text: '正在保存答案...',
+          background: 'rgba(255, 255, 255, 0.7)'
+      });
+      fillAnswer(params).then((res) => {
+        saveLoading.close() // 关闭 loading
+        if (res.code) { // 保存成功
+          console.log(`Question ${questionId}: Save successful.`)
+          // 更新已提交答案记录
+          this.submittedAnswers[questionId] = answerContent
+          // 更新 sessionStorage 标记
+          sessionStorage.setItem('exam_' + questionId, '1')
+          // 更新答题卡状态
+          this.updateQuestionStatus(questionId, 1)
 
-            // 保存已提交的答案，用于后续比较
-            this.submittedAnswers[questionId] = answerContent
+          // 如果是简答题，并且保存成功了，现在可以清空输入框了
+          // if (currentQuType === 4) {
+          //   this.saqTextarea = '' // 考虑是否真的需要清空，或者保留以便用户修改？暂时不清空，让用户看到自己提交的内容
+          // }
 
-            // 更新当前题目的状态
-            this.updateQuestionStatus(currentItem.questionId, 1)
-          } else {
-            // 标记为未答
-            sessionStorage.setItem('exam_' + currentItem.questionId, '0')
-            this.updateQuestionStatus(currentItem.questionId, 0)
-          }
-
-          // 最后一个动作，交卷
+          // 执行回调（如果存在）
           if (callback) {
             callback()
           }
-          // 查找详情
+          // 保存成功后，加载下一个题目
           this.fetchQuData(item)
-        })
-      } else {
-        // 确保不标记为已答题
-        sessionStorage.setItem('exam_' + currentItem.questionId, '0')
-        this.updateQuestionStatus(currentItem.questionId, 0)
 
-        // 查找详情
-        this.fetchQuData(item)
-      }
+        } else { // 保存失败 (API 返回 code 为 false)
+          console.error(`Question ${questionId}: Save failed (API response error):`, res.msg)
+          this.$message({
+            message: `答案保存失败: ${res.msg || '未知错误'}`,
+            type: 'error',
+            duration: 3000 // 显示时间长一点
+          })
+          // 保存失败，**不** 清空输入框，**不** 更新状态，**不** 加载下一题
+          // 用户停留在当前页面，可以尝试重新提交
+        }
+      }).catch((error) => { // 保存异常 (网络错误等)
+        saveLoading.close() // 关闭 loading
+        console.error(`Question ${questionId}: Save failed (Network/request error):`, error)
+        this.$message({
+          message: '答案保存时发生网络错误，请稍后重试！',
+          type: 'error',
+          duration: 3000
+        })
+        // 保存异常，**不** 清空输入框，**不** 更新状态，**不** 加载下一题
+      })
     },
 
     // 更新题目状态
@@ -549,84 +602,104 @@ export default {
 
     // 提交最后一题答案
     submitLastAnswer() {
+      const currentItem = this.cardItem
       // 获取题目ID
-      const questionId = this.cardItem.questionId
+      const questionId = currentItem.questionId
       // 判断题目类型
-      const isSimpleAnswer = this.allItem[this.cardItem.sort]?.type === 4
+      const currentQuType = this.quData.quType
 
       // 准备答案数据
       let answerContent = ''
-      if (isSimpleAnswer) {
+      if (currentQuType === 4) {
         // 简答题答案
-        answerContent = this.saqTextarea
+        answerContent = this.saqTextarea.trim()
       } else {
         // 单选、多选、判断题答案
-        const answers = [...this.multiValue]
-        if (this.radioValue  != '') {
-          answers.push(this.radioValue)
+        const answers = []
+        if (currentQuType === 2) {
+          answers.push(...this.multiValue)
+        }else if (currentQuType === 1 || currentQuType === 3) {
+          if (this.radioValue !== '' && this.radioValue !== null && this.radioValue !== undefined) {
+            answers.push(this.radioValue)
+          }
         }
-        answerContent = answers.join(',')
+        // 显式处理空数组情况，避免join出空字符串
+        if (answers.length > 0) {
+             answerContent = answers.join(',')
+        } else {
+             answerContent = '' // 确保空答案是空字符串
+        }
       }
 
       // 检查是否有答案
-      const hasAnswer = isSimpleAnswer ? !!answerContent.trim() : answerContent  != ''
+      const hasAnswer = !!answerContent
 
-      if (hasAnswer) {
-        const params = {
-          examId: this.paperId,
-          quId: questionId,
-          answer: answerContent
-        }
-
-        // 对于多选题，需要对答案进行排序
-        if (this.quData.quType === 2 && answerContent) {
-          // 将答案ID转为数组，排序后再转回字符串
-          const sortedAnswers = answerContent.split(',')
-            .map(id => parseInt(id))
-            .sort((a, b) => {
-              // 查找对应选项的sort值进行排序
-              const itemA = this.quData.answerList.find(item => item.id === a)
-              const itemB = this.quData.answerList.find(item => item.id === b)
-              return (itemA?.sort || 0) - (itemB?.sort || 0)
-            })
-            .join(',')
-
-          params.answer = sortedAnswers
-        }
-
-        fillAnswer(params).then((res) => {
-          if (res.code) {
-            // 标记为已答
-            sessionStorage.setItem('exam_' + questionId, '1')
-
-            // 保存已提交的答案，用于后续比较
-            this.submittedAnswers[questionId] = answerContent
-
-            // 更新当前题目的状态
-            this.updateQuestionStatus(questionId, 1)
-
-            this.$message({
-              message: '答案提交成功！',
-              type: 'success'
-            })
-          } else {
-            // 标记为未答
-            sessionStorage.setItem('exam_' + questionId, '0')
-            this.updateQuestionStatus(questionId, 0)
-
-            this.$message({
-              message: '答案提交失败，请重试！',
-              type: 'error'
-            })
-          }
-        })
-      } else {
+      if (!hasAnswer) {
         this.$message({
           message: '请先填写答案再提交！',
           type: 'warning'
         })
+        return
       }
+
+      const lastSavedAnswer = this.submittedAnswers[questionId]
+      const shouldCallApi = hasAnswer && (lastSavedAnswer === undefined || answerContent !== lastSavedAnswer)
+
+      if (!shouldCallApi) {
+         this.$message({
+            message: '答案未更改，无需重复提交。',
+            type: 'info'
+         })
+         return
+      }
+
+      const params = {
+        examId: this.paperId,
+        quId: questionId,
+        answer: answerContent
+      }
+
+      if (currentQuType === 2 && hasAnswer) {
+         const sortedAnswers = answerContent.split(',')
+           .map(id => parseInt(id))
+           .sort((a, b) => {
+             const itemA = this.quData.answerList.find(opt => opt.id === a)
+             const itemB = this.quData.answerList.find(opt => opt.id === b)
+             return (itemA?.sort ?? 0) - (itemB?.sort ?? 0)
+           })
+           .join(',')
+         params.answer = sortedAnswers
+      }
+
+      const saveLoading = Loading.service({ /* ... loading config ... */ });
+
+      fillAnswer(params).then((res) => {
+        saveLoading.close();
+        if (res.code) {
+          this.submittedAnswers[questionId] = answerContent
+          sessionStorage.setItem('exam_' + questionId, '1')
+          this.updateQuestionStatus(questionId, 1)
+          this.$message({
+            message: '最后一题答案提交成功！',
+            type: 'success'
+          })
+          // 用户可以选择交卷了
+        } else {
+          this.$message({
+            message: `最后一题答案提交失败: ${res.msg || '未知错误'}`,
+            type: 'error'
+          })
+        }
+      }).catch((error) => {
+        saveLoading.close();
+        console.error(`Question ${questionId}: Submit last answer failed:`, error)
+        this.$message({
+          message: '最后一题答案提交时发生网络错误！',
+          type: 'error'
+        })
+      })
     },
+
 
     // 试卷详情
     fetchQuData(item) {
@@ -641,41 +714,44 @@ export default {
       const examId = localStorage.getItem('examId')
       // 查找下个详情
       const params = { examId: examId, questionId: item.questionId }
+
+      // 在请求新数据前，清空上一题的答案状态，避免显示残留
+      this.radioValue = ''
+      this.multiValue = []
+      // 简答题不清空，因为 fetchQuData 会覆盖它
+
       quDetail(params).then((response) => {
         this.quData = response.data
-        this.radioValue = ''
-        this.multiValue = []
-
-        // 根据题目类型设置答案
-        if (response.data.quType === 4 && response.data.answerList != null) {
-          // 简答题
-          this.saqTextarea = response.data.answerList[0].content
-
-          // 记录当前加载的答案
-          if (sessionStorage.getItem('exam_' + item.questionId) === '1') {
-            this.submittedAnswers[item.questionId] = this.saqTextarea
-          }
-        } else if (
-          response.data.quType === 1 ||
-          response.data.quType === 2 ||
-          response.data.quType === 3
-        ) {
-          // 单选、多选、判断题
-          this.quData.answerList.forEach((item) => {
-            if ((this.quData.quType === 1 || this.quData.quType === 3) && item.checkout) {
-              this.radioValue = item.id
-            }
-            if (this.quData.quType === 2 && item.checkout) {
-              this.multiValue.push(item.id)
-            }
-          })
+        // 根据新加载的题目数据，恢复用户已选的答案 (如果之前保存过)
+        // 注意：quDetail API 返回的数据结构中似乎包含了用户的答案信息 (checkout 字段 和 content for SAQ)
+        if (response.data.quType === 4) {
+           // 后端返回的 answerList[0].content 应该是用户之前填写的简答题内容
+           this.saqTextarea = response.data.answerList?.[0]?.content || '' // 安全访问
+        } else if (response.data.quType === 1 || response.data.quType === 3) {
+           // 遍历选项，找到 checkout 为 true 的作为 radioValue
+           const checkedOption = response.data.answerList?.find(opt => opt.checkout)
+           this.radioValue = checkedOption ? checkedOption.id : ''
+        } else if (response.data.quType === 2) {
+           // 遍历选项，收集所有 checkout 为 true 的 id 到 multiValue
+           this.multiValue = response.data.answerList?.filter(opt => opt.checkout).map(opt => opt.id) || []
         }
+
+        // 更新已保存答案的本地副本 (如果 quDetail 返回了最新的答案)
+        // 这一步可能不需要，因为 handSave 已经维护了 this.submittedAnswers
+        // 但如果 quDetail 能确保返回最新已保存答案，可以在这里同步一下
+        // const latestAnswerFromServer = ... // (需要从 response.data 解析出答案)
+        // this.submittedAnswers[item.questionId] = latestAnswerFromServer;
 
         // 关闭加载提示
         loading.close()
-      }).catch(() => {
-        // 出错时也要关闭加载提示
-        loading.close()
+      }).catch((error) => {
+        loading.close() // 出错时也要关闭
+        console.error(`Failed to fetch question ${item.questionId}:`, error)
+        this.$message({
+          message: '加载题目详情失败，请重试！',
+          type: 'error'
+        })
+        // 加载题目失败，可能需要一些回退逻辑，比如不允许切换题目？
       })
     },
 

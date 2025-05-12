@@ -315,8 +315,15 @@ $cursor: #fff;
   }
 }
 
-/* reset element-ui css */
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
+
 .login-container {
+  min-height: 100%;
+  width: 100%;
+  background-color: $bg;
+  overflow: hidden;
   .el-input {
     display: inline-block;
     height: 47px;
@@ -345,19 +352,6 @@ $cursor: #fff;
     border-radius: 5px;
     color: #454545;
   }
-}
-</style>
-
-<style lang="scss" scoped>
-$bg: #2d3a4b;
-$dark_gray: #889aa4;
-$light_gray: #eee;
-
-.register-container {
-  min-height: 100%;
-  width: 100%;
-  background-color: $bg;
-  overflow: hidden;
 
   .login-form {
     position: relative;
@@ -409,7 +403,6 @@ $light_gray: #eee;
     cursor: pointer;
     user-select: none;
   }
-
   .but {
     width: 220px;
     height: 39px;
@@ -432,12 +425,12 @@ $light_gray: #eee;
     text-align: center;
     
     a {
-      color: #889aa4;
+      color: $dark_gray;
       font-size: 12px;
       text-decoration: none;
       
       &:hover {
-        color: #eee;
+        color: $light_gray;
         text-decoration: underline;
       }
     }
