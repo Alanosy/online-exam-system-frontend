@@ -209,7 +209,7 @@
           <el-checkbox v-model="postForm.timeLimit" />
         </el-form-item> -->
 
-        <el-form-item
+        <!-- <el-form-item
           v-if="postForm.timeLimit"
           label="考试时间"
           prop="examDuration"
@@ -221,7 +221,7 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
     </el-card>
 
@@ -280,11 +280,11 @@ export default {
       },
       filterText: "",
       treeLoading: false,
-      dateValues: [],
+      // dateValues: [],
       // 题库
       repoList: [
         {
-          addQuType:"0",
+          addQuType: "0",
           queIds: "",
           id: "",
           rowId: 0,
@@ -301,6 +301,7 @@ export default {
       // 已选择的题库
       excludes: [],
       postForm: {
+        start: [],
         // 总分数
         totalScore: 0,
         // 题库列表
@@ -345,12 +346,12 @@ export default {
       this.$refs.tree.filter(val);
     },
 
-    dateValues: {
-      handler() {
-        this.postForm.startTime = this.dateValues[0];
-        this.postForm.endTime = this.dateValues[1];
-      },
-    },
+    // dateValues: {
+    //   handler() {
+    //     this.postForm.startTime = this.dateValues[0];
+    //     this.postForm.endTime = this.dateValues[1];
+    //   },
+    // },
 
     // 题库变换
     repoList: {
@@ -389,134 +390,144 @@ export default {
     handleClick(tab, event) {
       this.$refs.questionSelector.clearSelection();
       // console.log(event)
-      this.repoList[0].addQuType=tab.index;
-      this.repoList[0].queIds=""
-      this.repoList[0].id=""
-      this.repoList[0].rowId=0
-      this.repoList[0].radioCount=0
-      this.repoList[0].radioScore=0
-      this.repoList[0].multiCount=0
-      this.repoList[0].judgeCount=0
-      this.repoList[0].judgeScore=0
-      this.repoList[0].saqCount=0
-      this.repoList[0].saqScore=0
+      this.repoList[0].addQuType = tab.index;
+      this.repoList[0].queIds = "";
+      this.repoList[0].id = "";
+      this.repoList[0].rowId = 0;
+      this.repoList[0].radioCount = 0;
+      this.repoList[0].radioScore = 0;
+      this.repoList[0].multiCount = 0;
+      this.repoList[0].judgeCount = 0;
+      this.repoList[0].judgeScore = 0;
+      this.repoList[0].saqCount = 0;
+      this.repoList[0].saqScore = 0;
       console.log(tab, event);
     },
     // 子组件选择的ids
     handleSelectedChange(selectedIds) {
-      var ids = []
-      selectedIds.selectedRows.forEach((item)=>{
-        ids.push(item.id)
-      })
+      var ids = [];
+      selectedIds.selectedRows.forEach((item) => {
+        ids.push(item.id);
+      });
 
-      this.repoList[0].queIds=ids.join(",")
-      this.repoList[0].radioCount=selectedIds.questionList.radioCount
-      this.repoList[0].radioScore=selectedIds.questionList.radioScore
-      this.repoList[0].multiCount=selectedIds.questionList.multiCount
-      this.repoList[0].judgeCount=selectedIds.questionList.judgeCount
-      this.repoList[0].judgeScore=selectedIds.questionList.judgeScore
-      this.repoList[0].saqCount=selectedIds.questionList.saqCount
-      this.repoList[0].saqScore=selectedIds.questionList.saqScore
+      this.repoList[0].queIds = ids.join(",");
+      this.repoList[0].radioCount = selectedIds.questionList.radioCount;
+      this.repoList[0].radioScore = selectedIds.questionList.radioScore;
+      this.repoList[0].multiCount = selectedIds.questionList.multiCount;
+      this.repoList[0].judgeCount = selectedIds.questionList.judgeCount;
+      this.repoList[0].judgeScore = selectedIds.questionList.judgeScore;
+      this.repoList[0].saqCount = selectedIds.questionList.saqCount;
+      this.repoList[0].saqScore = selectedIds.questionList.saqScore;
       console.log("从子组件接收到的选中ID:", this.repoList);
       // 在这里你可以将选中的ID保存到父组件的数据中
       this.selectedQuestionIds = selectedIds;
       // 或者执行其他需要的操作
     },
     handleSave() {
-      if(this.repoList[0].addQuType==="1"){
+      if (this.repoList[0].addQuType === "1") {
         this.$refs.postForm.validate((valid) => {
-        if (!valid) {
-          return;
-        }
-        if (this.postForm.totalScore === 0) {
-          this.$notify({
-            title: "提示信息",
-            message: "考试规则设置不正确，请确认！",
+          if (!valid) {
+            return;
+          }
+          if (this.postForm.totalScore === 0) {
+            this.$notify({
+              title: "提示信息",
+              message: "考试规则设置不正确，请确认！",
+              type: "warning",
+              duration: 2000,
+            });
+
+            return;
+          }
+
+          // 验证班级是否选择
+          if (!this.postForm.classIds || this.postForm.classIds.length === 0) {
+            this.$notify({
+              title: "提示信息",
+              message: "请选择考试班级！",
+              type: "warning",
+              duration: 2000,
+            });
+            return;
+          }
+
+          for (let i = 0; i < this.postForm.repoList.length; i++) {
+            const repo = this.postForm.repoList[i];
+            if (!repo.repoId) {
+              this.$notify({
+                title: "提示信息",
+                message: "考试题库选择不正确！",
+                type: "warning",
+                duration: 2000,
+              });
+              return;
+            }
+
+            if (
+              (repo.radioCount > 0 && repo.radioScore === 0) ||
+              (repo.radioCount === 0 && repo.radioScore > 0)
+            ) {
+              this.$notify({
+                title: "提示信息",
+                message: "题库第：[" + (i + 1) + "]项存在无效的单选题配置！",
+                type: "warning",
+                duration: 2000,
+              });
+
+              return;
+            }
+
+            if (
+              (repo.multiCount > 0 && repo.multiScore === 0) ||
+              (repo.multiCount === 0 && repo.multiScore > 0)
+            ) {
+              this.$notify({
+                title: "提示信息",
+                message: "题库第：[" + (i + 1) + "]项存在无效的多选题配置！",
+                type: "warning",
+                duration: 2000,
+              });
+
+              return;
+            }
+
+            if (
+              (repo.judgeCount > 0 && repo.judgeScore === 0) ||
+              (repo.judgeCount === 0 && repo.judgeScore > 0)
+            ) {
+              this.$notify({
+                title: "提示信息",
+                message: "题库第：[" + (i + 1) + "]项存在无效的判断题配置！",
+                type: "warning",
+                duration: 2000,
+              });
+              return;
+            }
+
+            if (
+              (repo.saqCount > 0 && repo.saqScore === 0) ||
+              (repo.saqCount === 0 && repo.saqScore > 0)
+            ) {
+              this.$notify({
+                title: "提示信息",
+                message: "题库第：[" + (i + 1) + "]项存在无效的简答题配置！",
+                type: "warning",
+                duration: 2000,
+              });
+              return;
+            }
+          }
+
+          this.$confirm("确实要提交保存吗？", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
             type: "warning",
-            duration: 2000,
+          }).then(() => {
+            this.submitForm();
           });
-
-          return;
-        }
-
-        // 验证班级是否选择
-        if (!this.postForm.classIds || this.postForm.classIds.length === 0) {
-          this.$notify({
-            title: "提示信息",
-            message: "请选择考试班级！",
-            type: "warning",
-            duration: 2000,
-          });
-          return;
-        }
-
-        for (let i = 0; i < this.postForm.repoList.length; i++) {
-          const repo = this.postForm.repoList[i];
-          if (!repo.repoId) {
-            this.$notify({
-              title: "提示信息",
-              message: "考试题库选择不正确！",
-              type: "warning",
-              duration: 2000,
-            });
-            return;
-          }
-
-          if (
-            (repo.radioCount > 0 && repo.radioScore === 0) ||
-            (repo.radioCount === 0 && repo.radioScore > 0)
-          ) {
-            this.$notify({
-              title: "提示信息",
-              message: "题库第：[" + (i + 1) + "]项存在无效的单选题配置！",
-              type: "warning",
-              duration: 2000,
-            });
-
-            return;
-          }
-
-          if (
-            (repo.multiCount > 0 && repo.multiScore === 0) ||
-            (repo.multiCount === 0 && repo.multiScore > 0)
-          ) {
-            this.$notify({
-              title: "提示信息",
-              message: "题库第：[" + (i + 1) + "]项存在无效的多选题配置！",
-              type: "warning",
-              duration: 2000,
-            });
-
-            return;
-          }
-
-          if (
-            (repo.judgeCount > 0 && repo.judgeScore === 0) ||
-            (repo.judgeCount === 0 && repo.judgeScore > 0)
-          ) {
-            this.$notify({
-              title: "提示信息",
-              message: "题库第：[" + (i + 1) + "]项存在无效的判断题配置！",
-              type: "warning",
-              duration: 2000,
-            });
-            return;
-          }
-
-          if (
-            (repo.saqCount > 0 && repo.saqScore === 0) ||
-            (repo.saqCount === 0 && repo.saqScore > 0)
-          ) {
-            this.$notify({
-              title: "提示信息",
-              message: "题库第：[" + (i + 1) + "]项存在无效的简答题配置！",
-              type: "warning",
-              duration: 2000,
-            });
-            return;
-          }
-        }
-
+        });
+      }
+      if (this.repoList[0].addQuType === "0") {
         this.$confirm("确实要提交保存吗？", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -524,18 +535,7 @@ export default {
         }).then(() => {
           this.submitForm();
         });
-      });
       }
-      if(this.repoList[0].addQuType==="0"){
-        this.$confirm("确实要提交保存吗？", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }).then(() => {
-          this.submitForm();
-        });
-      }
-     
     },
 
     handleCheckChange() {
@@ -557,22 +557,25 @@ export default {
       this.repoList.splice(index, 1);
     },
     formatDateToISOString(date) {
-      // 确保输入是一个Date对象
       if (!(date instanceof Date)) {
-        throw new TypeError("Expected a Date object");
+        return null;
       }
 
-      // 格式化为ISO 8601格式，注意这里的时区会自动调整为UTC
-      let isoString = date.toISOString();
+      // 获取本地时间的各部分（不进行时区转换）
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
 
-      // 截取并重新组合字符串，去除毫秒部分并替换T为大写
-      // 这一步是根据你的需求调整，通常ISO 8601格式包含毫秒且T是小写
-      isoString = isoString.split(".")[0].replace("T", "T");
-
-      return isoString;
+      // 格式化为本地时间字符串（不含时区信息）
+      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+      // 输出示例："2025-05-14 09:00:00"（保留用户选择的本地时间）
     },
 
     submitForm() {
+      console.log("postForm", this.postForm);
       // 校验和处理数据
       let cerTemp = "";
       if (
@@ -582,8 +585,8 @@ export default {
         console.log(this.postForm.certificateId);
         cerTemp = this.postForm.certificateId.join(",");
       }
-      debugger
       this.postForm.repoList = this.repoList;
+
       const params = {
         title: this.postForm.title,
         // content: this.postForm.content, // 添加考试描述字段
@@ -593,10 +596,9 @@ export default {
         startTime: this.formatDateToISOString(this.postForm.start[0]),
         endTime: this.formatDateToISOString(this.postForm.start[1]),
         gradeIds: this.postForm.classIds.join(","),
-        // repoId: this.postForm.repoList[0].id,
-        repoId: this.postForm.repoList[0].repoId, 
+        repoId: this.postForm.repoList[0].repoId,
         certificateId: cerTemp,
-        addQuype:this.postForm.repoList[0].addQuType,
+        addQuype: this.postForm.repoList[0].addQuType,
         quIds: this.postForm.repoList[0].queIds,
         radioCount: this.postForm.repoList[0].radioCount,
         radioScore: this.postForm.repoList[0].radioScore,
@@ -607,8 +609,6 @@ export default {
         saqCount: this.postForm.repoList[0].saqCount,
         saqScore: this.postForm.repoList[0].saqScore,
       };
-      console.log(this.repoList)
-      console.log(params)
       saveData(params).then((res) => {
         if (res.code) {
           this.$notify({
