@@ -256,12 +256,24 @@ export default {
 
     handleSizeChange(val) {
       this.pageSize = val;
-      this.getQuPage(this.pageNum, val);
+       this.pageNum,
+        this.pageSize,
+        
+      this.getQuPage(this.pageNum, 
+        val,
+        this.searchName,
+        this.selectedRepoSingleSearch,
+        this.selValue);
     },
 
     handleCurrentChange(val) {
       this.pageNum = val;
-      this.getQuPage(val, this.pageSize);
+      this.getQuPage(
+        val, 
+        this.pageSize,
+        this.searchName,
+        this.selectedRepoSingleSearch,
+        this.selValue);
     },
     scoreFun(){
         this.questionList.radioCount = 0;
