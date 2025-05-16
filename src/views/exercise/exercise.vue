@@ -123,7 +123,10 @@
             {{ number == 1 ? curTypeIndex + 1 : currentQuIndex + 1 }}.{{ quDetail.content }}
           </p>
           <p v-if="quDetail.image != null && quDetail.image != ''">
-            <el-image :src="quDetail.image" style="max-width: 100px" />
+            <el-image 
+            :src="quDetail.image" 
+            style="max-width: 100px;max-height:100%" 
+            :preview-src="[quDetail.image]" />
           </p>
           <div v-if="quDetail.quType == 1 || quDetail.quType == 3">
             <el-radio-group v-model="radioValue" :disabled="isAnswered">
@@ -259,6 +262,7 @@ export default {
 
   data() {
     return {
+      flag: false,
       showAnalysis: 0,
       repoId: '',
       repoTitle: '',
@@ -473,6 +477,7 @@ export default {
       this.statisticsDialogVisible = false
     },
     async test() {
+    
       const res = await getQuestion(null, this.repoId)
       this.quList = res.data
 

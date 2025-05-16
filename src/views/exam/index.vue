@@ -72,7 +72,10 @@
           <!-- 题干 -->
           <p v-if="quData.content">{{ quData.sort + 1 }}.{{ quData.content }}</p>
           <p v-if="quData.image">
-            <el-image :src="quData.image" style="max-width: 200px" />
+            <el-image :src="quData.image"
+            :preview-src="[quData.image]" 
+            style="max-width: 200px;max-height:100%" 
+           />
           </p>
 
           <!-- 单选和判断题选项区域 -->
@@ -85,7 +88,9 @@
               >
                 {{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image" style="clear: both">
-                  <el-image :src="item.image" style="max-width: 200px" />
+                  <el-image :src="item.image"
+                  :preview-src="[item.image]" 
+                  style="max-width: 200px" />
                 </div>
               </el-radio>
             </el-radio-group>
@@ -101,7 +106,9 @@
               >
                 {{ numberToLetter(item.sort) }}.{{ item.content }}
                 <div v-if="item.image" style="clear: both">
-                  <el-image :src="item.image" style="max-width: 200px" />
+                  <el-image :src="item.image" 
+                  :preview-src="[item.image]" 
+                  style="max-width: 200px" />
                 </div>
               </el-checkbox>
             </el-checkbox-group>
@@ -137,7 +144,7 @@
             </el-button>
 
             <el-button
-              v-if="showNext"
+              v-if="showNext&&cardItem.sort != allItem.length - 1"
               type="warning"
               icon="el-icon-right"
               @click="handNext()"
@@ -145,9 +152,9 @@
               下一题
             </el-button>
 
-            <!-- 添加最后一题的提交按钮 -->
+            <!-- 添加最后一题的提交按钮 !showNext && -->
             <el-button
-              v-if="!showNext && cardItem.sort === allItem.length - 1"
+              v-if="cardItem.sort === allItem.length - 1"
               type="success"
               icon="el-icon-check"
               @click="submitLastAnswer()"

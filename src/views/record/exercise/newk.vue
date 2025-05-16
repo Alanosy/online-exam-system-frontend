@@ -20,7 +20,9 @@
                         <div class="qu_content">{{indexx+1}}、{{ index.title }}</div>
                       </div>
                       <div v-if="index.image != null && index.image != ''">
-                        <el-image :src="index.image" style="height: 100px;" />
+                        <el-image :src="index.image" 
+                        :preview-src="[index.image]" 
+                        style="height: 100px;" />
                       </div>
                       <!-- 选项 -->
                       <el-radio-group class="qu_choose_group">
@@ -41,7 +43,9 @@
                               {{ numberToLetter(indexs) }}、{{ item.content }}
                             </div>
                             <div v-if="item.image != null && item.image != ''">
-                              <el-image :src="item.image" class="qu_choose_tag_img" />
+                              <el-image :src="item.image"
+                              :preview-src="[item.image]" 
+                               class="qu_choose_tag_img" />
                             </div>
                           </div>
                         </el-radio>

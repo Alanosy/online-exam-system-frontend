@@ -27,7 +27,9 @@
         
                       </div>
                       <div v-if="index.image != null && index.image != ''">
-                        <el-image :src="index.image" style="height: 100px" />
+                        <el-image :src="index.image"
+                        :preview-src="[index.image]" 
+                        style="height: 100px" />
                       </div>
                       <!-- 选项 -->
                       <el-radio-group class="qu_choose_group">
@@ -60,11 +62,13 @@
                             >
                               <el-image
                                 :src="item.image"
+                                :preview-src="[item.image]" 
                                 style="max-width: 200px"
                               />
                             </div>
                             <div v-if="item.image != null && item.image != ''">
                               <el-image
+                              :preview-src="[item.image]" 
                                 :src="item.image"
                                 class="qu_choose_tag_img"
                               />
