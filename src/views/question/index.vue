@@ -402,12 +402,16 @@ export default {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
-      this.getQuPage(this.pageNum, val)
+      this.getQuPage(this.pageNum, val,this.searchName,
+        this.selectedRepoSingleSearch,
+        this.selValue)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val
-      this.getQuPage(val, this.pageSize)
+      this.getQuPage(val, this.pageSize,this.searchName,
+        this.selectedRepoSingleSearch,
+        this.selValue)
     },
     // 下载模板
     async startDownload() {
