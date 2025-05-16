@@ -64,7 +64,7 @@
       </el-table-column>
     </el-table>
 
-    <div class="pagination-container">
+    <!-- <div class="pagination-container"> -->
       <el-pagination
         :current-page="data.current"
         :page-sizes="[10, 20, 30, 40]"
@@ -74,7 +74,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
-    </div>
+    <!-- </div> -->
 
     <!-- 新增题库 -->
     <el-dialog title="新增题库" :visible.sync="addRepoDialogVisible" width="500px">
