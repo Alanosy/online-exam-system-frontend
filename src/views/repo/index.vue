@@ -534,12 +534,12 @@ export default {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
-      this.getRepoPage(this.pageNum, val)
+      this.getRepoPage(this.pageNum, val, this.searchTitle, this.searchCategory)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val
-      this.getRepoPage(val, this.pageSize)
+      this.getRepoPage(val, this.pageSize, this.searchTitle, this.searchCategory)
     }
   }
 }

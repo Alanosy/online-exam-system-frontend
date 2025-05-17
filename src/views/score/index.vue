@@ -147,12 +147,12 @@ export default {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
-      this.getScorePage(this.pageNum, val)
+      this.getScorePage()
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val
-      this.getScorePage(val, this.pageSize)
+      this.getScorePage()
     },
     handleClick(row) {
     }

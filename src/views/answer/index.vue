@@ -153,12 +153,12 @@ export default {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
-      this.getAnswerPage(this.pageNum, val)
+      this.getAnswerPage(this.pageNum, val,this.searchTitle)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val
-      this.getAnswerPage(val, this.pageSize)
+      this.getAnswerPage(val, this.pageSize,this.searchTitle)
     },
     screenInfo(row) {
       localStorage.setItem('answer_examId', row.examId)

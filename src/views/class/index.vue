@@ -298,12 +298,12 @@ export default {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
-      this.getClassPage(this.pageNum, val)
+      this.getClassPage(this.pageNum, val,this.formInline.searchTitle)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val
-      this.getClassPage(val, this.pageSize)
+      this.getClassPage(val, this.pageSize,this.formInline.searchTitle)
     }
   }
 }

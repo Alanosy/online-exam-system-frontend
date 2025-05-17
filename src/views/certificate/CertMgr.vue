@@ -285,12 +285,14 @@ export default {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
-      this.getCertificatePage(this.pageNum, val)
+      this.getCertificatePage(this.pageNum, val,this.searchCertificateName,
+      this.searchCertificationNuit)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val
-      this.getCertificatePage(val, this.pageSize)
+      this.getCertificatePage(val, this.pageSize,this.searchCertificateName,
+      this.searchCertificationNuit)
     },
     handleClick(row) {
     }

@@ -225,12 +225,14 @@ export default {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val;
-      this.getDiscussionPage(this.pageNum, val);
+      this.getDiscussionPage(this.pageNum, val,this.searchForm.searchTitle,
+      this.searchForm.gradeId);
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val;
-      this.getDiscussionPage(val, this.pageSize);
+      this.getDiscussionPage(val, this.pageSize,this.searchForm.searchTitle,
+      this.searchForm.gradeId);
     },
   },
 };

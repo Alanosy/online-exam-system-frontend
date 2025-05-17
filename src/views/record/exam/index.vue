@@ -163,12 +163,12 @@ export default {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
-      this.getExamRecordPaging(this.pageNum, val)
+      this.getExamRecordPaging(this.pageNum, val, this.searchTitle)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val
-      this.getExamRecordPaging(val, this.pageSize)
+      this.getExamRecordPaging(val, this.pageSize, this.searchTitle)
     },
 
     handleClose(done) {

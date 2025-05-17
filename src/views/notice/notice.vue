@@ -198,12 +198,12 @@ export default {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
-      this.getNoticePage(this.pageNum, val)
+      this.getNoticePage(this.pageNum, val,this.searchTitle)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val
-      this.getNoticePage(val, this.pageSize)
+      this.getNoticePage(val, this.pageSize,this.searchTitle)
     }
   }
 }

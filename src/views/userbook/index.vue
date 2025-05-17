@@ -147,12 +147,12 @@ export default {
     handleSizeChange(val) {
       // 设置每页多少条逻辑
       this.pageSize = val
-      this.getUserBookPage(this.pageNum, val)
+      this.getUserBookPage(this.pageNum, val, this.searchTitle)
     },
     handleCurrentChange(val) {
       // 设置当前页逻辑
       this.pageNum = val
-      this.getUserBookPage(val, this.pageSize)
+      this.getUserBookPage(val, this.pageSize, this.searchTitle)
     },
     // 分页查询
     async getUserBookPage(pageNum, pageSize, examName = null) {

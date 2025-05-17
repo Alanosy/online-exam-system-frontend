@@ -176,12 +176,14 @@ export default {
     // 设置每页多少条逻辑
     handleSizeChange(val) {
       this.pageSize = val
-      this.getUserPage(this.pageNum, val)
+      this.getUserPage(this.pageNum, val,this.searchForm.searchRealName,
+      this.searchForm.searchClass)
     },
     // 设置当前页逻辑
     handleCurrentChange(val) {
       this.pageNum = val
-      this.getUserPage(val, this.pageSize)
+      this.getUserPage(val, this.pageSize,this.searchForm.searchRealName,
+      this.searchForm.searchClass)
     },
     // 添加用户逻辑
     addUser() {
