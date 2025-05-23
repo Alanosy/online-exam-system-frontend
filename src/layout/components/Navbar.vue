@@ -50,7 +50,7 @@
           style="border: 1px solid #cacaca"
           :class="{ active: item.checked }"
           @click="$router.push(item.path)"
-          @close="$store.commit('menu/REMOVE_TAG', item)"
+          @close="handleTagClose(item)"
         >
           {{ item.title }}
         </el-tag>
@@ -83,7 +83,19 @@ export default {
     this.decode()
   },
   methods: {
-
+    handleTagClose(item) {
+      if (this.$route.path === item.path) {
+        this.$store.commit('menu/REMOVE_TAG', item)
+        const tags = this.$store.state.menu.tags
+        if (tags.length > 0) {
+          this.$router.push(tags[tags.length - 1].path).then(() => {
+            window.location.reload()
+          })
+        }
+      } else {
+        this.$store.commit('menu/REMOVE_TAG', item)
+      }
+    },
     decode() {
       const token = getToken()
       const user = parseJwt(token)
