@@ -414,6 +414,7 @@ export default {
       this.repoList[0].radioCount = selectedIds.questionList.radioCount;
       this.repoList[0].radioScore = selectedIds.questionList.radioScore;
       this.repoList[0].multiCount = selectedIds.questionList.multiCount;
+      this.repoList[0].multiScore = selectedIds.questionList.multiScore;
       this.repoList[0].judgeCount = selectedIds.questionList.judgeCount;
       this.repoList[0].judgeScore = selectedIds.questionList.judgeScore;
       this.repoList[0].saqCount = selectedIds.questionList.saqCount;

@@ -258,8 +258,8 @@ export default {
       this.pageSize = val;
        this.pageNum,
         this.pageSize,
-        
-      this.getQuPage(this.pageNum, 
+
+      this.getQuPage(this.pageNum,
         val,
         this.searchName,
         this.selectedRepoSingleSearch,
@@ -269,18 +269,18 @@ export default {
     handleCurrentChange(val) {
       this.pageNum = val;
       this.getQuPage(
-        val, 
+        val,
         this.pageSize,
         this.searchName,
         this.selectedRepoSingleSearch,
         this.selValue);
     },
     scoreFun(){
-        this.questionList.radioCount = 0;
+      this.questionList.radioCount = 0;
       this.questionList.multiCount = 0;
       this.questionList.judgeCount = 0;
       this.questionList.saqCount = 0;
-  
+
       this.singleChoiceQuestions = false;
       this.multipleChoiceQuestions = false;
       this.trueOrFalseQuestions = false;
@@ -315,7 +315,6 @@ export default {
       if (this.questionList.saqCount === 0) {
         this.questionList.saqScore = 0;
       }
-
       const data = {
         selectedRows: this.selectedRows,
         questionList: this.questionList,
@@ -351,7 +350,7 @@ export default {
       this.questionList.multiCount = 0;
       this.questionList.judgeCount = 0;
       this.questionList.saqCount = 0;
-  
+
       this.singleChoiceQuestions = false;
       this.multipleChoiceQuestions = false;
       this.trueOrFalseQuestions = false;
@@ -391,6 +390,7 @@ export default {
         selectedRows: this.selectedRows,
         questionList: this.questionList,
       };
+      console.log("data",data)
       console.log("this.selectedRows", this.selectedRows);
       // 触发自定义事件，将选中的ID数组传递给父组件
       this.$emit("selected-change", data);
