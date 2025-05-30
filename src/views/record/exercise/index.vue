@@ -161,10 +161,12 @@ export default {
       //  ("submit!");
     },
     handleSizeChange(val) {
-      //  (`每页 ${val} 条`);
+      this.pageSize = val
+      this.getExerciseRecordPaging(this.pageNum, this.pageSize, this.searchTitle)
     },
     handleCurrentChange(val) {
-      //  (`当前页: ${val}`);
+      this.pageNum = val
+      this.getExerciseRecordPaging(this.pageNum, this.pageSize, this.searchTitle)
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
