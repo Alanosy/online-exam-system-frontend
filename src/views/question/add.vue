@@ -14,6 +14,7 @@
             :disabled="quTypeDisabled"
             class="filter-item"
             @change="handleTypeChange"
+            style="width: 400px"
           >
             <el-option
               v-for="item in quTypes"
@@ -25,11 +26,17 @@
         </el-form-item>
 
         <el-form-item label="归属题库" prop="repoId">
-          <repo-select v-model="postForm.repoId" :multi="false" />
+          <repo-select v-model="postForm.repoId" :multi="false" style="width: 400px" />
         </el-form-item>
 
         <el-form-item label="题目内容" prop="content">
-          <el-input v-model="postForm.content" type="textarea" />
+          <el-input 
+            v-model="postForm.content" 
+            type="textarea" 
+            :rows="4"
+            resize="vertical"
+            style="width: 1200px"
+          />
         </el-form-item>
 
         <el-form-item label="试题图片" style="margin-left: 7px">
@@ -42,6 +49,9 @@
             :precision="1"
             :max="999999"
             type="textarea"
+            :rows="12"
+            resize="vertical"
+            style="width: 1200px"
           />
         </el-form-item>
       </el-card>
@@ -362,5 +372,19 @@ export default {
   background: #ecf5ff;
   border-color: #b3d8ff;
   margin-bottom: 25px;
+}
+
+.el-form-item {
+  margin-bottom: 22px;
+}
+
+.el-textarea__inner {
+  min-height: 120px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.el-form-item__label {
+  font-weight: 500;
 }
 </style>

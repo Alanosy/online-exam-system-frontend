@@ -3,7 +3,7 @@
     <el-container>
       <el-main class="right">
         <el-col>
-          <el-card class="qu_list">
+          <el-card class="qu_list" v-loading="loading">
             <div>
               <template v-for="(index,indexx) in data">
                 <!-- eslint-disable-next-line vue/require-v-for-key -->
@@ -148,7 +148,8 @@ export default {
       input: '',
       quIndex: -1,
       repoId: 0,
-      data: {}
+      data: {},
+      loading: false
     }
   },
   created() {
@@ -197,9 +198,17 @@ export default {
     },
     // 分页查询
     async ExerciseDetail() {
-      const params = { repoId: this.repoId }
-      const res = await recordExerciseDetail(params)
-      this.data = res.data
+      this.loading = true
+      try {
+        const params = { repoId: this.repoId }
+        const res = await recordExerciseDetail(params)
+        this.data = res.data
+      } catch (error) {
+        console.error('获取练习详情失败:', error)
+        this.$message.error('获取练习详情失败，请稍后重试')
+      } finally {
+        this.loading = false
+      }
     },
     // 点击答题卡题号, 右侧题目滑动
     handleTag(index) {
