@@ -22,7 +22,7 @@
     </div>
     </div>
     <div v-for="item in relyData">
-    <Discussion :discussionData="item" :delFun="showIsDel" :discussionId="data.id" :onConfirm="getDiscussionDetailsFun" style="margin: 10px 0;"></Discussion> 
+    <Discussion :discussionData="item" :delFun="showIsDel" :discussionId="data.id" :onConfirm="getDiscussionDetailsFun" style="margin: 10px 0;"></Discussion>
     </div>
 
     <div class="edit_main" >
@@ -63,7 +63,7 @@
         </div>
       </div> -->
 
-     
+
 
     <!-- </div> -->
   </div>
@@ -146,7 +146,7 @@ export default {
   destroyed() {
     // 组件卸载时取消监听
     EventBus.$off('websocket-message', this.handleMessage)
-    
+
   },
   methods: {
     handleRadioChange(value) {
@@ -177,7 +177,6 @@ export default {
     },
     //展示是否删除
     showIsDel(replyId){
-        debugger
         this.$confirm('此操作将永久删除该回复, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -188,7 +187,7 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
     },
     // 回复
@@ -204,7 +203,7 @@ export default {
           this.$message({type:"error",message:res.msg})
         }
       })
-      
+
     },
     getDiscussionDetailsFun() {
       discussionDetail(this.currentDiscussionId).then((res) => {
@@ -296,12 +295,12 @@ export default {
         }
       }
       .replyEditBtnGroup {
-       
+
         /* margin-top: 16px; */
         height: 36px;
         .replyBtn {
           float: right;
-          margin-top: 20px 0;
+          margin-top: 20px;
         }
       }
     }

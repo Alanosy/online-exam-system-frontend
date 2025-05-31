@@ -27,6 +27,7 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css' // 引入样式
 import 'quill/dist/quill.snow.css' // snow theme
 import 'quill/dist/quill.bubble.css' // bubble theme
+import { connectWebSocket, sendMessage } from '@/utils/websocket'
 
 // 如果是开发环境，关闭一些提示
 if (process.env.NODE_ENV === 'development') {
@@ -62,6 +63,16 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+// 路由守卫，在路由切换前判断是否连接 WebSocket
+router.beforeEach((to, from, next) => {
+  const isLoginOrRegister = ['login', 'register'].includes(to.name)
+  // 页面加载时 不是登录页或注册页 尝试重新连接
+  if (!isLoginOrRegister) {
+    connectWebSocket()
+  }
+  next()
+})
+
 axios.defaults.withCredentials = true
 
 /**
@@ -85,6 +96,10 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+
+// 将 WebSocket 相关方法挂载到 Vue 原型上
+Vue.prototype.$connectWebSocket = connectWebSocket
+Vue.prototype.$sendMessage = sendMessage
 
 new Vue({
   el: '#app',

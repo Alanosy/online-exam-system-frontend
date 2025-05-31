@@ -11,7 +11,7 @@
         <!-- <div class="like" :style="isLike==0:background=">点赞<i class="el-icon-thumb"></i></i><span></span></div> -->
         <div class="like">
           <span class="text-white p-2">
-            <i class="el-icon-delete" 
+            <i class="el-icon-delete"
             v-if="currentUserId === discussionData.userId || currentRole === 'teacher'"
             @click="showIsDel(discussionData.id)"
             ></i>
@@ -23,7 +23,7 @@
           </span>
         </div>
 
-     
+
       </div>
     </div>
     <div class="topicReply_right">
@@ -52,7 +52,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    
+
     discussionData: {
       type: Object,
       default() {
@@ -74,11 +74,11 @@ export default {
         discussionData: {
             handler(val) {
                 this.discussionData = val;
-            
+
             },
 
         }
-      
+
     },
 
     data() {
@@ -117,7 +117,6 @@ export default {
     },
     showIsDel(id){
       console.log(111111)
-      debugger
       this.delFun(id);
 
     },

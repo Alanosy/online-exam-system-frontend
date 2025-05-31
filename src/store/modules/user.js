@@ -1,8 +1,11 @@
 
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken,setUserId,removeUserId,setRole,removeRole,setGradeId } from '@/utils/auth'
+
 import { resetRouter } from '@/router'
 import { parseJwt } from '@/utils/jwtUtils'
+import { connectWebSocket, disconnectWebSocket } from '@/utils/websocket'
+
 const getDefaultState = () => {
   return {
     token: getToken(),
@@ -40,14 +43,23 @@ const actions = {
         const { data } = response
         if (response.code === 1) {
           const info = parseJwt(data)
+          const user = JSON.parse(info.userInfo)
           const roleId = JSON.parse(info.userInfo).roleId
+          setUserId(user.id)
           if (roleId === 1) {
             window.localStorage.setItem('roles', 'student')
+            setRole('student')
+            setGradeId(user.gradeId)
           } else if (roleId === 2) {
             window.localStorage.setItem('roles', 'teacher')
+            setRole('teacher')
           } else if (roleId === 3) {
             window.localStorage.setItem('roles', 'admin')
+            setRole('admin')
+
           }
+          // 建立websocket连接
+          connectWebSocket()
           commit('SET_TOKEN', data)
           setToken(data)
           resolve()
@@ -87,9 +99,14 @@ const actions = {
       logout(state.token).then(() => {
         removeToken() // must remove  token  first
         resetRouter()
+
         commit('RESET_STATE')
         sessionStorage.clear()
+        localStorage.clear()
+        disconnectWebSocket()
         resolve()
+        removeUserId()
+        removeRole()
       }).catch(error => {
         reject(error)
       })
