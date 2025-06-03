@@ -772,29 +772,44 @@ export default {
       this.resetAnswerState()
       if (this.currentQuIndex > 0) {
         this.currentQuIndex--
-        // this.nextText = '提交答案';
         this.showButton()
         this.getCurrentQuDetial()
-        getAnswerInfo(this.quList[this.currentQuIndex].repoId, this.quList[this.currentQuIndex].quId).then(res => {
-          this.rightQuAnswer = res
-          if (res.data.quType === 1 || res.data.quType === 3 || res.data.quType === 4) {
-            if (res.data.quType === 1 || res.data.quType === 3) {
-              this.radioValue = parseInt(res.data.answerContent)
-            } else if (res.data.quType === 4) {
-              this.radioValue = res.data.answerContent
-            }
-          } else if (res.data.quType === 2) {
-            const arr = res.data.answerContent.split(',')
-            arr.forEach(element => {
-              for (let index = 0; index < res.data.options.length; index++) {
-                const option = res.data.options[index]
-                if (parseInt(element) === option.id) {
-                  this.multiValue.push(option.id)
+        
+        // 检查上一题是否已作答
+        const previousQuestion = this.quList[this.currentQuIndex]
+        if (previousQuestion && previousQuestion.exercised) {
+          try {
+            const res = await getAnswerInfo(previousQuestion.repoId, previousQuestion.quId)
+            this.rightQuAnswer = res
+            if (res.data) {
+              this.isAnswered = true
+              if (res.data.quType === 1 || res.data.quType === 3 || res.data.quType === 4) {
+                if (res.data.quType === 1 || res.data.quType === 3) {
+                  this.radioValue = parseInt(res.data.answerContent)
+                } else if (res.data.quType === 4) {
+                  this.radioValue = res.data.answerContent
                 }
+              } else if (res.data.quType === 2) {
+                const arr = res.data.answerContent.split(',')
+                arr.forEach(element => {
+                  for (let index = 0; index < res.data.options.length; index++) {
+                    const option = res.data.options[index]
+                    if (parseInt(element) === option.id) {
+                      this.multiValue.push(option.id)
+                    }
+                  }
+                })
               }
-            })
+            }
+          } catch (error) {
+            console.error('获取答案信息失败:', error)
+            this.$message.error('获取答案信息失败')
           }
-        })
+        } else {
+          // 如果题目未作答，重置相关状态
+          this.isAnswered = false
+          this.rightQuAnswer = {}
+        }
       }
       loading.close()
     },
