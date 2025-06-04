@@ -51,45 +51,62 @@ service.interceptors.response.use(
       store.commit('SET_TOKEN', newToken) // 如果 store 中有设置 Token 的 mutation，也更新一下
     }
 
-    return res
-
-    // if the custom code is not 20000, it is judged as an error.
-    // if (res.code  != 20000) {
-    //   Message({
-    //     message: res.message || 'Error',
-    //     type: 'error',
-    //     duration: 5 * 1000
-    //   })
-
-    //   // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-    //   if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-    //     // to re-login
-    //     MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-    //       confirmButtonText: 'Re-Login',
-    //       cancelButtonText: 'Cancel',
-    //       type: 'warning'
-    //     }).then(() => {
-    //       store.dispatch('user/resetToken').then(() => {
-    //         location.reload()
-    //       })
-    //     })
-    //   }
-    //   return Promise.reject(new Error(res.message || 'Error'))
-    // } else {
-    //   return res
-    // }
+    if (res.code !== 1) {
+      Message({
+        message: res.msg || '错误',
+        type: 'error',
+        duration: 5 * 1000
+      })
+      return Promise.reject(new Error(res.msg || '错误'))
+    } else {
+      return res
+    }
   },
   error => {
-    const { response } = error
-    if (response) {
-      // 后端返回了错误响应
-      const { status, data } = response
-      console.error(`Error: ${status}, Message: ${data.msg}`)
-      handleErrorResponse(status, data.msg) // 处理错误
+    console.log('err' + error)
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          // 清除token
+          store.dispatch('user/resetToken')
+          // 跳转登录页
+          router.replace({
+            path: '/login',
+            query: { redirect: router.currentRoute.fullPath }
+          })
+          Message({
+            message: '登录已过期，请重新登录',
+            type: 'error',
+            duration: 5 * 1000
+          })
+          break
+        case 403:
+          Message({
+            message: '没有权限访问该资源',
+            type: 'error',
+            duration: 5 * 1000
+          })
+          break
+        case 404:
+          Message({
+            message: '请求的资源不存在',
+            type: 'error',
+            duration: 5 * 1000
+          })
+          break
+        default:
+          Message({
+            message: error.response.data.msg || '发生未知错误',
+            type: 'error',
+            duration: 5 * 1000
+          })
+      }
     } else {
-      // 网络错误或其他问题
-      console.error('Network Error')
-      handleErrorResponse(500, '网络连接失败，请稍后再试')
+      Message({
+        message: '网络错误，请稍后重试',
+        type: 'error',
+        duration: 5 * 1000
+      })
     }
     return Promise.reject(error)
   }
