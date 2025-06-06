@@ -30,9 +30,9 @@
         </el-form-item>
 
         <el-form-item label="题目内容" prop="content">
-          <el-input 
-            v-model="postForm.content" 
-            type="textarea" 
+          <el-input
+            v-model="postForm.content"
+            type="textarea"
             :rows="4"
             resize="vertical"
             style="width: 1200px"
@@ -72,7 +72,7 @@
           添加
         </el-button>
 
-        <el-table :data="postForm.options" :border="true" style="width: 90%">
+        <el-table :data="postForm.options.filter(option => !option.isDeleted)" :border="true" style="width: 90%">
           <el-table-column label="是否答案" width="120" align="center">
             <template v-slot="scope">
               <el-checkbox v-model="scope.row.isRight">答案</el-checkbox>
@@ -248,7 +248,19 @@ export default {
     },
 
     removeItem(index) {
-      this.postForm.options.splice(index, 1)
+      const actualIndex = this.postForm.options.findIndex((option, idx) => {
+        return idx === index && !option.isDeleted
+      })
+      if (actualIndex !== -1) {
+        // 将选项标记为已删除
+        this.postForm.options[actualIndex].isDeleted = 1
+        // 更新选项的排序
+        this.postForm.options.forEach((option, idx) => {
+          if (!option.isDeleted) {
+            option.sort = idx
+          }
+        })
+      }
     },
 
     fetchData(id) {
