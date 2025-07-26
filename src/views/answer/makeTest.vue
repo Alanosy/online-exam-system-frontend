@@ -93,9 +93,9 @@
                             <br/>
                             <span>{{ item.refAnswer }}</span>
                             <br/><br/>
-                            <span>AI评分</span>
+                            <span v-if="item.aiReason!==null">AI评分</span>
                             <br/>
-                            <span>{{ item.aiReason }}</span>
+                            <span v-if="item.aiReason!==null">{{ item.aiReason }}</span>
                           </div>
                         </el-card>
                       </div>
