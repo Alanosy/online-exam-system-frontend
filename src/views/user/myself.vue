@@ -116,14 +116,15 @@ import { getTokenInfo, getRole } from '@/utils/jwtUtils'
 export default {
   data() {
     return {
-      fileDigetRolealogVisible: false,
+      fileDialogVisible: false,
       fileList: [],
       data: {},
       form: {
         code: ''
       },
       isAdmin: false,
-      addClassDialogVisible: false
+      addClassDialogVisible: false,
+      hasFiles: false
     }
   },
   created() {
