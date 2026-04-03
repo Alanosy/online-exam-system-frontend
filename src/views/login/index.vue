@@ -203,7 +203,7 @@ export default {
                   this.$store.commit('menu/CLOSE_SIDEBAR')
                   const userInfo = getTokenInfo()
                   this.$store.dispatch('loginUser', { id: userInfo.id })
-                  this.$router.push({ path: 'index' })
+                  this.$router.push(this.redirect || '/index')
 
                   this.loading = false
                 })

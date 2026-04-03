@@ -1,4 +1,3 @@
-
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken,setUserId,removeUserId,setRole,removeRole,setGradeId } from '@/utils/auth'
 
@@ -93,11 +92,21 @@ const actions = {
     })
   },
 
+  // reset token
+  resetToken({ commit }) {
+    return new Promise(resolve => {
+      removeToken() // 移除token
+      commit('RESET_STATE') // 重置状态
+      localStorage.removeItem('roles') // 移除角色信息
+      resolve()
+    })
+  },
+
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
-        removeToken() // must remove  token  first
+        removeToken() // must remove token first
         resetRouter()
 
         commit('RESET_STATE')
@@ -110,15 +119,6 @@ const actions = {
       }).catch(error => {
         reject(error)
       })
-    })
-  },
-
-  // remove token
-  resetToken({ commit }) {
-    return new Promise(resolve => {
-      removeToken() // must remove  token  first
-      commit('RESET_STATE')
-      resolve()
     })
   }
 }

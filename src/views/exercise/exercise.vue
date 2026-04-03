@@ -119,7 +119,12 @@
       <el-col :span="19" :xs="24">
         <el-card class="qu-content content-h">
           <p v-if="quDetail.content">
-            {{ shouQuType(quDetail.quType) }}
+            <span :class="['question-type', {
+              'single-choice': quDetail.quType === 1,
+              'multiple-choice': quDetail.quType === 2,
+              'judgment': quDetail.quType === 3,
+              'short-answer': quDetail.quType === 4
+            }]">{{ shouQuType(quDetail.quType) }}</span>
             {{ number == 1 ? curTypeIndex + 1 : currentQuIndex + 1 }}.{{ quDetail.content }}
           </p>
           <p v-if="quDetail.image != null && quDetail.image != ''">
@@ -675,13 +680,13 @@ export default {
     // 题干显示题型
     shouQuType(type) {
       if (type === 1) {
-        return '(单选题)'
+        return '单选题'
       } else if (type === 2) {
-        return '(多选题)'
+        return '多选题'
       } else if (type === 3) {
-        return '(判断题)'
+        return '判断题'
       } else if (type === 4) {
-        return '(简答题)'
+        return '简答题'
       }
     },
     async handNext() {
@@ -772,29 +777,44 @@ export default {
       this.resetAnswerState()
       if (this.currentQuIndex > 0) {
         this.currentQuIndex--
-        // this.nextText = '提交答案';
         this.showButton()
         this.getCurrentQuDetial()
-        getAnswerInfo(this.quList[this.currentQuIndex].repoId, this.quList[this.currentQuIndex].quId).then(res => {
-          this.rightQuAnswer = res
-          if (res.data.quType === 1 || res.data.quType === 3 || res.data.quType === 4) {
-            if (res.data.quType === 1 || res.data.quType === 3) {
-              this.radioValue = parseInt(res.data.answerContent)
-            } else if (res.data.quType === 4) {
-              this.radioValue = res.data.answerContent
-            }
-          } else if (res.data.quType === 2) {
-            const arr = res.data.answerContent.split(',')
-            arr.forEach(element => {
-              for (let index = 0; index < res.data.options.length; index++) {
-                const option = res.data.options[index]
-                if (parseInt(element) === option.id) {
-                  this.multiValue.push(option.id)
+        
+        // 检查上一题是否已作答
+        const previousQuestion = this.quList[this.currentQuIndex]
+        if (previousQuestion && previousQuestion.exercised) {
+          try {
+            const res = await getAnswerInfo(previousQuestion.repoId, previousQuestion.quId)
+            this.rightQuAnswer = res
+            if (res.data) {
+              this.isAnswered = true
+              if (res.data.quType === 1 || res.data.quType === 3 || res.data.quType === 4) {
+                if (res.data.quType === 1 || res.data.quType === 3) {
+                  this.radioValue = parseInt(res.data.answerContent)
+                } else if (res.data.quType === 4) {
+                  this.radioValue = res.data.answerContent
                 }
+              } else if (res.data.quType === 2) {
+                const arr = res.data.answerContent.split(',')
+                arr.forEach(element => {
+                  for (let index = 0; index < res.data.options.length; index++) {
+                    const option = res.data.options[index]
+                    if (parseInt(element) === option.id) {
+                      this.multiValue.push(option.id)
+                    }
+                  }
+                })
               }
-            })
+            }
+          } catch (error) {
+            console.error('获取答案信息失败:', error)
+            this.$message.error('获取答案信息失败')
           }
-        })
+        } else {
+          // 如果题目未作答，重置相关状态
+          this.isAnswered = false
+          this.rightQuAnswer = {}
+        }
       }
       loading.close()
     },
@@ -952,6 +972,39 @@ page {
   font-size: 14px;
   color: #999;
   margin-top: 4px;
+}
+
+.question-type {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.single-choice {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
+}
+
+.multiple-choice {
+  background-color: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.judgment {
+  background-color: #fff7e6;
+  color: #fa8c16;
+  border: 1px solid #ffd591;
+}
+
+.short-answer {
+  background-color: #f9f0ff;
+  color: #722ed1;
+  border: 1px solid #d3adf7;
 }
 
 </style>
