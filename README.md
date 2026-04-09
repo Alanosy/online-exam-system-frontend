@@ -29,11 +29,12 @@
 
 <table>
     <tr>
-        <td><img src="https://github.com/Alanosy/online-exam-system-backend/blob/master/img/管理端.png"/></td>
-        <td><img src="https://github.com/Alanosy/online-exam-system-backend/blob/master/img/教师端.png"/></td>
-      	<td><img src="https://github.com/Alanosy/online-exam-system-backend/blob/master/img/学生端.png"/></td>
+        <td><img src="http://bucket.alan.org.cn/blog/2026/04/10/01-04-41-80771fc50a6fa5472b1ce441721b9b33-dacd41.png"/></td>
+        <td><img src="http://bucket.alan.org.cn/blog/2026/04/10/01-07-38-0aaab4c596d622c45935de321f16abc6-0d82a8.png"/></td>
+      	<td><img src="http://bucket.alan.org.cn/blog/2026/04/10/01-04-54-8df2f72d9681a6279de6527250d62751-c22b74.png"/></td>
     </tr>
 </table>
+
 
 #### 安装
 
@@ -55,14 +56,18 @@
    npm run dev
    ```
 
+#### 详细的部署教程
+
+详细部署请关注微信公众号：「程序员阿祥」，回复「考试系统部署教程」获取，包含环境的详细部署，下载地址+步骤截图等等，超详细
+
 #### 开发环境
 
 
 | **工具**  | **版本号** | **下载**                                                     |
 | --------- | ---------- | ------------------------------------------------------------ |
-| **JDK**   | **8**      | https://www.oracle.com/cn/java/technologies/downloads/#java8 |
-| **MySQL** | **5.7**    | https://dev.mysql.com/downloads/mysql/5.7.html               |
-| **Redis** | **5**      | [https://redis.io/download](https://redis.io/download)       |
+| **JDK**   | **17**     | https://www.oracle.com/cn/java/technologies/downloads/#java8 |
+| **MySQL** | **8**      | https://dev.mysql.com/downloads/mysql/5.7.html               |
+| **Redis** | **7**      | [https://redis.io/download](https://redis.io/download)       |
 | **Nginx** | **1.22**   | [http://nginx.org/en/download.html](http://nginx.org/en/download.html) |
 
 #### 参与贡献
@@ -74,11 +79,27 @@
 
 #### 联系方式
 
-QQ群：1034380536  (<==可以先加这个)
+QQ群：1034380536 (已满)
 
 微信：fignet
 
 邮箱：fignet@163.com
+
+#### 最新联系方式
+
+微信公众号关注「程序员阿祥」，回复「考试系统交流群」获取最新在线交流群
+
+#### 其他服务（有偿）
+
+博主提供代部署服务(50rmb)
+
+提供讲解服务等等
+
+#### 最后
+
+本项目还在开发当中，存在着bug还请谅解，也希望你加入到我们一起开发该项目
+
+该项目正在升级，重新架构并引入Agent
 
 ## 许可证
 
